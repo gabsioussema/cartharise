@@ -1,14 +1,307 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../domain/app_data.dart';
 import '../../l10n/app_localizations.dart';
-import '../widgets/stub_screen.dart';
+import '../../state/app_state.dart';
+import '../journal/journal_kit.dart';
+import '../nav.dart';
+import '../theme/cartha_theme.dart';
+import '../widgets/widgets.dart';
+import 'app_version.dart';
+import 'appearance_screen.dart';
+import 'font_licenses.dart';
 
-/// STUB (Foundation) — Journal+You agent. Owner replaces the body and keeps the class name
-/// and constructor (PLAN.md §6).
+/// The You hub (qarta settings pattern, sectioned): profile (optional name,
+/// pace), then Credit (Inspiration), Settings (Reminders, Appearance, Your
+/// data), Care (Support & safety) and About (version, licences, replay the
+/// welcome). Detail pages open full screen.
 class YouTab extends StatelessWidget {
   const YouTab({super.key});
 
+  Future<void> _editName(BuildContext context) async {
+    final l = AppLocalizations.of(context);
+    final state = context.read<AppState>();
+    final name = await askText(
+      context,
+      title: l.youNameDialogTitle,
+      action: l.save,
+      initial: state.data.profile?.displayName,
+      hint: l.youNameHint,
+      maxLength: 40,
+      textCapitalization: TextCapitalization.words,
+    );
+    if (name == null) return;
+    await state.updateProfile(displayName: () => name);
+  }
+
+  Future<void> _replayWelcome(BuildContext context) async {
+    final l = AppLocalizations.of(context);
+    final state = context.read<AppState>();
+    final ok = await confirmDialog(
+      context,
+      title: l.youReplayConfirmTitle,
+      body: l.youReplayConfirmBody,
+      action: l.youReplayConfirmAction,
+    );
+    if (ok) await state.resetOnboarding();
+  }
+
+  void _licences(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final credit = context.read<AppState>().content.credit;
+    registerFontLicenses();
+    showLicensePage(
+      context: context,
+      applicationName: l.appTitle,
+      applicationVersion: l.youVersion(kAppVersion, kAppBuild),
+      applicationIcon: const Padding(
+        padding: EdgeInsets.all(12),
+        child: CarthaEmblem(size: 64, excludeFromSemantics: true),
+      ),
+      applicationLegalese: l.youLegalese(credit.title, credit.author),
+    );
+  }
+
+  void _push(BuildContext context, Widget screen) =>
+      Navigator.of(context)
+          .push(MaterialPageRoute<void>(builder: (_) => screen));
+
   @override
-  Widget build(BuildContext context) =>
-      StubScreen(title: AppLocalizations.of(context).tabYou, pushed: false);
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final p = CarthaPalette.of(context);
+    final theme = Theme.of(context);
+    final state = context.watch<AppState>();
+    final profile = state.data.profile;
+    final settings = state.settings;
+    final name = profile?.displayName;
+
+    return Scaffold(
+      body: SafeArea(
+        bottom: false,
+        child: AreaListView(
+          children: [
+            ScreenHeader(
+              title: l.youTitle,
+              subtitle: l.youSubtitle,
+              padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 16),
+            ),
+            HeroCard(
+              key: const ValueKey('you-profile'),
+              eyebrow: l.youProfileEyebrow,
+              title: name ?? l.youNoName,
+              trailing: CarthaEmblem(
+                size: 48,
+                color: p.heroAccent,
+                excludeFromSemantics: true,
+              ),
+              onTap: () => _editName(context),
+              semanticLabel: l.youEditName,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Text(
+                      l.youProfileBody,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: p.onHeroMuted,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Icon(Icons.edit_outlined, color: p.heroAccent, size: 20),
+                ],
+              ),
+            ),
+            const SizedBox(height: 12),
+            SectionCard(
+              icon: Icons.directions_walk,
+              title: l.youPaceTitle,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  PillTabs<Pace>(
+                    key: const ValueKey('you-pace'),
+                    tabs: [
+                      PillTab(value: Pace.oneDay, label: l.youPaceOneDay),
+                      PillTab(value: Pace.flexible, label: l.youPaceFlexible),
+                    ],
+                    selected: profile?.pace ?? Pace.flexible,
+                    onChanged: (pace) => state.updateProfile(pace: pace),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(l.youPaceHint, style: theme.textTheme.bodySmall),
+                ],
+              ),
+            ),
+            AreaSectionLabel(l.youSectionCredit),
+            _HubGroup(
+              tiles: [
+                _HubTile(
+                  key: const ValueKey('you-inspiration'),
+                  icon: Icons.auto_stories_outlined,
+                  title: l.youInspiration,
+                  subtitle: l.youInspirationHint,
+                  onTap: () => AppNav.openInspiration(context),
+                ),
+              ],
+            ),
+            AreaSectionLabel(l.youSectionSettings),
+            _HubGroup(
+              tiles: [
+                _HubTile(
+                  key: const ValueKey('you-reminders'),
+                  icon: Icons.notifications_none,
+                  title: l.youReminders,
+                  subtitle: settings.remindersEnabled
+                      ? l.youRemindersOn
+                      : l.youRemindersOff,
+                  onTap: () => AppNav.openReminders(context),
+                ),
+                _HubTile(
+                  key: const ValueKey('you-appearance'),
+                  icon: Icons.palette_outlined,
+                  title: l.youAppearance,
+                  subtitle: l.youAppearanceSummary(
+                    themeLabel(l, settings.theme),
+                    appearanceLabel(l, settings.appearance),
+                  ),
+                  onTap: () => _push(context, const AppearanceScreen()),
+                ),
+                _HubTile(
+                  key: const ValueKey('you-data'),
+                  icon: Icons.storage_outlined,
+                  title: l.youData,
+                  subtitle: l.youDataHint,
+                  onTap: () => AppNav.openData(context),
+                ),
+              ],
+            ),
+            AreaSectionLabel(l.youSectionCare),
+            _HubGroup(
+              tiles: [
+                _HubTile(
+                  key: const ValueKey('you-support'),
+                  icon: Icons.health_and_safety_outlined,
+                  title: l.youSupport,
+                  subtitle: l.youSupportHint,
+                  onTap: () => AppNav.openSupport(context),
+                ),
+              ],
+            ),
+            AreaSectionLabel(l.youSectionAbout),
+            _HubGroup(
+              tiles: [
+                _HubTile(
+                  key: const ValueKey('you-version'),
+                  icon: Icons.info_outline,
+                  title: l.appTitle,
+                  subtitle:
+                      '${l.youVersion(kAppVersion, kAppBuild)}\n${l.youAboutBody}',
+                ),
+                _HubTile(
+                  key: const ValueKey('you-licences'),
+                  icon: Icons.gavel_outlined,
+                  title: l.youLicences,
+                  subtitle: l.youLicencesHint,
+                  onTap: () => _licences(context),
+                ),
+                _HubTile(
+                  key: const ValueKey('you-replay'),
+                  icon: Icons.replay,
+                  title: l.youReplayWelcome,
+                  subtitle: l.youReplayWelcomeHint,
+                  onTap: () => _replayWelcome(context),
+                ),
+              ],
+            ),
+            const SizedBox(height: 28),
+            Center(
+              child: Column(
+                children: [
+                  const CarthaEmblem(size: 44, excludeFromSemantics: true),
+                  const SizedBox(height: 8),
+                  Text(
+                    l.appTagline.toUpperCase(),
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: p.accent,
+                      letterSpacing: 1.6,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// A card of hub rows separated by hairlines.
+class _HubGroup extends StatelessWidget {
+  const _HubGroup({required this.tiles});
+
+  final List<Widget> tiles;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = CarthaPalette.of(context);
+    return SectionCard(
+      padding: const EdgeInsetsDirectional.symmetric(vertical: 6),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          for (final (i, tile) in tiles.indexed) ...[
+            if (i > 0) Divider(color: p.border, indent: 72, endIndent: 16),
+            tile,
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+/// One hub row: tinted icon tile, title, hint, chevron when it opens a page.
+class _HubTile extends StatelessWidget {
+  const _HubTile({
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    this.onTap,
+  });
+
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = CarthaPalette.of(context);
+    final theme = Theme.of(context);
+    return ListTile(
+      contentPadding: const EdgeInsetsDirectional.symmetric(
+        horizontal: 16,
+        vertical: 4,
+      ),
+      leading: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: p.selection,
+          borderRadius: BorderRadius.circular(CarthaTheme.radiusSmall - 4),
+        ),
+        child: Icon(icon, color: p.accent, size: 22),
+      ),
+      title: Text(title, style: theme.textTheme.titleMedium),
+      subtitle: Text(subtitle),
+      trailing: onTap == null
+          ? null
+          : Icon(Icons.chevron_right, color: p.textSecondary),
+      onTap: onTap,
+    );
+  }
 }
