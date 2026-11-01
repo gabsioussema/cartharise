@@ -1,0 +1,3 @@
+tags:
+  screenshots:
+    skip: "Design screenshots; run with: flutter test --tags screenshots --run-skipped (make screenshots)"

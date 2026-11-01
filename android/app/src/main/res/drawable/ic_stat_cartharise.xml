@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Status-bar icon for check-in reminders: the Cartharise emblem as a
+     single-colour vector (Android tints it). Paths from assets/brand/emblem.svg. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="300"
+    android:viewportHeight="300">
+    <group android:translateX="-106" android:translateY="-73">
+        <path
+            android:pathData="M256 158 C238 148 218 145 198 151 L162 140 L121 188 L158 230 L181 240 L198 211 L214 205"
+            android:strokeColor="#FFFFFFFF" android:strokeWidth="16"
+            android:strokeLineCap="round" android:strokeLineJoin="round" />
+        <path
+            android:pathData="M256 158 C274 148 294 145 314 151 L350 140 L391 188 L354 230 L331 240 L314 211 L298 205"
+            android:strokeColor="#FFFFFFFF" android:strokeWidth="16"
+            android:strokeLineCap="round" android:strokeLineJoin="round" />
+        <path
+            android:pathData="M212 159 L230 175 L223 205 L213 224 L237 249 L231 289 C247 282 251 263 255 245"
+            android:strokeColor="#FFFFFFFF" android:strokeWidth="16"
+            android:strokeLineCap="round" android:strokeLineJoin="round" />
+        <path
+            android:pathData="M300 159 L282 175 L289 205 L299 224 L275 249 L281 289 C265 282 261 263 257 245"
+            android:strokeColor="#FFFFFFFF" android:strokeWidth="16"
+            android:strokeLineCap="round" android:strokeLineJoin="round" />
+        <path
+            android:pathData="M256 244 L256 307"
+            android:strokeColor="#FFFFFFFF" android:strokeWidth="15"
+            android:strokeLineCap="square" />
+    </group>
+</vector>

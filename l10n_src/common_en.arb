@@ -1,0 +1,59 @@
+{
+  "appTitle": "Cartharise",
+  "@appTitle": {"description": "App name. Not translated."},
+  "appTagline": "Master Yourself. Rise With Purpose.",
+  "@appTagline": {"description": "Brand tagline under the wordmark (boot screen, About)."},
+  "appPromise": "Understand yourself. Choose your path. Rise with purpose.",
+
+  "tabToday": "Today",
+  "tabReset": "Reset",
+  "tabCompass": "Compass",
+  "tabJournal": "Journal",
+  "tabYou": "You",
+
+  "save": "Save",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "skip": "Skip",
+  "back": "Back",
+  "next": "Next",
+  "done": "Done",
+  "retry": "Retry",
+  "close": "Close",
+  "edit": "Edit",
+  "add": "Add",
+  "keepGoing": "Continue",
+  "tryAgain": "Try again",
+  "notNow": "Not now",
+  "moreInfo": "More information",
+
+  "saveStatusSaving": "Saving…",
+  "saveStatusSaved": "Saved on this device",
+  "saveStatusFailed": "Your last change couldn't be saved.",
+  "saveFailedHelp": "Your words are still here on screen. Try saving again, or export a copy so nothing is lost.",
+  "saveExportCopy": "Export a copy",
+
+  "bootLoading": "Preparing your space…",
+  "bootLoadErrorTitle": "Your saved data couldn't be opened",
+  "bootLoadErrorBody": "Cartharise couldn't read the file it keeps on this phone. Nothing has been deleted or overwritten.",
+  "bootLoadErrorHint": "Try again. If it keeps happening, check that your phone has free storage, then try once more.",
+  "bootStartFresh": "Start fresh and keep the unreadable file",
+  "bootStartFreshConfirmTitle": "Start fresh?",
+  "bootStartFreshConfirmBody": "The unreadable file is set aside on this phone, not deleted. Cartharise then starts empty.",
+
+  "storageErrorTitle": "Storage problem",
+  "storageErrorBody": "Cartharise can't write to this phone's storage right now. Your current words stay on screen until you leave this screen.",
+
+  "stubComingSoonTitle": "Coming soon",
+  "stubComingSoonBody": "This part of Cartharise is still being built. Nothing you have written is affected.",
+
+  "linkOpenFailed": "Couldn't open the link. You can visit it yourself: {url}",
+  "@linkOpenFailed": {"placeholders": {"url": {"type": "String"}}},
+  "shareFailed": "Couldn't open the share sheet on this phone.",
+
+  "loaderLabel": "Loading",
+  "emblemLabel": "Cartharise emblem",
+  "progressLabel": "{value} percent",
+  "@progressLabel": {"placeholders": {"value": {"type": "int"}}},
+  "selectedLabel": "Selected"
+}
