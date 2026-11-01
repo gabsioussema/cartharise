@@ -64,5 +64,286 @@
       }
     }
   },
-  "selectedLabel": "Selected"
+  "selectedLabel": "Selected",
+  "onboardingBrandIntro": "A calm guide to one honest day of reflection, and the small steps that follow it.",
+  "@onboardingBrandIntro": {
+    "description": "Brand page, under the tagline."
+  },
+  "onboardingBegin": "Begin",
+  "onboardingNext": "Next",
+  "onboardingGetStarted": "Get started",
+  "onboardingSkip": "Skip",
+  "onboardingSkipLabel": "Skip the introduction",
+  "@onboardingSkipLabel": {
+    "description": "Screen-reader label of Skip: it jumps to the setup steps."
+  },
+  "onboardingFinish": "Finish",
+  "onboardingPageDots": "Page {current} of {total}",
+  "@onboardingPageDots": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "onboardingStepCounter": "Setup {current} of {total}",
+  "@onboardingStepCounter": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "onboardingUnderstandTitle": "Understand Yourself",
+  "onboardingUnderstandBody": "Notice what you want, what you put up with, and what keeps pulling you back.",
+  "onboardingResetTitle": "Reset Your Life",
+  "onboardingResetBody": "Spend one honest day with a few questions, morning, daytime and evening, and see your situation clearly.",
+  "onboardingDirectionTitle": "Choose a Direction",
+  "onboardingDirectionBody": "Turn what you discover into a Life Compass: what you move away from, and what you move toward.",
+  "onboardingStepsTitle": "Improve Step by Step",
+  "onboardingStepsBody": "Small daily actions, looked at each week and adjusted as you learn. No streaks, no scores.",
+  "onboardingLimitsTitle": "What This Is, and Isn't",
+  "onboardingLimitsIntro": "Before you begin, a few honest words.",
+  "onboardingLimitsClarityTitle": "One day can bring clarity",
+  "onboardingLimitsClarityBody": "A focused day of questions can show you where you stand and what you would like instead.",
+  "onboardingLimitsNoGuaranteeTitle": "It can't guarantee a fixed life",
+  "onboardingLimitsNoGuaranteeBody": "Change comes from what you keep doing afterwards: small actions, noticed and adjusted over weeks.",
+  "onboardingLimitsPracticeTitle": "An ongoing practice",
+  "onboardingLimitsPracticeBody": "Come back whenever you like. You can redo the reset, change your goals or simply write.",
+  "onboardingLimitsNotTherapyTitle": "Not therapy or diagnosis",
+  "onboardingLimitsNotTherapyBody": "Cartharise is a self-reflection tool. It doesn't diagnose anything or replace professional care. If you're having a hard time, Support in the You tab lists places to get help.",
+  "onboardingLimitsControlTitle": "You stay in control",
+  "onboardingLimitsControlBody": "Every question can be skipped, softened or left for later.",
+  "onboardingAdultConfirm": "I'm 18 or older",
+  "onboardingAdultConfirmHelp": "Cartharise is made for adults.",
+  "onboardingAdultRequired": "Confirm you're 18 or older to continue.",
+  "onboardingCreditTitle": "Inspired By",
+  "onboardingCreditIntro": "Cartharise is built around the ideas of this article:",
+  "onboardingCreditByline": "by {author} · {date}",
+  "@onboardingCreditByline": {
+    "placeholders": {
+      "author": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "onboardingCreditArticle": "Read the original article",
+  "onboardingCreditNewsletter": "Read it in the author's newsletter",
+  "onboardingCreditNoNeed": "You don't need to read it first. Every idea is explained in plain words as you go.",
+  "onboardingPaceTitle": "Choose Your Pace",
+  "onboardingPaceIntro": "You can change this later in the You tab.",
+  "onboardingPaceOneDayTitle": "One day",
+  "onboardingPaceOneDayBody": "Do the morning, daytime and evening reflections within a single day.",
+  "onboardingPaceFlexibleTitle": "At my own pace",
+  "onboardingPaceFlexibleBody": "Spread the reflections over days or weeks and pick up where you left off.",
+  "onboardingPaceNoLock": "Either way, nothing ever locks or expires. Every part stays open.",
+  "onboardingNameTitle": "What Should We Call You?",
+  "onboardingNameIntro": "Optional, never shared. It stays on this phone and is only used to greet you.",
+  "onboardingNameLabel": "Name (optional)",
+  "onboardingNameHelp": "Leave it empty and Cartharise will call you Traveler.",
+  "onboardingPrivacyTitle": "Your Words Stay Yours",
+  "onboardingPrivacyStorageHeading": "Where your writing lives",
+  "onboardingPrivacyNoAccount": "No account, no ads, no analytics. Nothing you write is sent anywhere.",
+  "onboardingPrivacyControl": "You can export or delete everything at any time in You, under Your data.",
+  "todayGreetingMorning": "Good morning, {name}.",
+  "@todayGreetingMorning": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "todayGreetingAfternoon": "Good afternoon, {name}.",
+  "@todayGreetingAfternoon": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "todayGreetingEvening": "Good evening, {name}.",
+  "@todayGreetingEvening": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "todayDefaultName": "Traveler",
+  "@todayDefaultName": {
+    "description": "Used in the greeting when the user gave no name."
+  },
+  "todaySubtitle": "Clarity today. Progress tomorrow.",
+  "todayNextEyebrow": "Your next step",
+  "todayNextStartTitle": "Begin the morning reflection",
+  "todayNextStartBody": "{count} short questions, one at a time. Skip any of them, pause whenever you like.",
+  "@todayNextStartBody": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todayNextStartAction": "Begin",
+  "todayNextLessonsAction": "Learn the {count} ideas (optional)",
+  "@todayNextLessonsAction": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todayNextResumeTitle": "{phase, select, morning{Continue the morning reflection} daytime{Continue the daytime check-ins} evening{Continue the evening reflection} other{Continue your reset}}",
+  "@todayNextResumeTitle": {
+    "placeholders": {
+      "phase": {
+        "type": "String"
+      }
+    }
+  },
+  "todayNextResumeBody": "Next: {title}",
+  "@todayNextResumeBody": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "todayNextResumePosition": "{phase, select, morning{Morning} daytime{Daytime} evening{Evening} other{Reset}} · question {ordinal} of {total}",
+  "@todayNextResumePosition": {
+    "placeholders": {
+      "phase": {
+        "type": "String"
+      },
+      "ordinal": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "todayNextResumeAction": "Continue",
+  "todayNextSeeReset": "See the whole reset",
+  "todayNextCompassTitle": "Build your Compass",
+  "todayNextCompassImportBody": "Your evening answers can fill the empty parts of your Life Compass. You choose what goes in.",
+  "todayNextCompassManualBody": "Write your vision, a one-month project and a few daily levers in your own words.",
+  "todayNextCompassImportAction": "Review your answers",
+  "todayNextLeversTitle": "Turn your levers into quests",
+  "todayNextLeversBody": "Your daily levers can become a few small actions to check off. You approve each one.",
+  "todayNextLeversAction": "Choose quests",
+  "todayNextReviewTitle": "Look back on your week",
+  "todayNextReviewBody": "Three short questions: what went well, what got in the way, and what to try next.",
+  "todayNextReviewAction": "Start a weekly review",
+  "todayNextJournalTitle": "Write a note",
+  "todayNextJournalBody": "A few lines about today: what you noticed, what you tried, what you learned.",
+  "todayNextJournalAction": "New note",
+  "todayOpenJournal": "Open the journal",
+  "todayOpenCompass": "Open Compass",
+  "todayFocusTitle": "Today's focus",
+  "todayFocusEmptyTitle": "No quests for today",
+  "todayFocusEmptyBody": "Quests are small actions you choose yourself. Add one whenever you're ready.",
+  "todayFocusAdd": "Add a quest",
+  "todayFocusSeeAll": "See all {count} quests",
+  "@todayFocusSeeAll": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todayQuestMarkDone": "Mark '{title}' done",
+  "@todayQuestMarkDone": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "todayQuestDaily": "Daily",
+  "todayJourneyTitle": "Your journey",
+  "todayJourneyWritten": "{answered} of {total} reflections written",
+  "@todayJourneyWritten": {
+    "placeholders": {
+      "answered": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "todayJourneyNotStarted": "Your reset hasn't started yet. It's ready whenever you are.",
+  "todayJourneyInProgress": "Your reset is waiting where you left it.",
+  "todayJourneyAllTouched": "Every reflection is written or set aside. You can revisit any of them.",
+  "todayJourneyCompleted": "You finished this reset. Your answers stay here to revisit.",
+  "todayJourneyOpenReset": "Open the reset",
+  "todayPhaseProgress": "{phase, select, morning{Morning} daytime{Daytime} evening{Evening} other{Reset}} {answered}/{total}",
+  "@todayPhaseProgress": {
+    "placeholders": {
+      "phase": {
+        "type": "String"
+      },
+      "answered": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "todayPhaseProgressLabel": "{phase, select, morning{Morning} daytime{Daytime} evening{Evening} other{Reset}}: {answered} of {total} written",
+  "@todayPhaseProgressLabel": {
+    "placeholders": {
+      "phase": {
+        "type": "String"
+      },
+      "answered": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "todayPathDay": "Day {day} of 30",
+  "@todayPathDay": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "todayPathStage": "Thirty-day path · {stage, select, observe{Observe} experiment{Experiment} build{Build} adjust{Adjust} other{Path}}",
+  "@todayPathStage": {
+    "placeholders": {
+      "stage": {
+        "type": "String"
+      }
+    }
+  },
+  "todayPathOpen": "Open day {day}",
+  "@todayPathOpen": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "todayDirectionTitle": "Your direction",
+  "todayDirectionVision": "Vision",
+  "todayDirectionMonth": "This month",
+  "todayDirectionNoVision": "No vision written yet.",
+  "todayDirectionNoMonth": "No month project yet.",
+  "todayDirectionEmptyTitle": "Your Compass is empty",
+  "todayDirectionEmptyBody": "It holds your vision, a one-month project and a few daily levers, in your own words."
 }
