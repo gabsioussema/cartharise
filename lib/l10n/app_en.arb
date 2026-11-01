@@ -64,5 +64,442 @@
       }
     }
   },
-  "selectedLabel": "Selected"
+  "selectedLabel": "Selected",
+  "journalTitle": "Journal",
+  "@journalTitle": {
+    "description": "Journal tab screen title (Cinzel, keep short)."
+  },
+  "journalSubtitle": "Think, reflect and grow, at your own pace.",
+  "journalSectionNotes": "Notes",
+  "journalSectionReviews": "Reviews",
+  "journalSectionLookBack": "Look back",
+  "journalDateTime": "{date}, {time}",
+  "@journalDateTime": {
+    "description": "A local date followed by a local time.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "journalNotesIntro": "Free writing, beyond the guided questions. Notes stay on this phone.",
+  "journalNewNote": "New note",
+  "journalNotesEmptyTitle": "No notes yet",
+  "journalNotesEmptyBody": "Write down anything on your mind: an idea, a worry, something you noticed today.",
+  "journalUntitled": "Untitled note",
+  "journalEditedBadge": "Edited",
+  "journalEntryNewTitle": "New note",
+  "journalEntryTitle": "Note",
+  "journalEntryTitleField": "Title (optional)",
+  "journalEntryBodyField": "Your note",
+  "journalEntryBodyHint": "Write freely. It saves as you type.",
+  "journalEntryWritten": "Written {when}",
+  "@journalEntryWritten": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "journalEntryEdited": "Last edited {when}",
+  "@journalEntryEdited": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "journalEntryPrivacy": "Only on this phone. Never shown in notifications.",
+  "journalEntryDelete": "Delete note",
+  "journalEntryDeleteTitle": "Delete this note?",
+  "journalEntryDeleteBody": "The note is removed from this phone. This can't be undone.",
+  "journalEntryDeleted": "Note deleted",
+  "journalEntryMissingTitle": "This note isn't here any more",
+  "journalEntryMissingBody": "It may have been deleted. Your other notes are unchanged.",
+  "journalReviewsIntro": "Once a week, look at what went well, what got in the way and one small thing to try next.",
+  "journalReviewThisWeek": "Review this week",
+  "journalOpenThisWeek": "Open this week's review",
+  "journalReviewsEmptyTitle": "No weekly reviews yet",
+  "journalReviewsEmptyBody": "A review takes a few minutes. There is no right way to do it.",
+  "journalWeekOf": "Week of {date}",
+  "@journalWeekOf": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "journalReviewTitle": "Weekly review",
+  "journalReviewEditIntro": "Write as much or as little as you like. It saves as you type.",
+  "journalReviewChangeWeek": "Change week",
+  "journalReviewWins": "Wins",
+  "journalReviewWinsHint": "What went well this week, however small?",
+  "journalReviewFriction": "Friction",
+  "journalReviewFrictionHint": "What got in the way? Just notice it. No blame needed.",
+  "journalReviewNext": "Next experiment",
+  "journalReviewNextHint": "One small thing to try next week.",
+  "journalReviewSave": "Save review",
+  "journalReviewSaved": "Review saved",
+  "journalReviewEdit": "Edit review",
+  "journalReviewDelete": "Delete review",
+  "journalReviewDeleteTitle": "Delete this review?",
+  "journalReviewDeleteBody": "The review for the week of {date} is removed from this phone. This can't be undone.",
+  "@journalReviewDeleteBody": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "journalReviewDeleted": "Review deleted",
+  "journalReviewNothingWritten": "Nothing written",
+  "journalReviewWritten": "Saved {when}",
+  "@journalReviewWritten": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "journalReviewMissingTitle": "This review isn't here any more",
+  "journalReviewMissingBody": "It may have been deleted. Your other reviews are unchanged.",
+  "journalLookBackIntro": "See how your words have changed over time. Nothing here is scored or labelled.",
+  "journalCompareTitle": "Compare your Compass",
+  "journalCompareBody": "Choose two moments to place side by side.",
+  "journalCompareFirst": "First",
+  "journalCompareSecond": "Second",
+  "journalCompareNow": "Your Compass now",
+  "journalComparePick": "Choose what to show as “{which}”",
+  "@journalComparePick": {
+    "placeholders": {
+      "which": {
+        "type": "String"
+      }
+    }
+  },
+  "journalComparePickerLabel": "{which}: {current}. Tap to change.",
+  "@journalComparePickerLabel": {
+    "placeholders": {
+      "which": {
+        "type": "String"
+      },
+      "current": {
+        "type": "String"
+      }
+    }
+  },
+  "journalCompareEmptyTitle": "No saved versions yet",
+  "journalCompareEmptyBody": "Save a version of your Compass and you can compare it here later.",
+  "journalOpenCompass": "Open Compass",
+  "journalCompareSame": "Same in both",
+  "journalCompareEmptyField": "Empty",
+  "journalVersionManual": "saved by you",
+  "journalVersionBeforeImport": "before an import",
+  "journalVersionBeforeRestore": "before a restore",
+  "journalVersionLabel": "{date} · {reason}",
+  "@journalVersionLabel": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "journalFieldAntiVision": "Anti-vision",
+  "journalFieldVision": "Vision",
+  "journalFieldYearGoal": "One-year goal",
+  "journalFieldMonthProject": "One-month project",
+  "journalFieldDailyLevers": "Daily levers",
+  "journalFieldConstraints": "Constraints",
+  "journalPastResetsTitle": "Earlier resets",
+  "journalPastResetsBody": "Starting a new reset keeps the earlier one here to read.",
+  "journalPastResetsEmpty": "No earlier resets yet. When you start a new reset, the previous one is kept here, unchanged.",
+  "journalResetStarted": "Started {date}",
+  "@journalResetStarted": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "journalResetCompleted": "Completed {date}",
+  "@journalResetCompleted": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "journalResetAnswerCount": "{count, plural, =0{No written answers} =1{1 written answer} other{{count} written answers}}",
+  "@journalResetAnswerCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "journalPastResetTitle": "Earlier reset",
+  "journalPastResetReadOnly": "Read-only. Your words are kept exactly as you wrote them.",
+  "journalPastResetCompare": "Show my current answers too",
+  "journalPastResetThen": "Then",
+  "journalPastResetNow": "Now",
+  "journalPastResetNoCurrent": "No answer in your current reset",
+  "journalPastResetSkipped": "Skipped",
+  "journalPastResetNone": "This reset has no written answers.",
+  "journalPastResetOther": "Other answers",
+  "journalPastResetMissingTitle": "This reset isn't here any more",
+  "journalPhaseMorning": "Morning",
+  "journalPhaseDaytime": "Daytime",
+  "journalPhaseBonus": "Bonus",
+  "journalPhaseEvening": "Evening",
+  "youTitle": "You",
+  "@youTitle": {
+    "description": "You tab screen title (Cinzel, keep short)."
+  },
+  "youSubtitle": "Your space, your choices.",
+  "youProfileEyebrow": "Profile",
+  "youNoName": "No name set",
+  "youProfileBody": "A name is optional and stays on this phone. Tap to change it.",
+  "youEditName": "Edit name",
+  "youNameDialogTitle": "Your name",
+  "youNameHint": "Optional",
+  "youPaceTitle": "Pace",
+  "youPaceOneDay": "One day",
+  "youPaceFlexible": "Flexible",
+  "youPaceHint": "Nothing is ever locked by time. Change this whenever you like.",
+  "youSectionCredit": "Credit",
+  "youSectionSettings": "Settings",
+  "youSectionCare": "Care",
+  "youSectionAbout": "About",
+  "youInspiration": "Inspiration",
+  "youInspirationHint": "The article behind Cartharise",
+  "youReminders": "Reminders",
+  "youRemindersOn": "On",
+  "youRemindersOff": "Off",
+  "youAppearance": "Appearance",
+  "youAppearanceSummary": "{theme} · {mode}",
+  "@youAppearanceSummary": {
+    "placeholders": {
+      "theme": {
+        "type": "String"
+      },
+      "mode": {
+        "type": "String"
+      }
+    }
+  },
+  "youData": "Your data",
+  "youDataHint": "Export, restore or delete",
+  "youSupport": "Support & safety",
+  "youSupportHint": "Not therapy. Help if things feel heavy.",
+  "youVersion": "Version {version} (build {build})",
+  "@youVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      },
+      "build": {
+        "type": "String"
+      }
+    }
+  },
+  "youAboutBody": "An independent self-reflection app. Everything stays on this phone.",
+  "youLicences": "Open-source licences",
+  "youLicencesHint": "Including the Inter and Cinzel fonts (SIL Open Font License)",
+  "youLegalese": "Independent app inspired by “{title}” by {author}. Not affiliated with or endorsed by the author.",
+  "@youLegalese": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "author": {
+        "type": "String"
+      }
+    }
+  },
+  "youReplayWelcome": "Replay the welcome",
+  "youReplayWelcomeHint": "See the introduction again. Nothing you've written changes.",
+  "youReplayConfirmTitle": "Replay the welcome?",
+  "youReplayConfirmBody": "You'll see the introduction again. Your writing, Compass and settings stay as they are.",
+  "youReplayConfirmAction": "Show the welcome",
+  "youInspirationTitle": "Inspiration",
+  "youInspirationSubtitle": "The work that inspired Cartharise",
+  "youInspirationEyebrow": "Inspired by",
+  "youInspirationByline": "by {author}",
+  "@youInspirationByline": {
+    "placeholders": {
+      "author": {
+        "type": "String"
+      }
+    }
+  },
+  "youInspirationPublished": "Published {date}",
+  "@youInspirationPublished": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "youInspirationReadArticle": "Read the article on X",
+  "youInspirationReadNewsletter": "Read the newsletter version",
+  "youInspirationLinkHint": "Opens in your browser: {host}",
+  "@youInspirationLinkHint": {
+    "placeholders": {
+      "host": {
+        "type": "String"
+      }
+    }
+  },
+  "youInspirationIndependentTitle": "An independent app",
+  "youInspirationParaphraseTitle": "In Cartharise's own words",
+  "youInspirationSplitTitle": "From the source, or added by Cartharise?",
+  "youInspirationFromSource": "From the article, paraphrased",
+  "youInspirationSource1": "The seven central ideas behind the Awakening lessons",
+  "youInspirationSource2": "The morning, daytime and evening reset questions",
+  "youInspirationSource3": "The six parts of the Life Compass",
+  "youInspirationSource4": "The six daytime check-in times",
+  "youInspirationAdded": "Added by Cartharise",
+  "youInspirationAdded1": "Examples, help texts and softer wording",
+  "youInspirationAdded2": "Quests, the Today view and the thirty-day path",
+  "youInspirationAdded3": "Journal notes, weekly reviews and Look back",
+  "youInspirationAdded4": "Reminders, calendar export and backups",
+  "youInspirationReadOriginal": "For the author's full reasoning, read the original.",
+  "youRemindersTitle": "Reminders",
+  "youRemindersSubtitle": "Six optional check-ins during the day.",
+  "youRemindersSwitch": "Check-in notifications",
+  "youRemindersSwitchOn": "On, at the times below.",
+  "youRemindersSwitchOff": "Off. Nothing is sent until you turn this on.",
+  "youRemindersPrivacy": "Notifications show only the check-in's title, never your words.",
+  "youRemindersDeniedTitle": "Notifications aren't allowed",
+  "youRemindersDeniedBody": "Cartharise isn't allowed to send notifications on this phone, so reminders stay off. You can allow them in your phone's settings and try again, or add the check-ins to your calendar instead.",
+  "youRemindersUnavailableTitle": "Notifications aren't available",
+  "youRemindersUnavailableBody": "This phone can't show Cartharise notifications, so reminders stay off. You can add the check-ins to your calendar instead.",
+  "youRemindersScheduleFailed": "Cartharise couldn't schedule the notifications on this phone. Try again, or add the check-ins to your calendar instead.",
+  "youRemindersCalendarInstead": "Add to your calendar instead",
+  "youRemindersTimesTitle": "Check-in times",
+  "youRemindersTimesBody": "In your phone's local time. Change any of them to suit your day.",
+  "youRemindersSourceDefault": "Source default {time}",
+  "@youRemindersSourceDefault": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "youRemindersUseDefault": "Use {time}",
+  "@youRemindersUseDefault": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "youRemindersChangeTime": "Change the time for {title}, now {time}",
+  "@youRemindersChangeTime": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "youRemindersRowLabel": "Check-in {title}, {time}",
+  "@youRemindersRowLabel": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "youRemindersQuietTitle": "Quiet hours",
+  "youRemindersQuietBody": "No check-in notifications between these times.",
+  "youRemindersQuietFrom": "From",
+  "youRemindersQuietUntil": "Until",
+  "youRemindersQuietNotSet": "Not set",
+  "youRemindersQuietClear": "Clear quiet hours",
+  "youRemindersQuietIncomplete": "Set both times for quiet hours to apply.",
+  "youRemindersCalendarTitle": "Add to your calendar",
+  "youRemindersCalendarBody": "A calendar file (.ics) with your switched-on check-ins for the next 30 days. Open it with your calendar app to add them. It contains only the check-in titles.",
+  "youRemindersCalendarButton": "Add to calendar (.ics)",
+  "youRemindersCalendarNone": "Switch on at least one check-in to create the file.",
+  "youRemindersCalendarShared": "Calendar file shared. Open it with your calendar app to add the check-ins.",
+  "youShareDismissed": "Nothing was shared.",
+  "youAppearanceTitle": "Appearance",
+  "youAppearanceSubtitle": "Colours, light or dark, and motion.",
+  "youThemeTitle": "Theme",
+  "youThemeForest": "Forest",
+  "youThemeOlive": "Olive",
+  "youModeTitle": "Light or dark",
+  "youModeSystem": "System",
+  "youModeLight": "Light",
+  "youModeDark": "Dark",
+  "youMotion": "Interface motion",
+  "youMotionHint": "Gentle movement between screens and the animated emblem. Your phone's reduce-motion setting always turns it off.",
+  "youDataTitle": "Your data",
+  "youDataSubtitle": "Everything you write stays on this phone.",
+  "youDataWhereTitle": "Where your data lives",
+  "youDataExportTitle": "Export a backup",
+  "youDataExportBody": "Saves everything you've written and chosen as one JSON file you can keep or move to another phone. The file isn't encrypted, so keep it somewhere private.",
+  "youDataExportButton": "Export backup",
+  "youDataExported": "Backup shared.",
+  "youDataImportTitle": "Restore a backup",
+  "youDataImportBody": "Replaces everything on this phone with a Cartharise backup. You'll see the backup's date and confirm first.",
+  "youDataImportButton": "Choose a backup file",
+  "youDataImportConfirmTitle": "Restore this backup?",
+  "youDataImportConfirmBody": "Replace everything on this phone with the backup from {date}?",
+  "@youDataImportConfirmBody": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "youDataImportConfirmAction": "Replace",
+  "youDataImportUnknownDate": "an unknown date",
+  "youDataImported": "Backup restored.",
+  "youDataImportFailedTitle": "This file couldn't be used",
+  "youDataImportUnchanged": "Your current data was not changed.",
+  "youDataImportNotJson": "It isn't a readable backup file.",
+  "youDataImportNotBackup": "It isn't a Cartharise backup.",
+  "youDataImportUnsupported": "This backup's format isn't supported by this version of Cartharise.",
+  "youDataImportDamaged": "The backup is incomplete or damaged.",
+  "youDataImportTooLarge": "The file is too large to be a Cartharise backup.",
+  "youDataImportNotText": "It isn't a text file.",
+  "youDataImportOpenFailed": "The file couldn't be opened.",
+  "youDataDeleteTitle": "Delete all data",
+  "youDataDeleteBody": "Erases everything Cartharise keeps on this phone and cancels reminders. Export a backup first if you want to keep a copy.",
+  "youDataDeleteButton": "Delete all data",
+  "youDataDeleteConfirm1Title": "Delete all data?",
+  "youDataDeleteConfirm1Body": "Your answers, Compass, quests, notes, reviews and settings will be erased from this phone, and reminders cancelled.",
+  "youDataDeleteConfirm1Action": "Continue",
+  "youDataDeleteConfirm2Title": "This can't be undone",
+  "youDataDeleteConfirm2Body": "Cartharise keeps no copy anywhere else. Once deleted, your writing can only come back from a backup you exported.",
+  "youDataDeleteConfirm2Action": "Delete everything",
+  "youDataDeleteFailed": "Couldn't delete your data. Your writing is still on this phone; please try again.",
+  "youSupportTitle": "Support & safety",
+  "youSupportSubtitle": "Reflection can stir things up. That's normal.",
+  "youSupportNotTherapyTitle": "Not therapy",
+  "youSupportNotTherapyBody": "Cartharise is a tool for self-reflection. It isn't therapy, counselling or medical advice, and it doesn't diagnose anything.",
+  "youSupportHeavyTitle": "If a question feels heavy",
+  "youSupportHeavy1": "Skip it. Every question is optional.",
+  "youSupportHeavy2": "Switch to the softer wording where it's offered.",
+  "youSupportHeavy3": "Pause and come back another day. Your words are kept.",
+  "youSupportHeavy4": "Talk it through with someone you trust.",
+  "youSupportCrisisTitle": "If you're in crisis",
+  "youSupportCrisisBody": "If you're in danger or thinking about harming yourself, contact your local emergency services now, or reach a crisis line in your country.",
+  "youSupportFindHelpline": "Find a helpline",
+  "youSupportHelplineHint": "Opens findahelpline.com, a directory of helplines by country.",
+  "youSupportOngoingTitle": "Ongoing support",
+  "youSupportOngoingBody": "If difficult feelings last or get in the way of daily life, a doctor, psychologist or counsellor can help."
 }

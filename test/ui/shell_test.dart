@@ -7,6 +7,7 @@ import 'package:cartharise/ui/today/today_tab.dart';
 import 'package:cartharise/ui/widgets/loader.dart';
 import 'package:cartharise/ui/widgets/save_indicator.dart';
 import 'package:cartharise/ui/you/data_screen.dart';
+import 'package:cartharise/ui/you/reminders_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -104,7 +105,7 @@ void main() {
         final context = tester.element(find.byType(TodayTab));
         AppNav.openReminders(context);
         await pumpFrames(tester);
-        final pushed = tester.element(find.text('You').last);
+        final pushed = tester.element(find.byType(RemindersScreen));
         AppNav.openMissions(pushed);
         await pumpFrames(tester);
         expect(h.shell.tab, AppTab.compass);
