@@ -63,7 +63,10 @@ class _ProjectScreenState extends State<ProjectScreen> {
   void _snack(String text, {SnackBarAction? action}) =>
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text(text), action: action));
+        ..showSnackBar(
+          // Undo stays for the usual few seconds, not until dismissed.
+          SnackBar(content: Text(text), action: action, persist: false),
+        );
 
   Future<void> _updateCompass() async {
     final l = AppLocalizations.of(context);

@@ -118,3 +118,20 @@ Strings live in per-area fragments `l10n_src/<area>_en.arb` (area-prefixed keys)
 invalid JSON or a duplicate key) and `flutter gen-l10n`. `lib/l10n/` is a build
 output; `test/merge_arb_test.dart` fails if it is stale. Prompt and lesson text
 is content (`ContentLibrary`), not ARB.
+
+## Tests
+
+* Unit tests for the domain, state, reminders and `.ics` (`test/*_test.dart`).
+* One widget-test file per area (`test/ui/<area>_test.dart`), each with the size
+  matrix (320×568 @200 %, 390×844, 1024×1366 @130 %) in dark and light.
+* `test/ui/journeys_test.dart`: the requirements' §11 acceptance journeys, end
+  to end through the real app and the real English content: first launch →
+  onboarding → reset (14 morning answers kept when going back, a daytime
+  check-in that persists, 7 evening answers) → previewed Compass import, a
+  later import that keeps edited text → levers to quests (complete, reopen,
+  delete) → note and weekly review create/edit/delete → Inspiration link →
+  `.ics` with 6 daily events → JSON export, delete all, restore. Edge cases:
+  skip every prompt, malformed imports, 320 dp at 200 % text, a failed save
+  leading to "Export a copy", and every `AppNav` route reaching its screen.
+* `test/ui_base_test.dart` guards the palette rule; `make screenshots` renders
+  every area's screens to `test/screenshots/out/` (git-ignored).

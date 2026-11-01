@@ -14,6 +14,7 @@ import '../../domain/content.dart';
 import '../../domain/local_date.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
+import '../compass/compass_copy.dart';
 
 /// The widest a column of reading or writing gets (tablets).
 const double kReadableWidth = 680;
@@ -119,15 +120,9 @@ String formatHhmm(BuildContext context, String hhmm) {
 
 // ── Labels shared by Journal and You ───────────────────────────────────────
 
+/// The same field names the Compass tab shows.
 String compassFieldLabel(AppLocalizations l, CompassField field) =>
-    switch (field) {
-      CompassField.antiVision => l.journalFieldAntiVision,
-      CompassField.vision => l.journalFieldVision,
-      CompassField.yearGoal => l.journalFieldYearGoal,
-      CompassField.monthProject => l.journalFieldMonthProject,
-      CompassField.dailyLevers => l.journalFieldDailyLevers,
-      CompassField.constraints => l.journalFieldConstraints,
-    };
+    CompassFieldCopy.of(l, field).title;
 
 String phaseLabel(AppLocalizations l, PromptPhase phase) => switch (phase) {
   PromptPhase.morning => l.journalPhaseMorning,

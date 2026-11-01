@@ -10,7 +10,6 @@ import '../../state/app_state.dart';
 import '../compass/compass_import.dart';
 import '../nav.dart';
 import '../theme/cartha_theme.dart';
-import '../widgets/scenes.dart';
 import '../widgets/widgets.dart';
 import 'next_step.dart';
 import 'today_model.dart';

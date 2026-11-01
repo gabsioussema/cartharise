@@ -127,13 +127,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'Cartharise can\'t write to this phone\'s storage right now. Your current words stay on screen until you leave this screen.';
 
   @override
-  String get stubComingSoonTitle => 'Coming soon';
-
-  @override
-  String get stubComingSoonBody =>
-      'This part of Cartharise is still being built. Nothing you have written is affected.';
-
-  @override
   String linkOpenFailed(String url) {
     return 'Couldn\'t open the link. You can visit it yourself: $url';
   }
@@ -731,24 +724,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String journalVersionLabel(String date, String reason) {
     return '$date · $reason';
   }
-
-  @override
-  String get journalFieldAntiVision => 'Anti-vision';
-
-  @override
-  String get journalFieldVision => 'Vision';
-
-  @override
-  String get journalFieldYearGoal => 'One-year goal';
-
-  @override
-  String get journalFieldMonthProject => 'One-month project';
-
-  @override
-  String get journalFieldDailyLevers => 'Daily levers';
-
-  @override
-  String get journalFieldConstraints => 'Constraints';
 
   @override
   String get journalPastResetsTitle => 'Earlier resets';

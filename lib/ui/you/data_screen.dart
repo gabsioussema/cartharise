@@ -236,16 +236,10 @@ class _DataScreenState extends State<DataScreen> {
                 children: [
                   Text(l.youDataDeleteBody, style: secondary),
                   const SizedBox(height: 16),
-                  OutlinedButton.icon(
+                  DestructiveButton(
                     key: const ValueKey('data-delete'),
+                    label: l.youDataDeleteButton,
                     onPressed: _deleting ? null : _deleteAll,
-                    icon: const Icon(Icons.delete_forever_outlined),
-                    label: Text(l.youDataDeleteButton),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: p.error,
-                      side: BorderSide(color: p.error),
-                      minimumSize: const Size(double.infinity, 52),
-                    ),
                   ),
                 ],
               ),

@@ -8,7 +8,6 @@ import '../../domain/app_data.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
 import '../theme/cartha_theme.dart';
-import '../widgets/scenes.dart';
 import '../widgets/widgets.dart';
 import 'onboarding_steps.dart';
 

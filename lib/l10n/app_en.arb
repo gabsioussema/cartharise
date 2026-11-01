@@ -43,8 +43,6 @@
   "bootStartFreshConfirmBody": "The unreadable file is set aside on this phone, not deleted. Cartharise then starts empty.",
   "storageErrorTitle": "Storage problem",
   "storageErrorBody": "Cartharise can't write to this phone's storage right now. Your current words stay on screen until you leave this screen.",
-  "stubComingSoonTitle": "Coming soon",
-  "stubComingSoonBody": "This part of Cartharise is still being built. Nothing you have written is affected.",
   "linkOpenFailed": "Couldn't open the link. You can visit it yourself: {url}",
   "@linkOpenFailed": {
     "placeholders": {
@@ -384,12 +382,6 @@
       }
     }
   },
-  "journalFieldAntiVision": "Anti-vision",
-  "journalFieldVision": "Vision",
-  "journalFieldYearGoal": "One-year goal",
-  "journalFieldMonthProject": "One-month project",
-  "journalFieldDailyLevers": "Daily levers",
-  "journalFieldConstraints": "Constraints",
   "journalPastResetsTitle": "Earlier resets",
   "journalPastResetsBody": "Starting a new reset keeps the earlier one here to read.",
   "journalPastResetsEmpty": "No earlier resets yet. When you start a new reset, the previous one is kept here, unchanged.",

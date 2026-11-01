@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../theme/cartha_theme.dart';
+
 /// The main action of a screen: a bronze pill (dark) / deep pill (light),
 /// like the board's "Next →" / "Get Started →". At most one per view.
 class PrimaryButton extends StatelessWidget {
@@ -69,6 +71,40 @@ class SecondaryButton extends StatelessWidget {
         icon: icon,
         trailingIcon: trailingIcon,
       ),
+    );
+    return expand ? SizedBox(width: double.infinity, child: button) : button;
+  }
+}
+
+/// An irreversible action (e.g. "Delete all data"): an outlined pill in the
+/// error colour, with an icon so the meaning is not carried by colour alone.
+/// Always pair it with a destructive [confirmDialog].
+class DestructiveButton extends StatelessWidget {
+  const DestructiveButton({
+    super.key,
+    required this.label,
+    required this.onPressed,
+    this.icon = Icons.delete_forever_outlined,
+    this.expand = true,
+  });
+
+  final String label;
+
+  /// Null disables the button.
+  final VoidCallback? onPressed;
+  final IconData icon;
+  final bool expand;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = CarthaPalette.of(context);
+    final button = OutlinedButton(
+      onPressed: onPressed,
+      style: OutlinedButton.styleFrom(
+        foregroundColor: p.error,
+        side: BorderSide(color: onPressed == null ? p.border : p.error),
+      ),
+      child: _ButtonContent(label: label, icon: icon),
     );
     return expand ? SizedBox(width: double.infinity, child: button) : button;
   }

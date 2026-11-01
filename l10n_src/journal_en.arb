@@ -84,13 +84,6 @@
   "journalVersionLabel": "{date} · {reason}",
   "@journalVersionLabel": {"placeholders": {"date": {"type": "String"}, "reason": {"type": "String"}}},
 
-  "journalFieldAntiVision": "Anti-vision",
-  "journalFieldVision": "Vision",
-  "journalFieldYearGoal": "One-year goal",
-  "journalFieldMonthProject": "One-month project",
-  "journalFieldDailyLevers": "Daily levers",
-  "journalFieldConstraints": "Constraints",
-
   "journalPastResetsTitle": "Earlier resets",
   "journalPastResetsBody": "Starting a new reset keeps the earlier one here to read.",
   "journalPastResetsEmpty": "No earlier resets yet. When you start a new reset, the previous one is kept here, unchanged.",

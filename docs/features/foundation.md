@@ -57,7 +57,7 @@ dialogs), 16 (inputs), pill buttons. Flat, thin borders.
 | `ScreenHeader(title, subtitle)` | Cinzel title + Inter subtitle, header semantics. |
 | `ChipTag(label, icon, tone)` | small non-interactive label. |
 | `openExternalLink(context, uri)` | url_launcher (external app); honest snackbar with the address on failure. |
-| `StubScreen` | placeholder used by the §6 stubs until each owner replaces them. |
+| `DestructiveButton` | outlined pill in the error colour for irreversible actions (Delete all data); always paired with a confirm. |
 
 ## Loader spec (`CarthaLoader`)
 
@@ -126,7 +126,7 @@ provided above `MaterialApp`; `AppNav` helpers: `switchTab`, `tabWidget`,
 | `test/reminder_test.dart` | planning, quiet hours (incl. midnight), DST-safe next occurrence |
 | `test/ics_test.dart` | 6 events, COUNT=30, floating DTSTART, stable UIDs, CRLF, folding, escaping, no user text |
 | `test/merge_arb_test.dart` | ARB merge order, duplicate/invalid failures, `app_en.arb` up to date |
-| `test/ui/shell_test.dart` | boot loader → onboarding, onboarding stub → app, load error + Try again, 5 tabs & switching (dark + light), AppNav from pushed screens, notification tap, size matrix, SaveIndicator failure |
+| `test/ui/shell_test.dart` | boot loader → onboarding, onboarding → app, load error + Try again, 5 tabs & switching (dark + light), AppNav from pushed screens, notification tap, size matrix, SaveIndicator failure |
 | `test/ui/loader_test.dart` | keyframes, emblem geometry, animating vs static (device / setting), lockups render |
 | `test/screenshots/foundation_screens_test.dart` | tagged `screenshots`: boot, load error, shell, UI-base gallery (Forest + Olive, dark + light) → `test/screenshots/out/` |
 

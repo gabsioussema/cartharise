@@ -32,6 +32,8 @@ to tasks; complete, reopen, and delete a task").
   Undo. Daily quests stay in Today.
 * Delete (menu or "Delete quest" in the sheet) is immediate with an **Undo**
   snackbar that puts the quest back at the same position.
+* Undo snackbars use `persist: false`: they leave after the usual few seconds
+  (Flutter otherwise keeps a snackbar with an action until it is dismissed).
 * Sheet (`showQuestSheet`): title (required, "Give the quest a few words."),
   "Repeat every day" switch, optional date via the date picker ("Remove date").
 

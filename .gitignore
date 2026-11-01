@@ -49,3 +49,6 @@ app.*.map.json
 
 # macOS
 .DS_Store
+
+# Design screenshots (regenerate with: make screenshots)
+/test/screenshots/out/

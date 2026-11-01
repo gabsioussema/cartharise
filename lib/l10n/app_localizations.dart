@@ -316,18 +316,6 @@ abstract class AppLocalizations {
   /// **'Cartharise can\'t write to this phone\'s storage right now. Your current words stay on screen until you leave this screen.'**
   String get storageErrorBody;
 
-  /// No description provided for @stubComingSoonTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Coming soon'**
-  String get stubComingSoonTitle;
-
-  /// No description provided for @stubComingSoonBody.
-  ///
-  /// In en, this message translates to:
-  /// **'This part of Cartharise is still being built. Nothing you have written is affected.'**
-  String get stubComingSoonBody;
-
   /// No description provided for @linkOpenFailed.
   ///
   /// In en, this message translates to:
@@ -1329,42 +1317,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{date} · {reason}'**
   String journalVersionLabel(String date, String reason);
-
-  /// No description provided for @journalFieldAntiVision.
-  ///
-  /// In en, this message translates to:
-  /// **'Anti-vision'**
-  String get journalFieldAntiVision;
-
-  /// No description provided for @journalFieldVision.
-  ///
-  /// In en, this message translates to:
-  /// **'Vision'**
-  String get journalFieldVision;
-
-  /// No description provided for @journalFieldYearGoal.
-  ///
-  /// In en, this message translates to:
-  /// **'One-year goal'**
-  String get journalFieldYearGoal;
-
-  /// No description provided for @journalFieldMonthProject.
-  ///
-  /// In en, this message translates to:
-  /// **'One-month project'**
-  String get journalFieldMonthProject;
-
-  /// No description provided for @journalFieldDailyLevers.
-  ///
-  /// In en, this message translates to:
-  /// **'Daily levers'**
-  String get journalFieldDailyLevers;
-
-  /// No description provided for @journalFieldConstraints.
-  ///
-  /// In en, this message translates to:
-  /// **'Constraints'**
-  String get journalFieldConstraints;
 
   /// No description provided for @journalPastResetsTitle.
   ///

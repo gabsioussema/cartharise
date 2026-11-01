@@ -30,9 +30,10 @@ class ShellController extends ChangeNotifier {
   AppTab _tab;
   AppTab get tab => _tab;
 
-  /// A request for the Compass tab to show a section (set by
-  /// [AppNav.openCompass] / [AppNav.openMissions]). The Compass tab listens,
-  /// switches, and sets it back to null.
+  /// The Compass tab's section (set by [AppNav.openCompass] /
+  /// [AppNav.openMissions]). The Compass tab listens and switches; when the
+  /// user taps a section pill it writes that section back here, so the next
+  /// request is always a real change it hears.
   final ValueNotifier<CompassSection?> compassSection = ValueNotifier(null);
 
   void select(AppTab tab) {

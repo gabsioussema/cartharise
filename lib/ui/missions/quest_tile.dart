@@ -23,6 +23,9 @@ Future<void> deleteQuestWithUndo(BuildContext context, Quest quest) async {
     ..showSnackBar(
       SnackBar(
         content: Text(l.missionsQuestDeleted),
+        // Undo is offered for a few seconds, then the bar goes by itself
+        // (an action would otherwise keep it on screen until dismissed).
+        persist: false,
         action: SnackBarAction(
           label: l.missionsUndo,
           onPressed: () => state.restoreQuest(quest, index),
@@ -49,6 +52,7 @@ Future<void> setQuestDoneWithFeedback(
       ..showSnackBar(
         SnackBar(
           content: Text(l.missionsQuestMovedToDone(quest.title)),
+          persist: false,
           action: SnackBarAction(
             label: l.missionsUndo,
             onPressed: () => state.setQuestDone(quest.id, false, day: day),

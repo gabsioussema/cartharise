@@ -9,6 +9,7 @@ import 'data/data_store.dart';
 import 'reminders/reminder_scheduler.dart';
 import 'services/file_share.dart';
 import 'state/app_state.dart';
+import 'ui/you/font_licenses.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,6 +18,8 @@ Future<void> main() async {
   await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   // Reminders fire at local wall-clock time; the zone is re-read every launch.
   await initTimeZone();
+  // Bundled Inter + Cinzel (OFL) appear on the licence page app-wide.
+  registerFontLicenses();
 
   final state = AppState(
     store: FileDataStore(),
