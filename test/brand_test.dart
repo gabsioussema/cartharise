@@ -23,6 +23,10 @@ void main() {
     );
   });
 
+  test('the Android notification icon is the EmblemGeometry emblem', () {
+    expect(readText(notificationIconPath), notificationIconXml(), reason: hint);
+  });
+
   for (final MapEntry(key: path, value: box) in lockupEmblemBoxes.entries) {
     test('$path carries the EmblemGeometry emblem', () {
       expect(readText(path), contains(lockupEmblemBlock(box)), reason: hint);

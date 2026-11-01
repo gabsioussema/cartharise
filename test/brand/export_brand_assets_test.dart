@@ -17,6 +17,10 @@ void main() {
     File('assets/brand/loader_reference.svg').writeAsStringSync(loaderSvg());
   });
 
+  test('the Android notification icon', () {
+    File(notificationIconPath).writeAsStringSync(notificationIconXml());
+  });
+
   test('the emblem in both lockups', () {
     for (final MapEntry(key: path, value: box) in lockupEmblemBoxes.entries) {
       File(path).writeAsStringSync(withLockupEmblem(readText(path), box));

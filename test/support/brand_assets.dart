@@ -73,6 +73,47 @@ String loaderSvg() {
       '</svg>\n';
 }
 
+/// The Android status-bar icon for check-in reminders: the emblem as a
+/// single-colour vector drawable (Android tints it), filling a 24 dp square.
+const String notificationIconPath =
+    'android/app/src/main/res/drawable/ic_stat_cartharise.xml';
+
+String notificationIconXml() {
+  const b = EmblemGeometry.tightBounds;
+  const side = 330.0;
+  final shift = _num(side / 2 - b.center.dx);
+  final shiftY = _num(side / 2 - b.center.dy);
+  final lines = EmblemGeometry.lineData.map(
+    (d) =>
+        '        <path\n'
+        '            android:pathData="$d"\n'
+        '            android:strokeColor="#FFFFFFFF" '
+        'android:strokeWidth="${_num(EmblemGeometry.strokeWidth)}"\n'
+        '            android:strokeLineJoin="miter" '
+        'android:strokeMiterLimit="${_num(EmblemGeometry.miterLimit)}"\n'
+        '            android:strokeLineCap="butt" />\n',
+  );
+  final fills = EmblemGeometry.fillData.map(
+    (d) =>
+        '        <path\n'
+        '            android:pathData="$d"\n'
+        '            android:fillColor="#FFFFFFFF" />\n',
+  );
+  return '<?xml version="1.0" encoding="utf-8"?>\n'
+      '<!-- Status-bar icon for check-in reminders: the Cartharise emblem as a\n'
+      '     single-colour vector (Android tints it). Exported from\n'
+      '     EmblemGeometry by `make brand`; do not edit by hand. -->\n'
+      '<vector xmlns:android="http://schemas.android.com/apk/res/android"\n'
+      '    android:width="24dp"\n'
+      '    android:height="24dp"\n'
+      '    android:viewportWidth="${_num(side)}"\n'
+      '    android:viewportHeight="${_num(side)}">\n'
+      '    <group android:translateX="$shift" android:translateY="$shiftY">\n'
+      '${lines.join()}${fills.join()}'
+      '    </group>\n'
+      '</vector>\n';
+}
+
 /// Where the emblem sits in each lockup (its ink box in the SVG's own
 /// coordinates); the lettering and tagline around it are fixed artwork.
 const Map<String, Rect> lockupEmblemBoxes = {
