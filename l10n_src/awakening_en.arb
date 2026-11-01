@@ -1,6 +1,6 @@
 {
   "awakeningTitle": "The Awakening",
-  "awakeningSubtitle": "Seven ideas behind the reset, in plain words. Optional, and in any order.",
+  "awakeningSubtitle": "Seven ideas behind the reset. Optional, any order.",
   "awakeningStripTitle": "Learn the ideas first (optional)",
   "awakeningSeeAll": "See all lessons",
   "awakeningReadCount": "{read} of {total} read",
@@ -24,7 +24,7 @@
   "awakeningPrevious": "Previous lesson",
   "awakeningNext": "Next lesson",
   "awakeningDone": "Back to the lessons",
-  "awakeningSourceNote": "Paraphrased in Cartharise's own words from “{title}” by {author}. Cartharise is independent.",
+  "awakeningSourceNote": "In Cartharise's words, from “{title}” by {author}. Independent app.",
   "@awakeningSourceNote": {"placeholders": {"title": {"type": "String"}, "author": {"type": "String"}}},
   "awakeningSourceLink": "About the source",
   "awakeningMissing": "This lesson isn't available."

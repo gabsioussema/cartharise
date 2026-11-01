@@ -19,7 +19,7 @@ Requirements: F-058–F-064 and §13 "The Campaign" of
 | Constraints | Rules of engagement | Compass › Boundaries, always shown with "The game never rewards giving these up." |
 
 Nothing is copied or inferred: the map shows the user's own Compass words, or
-"Not written yet. Add it in your Compass when you're ready."
+"Not written yet."
 
 ## User flow
 
@@ -30,7 +30,8 @@ Nothing is copied or inferred: the map shows the user's own Compass words, or
 2. **Act I · The one-day awakening** (F-059): five chapter cards with the
    article's counts — See the terrain (4), Find the pattern (7), Raise your
    banner (3), Break autopilot (6 daytime check-ins), Plan the campaign (7
-   evening questions). Each shows "n of total written" in the current reset,
+   evening questions). Each card is kept short: name, area · count, progress,
+   "n of total written" in the current reset,
    an "Explored" chip when complete, and **Explore** → the chapter's first
    unanswered question (`AppNav.openPrompt`). Bonus prompts never count.
 3. **The strategist's map** — the table above; **Build your strategy** (→

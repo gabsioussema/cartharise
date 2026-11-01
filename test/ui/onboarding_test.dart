@@ -24,7 +24,7 @@ const _titles = {
   OnboardingStep.reset: 'Reset Your Life',
   OnboardingStep.direction: 'Choose a Direction',
   OnboardingStep.steps: 'Improve Step by Step',
-  OnboardingStep.limits: "What this is, and isn't",
+  OnboardingStep.limits: "Before you start",
   OnboardingStep.credit: 'Inspired by',
   OnboardingStep.pace: 'Choose your pace',
   OnboardingStep.name: 'What should we call you?',
@@ -177,8 +177,8 @@ void main() {
         findsOneWidget,
         reason: 'promise',
       );
-      expect(find.text("It can't guarantee a fixed life"), findsOneWidget);
-      expect(find.text('Not therapy or diagnosis'), findsOneWidget);
+      expect(find.text("It won't fix your life overnight"), findsOneWidget);
+      expect(find.text('Not therapy'), findsOneWidget);
 
       // Not confirmed: Next is disabled and the reason is said in words.
       expect(_button(tester, _next).onPressed, isNull);
@@ -220,7 +220,7 @@ void main() {
       expect(
         tester.getSemantics(find.byKey(_adult)),
         isSemantics(
-          label: "I'm 18 or older\nCartharise is made for adults.",
+          label: "I'm 18 or older\nMade for adults.",
           hasCheckedState: true,
           isChecked: false,
           hasTapAction: true,
@@ -274,14 +274,9 @@ void main() {
         expect(find.text('“${credit.title}”'), findsOneWidget);
         expect(find.text('by Dan Koe · 23 December 2025'), findsOneWidget);
         expect(find.text(credit.independenceNotice), findsOneWidget);
-        expect(find.text(credit.paraphraseNotice), findsOneWidget);
-        expect(
-          find.text(
-            "You don't need to read it first. Every idea is explained in plain "
-            'words as you go.',
-          ),
-          findsOneWidget,
-        );
+        // Kept short here; the full paraphrase notice lives in Inspiration.
+        expect(find.text(credit.paraphraseNotice), findsNothing);
+        expect(find.text('No need to read it first.'), findsOneWidget);
         await _tap(
           tester,
           find.byKey(const ValueKey('onboarding-credit-article')),
@@ -333,16 +328,10 @@ void main() {
           matching: find.byType(Text),
         ),
       );
-      expect(storage.data, contains('only on this phone'));
+      expect(storage.data, contains('Only on this phone'));
       expect(storage.data, contains('not encrypted'));
-      expect(storage.data, contains('not included in phone or cloud backups'));
-      expect(
-        find.text(
-          'No account, no ads, no analytics. Nothing you write is sent '
-          'anywhere.',
-        ),
-        findsOneWidget,
-      );
+      expect(storage.data, contains('not in phone or cloud backups'));
+      expect(find.text('No account, ads or analytics.'), findsOneWidget);
       expect(find.text('Finish'), findsOneWidget);
     });
 

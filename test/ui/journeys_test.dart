@@ -187,7 +187,7 @@ void main() {
     for (var i = 0; i < 5; i++) {
       await _tap(tester, find.byKey(_next)); // brand + four carousel pages
     }
-    expect(find.text("What this is, and isn't"), findsOneWidget);
+    expect(find.text("Before you start"), findsOneWidget);
     await _tap(tester, find.byKey(_adult));
     await _tap(tester, find.byKey(_next));
     // Inspired by: title, author and the exact article link.
@@ -573,7 +573,7 @@ void main() {
       await _tap(tester, _in<ResetTab>(find.text('The Mirror')));
       final first = _prompt('morning.01');
       expect(find.text(first.question), findsOneWidget);
-      expect(find.textContaining('You skipped this one'), findsOneWidget);
+      expect(find.textContaining('Skipped. Come back anytime'), findsOneWidget);
       await _type(tester, find.byType(TextField), 'Ready now.');
       await _tap(tester, find.text('Save & continue'));
       final a = h.store.saved!.currentJourney!.answer('morning.01')!;

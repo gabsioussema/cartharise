@@ -19,14 +19,6 @@ String chapterArea(AppLocalizations l, CampaignChapter c) => switch (c) {
   CampaignChapter.plan => l.campaignChapterPlanArea,
 };
 
-String chapterBody(AppLocalizations l, CampaignChapter c) => switch (c) {
-  CampaignChapter.terrain => l.campaignChapterTerrainBody,
-  CampaignChapter.pattern => l.campaignChapterPatternBody,
-  CampaignChapter.banner => l.campaignChapterBannerBody,
-  CampaignChapter.autopilot => l.campaignChapterAutopilotBody,
-  CampaignChapter.plan => l.campaignChapterPlanBody,
-};
-
 String achievementName(AppLocalizations l, Achievement a) => switch (a) {
   Achievement.observer => l.campaignAchievementObserver,
   Achievement.pathfinder => l.campaignAchievementPathfinder,

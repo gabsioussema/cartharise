@@ -1,11 +1,11 @@
 {
   "resetTitle": "The Reset",
-  "resetSubtitle": "One guided day: look honestly at where you are, picture where you want to go, and choose a first step.",
+  "resetSubtitle": "One day: see where you are, choose where to go.",
 
   "resetPaceOneDayTitle": "Your pace: one day",
-  "resetPaceOneDayBody": "Morning questions, a few check-ins during the day, then the evening. Nothing locks if it takes you longer.",
+  "resetPaceOneDayBody": "Morning, daytime, evening. Nothing locks if it takes longer.",
   "resetPaceFlexibleTitle": "Your pace: flexible",
-  "resetPaceFlexibleBody": "Take the parts in any order and come back whenever you like. Nothing locks and nothing expires.",
+  "resetPaceFlexibleBody": "Any order, any pace. Nothing locks or expires.",
   "resetPaceChange": "Change pace",
 
   "resetProgressTitle": "Your reset",
@@ -15,9 +15,9 @@
   "@resetProgressNext": {"placeholders": {"title": {"type": "String"}}},
   "resetBegin": "Begin",
   "resetContinue": "Continue",
-  "resetAllDoneBody": "Every core question has been answered or skipped. You can still open and change any of them.",
+  "resetAllDoneBody": "Every core question is answered or skipped. You can still edit them.",
   "resetSeeCreated": "See what you created",
-  "resetCompletedOn": "Finished on {date}. You can still revisit and edit any answer.",
+  "resetCompletedOn": "Finished on {date}. Answers stay editable.",
   "@resetCompletedOn": {"placeholders": {"date": {"type": "String"}}},
 
   "resetPhasesTitle": "Your day",
@@ -30,7 +30,7 @@
   "resetSubflowInterrupt": "The Interrupt",
   "resetSubflowBreakthrough": "The Breakthrough",
   "resetMirrorBody": "Current reality, possible futures, identity",
-  "resetVisionBody": "A good ordinary day, who you want to become, one action this week",
+  "resetVisionBody": "A good ordinary day, who you want to be, one step",
   "resetInterruptBody": "Six short check-ins at moments in your day",
   "resetBreakthroughBody": "Insights, direction and a plan",
 
@@ -62,7 +62,7 @@
   "@resetCheckinTime": {"placeholders": {"time": {"type": "String"}}},
 
   "resetOptionalTitle": "Optional contemplations",
-  "resetOptionalBody": "Three extra questions for a quiet moment. They don't count toward your progress.",
+  "resetOptionalBody": "Three extra questions. Optional.",
   "resetOptionalChip": "Optional",
 
   "resetPastTitle": "Past resets",
@@ -75,11 +75,11 @@
   "@resetPastAnswerCount": {"placeholders": {"count": {"type": "int"}}},
 
   "resetNewTitle": "Start a new reset",
-  "resetNewBody": "Want to go through it again? Start fresh: this reset stays readable under Past resets.",
+  "resetNewBody": "Start fresh. This reset stays under Past resets.",
   "resetNewConfirmTitle": "Start a new reset?",
-  "resetNewConfirmBody": "Your current answers are kept as a past reset you can read at any time. The new reset starts empty. Your Compass, quests and journal don't change.",
+  "resetNewConfirmBody": "Your answers move to Past resets. Compass, quests and journal stay.",
   "resetNewConfirmAction": "Start new reset",
-  "resetNewStarted": "A new reset has started. Your earlier one is under Past resets.",
+  "resetNewStarted": "New reset started. The earlier one is under Past resets.",
 
   "resetQuestionOf": "Question {n} of {total}",
   "@resetQuestionOf": {"placeholders": {"n": {"type": "int"}, "total": {"type": "int"}}},
@@ -94,19 +94,19 @@
   "resetExampleTitle": "Example — not a right answer",
   "resetAnswerLabel": "Your answer",
   "resetAnswerHint": "Write as much or as little as you like.",
-  "resetSkippedNote": "You skipped this one. Write something whenever you like, or leave it.",
+  "resetSkippedNote": "Skipped. Come back anytime, or leave it.",
   "resetSaveContinue": "Save & continue",
   "resetSaveFinish": "Save & finish",
   "resetSkip": "Skip for now",
   "resetPause": "Pause",
   "resetHeavyLink": "Feeling heavy?",
   "resetHeavyTitle": "This can be a lot",
-  "resetHeavyBody": "Some questions touch tender places. You decide how deep to go: soften the wording, skip, or stop here. Your words are saved.",
+  "resetHeavyBody": "Go as deep as you like: soften, skip or stop. Your words are saved.",
   "resetHeavySofter": "Switch to softer wording",
   "resetHeavySkip": "Skip this question",
   "resetHeavyPause": "Take a pause",
   "resetHeavySupport": "Support and safety",
-  "resetHeavyCrisis": "Cartharise is not therapy. If you feel unsafe, contact local emergency services or a crisis line now.",
+  "resetHeavyCrisis": "Cartharise isn't therapy. If you feel unsafe, contact emergency services or a crisis line now.",
   "resetPromptMissing": "This question isn't available.",
 
   "resetCompleteTitle": "Reset complete",
@@ -119,9 +119,9 @@
   "resetCompletePhaseLine": "{phase}: {answered} of {total} answered",
   "@resetCompletePhaseLine": {"placeholders": {"phase": {"type": "String"}, "answered": {"type": "int"}, "total": {"type": "int"}}},
   "resetCompleteVisionTitle": "Your vision, in your words",
-  "resetCompleteOpen": "{count, plural, =1{1 core question is still open. You can return to it from the Reset tab at any time.} other{{count} core questions are still open. You can return to them from the Reset tab at any time.}}",
+  "resetCompleteOpen": "{count, plural, =1{1 core question is still open.} other{{count} core questions are still open.}}",
   "@resetCompleteOpen": {"placeholders": {"count": {"type": "int"}}},
-  "resetCompleteCompassBody": "Your evening answers can become the first draft of your Life Compass. You choose what to copy, and nothing you already wrote is overwritten.",
+  "resetCompleteCompassBody": "Your evening answers can start your Life Compass. You choose; nothing is overwritten.",
   "resetCompleteBuildCompass": "Build your Compass",
   "resetCompleteLater": "Later"
 }

@@ -125,10 +125,10 @@ void main() {
       // Shown on onboarding and in You › Your data (StorageTransparencyText).
       final text = lookupAppLocalizations(const Locale('en'))
           .storageTransparency;
-      expect(text, contains('only on this phone'));
+      expect(text, contains('Only on this phone'));
       expect(text, contains('not encrypted by Cartharise'));
-      expect(text, contains('not synced'));
-      expect(text, contains('not included in phone or cloud backups'));
+      expect(text, contains('Not synced'));
+      expect(text, contains('not in phone or cloud backups'));
       expect(text, contains('erases it'));
     });
   });

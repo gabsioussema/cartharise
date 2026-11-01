@@ -98,10 +98,7 @@ void main() {
               'One-year mission',
               'The outcome that would matter most a year from now.',
             ),
-            (
-              'One-month project',
-              'One project for the next four weeks that moves the mission forward.',
-            ),
+            ('One-month project', 'One project for the next four weeks.'),
             ('Daily levers', '2–3 actions, one per line.'),
             ('Boundaries', "What I won't sacrifice."),
           ]) {
@@ -109,12 +106,7 @@ void main() {
             expect(find.text(help), findsOneWidget, reason: help);
           }
           expect(find.text('Written only by you'), findsOneWidget);
-          expect(
-            find.text(
-              'Only you write this. Cartharise never fills it in from your answers.',
-            ),
-            findsOneWidget,
-          );
+          expect(find.text('Only you write this.'), findsOneWidget);
           // Empty Compass, no evening answers: a calm way in, no import offer.
           expect(find.text('Your Compass is empty'), findsOneWidget);
           expect(find.text('Use my evening reflections'), findsNothing);
@@ -228,12 +220,7 @@ void main() {
         find.byKey(const ValueKey('compass-import-constraints')),
         findsNothing,
       );
-      expect(
-        find.text(
-          'Boundaries are never filled from your answers. Only you write them.',
-        ),
-        findsOneWidget,
-      );
+      expect(find.text('Boundaries are only written by you.'), findsOneWidget);
       expect(find.text('Fill 3 fields'), findsOneWidget);
 
       // Untick the levers, confirm.
@@ -336,7 +323,7 @@ void main() {
       await pumpFrames(tester);
       expect(
         find.text(
-          'Nothing to bring over yet. Answer the evening questions in Reset, then come back.',
+          'Nothing to bring over yet. Answer the evening questions first.',
         ),
         findsOneWidget,
       );
@@ -396,9 +383,7 @@ void main() {
       expect(before.compass.vision, 'Second');
       expect(fieldText(tester, CompassField.vision), 'First');
       expect(
-        find.text(
-          'Version restored. Your previous Compass was saved as a version.',
-        ),
+        find.text('Version restored. The previous one was saved.'),
         findsOneWidget,
       );
     });

@@ -90,7 +90,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get saveFailedHelp =>
-      'Your words are still here on screen. Try saving again, or export a copy so nothing is lost.';
+      'Your words are still here. Retry, or export a copy.';
 
   @override
   String get saveExportCopy => 'Export a copy';
@@ -103,11 +103,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get bootLoadErrorBody =>
-      'Cartharise couldn\'t read the file it keeps on this phone. Nothing has been deleted or overwritten.';
+      'Cartharise couldn\'t read its file. Nothing was deleted.';
 
   @override
   String get bootLoadErrorHint =>
-      'Try again. If it keeps happening, check that your phone has free storage, then try once more.';
+      'Try again. If it keeps failing, free up some storage.';
 
   @override
   String get bootStartFresh => 'Start fresh and keep the unreadable file';
@@ -117,18 +117,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get bootStartFreshConfirmBody =>
-      'The unreadable file is set aside on this phone, not deleted. Cartharise then starts empty.';
+      'The unreadable file is set aside, not deleted. Cartharise starts empty.';
 
   @override
   String get storageTransparency =>
-      'Stored only on this phone, in Cartharise\'s private app folder. It is not encrypted by Cartharise, not synced, and not included in phone or cloud backups. Removing the app or using “Delete all data” erases it.';
+      'Only on this phone. Not synced, not in phone or cloud backups, and not encrypted by Cartharise. Deleting the app or your data erases it.';
 
   @override
   String get storageErrorTitle => 'Storage problem';
 
   @override
   String get storageErrorBody =>
-      'Cartharise can\'t write to this phone\'s storage right now. Your current words stay on screen until you leave this screen.';
+      'Can\'t save on this phone right now. Your words stay on screen until you leave.';
 
   @override
   String linkOpenFailed(String url) {
@@ -164,7 +164,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get awakeningSubtitle =>
-      'Seven ideas behind the reset, in plain words. Optional, and in any order.';
+      'Seven ideas behind the reset. Optional, any order.';
 
   @override
   String get awakeningStripTitle => 'Learn the ideas first (optional)';
@@ -235,7 +235,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String awakeningSourceNote(String title, String author) {
-    return 'Paraphrased in Cartharise\'s own words from “$title” by $author. Cartharise is independent.';
+    return 'In Cartharise\'s words, from “$title” by $author. Independent app.';
   }
 
   @override
@@ -249,10 +249,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get campaignSubtitle => 'Your direction, played as a game.';
-
-  @override
-  String get campaignIntro =>
-      'Dan Koe\'s article frames a life plan as a game. Here it is: your vision is the win condition, your anti-vision is what\'s at stake, the one-year mission is the main campaign, the one-month project is your boss fight, daily levers are quests and your boundaries are the rules.';
 
   @override
   String get campaignStatusEyebrow => 'Your campaign';
@@ -269,7 +265,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get campaignXpNote =>
-      'XP counts participation and practice, never your worth. Rest days cost nothing, and nothing is ever taken away.';
+      'XP counts what you do, never your worth. Rest costs nothing.';
 
   @override
   String get campaignXpHow => 'How XP is earned';
@@ -301,7 +297,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String campaignXpRulesNote(int step) {
-    return 'XP never looks at what you write, how long it is or how you feel. Skipping, resting and changing your plans never cost XP. Every $step XP is a new level.';
+    return 'XP ignores what you write and how you feel. Skipping and resting never cost XP. Every $step XP is a new level.';
   }
 
   @override
@@ -324,18 +320,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get campaignChapterTerrainArea => 'Current reality';
 
   @override
-  String get campaignChapterTerrainBody =>
-      'Notice dissatisfaction, repeated complaints and what you actually do.';
-
-  @override
   String get campaignChapterPattern => 'Find the pattern';
 
   @override
   String get campaignChapterPatternArea => 'Anti-vision and identity';
-
-  @override
-  String get campaignChapterPatternBody =>
-      'Explore the future you want to avoid and the patterns that protect you.';
 
   @override
   String get campaignChapterBanner => 'Raise your banner';
@@ -344,28 +332,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get campaignChapterBannerArea => 'Future vision';
 
   @override
-  String get campaignChapterBannerBody =>
-      'Imagine a better ordinary day and one small step that fits it.';
-
-  @override
   String get campaignChapterAutopilot => 'Break autopilot';
 
   @override
   String get campaignChapterAutopilotArea => 'Daytime check-ins';
 
   @override
-  String get campaignChapterAutopilotBody =>
-      'Notice your choices during a real day.';
-
-  @override
   String get campaignChapterPlan => 'Plan the campaign';
 
   @override
   String get campaignChapterPlanArea => 'Evening synthesis';
-
-  @override
-  String get campaignChapterPlanBody =>
-      'Turn reflection into a one-year mission, a one-month project and daily levers.';
 
   @override
   String campaignChapterReflections(String area, int count) {
@@ -398,10 +374,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get campaignMapTitle => 'The strategist\'s map';
 
   @override
-  String get campaignMapSubtitle =>
-      'The six parts of your Life Compass, as the article\'s game.';
-
-  @override
   String get campaignMapAntiVision => 'What\'s at stake · Anti-vision';
 
   @override
@@ -424,8 +396,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'The game never rewards giving these up.';
 
   @override
-  String get campaignMapEmpty =>
-      'Not written yet. Add it in your Compass when you\'re ready.';
+  String get campaignMapEmpty => 'Not written yet.';
 
   @override
   String get campaignMapEdit => 'Build your strategy';
@@ -438,18 +409,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get campaignBossBody =>
-      'The boss is the project or obstacle, never you or other people. Record what you try and what you learn. Setbacks cost nothing.';
+      'The boss is a project, never a person. Log what you try.';
 
   @override
   String get campaignBossNoProject =>
-      'Your one-month project will appear here once you set it in your Compass or Missions.';
+      'Set a one-month project in your Compass to see it here.';
 
   @override
   String get campaignAttemptLabel => 'What did you actually try?';
 
   @override
   String get campaignAttemptHint =>
-      'A 20-minute focus block, a message I\'d been putting off, a first draft…';
+      'A focus block, a hard message, a first draft…';
 
   @override
   String get campaignAttemptRequired =>
@@ -459,15 +430,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get campaignLearningLabel => 'What did you learn? (optional)';
 
   @override
-  String get campaignLearningHint =>
-      'What worked, what didn\'t, what you\'ll change next time.';
+  String get campaignLearningHint => 'What worked, what you\'d change.';
 
   @override
   String get campaignRecord => 'Record this attempt';
 
   @override
-  String get campaignRecorded =>
-      'Attempt recorded. What you learned counts too.';
+  String get campaignRecorded => 'Attempt recorded.';
 
   @override
   String campaignLogTitle(int count) {
@@ -516,7 +485,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get campaignAttemptDeleteBody =>
-      'It will be removed from your battle log. This can\'t be undone.';
+      'It will be removed. This can\'t be undone.';
 
   @override
   String get campaignAttemptDeleted => 'Attempt deleted';
@@ -526,7 +495,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get campaignAchievementsSubtitle =>
-      'Earned by doing the exercises, never by what you write.';
+      'Earned by doing, never by what you write.';
 
   @override
   String campaignAchievementsCount(int earned, int total) {
@@ -592,7 +561,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get campaignActTwoBody =>
-      'Your one-year mission is a direction, not a deadline. Work on your monthly project, do small quests, notice patterns and adjust your strategy whenever you learn something new.';
+      'A direction, not a deadline. Keep the small steps going.';
 
   @override
   String get campaignStatQuests => 'Quests completed';
@@ -611,7 +580,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get campaignNote =>
-      'Cartharise\'s reading of the game framework in Section VII of Dan Koe\'s article. XP, levels, chapters, achievement names and the battle log are Cartharise additions, not part of the article. Everything stays on this phone, and you can turn the Campaign off in You › Settings.';
+      'XP, levels and achievements are Cartharise additions, not part of the article. Turn them off in You.';
 
   @override
   String get campaignTodayTitle => 'The Campaign';
@@ -629,7 +598,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get campaignSettingHint =>
-      'XP, levels and achievements for your reset and quests. Turning it off hides them; your battle log is kept.';
+      'XP, levels and achievements. Your battle log is kept if you turn it off.';
 
   @override
   String get compassTitle => 'Compass';
@@ -651,7 +620,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get compassHeroEmpty =>
-      'Six short answers that point your days somewhere you choose. Write them yourself, or start from your evening reflection.';
+      'Six short answers that point your days. Write them, or start from your evening answers.';
 
   @override
   String compassLastUpdated(String date) {
@@ -667,7 +636,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get compassImportOfferBody =>
-      'You can bring your own evening words into the empty fields below. You choose which ones, and nothing changes until you confirm.';
+      'Bring your evening words into empty fields. Nothing changes until you confirm.';
 
   @override
   String get compassImportAction => 'Use my evening reflections';
@@ -677,7 +646,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get compassEmptyBody =>
-      'Write each part yourself below, or answer the evening reflection first and bring your words here.';
+      'Write each part below, or answer the evening questions first.';
 
   @override
   String get compassEmptyAction => 'Go to the evening reflection';
@@ -717,7 +686,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get compassFieldMonthProjectHelp =>
-      'One project for the next four weeks that moves the mission forward.';
+      'One project for the next four weeks.';
 
   @override
   String get compassFieldMonthProjectHint =>
@@ -743,8 +712,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Sleep, family dinners, one rest day…';
 
   @override
-  String get compassConstraintsOwnWords =>
-      'Only you write this. Cartharise never fills it in from your answers.';
+  String get compassConstraintsOwnWords => 'Only you write this.';
 
   @override
   String get compassConstraintsChip => 'Written only by you';
@@ -759,8 +727,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get compassVersionsTitle => 'Versions';
 
   @override
-  String get compassVersionsBody =>
-      'Save a snapshot before big changes. Restoring an older version first keeps a copy of what you have now.';
+  String get compassVersionsBody => 'Save a snapshot before big changes.';
 
   @override
   String get compassSaveVersion => 'Save a version';
@@ -813,7 +780,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get compassVersionReadOnly =>
-      'Read-only. Restoring replaces your current Compass, after saving it as a version.';
+      'Read-only. Restoring saves your current Compass first.';
 
   @override
   String get compassRestoreAction => 'Restore this version';
@@ -823,21 +790,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get compassRestoreConfirmBody =>
-      'Your Compass will be replaced by this version. What you have now is saved as a version first, so nothing is lost.';
+      'This replaces your Compass. The current one is saved first.';
 
   @override
   String get compassRestoreConfirm => 'Restore';
 
   @override
-  String get compassRestored =>
-      'Version restored. Your previous Compass was saved as a version.';
+  String get compassRestored => 'Version restored. The previous one was saved.';
 
   @override
   String get compassImportTitle => 'Use my evening reflections';
 
   @override
   String get compassImportBody =>
-      'Your evening answers, exactly as you wrote them. Choose which empty fields they should start.';
+      'Your evening answers, as written. Pick the empty fields to fill.';
 
   @override
   String compassImportFrom(String prompt) {
@@ -852,7 +818,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get compassImportConstraintsNote =>
-      'Boundaries are never filled from your answers. Only you write them.';
+      'Boundaries are only written by you.';
 
   @override
   String get compassImportSnapshotNote =>
@@ -872,7 +838,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get compassImportNothing =>
-      'Nothing to bring over yet. Answer the evening questions in Reset, then come back.';
+      'Nothing to bring over yet. Answer the evening questions first.';
 
   @override
   String compassImportDone(int count) {
@@ -906,8 +872,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get journalNotesIntro =>
-      'Free writing, beyond the guided questions. Notes stay on this phone.';
+  String get journalNotesIntro => 'Free writing. Stays on this phone.';
 
   @override
   String get journalNewNote => 'New note';
@@ -917,7 +882,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get journalNotesEmptyBody =>
-      'Write down anything on your mind: an idea, a worry, something you noticed today.';
+      'An idea, a worry, something you noticed.';
 
   @override
   String get journalUntitled => 'Untitled note';
@@ -976,7 +941,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get journalReviewsIntro =>
-      'Once a week, look at what went well, what got in the way and one small thing to try next.';
+      'Once a week: what went well, what got in the way, what to try next.';
 
   @override
   String get journalReviewThisWeek => 'Review this week';
@@ -988,8 +953,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get journalReviewsEmptyTitle => 'No weekly reviews yet';
 
   @override
-  String get journalReviewsEmptyBody =>
-      'A review takes a few minutes. There is no right way to do it.';
+  String get journalReviewsEmptyBody => 'A few minutes. No right way.';
 
   @override
   String journalWeekOf(String date) {
@@ -1001,7 +965,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get journalReviewEditIntro =>
-      'Write as much or as little as you like. It saves as you type.';
+      'Write as much as you like. It saves as you type.';
 
   @override
   String get journalReviewChangeWeek => 'Change week';
@@ -1043,7 +1007,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String journalReviewDeleteBody(String date) {
-    return 'The review for the week of $date is removed from this phone. This can\'t be undone.';
+    return 'The review for the week of $date will be removed. This can\'t be undone.';
   }
 
   @override
@@ -1065,8 +1029,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'It may have been deleted. Your other reviews are unchanged.';
 
   @override
-  String get journalLookBackIntro =>
-      'See how your words have changed over time. Nothing here is scored or labelled.';
+  String get journalLookBackIntro => 'See how your words have changed.';
 
   @override
   String get journalCompareTitle => 'Compare your Compass';
@@ -1098,7 +1061,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get journalCompareEmptyBody =>
-      'Save a version of your Compass and you can compare it here later.';
+      'Save a Compass version to compare it here later.';
 
   @override
   String get journalOpenCompass => 'Open Compass';
@@ -1132,7 +1095,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get journalPastResetsEmpty =>
-      'No earlier resets yet. When you start a new reset, the previous one is kept here, unchanged.';
+      'No earlier resets yet. Starting a new one keeps the old one here.';
 
   @override
   String journalResetStarted(String date) {
@@ -1215,14 +1178,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get missionsIntro =>
-      'Small actions that move your Compass forward. Rest days are part of it.';
+      'Small steps toward your Compass. Rest counts too.';
 
   @override
   String get missionsToday => 'Today';
 
   @override
-  String get missionsTodayEmpty =>
-      'Nothing planned for today. Add a small quest, or rest. Both are fine.';
+  String get missionsTodayEmpty => 'Nothing planned. Add a quest, or rest.';
 
   @override
   String get missionsLater => 'Anytime & upcoming';
@@ -1307,8 +1269,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get missionsQuestRepeat => 'Repeat every day';
 
   @override
-  String get missionsQuestRepeatHelp =>
-      'Shows in Today each day. Checking it off counts for that day only.';
+  String get missionsQuestRepeatHelp => 'Shows in Today every day.';
 
   @override
   String get missionsQuestDueLabel => 'Date (optional)';
@@ -1333,7 +1294,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get missionsLeversBody =>
-      'From your Compass. Change the words if you like; each one you keep becomes a daily quest.';
+      'From your Compass. Edit, then add the ones you want.';
 
   @override
   String missionsLeversInclude(String title) {
@@ -1377,7 +1338,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get missionsProjectEmpty =>
-      'Plan one project for the next four weeks, with a few visible milestones.';
+      'Plan one project for the next four weeks.';
 
   @override
   String missionsProjectFromCompass(String title) {
@@ -1481,7 +1442,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get missionsRetroHelp =>
-      'Write any time: what worked, what you learned, what you would do differently.';
+      'What worked, what you learned, what you\'d change.';
 
   @override
   String get missionsRetroHint => 'Your notes';
@@ -1494,7 +1455,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get missionsProjectClearBody =>
-      'This clears the title, milestones and notes of the current project. Your Compass is not changed.';
+      'Clears this project\'s title, milestones and notes. Your Compass stays.';
 
   @override
   String get missionsProjectClearConfirm => 'Clear project';
@@ -1587,7 +1548,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboardingBrandIntro =>
-      'A calm guide to one honest day of reflection, and the small steps that follow it.';
+      'One honest day of reflection. Then small steps.';
 
   @override
   String get onboardingBegin => 'Begin';
@@ -1622,76 +1583,76 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboardingUnderstandBody =>
-      'Notice what you want, what you put up with, and what keeps pulling you back.';
+      'See what you want, and what holds you back.';
 
   @override
   String get onboardingResetTitle => 'Reset Your Life';
 
   @override
   String get onboardingResetBody =>
-      'Spend one honest day with a few questions, morning, daytime and evening, and see your situation clearly.';
+      'One day of questions: morning, daytime, evening.';
 
   @override
   String get onboardingDirectionTitle => 'Choose a Direction';
 
   @override
   String get onboardingDirectionBody =>
-      'Turn what you discover into a Life Compass: what you move away from, and what you move toward.';
+      'Turn your answers into a Life Compass.';
 
   @override
   String get onboardingStepsTitle => 'Improve Step by Step';
 
   @override
   String get onboardingStepsBody =>
-      'Small daily actions, looked at each week and adjusted as you learn. No streaks, no scores.';
+      'Small daily steps, adjusted each week. No pressure.';
 
   @override
-  String get onboardingLimitsTitle => 'What this is, and isn\'t';
+  String get onboardingLimitsTitle => 'Before you start';
 
   @override
-  String get onboardingLimitsIntro => 'Before you begin, a few honest words.';
+  String get onboardingLimitsIntro => 'A few honest words.';
 
   @override
   String get onboardingLimitsClarityTitle => 'One day can bring clarity';
 
   @override
   String get onboardingLimitsClarityBody =>
-      'A focused day of questions can show you where you stand and what you would like instead.';
+      'See where you stand and what you want.';
 
   @override
   String get onboardingLimitsNoGuaranteeTitle =>
-      'It can\'t guarantee a fixed life';
+      'It won\'t fix your life overnight';
 
   @override
   String get onboardingLimitsNoGuaranteeBody =>
-      'Change comes from what you keep doing afterwards: small actions, noticed and adjusted over weeks.';
+      'Change comes from small steps, week by week.';
 
   @override
   String get onboardingLimitsPracticeTitle => 'An ongoing practice';
 
   @override
   String get onboardingLimitsPracticeBody =>
-      'Come back whenever you like. You can redo the reset, change your goals or simply write.';
+      'Redo the reset or change your goals anytime.';
 
   @override
-  String get onboardingLimitsNotTherapyTitle => 'Not therapy or diagnosis';
+  String get onboardingLimitsNotTherapyTitle => 'Not therapy';
 
   @override
   String get onboardingLimitsNotTherapyBody =>
-      'Cartharise is a self-reflection tool. It doesn\'t diagnose anything or replace professional care. If you\'re having a hard time, Support in the You tab lists places to get help.';
+      'No diagnosis. For help, see You › Support.';
 
   @override
   String get onboardingLimitsControlTitle => 'You stay in control';
 
   @override
   String get onboardingLimitsControlBody =>
-      'Every question can be skipped, softened or left for later.';
+      'Skip, soften or pause any question.';
 
   @override
   String get onboardingAdultConfirm => 'I\'m 18 or older';
 
   @override
-  String get onboardingAdultConfirmHelp => 'Cartharise is made for adults.';
+  String get onboardingAdultConfirmHelp => 'Made for adults.';
 
   @override
   String get onboardingAdultRequired =>
@@ -1701,8 +1662,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingCreditTitle => 'Inspired by';
 
   @override
-  String get onboardingCreditIntro =>
-      'Cartharise is built around the ideas of this article:';
+  String get onboardingCreditIntro => 'Built on the ideas of:';
 
   @override
   String onboardingCreditByline(String author, String date) {
@@ -1717,46 +1677,42 @@ class AppLocalizationsEn extends AppLocalizations {
       'Read it in the author\'s newsletter';
 
   @override
-  String get onboardingCreditNoNeed =>
-      'You don\'t need to read it first. Every idea is explained in plain words as you go.';
+  String get onboardingCreditNoNeed => 'No need to read it first.';
 
   @override
   String get onboardingPaceTitle => 'Choose your pace';
 
   @override
-  String get onboardingPaceIntro => 'You can change this later in the You tab.';
+  String get onboardingPaceIntro => 'Change it anytime in You.';
 
   @override
   String get onboardingPaceOneDayTitle => 'One day';
 
   @override
   String get onboardingPaceOneDayBody =>
-      'Do the morning, daytime and evening reflections within a single day.';
+      'Morning, daytime and evening in one day.';
 
   @override
   String get onboardingPaceFlexibleTitle => 'Flexible';
 
   @override
-  String get onboardingPaceFlexibleBody =>
-      'Spread the reflections over days or weeks and pick up where you left off.';
+  String get onboardingPaceFlexibleBody => 'Spread it out. Pick up anytime.';
 
   @override
-  String get onboardingPaceNoLock =>
-      'Either way, nothing ever locks or expires. Every part stays open.';
+  String get onboardingPaceNoLock => 'Nothing locks or expires.';
 
   @override
   String get onboardingNameTitle => 'What should we call you?';
 
   @override
-  String get onboardingNameIntro =>
-      'Optional, never shared. It stays on this phone and is only used to greet you.';
+  String get onboardingNameIntro => 'Optional. Stays on this phone.';
 
   @override
   String get onboardingNameLabel => 'Name (optional)';
 
   @override
   String get onboardingNameHelp =>
-      'Leave it empty and Cartharise will call you Traveler.';
+      'Leave it empty and we\'ll call you Traveler.';
 
   @override
   String get onboardingPrivacyTitle => 'Your words stay yours';
@@ -1765,33 +1721,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingPrivacyStorageHeading => 'Where your writing lives';
 
   @override
-  String get onboardingPrivacyNoAccount =>
-      'No account, no ads, no analytics. Nothing you write is sent anywhere.';
+  String get onboardingPrivacyNoAccount => 'No account, ads or analytics.';
 
   @override
   String get onboardingPrivacyControl =>
-      'You can export or delete everything at any time in You, under Your data.';
+      'Export or delete anytime in You › Your data.';
 
   @override
   String get resetTitle => 'The Reset';
 
   @override
-  String get resetSubtitle =>
-      'One guided day: look honestly at where you are, picture where you want to go, and choose a first step.';
+  String get resetSubtitle => 'One day: see where you are, choose where to go.';
 
   @override
   String get resetPaceOneDayTitle => 'Your pace: one day';
 
   @override
   String get resetPaceOneDayBody =>
-      'Morning questions, a few check-ins during the day, then the evening. Nothing locks if it takes you longer.';
+      'Morning, daytime, evening. Nothing locks if it takes longer.';
 
   @override
   String get resetPaceFlexibleTitle => 'Your pace: flexible';
 
   @override
   String get resetPaceFlexibleBody =>
-      'Take the parts in any order and come back whenever you like. Nothing locks and nothing expires.';
+      'Any order, any pace. Nothing locks or expires.';
 
   @override
   String get resetPaceChange => 'Change pace';
@@ -1817,14 +1771,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get resetAllDoneBody =>
-      'Every core question has been answered or skipped. You can still open and change any of them.';
+      'Every core question is answered or skipped. You can still edit them.';
 
   @override
   String get resetSeeCreated => 'See what you created';
 
   @override
   String resetCompletedOn(String date) {
-    return 'Finished on $date. You can still revisit and edit any answer.';
+    return 'Finished on $date. Answers stay editable.';
   }
 
   @override
@@ -1859,7 +1813,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get resetVisionBody =>
-      'A good ordinary day, who you want to become, one action this week';
+      'A good ordinary day, who you want to be, one step';
 
   @override
   String get resetInterruptBody => 'Six short check-ins at moments in your day';
@@ -1938,8 +1892,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get resetOptionalTitle => 'Optional contemplations';
 
   @override
-  String get resetOptionalBody =>
-      'Three extra questions for a quiet moment. They don\'t count toward your progress.';
+  String get resetOptionalBody => 'Three extra questions. Optional.';
 
   @override
   String get resetOptionalChip => 'Optional';
@@ -1976,22 +1929,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get resetNewTitle => 'Start a new reset';
 
   @override
-  String get resetNewBody =>
-      'Want to go through it again? Start fresh: this reset stays readable under Past resets.';
+  String get resetNewBody => 'Start fresh. This reset stays under Past resets.';
 
   @override
   String get resetNewConfirmTitle => 'Start a new reset?';
 
   @override
   String get resetNewConfirmBody =>
-      'Your current answers are kept as a past reset you can read at any time. The new reset starts empty. Your Compass, quests and journal don\'t change.';
+      'Your answers move to Past resets. Compass, quests and journal stay.';
 
   @override
   String get resetNewConfirmAction => 'Start new reset';
 
   @override
   String get resetNewStarted =>
-      'A new reset has started. Your earlier one is under Past resets.';
+      'New reset started. The earlier one is under Past resets.';
 
   @override
   String resetQuestionOf(int n, int total) {
@@ -2031,8 +1983,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get resetAnswerHint => 'Write as much or as little as you like.';
 
   @override
-  String get resetSkippedNote =>
-      'You skipped this one. Write something whenever you like, or leave it.';
+  String get resetSkippedNote => 'Skipped. Come back anytime, or leave it.';
 
   @override
   String get resetSaveContinue => 'Save & continue';
@@ -2054,7 +2005,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get resetHeavyBody =>
-      'Some questions touch tender places. You decide how deep to go: soften the wording, skip, or stop here. Your words are saved.';
+      'Go as deep as you like: soften, skip or stop. Your words are saved.';
 
   @override
   String get resetHeavySofter => 'Switch to softer wording';
@@ -2070,7 +2021,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get resetHeavyCrisis =>
-      'Cartharise is not therapy. If you feel unsafe, contact local emergency services or a crisis line now.';
+      'Cartharise isn\'t therapy. If you feel unsafe, contact emergency services or a crisis line now.';
 
   @override
   String get resetPromptMissing => 'This question isn\'t available.';
@@ -2121,16 +2072,15 @@ class AppLocalizationsEn extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other:
-          '$count core questions are still open. You can return to them from the Reset tab at any time.',
-      one: '1 core question is still open. You can return to it from the Reset tab at any time.',
+      other: '$count core questions are still open.',
+      one: '1 core question is still open.',
     );
     return '$_temp0';
   }
 
   @override
   String get resetCompleteCompassBody =>
-      'Your evening answers can become the first draft of your Life Compass. You choose what to copy, and nothing you already wrote is overwritten.';
+      'Your evening answers can start your Life Compass. You choose; nothing is overwritten.';
 
   @override
   String get resetCompleteBuildCompass => 'Build your Compass';
@@ -2216,11 +2166,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get todayNextCompassImportBody =>
-      'Your evening answers can fill the empty parts of your Life Compass. You choose what goes in.';
+      'Your evening answers can fill your Compass. You choose.';
 
   @override
   String get todayNextCompassManualBody =>
-      'Write your vision, a one-month project and a few daily levers in your own words.';
+      'Write your vision, a month project and daily levers.';
 
   @override
   String get todayNextCompassImportAction => 'Review your answers';
@@ -2229,8 +2179,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get todayNextLeversTitle => 'Turn your levers into quests';
 
   @override
-  String get todayNextLeversBody =>
-      'Your daily levers can become a few small actions to check off. You approve each one.';
+  String get todayNextLeversBody => 'Turn your daily levers into small quests.';
 
   @override
   String get todayNextLeversAction => 'Choose quests';
@@ -2240,7 +2189,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get todayNextReviewBody =>
-      'Three short questions: what went well, what got in the way, and what to try next.';
+      'What went well, what got in the way, what\'s next.';
 
   @override
   String get todayNextReviewAction => 'Start a weekly review';
@@ -2249,8 +2198,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get todayNextJournalTitle => 'Write a note';
 
   @override
-  String get todayNextJournalBody =>
-      'A few lines about today: what you noticed, what you tried, what you learned.';
+  String get todayNextJournalBody => 'A few lines about today.';
 
   @override
   String get todayNextJournalAction => 'New note';
@@ -2268,8 +2216,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get todayFocusEmptyTitle => 'No quests for today';
 
   @override
-  String get todayFocusEmptyBody =>
-      'Quests are small actions you choose yourself. Add one whenever you\'re ready.';
+  String get todayFocusEmptyBody => 'Add a small quest when you\'re ready.';
 
   @override
   String get todayFocusAdd => 'Add a quest';
@@ -2316,7 +2263,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get todayJourneyAllTouched =>
-      'Every reflection is written or set aside. You can revisit any of them.';
+      'Every reflection is written or set aside.';
 
   @override
   String get todayJourneyCompleted =>
@@ -2389,7 +2336,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get todayDirectionEmptyBody =>
-      'It holds your vision, a one-month project and a few daily levers, in your own words.';
+      'Your vision, month project and daily levers.';
 
   @override
   String get youTitle => 'You';
@@ -2404,8 +2351,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get youNoName => 'No name set';
 
   @override
-  String get youProfileBody =>
-      'A name is optional and stays on this phone. Tap to change it.';
+  String get youProfileBody => 'Optional, stays on this phone. Tap to change.';
 
   @override
   String get youEditName => 'Edit name';
@@ -2426,8 +2372,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get youPaceFlexible => 'Flexible';
 
   @override
-  String get youPaceHint =>
-      'Nothing is ever locked by time. Change this whenever you like.';
+  String get youPaceHint => 'Nothing locks. Change anytime.';
 
   @override
   String get youSectionCredit => 'Credit';
@@ -2482,8 +2427,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get youAboutBody =>
-      'An independent self-reflection app. Everything stays on this phone.';
+  String get youAboutBody => 'Independent. Everything stays on this phone.';
 
   @override
   String get youLicences => 'Open-source licences';
@@ -2509,7 +2453,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get youReplayConfirmBody =>
-      'You\'ll see the introduction again. Your writing, Compass and settings stay as they are.';
+      'See the introduction again. Your writing and settings stay.';
 
   @override
   String get youReplayConfirmAction => 'Show the welcome';
@@ -2610,25 +2554,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get youRemindersPrivacy =>
-      'Notifications show only the check-in\'s title, never your words.';
+      'Notifications show the check-in title only, never your words.';
 
   @override
   String get youRemindersDeniedTitle => 'Notifications aren\'t allowed';
 
   @override
   String get youRemindersDeniedBody =>
-      'Cartharise isn\'t allowed to send notifications on this phone, so reminders stay off. You can allow them in your phone\'s settings and try again, or add the check-ins to your calendar instead.';
+      'Notifications are blocked for Cartharise. Allow them in your phone settings, or add the check-ins to your calendar.';
 
   @override
   String get youRemindersUnavailableTitle => 'Notifications aren\'t available';
 
   @override
   String get youRemindersUnavailableBody =>
-      'This phone can\'t show Cartharise notifications, so reminders stay off. You can add the check-ins to your calendar instead.';
+      'This phone can\'t show notifications. Add the check-ins to your calendar instead.';
 
   @override
   String get youRemindersScheduleFailed =>
-      'Cartharise couldn\'t schedule the notifications on this phone. Try again, or add the check-ins to your calendar instead.';
+      'Couldn\'t schedule the notifications. Try again, or use your calendar.';
 
   @override
   String get youRemindersCalendarInstead => 'Add to your calendar instead';
@@ -2638,7 +2582,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get youRemindersTimesBody =>
-      'In your phone\'s local time. Change any of them to suit your day.';
+      'Local time. Change any to suit your day.';
 
   @override
   String youRemindersSourceDefault(String time) {
@@ -2688,7 +2632,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get youRemindersCalendarBody =>
-      'A calendar file (.ics) with your switched-on check-ins for the next 30 days. Open it with your calendar app to add them. It contains only the check-in titles.';
+      'A calendar file with your check-ins for 30 days. Titles only.';
 
   @override
   String get youRemindersCalendarButton => 'Add to calendar (.ics)';
@@ -2711,7 +2655,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get youRemindersCalendarShared =>
-      'Calendar file shared. Open it with your calendar app to add the check-ins.';
+      'Calendar file shared. Open it in your calendar app.';
 
   @override
   String get youShareDismissed => 'Nothing was shared.';
@@ -2748,7 +2692,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get youMotionHint =>
-      'Gentle movement between screens and the animated emblem. Your phone\'s reduce-motion setting always turns it off.';
+      'Screen transitions and the animated emblem. Off when your phone reduces motion.';
 
   @override
   String get youDataTitle => 'Your data';
@@ -2764,7 +2708,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get youDataExportBody =>
-      'Saves everything you\'ve written and chosen as one JSON file you can keep or move to another phone. The file isn\'t encrypted, so keep it somewhere private.';
+      'Saves everything as one JSON file. It isn\'t encrypted, so keep it private.';
 
   @override
   String get youDataExportButton => 'Export backup';
@@ -2777,7 +2721,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get youDataImportBody =>
-      'Replaces everything on this phone with a Cartharise backup. You\'ll see the backup\'s date and confirm first.';
+      'Replaces everything with a backup. You\'ll confirm first.';
 
   @override
   String get youDataImportButton => 'Choose a backup file';
@@ -2801,7 +2745,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get youDataImportedNotSaved =>
-      'The backup is open on screen, but it couldn\'t be saved on this phone yet. Use Retry at the top of this screen, or export a copy.';
+      'Backup opened but not saved yet. Retry at the top, or export a copy.';
 
   @override
   String get youDataImportFailedTitle => 'This file couldn\'t be used';
@@ -2817,7 +2761,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get youDataImportUnsupported =>
-      'This backup\'s format isn\'t supported by this version of Cartharise.';
+      'This backup format isn\'t supported by this version.';
 
   @override
   String get youDataImportDamaged => 'The backup is incomplete or damaged.';
@@ -2837,7 +2781,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get youDataDeleteBody =>
-      'Erases everything Cartharise keeps on this phone and cancels reminders. Export a backup first if you want to keep a copy.';
+      'Erases everything on this phone and cancels reminders. Export first to keep a copy.';
 
   @override
   String get youDataDeleteButton => 'Delete all data';
@@ -2847,7 +2791,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get youDataDeleteConfirm1Body =>
-      'Your answers, Compass, quests, notes, reviews and settings will be erased from this phone, and reminders cancelled.';
+      'Answers, Compass, quests, notes, reviews and settings will be erased.';
 
   @override
   String get youDataDeleteConfirm1Action => 'Continue';
@@ -2857,18 +2801,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get youDataDeleteConfirm2Body =>
-      'Cartharise keeps no copy anywhere else. Once deleted, your writing can only come back from a backup you exported.';
+      'There\'s no other copy. Only an exported backup can bring it back.';
 
   @override
   String get youDataDeleteConfirm2Action => 'Delete everything';
 
   @override
   String get youDataDeleteFailed =>
-      'Couldn\'t delete your data. Your writing is still on this phone; please try again.';
+      'Couldn\'t delete. Your writing is still here; try again.';
 
   @override
   String get youDataDeleteCopiesLeft =>
-      'Your data was deleted, but a temporary copy of an earlier export or import couldn\'t be removed. Removing the app erases it.';
+      'Deleted, but a temporary export copy couldn\'t be removed. Removing the app erases it.';
 
   @override
   String get youSupportTitle => 'Support & safety';
@@ -2882,7 +2826,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get youSupportNotTherapyBody =>
-      'Cartharise is a tool for self-reflection. It isn\'t therapy, counselling or medical advice, and it doesn\'t diagnose anything.';
+      'A self-reflection tool. Not therapy, counselling, medical advice or diagnosis.';
 
   @override
   String get youSupportHeavyTitle => 'If a question feels heavy';
@@ -2906,19 +2850,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get youSupportCrisisBody =>
-      'If you\'re in danger or thinking about harming yourself, contact your local emergency services now, or reach a crisis line in your country.';
+      'In danger or thinking of harming yourself? Contact emergency services now, or a crisis line in your country.';
 
   @override
   String get youSupportFindHelpline => 'Find a helpline';
 
   @override
   String get youSupportHelplineHint =>
-      'Opens findahelpline.com, a directory of helplines by country.';
+      'Opens findahelpline.com, helplines by country.';
 
   @override
   String get youSupportOngoingTitle => 'Ongoing support';
 
   @override
   String get youSupportOngoingBody =>
-      'If difficult feelings last or get in the way of daily life, a doctor, psychologist or counsellor can help.';
+      'If hard feelings last, a doctor or counsellor can help.';
 }

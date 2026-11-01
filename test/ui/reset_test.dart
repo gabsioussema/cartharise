@@ -298,7 +298,7 @@ void main() {
       );
       expect(h.state.pastJourneys, hasLength(1));
       expect(h.state.journey.answers, isEmpty);
-      expect(find.textContaining('A new reset has started'), findsOneWidget);
+      expect(find.textContaining('New reset started'), findsOneWidget);
       expect(find.text('Past resets'), findsOneWidget);
       expect(h.store.saved!.journeys, hasLength(2));
 
@@ -467,7 +467,7 @@ void main() {
       await _tap(tester, find.text('1. Morning 1 title'));
       expect(find.text('Question morning 1?'), findsOneWidget);
       expect(find.text('Skipped'), findsOneWidget);
-      expect(find.textContaining('You skipped this one'), findsOneWidget);
+      expect(find.textContaining('Skipped. Come back anytime'), findsOneWidget);
 
       await tester.enterText(find.byType(TextField), 'Ready now');
       await _tap(tester, find.text('Save & continue'));
@@ -615,7 +615,7 @@ void main() {
       expect(find.text('Skip this question'), findsOneWidget);
       expect(find.text('Take a pause'), findsOneWidget);
       expect(find.text('Support and safety'), findsOneWidget);
-      expect(find.textContaining('not therapy'), findsOneWidget);
+      expect(find.textContaining("isn't therapy"), findsOneWidget);
       await _tap(tester, find.text('Switch to softer wording'));
       expect(find.text('Softer question morning 6?'), findsOneWidget);
 

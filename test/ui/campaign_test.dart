@@ -124,12 +124,7 @@ void main() {
       expect(find.text('Calm mornings and work I care about.'), findsOneWidget);
       expect(find.text('Rules of engagement · Boundaries'), findsOneWidget);
       expect(find.text('The game never rewards giving these up.'), findsOne);
-      expect(
-        find.text(
-          'Not written yet. Add it in your Compass when you\'re ready.',
-        ),
-        findsNWidgets(3),
-      );
+      expect(find.text('Not written yet.'), findsNWidgets(3));
 
       // The boss is the month project; the battle log lists the attempt.
       expect(find.text('Finish the first essay'), findsWidgets);
@@ -186,10 +181,7 @@ void main() {
       expect(entry.attempt, 'Sent the outline to Maya ');
       expect(entry.learning, 'Asking early saves days');
       expect(entry.day, '2026-11-03');
-      expect(
-        find.text('Attempt recorded. What you learned counts too.'),
-        findsOne,
-      );
+      expect(find.text('Attempt recorded.'), findsOne);
       expect(find.text('Battle log · 1 attempt'), findsOneWidget);
       expect(find.text('Level 1 · 55 XP'), findsOneWidget);
       expect(find.text('The Challenger'), findsOneWidget);
@@ -257,7 +249,7 @@ void main() {
         find.text('+20 XP for each quest you complete, counting up to 3 a day'),
         findsOneWidget,
       );
-      expect(find.textContaining('never looks at what you write'), findsOne);
+      expect(find.textContaining('ignores what you write'), findsOne);
       expect(find.textContaining('never cost XP'), findsOneWidget);
     });
 

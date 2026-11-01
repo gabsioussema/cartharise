@@ -889,8 +889,6 @@ class _CreditCard extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Text(credit.independenceNotice, style: theme.textTheme.bodySmall),
-              const SizedBox(height: 8),
-              Text(credit.paraphraseNotice, style: theme.textTheme.bodySmall),
             ],
           ),
         ),

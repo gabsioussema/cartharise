@@ -270,9 +270,7 @@ void main() {
           expect(find.text('Today'), findsOneWidget);
           expect(find.text('Tue, Nov 3'), findsOneWidget);
           expect(
-            find.text(
-              'Nothing planned for today. Add a small quest, or rest. Both are fine.',
-            ),
+            find.text('Nothing planned. Add a quest, or rest.'),
             findsOneWidget,
           );
           expect(find.text('Anytime & upcoming'), findsOneWidget);

@@ -274,7 +274,7 @@ void main() {
       await _openHub(tester, 'you-reminders');
       expect(
         find.text(
-          'Notifications show only the check-in\'s title, never your words.',
+          'Notifications show the check-in title only, never your words.',
         ),
         findsOneWidget,
       );
@@ -405,14 +405,14 @@ void main() {
 
     testWidgets('storage is described honestly', (tester) async {
       await pumpCartha(tester, data: withNote('x'), home: const DataScreen());
-      expect(find.textContaining('Stored only on this phone'), findsOneWidget);
+      expect(find.textContaining('Only on this phone'), findsOneWidget);
       expect(
         find.textContaining('not encrypted by Cartharise'),
         findsOneWidget,
       );
       // Android backups are off (manifest) and iOS excludes the folder.
       expect(
-        find.textContaining('not included in phone or cloud backups'),
+        find.textContaining('not in phone or cloud backups'),
         findsOneWidget,
       );
     });
@@ -523,8 +523,8 @@ void main() {
       expect(find.text('Backup restored.'), findsNothing);
       expect(
         find.text(
-          "The backup is open on screen, but it couldn't be saved on this "
-          'phone yet. Use Retry at the top of this screen, or export a copy.',
+          'Backup opened but not saved yet. Retry at the top, or export a '
+          'copy.',
         ),
         findsOneWidget,
       );
@@ -616,10 +616,7 @@ void main() {
       // The saved data is still deleted, and the leftover copy is named.
       expect(h.store.raw, isNull);
       expect(
-        find.textContaining(
-          "a temporary copy of an earlier export or import "
-          "couldn't be removed",
-        ),
+        find.textContaining("a temporary export copy couldn't be removed"),
         findsOneWidget,
       );
     });
@@ -636,7 +633,7 @@ void main() {
       await pumpFrames(tester);
       await tester.tap(find.widgetWithText(FilledButton, 'Delete everything'));
       await pumpFrames(tester);
-      expect(find.textContaining("Couldn't delete your data"), findsOneWidget);
+      expect(find.textContaining("Couldn't delete."), findsOneWidget);
       expect(h.state.data.journal.single.body, 'Still here');
     });
 
@@ -680,9 +677,12 @@ void main() {
       await pumpCartha(tester, data: onboardedData());
       await _openHub(tester, 'you-support');
       expect(find.byType(SupportScreen), findsOneWidget);
-      expect(find.textContaining("isn't therapy"), findsOneWidget);
+      expect(find.textContaining('Not therapy'), findsOneWidget);
       expect(find.textContaining('Skip it'), findsOneWidget);
-      expect(find.textContaining('local emergency services'), findsOneWidget);
+      expect(
+        find.textContaining('Contact emergency services now'),
+        findsOneWidget,
+      );
       await _tap(tester, find.byKey(const ValueKey('support-helpline')));
       expect(launched, ['https://findahelpline.com']);
     });

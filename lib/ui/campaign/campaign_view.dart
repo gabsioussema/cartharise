@@ -90,8 +90,6 @@ class _CampaignViewState extends State<CampaignView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(l.campaignIntro, style: secondary),
-          const SizedBox(height: 8),
           const Align(
             alignment: AlignmentDirectional.centerStart,
             child: SaveIndicator(),
@@ -470,11 +468,6 @@ class _ChapterCard extends StatelessWidget {
             ),
             style: theme.textTheme.bodySmall?.copyWith(color: p.textSecondary),
           ),
-          const SizedBox(height: 8),
-          Text(
-            chapterBody(l, progress.chapter),
-            style: theme.textTheme.bodyMedium,
-          ),
           const SizedBox(height: 12),
           ClipRRect(
             borderRadius: BorderRadius.circular(999),
@@ -538,10 +531,6 @@ class _StrategistMap extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(
-          l.campaignMapSubtitle,
-          style: theme.textTheme.bodyMedium?.copyWith(color: p.textSecondary),
-        ),
         for (final (i, (field, label)) in rows.indexed) ...[
           if (i > 0) Divider(color: p.border, height: 1),
           Padding(

@@ -67,7 +67,7 @@ void main() {
       await tester.runAsync(() => h.state.load());
       await pumpFrames(tester);
       expect(find.text('Your saved data couldn\'t be opened'), findsOneWidget);
-      expect(find.textContaining('Nothing has been deleted'), findsOneWidget);
+      expect(find.textContaining('Nothing was deleted'), findsOneWidget);
       expect(h.store.raw, '{ damaged');
       h.store.raw = null;
       await tester.tap(find.text('Try again'));

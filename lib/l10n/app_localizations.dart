@@ -253,7 +253,7 @@ abstract class AppLocalizations {
   /// No description provided for @saveFailedHelp.
   ///
   /// In en, this message translates to:
-  /// **'Your words are still here on screen. Try saving again, or export a copy so nothing is lost.'**
+  /// **'Your words are still here. Retry, or export a copy.'**
   String get saveFailedHelp;
 
   /// No description provided for @saveExportCopy.
@@ -277,13 +277,13 @@ abstract class AppLocalizations {
   /// No description provided for @bootLoadErrorBody.
   ///
   /// In en, this message translates to:
-  /// **'Cartharise couldn\'t read the file it keeps on this phone. Nothing has been deleted or overwritten.'**
+  /// **'Cartharise couldn\'t read its file. Nothing was deleted.'**
   String get bootLoadErrorBody;
 
   /// No description provided for @bootLoadErrorHint.
   ///
   /// In en, this message translates to:
-  /// **'Try again. If it keeps happening, check that your phone has free storage, then try once more.'**
+  /// **'Try again. If it keeps failing, free up some storage.'**
   String get bootLoadErrorHint;
 
   /// No description provided for @bootStartFresh.
@@ -301,13 +301,13 @@ abstract class AppLocalizations {
   /// No description provided for @bootStartFreshConfirmBody.
   ///
   /// In en, this message translates to:
-  /// **'The unreadable file is set aside on this phone, not deleted. Cartharise then starts empty.'**
+  /// **'The unreadable file is set aside, not deleted. Cartharise starts empty.'**
   String get bootStartFreshConfirmBody;
 
   /// Where the user's data lives (onboarding privacy page, You › Your data). Must stay true: Android backups are off in the manifest, iOS excludes the data folder from backup.
   ///
   /// In en, this message translates to:
-  /// **'Stored only on this phone, in Cartharise\'s private app folder. It is not encrypted by Cartharise, not synced, and not included in phone or cloud backups. Removing the app or using “Delete all data” erases it.'**
+  /// **'Only on this phone. Not synced, not in phone or cloud backups, and not encrypted by Cartharise. Deleting the app or your data erases it.'**
   String get storageTransparency;
 
   /// No description provided for @storageErrorTitle.
@@ -319,7 +319,7 @@ abstract class AppLocalizations {
   /// No description provided for @storageErrorBody.
   ///
   /// In en, this message translates to:
-  /// **'Cartharise can\'t write to this phone\'s storage right now. Your current words stay on screen until you leave this screen.'**
+  /// **'Can\'t save on this phone right now. Your words stay on screen until you leave.'**
   String get storageErrorBody;
 
   /// No description provided for @linkOpenFailed.
@@ -379,7 +379,7 @@ abstract class AppLocalizations {
   /// No description provided for @awakeningSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Seven ideas behind the reset, in plain words. Optional, and in any order.'**
+  /// **'Seven ideas behind the reset. Optional, any order.'**
   String get awakeningSubtitle;
 
   /// No description provided for @awakeningStripTitle.
@@ -499,7 +499,7 @@ abstract class AppLocalizations {
   /// No description provided for @awakeningSourceNote.
   ///
   /// In en, this message translates to:
-  /// **'Paraphrased in Cartharise\'s own words from “{title}” by {author}. Cartharise is independent.'**
+  /// **'In Cartharise\'s words, from “{title}” by {author}. Independent app.'**
   String awakeningSourceNote(String title, String author);
 
   /// No description provided for @awakeningSourceLink.
@@ -526,12 +526,6 @@ abstract class AppLocalizations {
   /// **'Your direction, played as a game.'**
   String get campaignSubtitle;
 
-  /// No description provided for @campaignIntro.
-  ///
-  /// In en, this message translates to:
-  /// **'Dan Koe\'s article frames a life plan as a game. Here it is: your vision is the win condition, your anti-vision is what\'s at stake, the one-year mission is the main campaign, the one-month project is your boss fight, daily levers are quests and your boundaries are the rules.'**
-  String get campaignIntro;
-
   /// No description provided for @campaignStatusEyebrow.
   ///
   /// In en, this message translates to:
@@ -553,7 +547,7 @@ abstract class AppLocalizations {
   /// No description provided for @campaignXpNote.
   ///
   /// In en, this message translates to:
-  /// **'XP counts participation and practice, never your worth. Rest days cost nothing, and nothing is ever taken away.'**
+  /// **'XP counts what you do, never your worth. Rest costs nothing.'**
   String get campaignXpNote;
 
   /// No description provided for @campaignXpHow.
@@ -595,7 +589,7 @@ abstract class AppLocalizations {
   /// No description provided for @campaignXpRulesNote.
   ///
   /// In en, this message translates to:
-  /// **'XP never looks at what you write, how long it is or how you feel. Skipping, resting and changing your plans never cost XP. Every {step} XP is a new level.'**
+  /// **'XP ignores what you write and how you feel. Skipping and resting never cost XP. Every {step} XP is a new level.'**
   String campaignXpRulesNote(int step);
 
   /// No description provided for @campaignActOne.
@@ -628,12 +622,6 @@ abstract class AppLocalizations {
   /// **'Current reality'**
   String get campaignChapterTerrainArea;
 
-  /// No description provided for @campaignChapterTerrainBody.
-  ///
-  /// In en, this message translates to:
-  /// **'Notice dissatisfaction, repeated complaints and what you actually do.'**
-  String get campaignChapterTerrainBody;
-
   /// No description provided for @campaignChapterPattern.
   ///
   /// In en, this message translates to:
@@ -645,12 +633,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Anti-vision and identity'**
   String get campaignChapterPatternArea;
-
-  /// No description provided for @campaignChapterPatternBody.
-  ///
-  /// In en, this message translates to:
-  /// **'Explore the future you want to avoid and the patterns that protect you.'**
-  String get campaignChapterPatternBody;
 
   /// No description provided for @campaignChapterBanner.
   ///
@@ -664,12 +646,6 @@ abstract class AppLocalizations {
   /// **'Future vision'**
   String get campaignChapterBannerArea;
 
-  /// No description provided for @campaignChapterBannerBody.
-  ///
-  /// In en, this message translates to:
-  /// **'Imagine a better ordinary day and one small step that fits it.'**
-  String get campaignChapterBannerBody;
-
   /// No description provided for @campaignChapterAutopilot.
   ///
   /// In en, this message translates to:
@@ -682,12 +658,6 @@ abstract class AppLocalizations {
   /// **'Daytime check-ins'**
   String get campaignChapterAutopilotArea;
 
-  /// No description provided for @campaignChapterAutopilotBody.
-  ///
-  /// In en, this message translates to:
-  /// **'Notice your choices during a real day.'**
-  String get campaignChapterAutopilotBody;
-
   /// No description provided for @campaignChapterPlan.
   ///
   /// In en, this message translates to:
@@ -699,12 +669,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Evening synthesis'**
   String get campaignChapterPlanArea;
-
-  /// No description provided for @campaignChapterPlanBody.
-  ///
-  /// In en, this message translates to:
-  /// **'Turn reflection into a one-year mission, a one-month project and daily levers.'**
-  String get campaignChapterPlanBody;
 
   /// No description provided for @campaignChapterReflections.
   ///
@@ -741,12 +705,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The strategist\'s map'**
   String get campaignMapTitle;
-
-  /// No description provided for @campaignMapSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'The six parts of your Life Compass, as the article\'s game.'**
-  String get campaignMapSubtitle;
 
   /// No description provided for @campaignMapAntiVision.
   ///
@@ -793,7 +751,7 @@ abstract class AppLocalizations {
   /// No description provided for @campaignMapEmpty.
   ///
   /// In en, this message translates to:
-  /// **'Not written yet. Add it in your Compass when you\'re ready.'**
+  /// **'Not written yet.'**
   String get campaignMapEmpty;
 
   /// No description provided for @campaignMapEdit.
@@ -817,13 +775,13 @@ abstract class AppLocalizations {
   /// No description provided for @campaignBossBody.
   ///
   /// In en, this message translates to:
-  /// **'The boss is the project or obstacle, never you or other people. Record what you try and what you learn. Setbacks cost nothing.'**
+  /// **'The boss is a project, never a person. Log what you try.'**
   String get campaignBossBody;
 
   /// No description provided for @campaignBossNoProject.
   ///
   /// In en, this message translates to:
-  /// **'Your one-month project will appear here once you set it in your Compass or Missions.'**
+  /// **'Set a one-month project in your Compass to see it here.'**
   String get campaignBossNoProject;
 
   /// No description provided for @campaignAttemptLabel.
@@ -835,7 +793,7 @@ abstract class AppLocalizations {
   /// No description provided for @campaignAttemptHint.
   ///
   /// In en, this message translates to:
-  /// **'A 20-minute focus block, a message I\'d been putting off, a first draft…'**
+  /// **'A focus block, a hard message, a first draft…'**
   String get campaignAttemptHint;
 
   /// No description provided for @campaignAttemptRequired.
@@ -853,7 +811,7 @@ abstract class AppLocalizations {
   /// No description provided for @campaignLearningHint.
   ///
   /// In en, this message translates to:
-  /// **'What worked, what didn\'t, what you\'ll change next time.'**
+  /// **'What worked, what you\'d change.'**
   String get campaignLearningHint;
 
   /// No description provided for @campaignRecord.
@@ -865,7 +823,7 @@ abstract class AppLocalizations {
   /// No description provided for @campaignRecorded.
   ///
   /// In en, this message translates to:
-  /// **'Attempt recorded. What you learned counts too.'**
+  /// **'Attempt recorded.'**
   String get campaignRecorded;
 
   /// No description provided for @campaignLogTitle.
@@ -931,7 +889,7 @@ abstract class AppLocalizations {
   /// No description provided for @campaignAttemptDeleteBody.
   ///
   /// In en, this message translates to:
-  /// **'It will be removed from your battle log. This can\'t be undone.'**
+  /// **'It will be removed. This can\'t be undone.'**
   String get campaignAttemptDeleteBody;
 
   /// No description provided for @campaignAttemptDeleted.
@@ -949,7 +907,7 @@ abstract class AppLocalizations {
   /// No description provided for @campaignAchievementsSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Earned by doing the exercises, never by what you write.'**
+  /// **'Earned by doing, never by what you write.'**
   String get campaignAchievementsSubtitle;
 
   /// No description provided for @campaignAchievementsCount.
@@ -1063,7 +1021,7 @@ abstract class AppLocalizations {
   /// No description provided for @campaignActTwoBody.
   ///
   /// In en, this message translates to:
-  /// **'Your one-year mission is a direction, not a deadline. Work on your monthly project, do small quests, notice patterns and adjust your strategy whenever you learn something new.'**
+  /// **'A direction, not a deadline. Keep the small steps going.'**
   String get campaignActTwoBody;
 
   /// No description provided for @campaignStatQuests.
@@ -1099,7 +1057,7 @@ abstract class AppLocalizations {
   /// No description provided for @campaignNote.
   ///
   /// In en, this message translates to:
-  /// **'Cartharise\'s reading of the game framework in Section VII of Dan Koe\'s article. XP, levels, chapters, achievement names and the battle log are Cartharise additions, not part of the article. Everything stays on this phone, and you can turn the Campaign off in You › Settings.'**
+  /// **'XP, levels and achievements are Cartharise additions, not part of the article. Turn them off in You.'**
   String get campaignNote;
 
   /// No description provided for @campaignTodayTitle.
@@ -1129,7 +1087,7 @@ abstract class AppLocalizations {
   /// No description provided for @campaignSettingHint.
   ///
   /// In en, this message translates to:
-  /// **'XP, levels and achievements for your reset and quests. Turning it off hides them; your battle log is kept.'**
+  /// **'XP, levels and achievements. Your battle log is kept if you turn it off.'**
   String get campaignSettingHint;
 
   /// Cinzel screen title of the Compass tab.
@@ -1171,7 +1129,7 @@ abstract class AppLocalizations {
   /// No description provided for @compassHeroEmpty.
   ///
   /// In en, this message translates to:
-  /// **'Six short answers that point your days somewhere you choose. Write them yourself, or start from your evening reflection.'**
+  /// **'Six short answers that point your days. Write them, or start from your evening answers.'**
   String get compassHeroEmpty;
 
   /// No description provided for @compassLastUpdated.
@@ -1195,7 +1153,7 @@ abstract class AppLocalizations {
   /// No description provided for @compassImportOfferBody.
   ///
   /// In en, this message translates to:
-  /// **'You can bring your own evening words into the empty fields below. You choose which ones, and nothing changes until you confirm.'**
+  /// **'Bring your evening words into empty fields. Nothing changes until you confirm.'**
   String get compassImportOfferBody;
 
   /// No description provided for @compassImportAction.
@@ -1213,7 +1171,7 @@ abstract class AppLocalizations {
   /// No description provided for @compassEmptyBody.
   ///
   /// In en, this message translates to:
-  /// **'Write each part yourself below, or answer the evening reflection first and bring your words here.'**
+  /// **'Write each part below, or answer the evening questions first.'**
   String get compassEmptyBody;
 
   /// No description provided for @compassEmptyAction.
@@ -1285,7 +1243,7 @@ abstract class AppLocalizations {
   /// No description provided for @compassFieldMonthProjectHelp.
   ///
   /// In en, this message translates to:
-  /// **'One project for the next four weeks that moves the mission forward.'**
+  /// **'One project for the next four weeks.'**
   String get compassFieldMonthProjectHelp;
 
   /// No description provided for @compassFieldMonthProjectHint.
@@ -1333,7 +1291,7 @@ abstract class AppLocalizations {
   /// No description provided for @compassConstraintsOwnWords.
   ///
   /// In en, this message translates to:
-  /// **'Only you write this. Cartharise never fills it in from your answers.'**
+  /// **'Only you write this.'**
   String get compassConstraintsOwnWords;
 
   /// No description provided for @compassConstraintsChip.
@@ -1363,7 +1321,7 @@ abstract class AppLocalizations {
   /// No description provided for @compassVersionsBody.
   ///
   /// In en, this message translates to:
-  /// **'Save a snapshot before big changes. Restoring an older version first keeps a copy of what you have now.'**
+  /// **'Save a snapshot before big changes.'**
   String get compassVersionsBody;
 
   /// No description provided for @compassSaveVersion.
@@ -1447,7 +1405,7 @@ abstract class AppLocalizations {
   /// No description provided for @compassVersionReadOnly.
   ///
   /// In en, this message translates to:
-  /// **'Read-only. Restoring replaces your current Compass, after saving it as a version.'**
+  /// **'Read-only. Restoring saves your current Compass first.'**
   String get compassVersionReadOnly;
 
   /// No description provided for @compassRestoreAction.
@@ -1465,7 +1423,7 @@ abstract class AppLocalizations {
   /// No description provided for @compassRestoreConfirmBody.
   ///
   /// In en, this message translates to:
-  /// **'Your Compass will be replaced by this version. What you have now is saved as a version first, so nothing is lost.'**
+  /// **'This replaces your Compass. The current one is saved first.'**
   String get compassRestoreConfirmBody;
 
   /// No description provided for @compassRestoreConfirm.
@@ -1477,7 +1435,7 @@ abstract class AppLocalizations {
   /// No description provided for @compassRestored.
   ///
   /// In en, this message translates to:
-  /// **'Version restored. Your previous Compass was saved as a version.'**
+  /// **'Version restored. The previous one was saved.'**
   String get compassRestored;
 
   /// No description provided for @compassImportTitle.
@@ -1489,7 +1447,7 @@ abstract class AppLocalizations {
   /// No description provided for @compassImportBody.
   ///
   /// In en, this message translates to:
-  /// **'Your evening answers, exactly as you wrote them. Choose which empty fields they should start.'**
+  /// **'Your evening answers, as written. Pick the empty fields to fill.'**
   String get compassImportBody;
 
   /// No description provided for @compassImportFrom.
@@ -1513,7 +1471,7 @@ abstract class AppLocalizations {
   /// No description provided for @compassImportConstraintsNote.
   ///
   /// In en, this message translates to:
-  /// **'Boundaries are never filled from your answers. Only you write them.'**
+  /// **'Boundaries are only written by you.'**
   String get compassImportConstraintsNote;
 
   /// No description provided for @compassImportSnapshotNote.
@@ -1531,7 +1489,7 @@ abstract class AppLocalizations {
   /// No description provided for @compassImportNothing.
   ///
   /// In en, this message translates to:
-  /// **'Nothing to bring over yet. Answer the evening questions in Reset, then come back.'**
+  /// **'Nothing to bring over yet. Answer the evening questions first.'**
   String get compassImportNothing;
 
   /// No description provided for @compassImportDone.
@@ -1579,7 +1537,7 @@ abstract class AppLocalizations {
   /// No description provided for @journalNotesIntro.
   ///
   /// In en, this message translates to:
-  /// **'Free writing, beyond the guided questions. Notes stay on this phone.'**
+  /// **'Free writing. Stays on this phone.'**
   String get journalNotesIntro;
 
   /// No description provided for @journalNewNote.
@@ -1597,7 +1555,7 @@ abstract class AppLocalizations {
   /// No description provided for @journalNotesEmptyBody.
   ///
   /// In en, this message translates to:
-  /// **'Write down anything on your mind: an idea, a worry, something you noticed today.'**
+  /// **'An idea, a worry, something you noticed.'**
   String get journalNotesEmptyBody;
 
   /// No description provided for @journalUntitled.
@@ -1699,7 +1657,7 @@ abstract class AppLocalizations {
   /// No description provided for @journalReviewsIntro.
   ///
   /// In en, this message translates to:
-  /// **'Once a week, look at what went well, what got in the way and one small thing to try next.'**
+  /// **'Once a week: what went well, what got in the way, what to try next.'**
   String get journalReviewsIntro;
 
   /// No description provided for @journalReviewThisWeek.
@@ -1723,7 +1681,7 @@ abstract class AppLocalizations {
   /// No description provided for @journalReviewsEmptyBody.
   ///
   /// In en, this message translates to:
-  /// **'A review takes a few minutes. There is no right way to do it.'**
+  /// **'A few minutes. No right way.'**
   String get journalReviewsEmptyBody;
 
   /// No description provided for @journalWeekOf.
@@ -1741,7 +1699,7 @@ abstract class AppLocalizations {
   /// No description provided for @journalReviewEditIntro.
   ///
   /// In en, this message translates to:
-  /// **'Write as much or as little as you like. It saves as you type.'**
+  /// **'Write as much as you like. It saves as you type.'**
   String get journalReviewEditIntro;
 
   /// No description provided for @journalReviewChangeWeek.
@@ -1819,7 +1777,7 @@ abstract class AppLocalizations {
   /// No description provided for @journalReviewDeleteBody.
   ///
   /// In en, this message translates to:
-  /// **'The review for the week of {date} is removed from this phone. This can\'t be undone.'**
+  /// **'The review for the week of {date} will be removed. This can\'t be undone.'**
   String journalReviewDeleteBody(String date);
 
   /// No description provided for @journalReviewDeleted.
@@ -1855,7 +1813,7 @@ abstract class AppLocalizations {
   /// No description provided for @journalLookBackIntro.
   ///
   /// In en, this message translates to:
-  /// **'See how your words have changed over time. Nothing here is scored or labelled.'**
+  /// **'See how your words have changed.'**
   String get journalLookBackIntro;
 
   /// No description provided for @journalCompareTitle.
@@ -1909,7 +1867,7 @@ abstract class AppLocalizations {
   /// No description provided for @journalCompareEmptyBody.
   ///
   /// In en, this message translates to:
-  /// **'Save a version of your Compass and you can compare it here later.'**
+  /// **'Save a Compass version to compare it here later.'**
   String get journalCompareEmptyBody;
 
   /// No description provided for @journalOpenCompass.
@@ -1969,7 +1927,7 @@ abstract class AppLocalizations {
   /// No description provided for @journalPastResetsEmpty.
   ///
   /// In en, this message translates to:
-  /// **'No earlier resets yet. When you start a new reset, the previous one is kept here, unchanged.'**
+  /// **'No earlier resets yet. Starting a new one keeps the old one here.'**
   String get journalPastResetsEmpty;
 
   /// No description provided for @journalResetStarted.
@@ -2089,7 +2047,7 @@ abstract class AppLocalizations {
   /// No description provided for @missionsIntro.
   ///
   /// In en, this message translates to:
-  /// **'Small actions that move your Compass forward. Rest days are part of it.'**
+  /// **'Small steps toward your Compass. Rest counts too.'**
   String get missionsIntro;
 
   /// No description provided for @missionsToday.
@@ -2101,7 +2059,7 @@ abstract class AppLocalizations {
   /// No description provided for @missionsTodayEmpty.
   ///
   /// In en, this message translates to:
-  /// **'Nothing planned for today. Add a small quest, or rest. Both are fine.'**
+  /// **'Nothing planned. Add a quest, or rest.'**
   String get missionsTodayEmpty;
 
   /// No description provided for @missionsLater.
@@ -2233,7 +2191,7 @@ abstract class AppLocalizations {
   /// No description provided for @missionsQuestRepeatHelp.
   ///
   /// In en, this message translates to:
-  /// **'Shows in Today each day. Checking it off counts for that day only.'**
+  /// **'Shows in Today every day.'**
   String get missionsQuestRepeatHelp;
 
   /// No description provided for @missionsQuestDueLabel.
@@ -2281,7 +2239,7 @@ abstract class AppLocalizations {
   /// No description provided for @missionsLeversBody.
   ///
   /// In en, this message translates to:
-  /// **'From your Compass. Change the words if you like; each one you keep becomes a daily quest.'**
+  /// **'From your Compass. Edit, then add the ones you want.'**
   String get missionsLeversBody;
 
   /// No description provided for @missionsLeversInclude.
@@ -2323,7 +2281,7 @@ abstract class AppLocalizations {
   /// No description provided for @missionsProjectEmpty.
   ///
   /// In en, this message translates to:
-  /// **'Plan one project for the next four weeks, with a few visible milestones.'**
+  /// **'Plan one project for the next four weeks.'**
   String get missionsProjectEmpty;
 
   /// No description provided for @missionsProjectFromCompass.
@@ -2497,7 +2455,7 @@ abstract class AppLocalizations {
   /// No description provided for @missionsRetroHelp.
   ///
   /// In en, this message translates to:
-  /// **'Write any time: what worked, what you learned, what you would do differently.'**
+  /// **'What worked, what you learned, what you\'d change.'**
   String get missionsRetroHelp;
 
   /// No description provided for @missionsRetroHint.
@@ -2521,7 +2479,7 @@ abstract class AppLocalizations {
   /// No description provided for @missionsProjectClearBody.
   ///
   /// In en, this message translates to:
-  /// **'This clears the title, milestones and notes of the current project. Your Compass is not changed.'**
+  /// **'Clears this project\'s title, milestones and notes. Your Compass stays.'**
   String get missionsProjectClearBody;
 
   /// No description provided for @missionsProjectClearConfirm.
@@ -2665,7 +2623,7 @@ abstract class AppLocalizations {
   /// Brand page, under the tagline.
   ///
   /// In en, this message translates to:
-  /// **'A calm guide to one honest day of reflection, and the small steps that follow it.'**
+  /// **'One honest day of reflection. Then small steps.'**
   String get onboardingBrandIntro;
 
   /// No description provided for @onboardingBegin.
@@ -2725,7 +2683,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingUnderstandBody.
   ///
   /// In en, this message translates to:
-  /// **'Notice what you want, what you put up with, and what keeps pulling you back.'**
+  /// **'See what you want, and what holds you back.'**
   String get onboardingUnderstandBody;
 
   /// No description provided for @onboardingResetTitle.
@@ -2737,7 +2695,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingResetBody.
   ///
   /// In en, this message translates to:
-  /// **'Spend one honest day with a few questions, morning, daytime and evening, and see your situation clearly.'**
+  /// **'One day of questions: morning, daytime, evening.'**
   String get onboardingResetBody;
 
   /// No description provided for @onboardingDirectionTitle.
@@ -2749,7 +2707,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingDirectionBody.
   ///
   /// In en, this message translates to:
-  /// **'Turn what you discover into a Life Compass: what you move away from, and what you move toward.'**
+  /// **'Turn your answers into a Life Compass.'**
   String get onboardingDirectionBody;
 
   /// No description provided for @onboardingStepsTitle.
@@ -2761,19 +2719,19 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingStepsBody.
   ///
   /// In en, this message translates to:
-  /// **'Small daily actions, looked at each week and adjusted as you learn. No streaks, no scores.'**
+  /// **'Small daily steps, adjusted each week. No pressure.'**
   String get onboardingStepsBody;
 
   /// No description provided for @onboardingLimitsTitle.
   ///
   /// In en, this message translates to:
-  /// **'What this is, and isn\'t'**
+  /// **'Before you start'**
   String get onboardingLimitsTitle;
 
   /// No description provided for @onboardingLimitsIntro.
   ///
   /// In en, this message translates to:
-  /// **'Before you begin, a few honest words.'**
+  /// **'A few honest words.'**
   String get onboardingLimitsIntro;
 
   /// No description provided for @onboardingLimitsClarityTitle.
@@ -2785,19 +2743,19 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingLimitsClarityBody.
   ///
   /// In en, this message translates to:
-  /// **'A focused day of questions can show you where you stand and what you would like instead.'**
+  /// **'See where you stand and what you want.'**
   String get onboardingLimitsClarityBody;
 
   /// No description provided for @onboardingLimitsNoGuaranteeTitle.
   ///
   /// In en, this message translates to:
-  /// **'It can\'t guarantee a fixed life'**
+  /// **'It won\'t fix your life overnight'**
   String get onboardingLimitsNoGuaranteeTitle;
 
   /// No description provided for @onboardingLimitsNoGuaranteeBody.
   ///
   /// In en, this message translates to:
-  /// **'Change comes from what you keep doing afterwards: small actions, noticed and adjusted over weeks.'**
+  /// **'Change comes from small steps, week by week.'**
   String get onboardingLimitsNoGuaranteeBody;
 
   /// No description provided for @onboardingLimitsPracticeTitle.
@@ -2809,19 +2767,19 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingLimitsPracticeBody.
   ///
   /// In en, this message translates to:
-  /// **'Come back whenever you like. You can redo the reset, change your goals or simply write.'**
+  /// **'Redo the reset or change your goals anytime.'**
   String get onboardingLimitsPracticeBody;
 
   /// No description provided for @onboardingLimitsNotTherapyTitle.
   ///
   /// In en, this message translates to:
-  /// **'Not therapy or diagnosis'**
+  /// **'Not therapy'**
   String get onboardingLimitsNotTherapyTitle;
 
   /// No description provided for @onboardingLimitsNotTherapyBody.
   ///
   /// In en, this message translates to:
-  /// **'Cartharise is a self-reflection tool. It doesn\'t diagnose anything or replace professional care. If you\'re having a hard time, Support in the You tab lists places to get help.'**
+  /// **'No diagnosis. For help, see You › Support.'**
   String get onboardingLimitsNotTherapyBody;
 
   /// No description provided for @onboardingLimitsControlTitle.
@@ -2833,7 +2791,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingLimitsControlBody.
   ///
   /// In en, this message translates to:
-  /// **'Every question can be skipped, softened or left for later.'**
+  /// **'Skip, soften or pause any question.'**
   String get onboardingLimitsControlBody;
 
   /// No description provided for @onboardingAdultConfirm.
@@ -2845,7 +2803,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingAdultConfirmHelp.
   ///
   /// In en, this message translates to:
-  /// **'Cartharise is made for adults.'**
+  /// **'Made for adults.'**
   String get onboardingAdultConfirmHelp;
 
   /// No description provided for @onboardingAdultRequired.
@@ -2863,7 +2821,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingCreditIntro.
   ///
   /// In en, this message translates to:
-  /// **'Cartharise is built around the ideas of this article:'**
+  /// **'Built on the ideas of:'**
   String get onboardingCreditIntro;
 
   /// No description provided for @onboardingCreditByline.
@@ -2887,7 +2845,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingCreditNoNeed.
   ///
   /// In en, this message translates to:
-  /// **'You don\'t need to read it first. Every idea is explained in plain words as you go.'**
+  /// **'No need to read it first.'**
   String get onboardingCreditNoNeed;
 
   /// No description provided for @onboardingPaceTitle.
@@ -2899,7 +2857,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingPaceIntro.
   ///
   /// In en, this message translates to:
-  /// **'You can change this later in the You tab.'**
+  /// **'Change it anytime in You.'**
   String get onboardingPaceIntro;
 
   /// No description provided for @onboardingPaceOneDayTitle.
@@ -2911,7 +2869,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingPaceOneDayBody.
   ///
   /// In en, this message translates to:
-  /// **'Do the morning, daytime and evening reflections within a single day.'**
+  /// **'Morning, daytime and evening in one day.'**
   String get onboardingPaceOneDayBody;
 
   /// No description provided for @onboardingPaceFlexibleTitle.
@@ -2923,13 +2881,13 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingPaceFlexibleBody.
   ///
   /// In en, this message translates to:
-  /// **'Spread the reflections over days or weeks and pick up where you left off.'**
+  /// **'Spread it out. Pick up anytime.'**
   String get onboardingPaceFlexibleBody;
 
   /// No description provided for @onboardingPaceNoLock.
   ///
   /// In en, this message translates to:
-  /// **'Either way, nothing ever locks or expires. Every part stays open.'**
+  /// **'Nothing locks or expires.'**
   String get onboardingPaceNoLock;
 
   /// No description provided for @onboardingNameTitle.
@@ -2941,7 +2899,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingNameIntro.
   ///
   /// In en, this message translates to:
-  /// **'Optional, never shared. It stays on this phone and is only used to greet you.'**
+  /// **'Optional. Stays on this phone.'**
   String get onboardingNameIntro;
 
   /// No description provided for @onboardingNameLabel.
@@ -2953,7 +2911,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingNameHelp.
   ///
   /// In en, this message translates to:
-  /// **'Leave it empty and Cartharise will call you Traveler.'**
+  /// **'Leave it empty and we\'ll call you Traveler.'**
   String get onboardingNameHelp;
 
   /// No description provided for @onboardingPrivacyTitle.
@@ -2971,13 +2929,13 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingPrivacyNoAccount.
   ///
   /// In en, this message translates to:
-  /// **'No account, no ads, no analytics. Nothing you write is sent anywhere.'**
+  /// **'No account, ads or analytics.'**
   String get onboardingPrivacyNoAccount;
 
   /// No description provided for @onboardingPrivacyControl.
   ///
   /// In en, this message translates to:
-  /// **'You can export or delete everything at any time in You, under Your data.'**
+  /// **'Export or delete anytime in You › Your data.'**
   String get onboardingPrivacyControl;
 
   /// No description provided for @resetTitle.
@@ -2989,7 +2947,7 @@ abstract class AppLocalizations {
   /// No description provided for @resetSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'One guided day: look honestly at where you are, picture where you want to go, and choose a first step.'**
+  /// **'One day: see where you are, choose where to go.'**
   String get resetSubtitle;
 
   /// No description provided for @resetPaceOneDayTitle.
@@ -3001,7 +2959,7 @@ abstract class AppLocalizations {
   /// No description provided for @resetPaceOneDayBody.
   ///
   /// In en, this message translates to:
-  /// **'Morning questions, a few check-ins during the day, then the evening. Nothing locks if it takes you longer.'**
+  /// **'Morning, daytime, evening. Nothing locks if it takes longer.'**
   String get resetPaceOneDayBody;
 
   /// No description provided for @resetPaceFlexibleTitle.
@@ -3013,7 +2971,7 @@ abstract class AppLocalizations {
   /// No description provided for @resetPaceFlexibleBody.
   ///
   /// In en, this message translates to:
-  /// **'Take the parts in any order and come back whenever you like. Nothing locks and nothing expires.'**
+  /// **'Any order, any pace. Nothing locks or expires.'**
   String get resetPaceFlexibleBody;
 
   /// No description provided for @resetPaceChange.
@@ -3055,7 +3013,7 @@ abstract class AppLocalizations {
   /// No description provided for @resetAllDoneBody.
   ///
   /// In en, this message translates to:
-  /// **'Every core question has been answered or skipped. You can still open and change any of them.'**
+  /// **'Every core question is answered or skipped. You can still edit them.'**
   String get resetAllDoneBody;
 
   /// No description provided for @resetSeeCreated.
@@ -3067,7 +3025,7 @@ abstract class AppLocalizations {
   /// No description provided for @resetCompletedOn.
   ///
   /// In en, this message translates to:
-  /// **'Finished on {date}. You can still revisit and edit any answer.'**
+  /// **'Finished on {date}. Answers stay editable.'**
   String resetCompletedOn(String date);
 
   /// No description provided for @resetPhasesTitle.
@@ -3133,7 +3091,7 @@ abstract class AppLocalizations {
   /// No description provided for @resetVisionBody.
   ///
   /// In en, this message translates to:
-  /// **'A good ordinary day, who you want to become, one action this week'**
+  /// **'A good ordinary day, who you want to be, one step'**
   String get resetVisionBody;
 
   /// No description provided for @resetInterruptBody.
@@ -3271,7 +3229,7 @@ abstract class AppLocalizations {
   /// No description provided for @resetOptionalBody.
   ///
   /// In en, this message translates to:
-  /// **'Three extra questions for a quiet moment. They don\'t count toward your progress.'**
+  /// **'Three extra questions. Optional.'**
   String get resetOptionalBody;
 
   /// No description provided for @resetOptionalChip.
@@ -3319,7 +3277,7 @@ abstract class AppLocalizations {
   /// No description provided for @resetNewBody.
   ///
   /// In en, this message translates to:
-  /// **'Want to go through it again? Start fresh: this reset stays readable under Past resets.'**
+  /// **'Start fresh. This reset stays under Past resets.'**
   String get resetNewBody;
 
   /// No description provided for @resetNewConfirmTitle.
@@ -3331,7 +3289,7 @@ abstract class AppLocalizations {
   /// No description provided for @resetNewConfirmBody.
   ///
   /// In en, this message translates to:
-  /// **'Your current answers are kept as a past reset you can read at any time. The new reset starts empty. Your Compass, quests and journal don\'t change.'**
+  /// **'Your answers move to Past resets. Compass, quests and journal stay.'**
   String get resetNewConfirmBody;
 
   /// No description provided for @resetNewConfirmAction.
@@ -3343,7 +3301,7 @@ abstract class AppLocalizations {
   /// No description provided for @resetNewStarted.
   ///
   /// In en, this message translates to:
-  /// **'A new reset has started. Your earlier one is under Past resets.'**
+  /// **'New reset started. The earlier one is under Past resets.'**
   String get resetNewStarted;
 
   /// No description provided for @resetQuestionOf.
@@ -3415,7 +3373,7 @@ abstract class AppLocalizations {
   /// No description provided for @resetSkippedNote.
   ///
   /// In en, this message translates to:
-  /// **'You skipped this one. Write something whenever you like, or leave it.'**
+  /// **'Skipped. Come back anytime, or leave it.'**
   String get resetSkippedNote;
 
   /// No description provided for @resetSaveContinue.
@@ -3457,7 +3415,7 @@ abstract class AppLocalizations {
   /// No description provided for @resetHeavyBody.
   ///
   /// In en, this message translates to:
-  /// **'Some questions touch tender places. You decide how deep to go: soften the wording, skip, or stop here. Your words are saved.'**
+  /// **'Go as deep as you like: soften, skip or stop. Your words are saved.'**
   String get resetHeavyBody;
 
   /// No description provided for @resetHeavySofter.
@@ -3487,7 +3445,7 @@ abstract class AppLocalizations {
   /// No description provided for @resetHeavyCrisis.
   ///
   /// In en, this message translates to:
-  /// **'Cartharise is not therapy. If you feel unsafe, contact local emergency services or a crisis line now.'**
+  /// **'Cartharise isn\'t therapy. If you feel unsafe, contact emergency services or a crisis line now.'**
   String get resetHeavyCrisis;
 
   /// No description provided for @resetPromptMissing.
@@ -3541,13 +3499,13 @@ abstract class AppLocalizations {
   /// No description provided for @resetCompleteOpen.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =1{1 core question is still open. You can return to it from the Reset tab at any time.} other{{count} core questions are still open. You can return to them from the Reset tab at any time.}}'**
+  /// **'{count, plural, =1{1 core question is still open.} other{{count} core questions are still open.}}'**
   String resetCompleteOpen(int count);
 
   /// No description provided for @resetCompleteCompassBody.
   ///
   /// In en, this message translates to:
-  /// **'Your evening answers can become the first draft of your Life Compass. You choose what to copy, and nothing you already wrote is overwritten.'**
+  /// **'Your evening answers can start your Life Compass. You choose; nothing is overwritten.'**
   String get resetCompleteCompassBody;
 
   /// No description provided for @resetCompleteBuildCompass.
@@ -3661,13 +3619,13 @@ abstract class AppLocalizations {
   /// No description provided for @todayNextCompassImportBody.
   ///
   /// In en, this message translates to:
-  /// **'Your evening answers can fill the empty parts of your Life Compass. You choose what goes in.'**
+  /// **'Your evening answers can fill your Compass. You choose.'**
   String get todayNextCompassImportBody;
 
   /// No description provided for @todayNextCompassManualBody.
   ///
   /// In en, this message translates to:
-  /// **'Write your vision, a one-month project and a few daily levers in your own words.'**
+  /// **'Write your vision, a month project and daily levers.'**
   String get todayNextCompassManualBody;
 
   /// No description provided for @todayNextCompassImportAction.
@@ -3685,7 +3643,7 @@ abstract class AppLocalizations {
   /// No description provided for @todayNextLeversBody.
   ///
   /// In en, this message translates to:
-  /// **'Your daily levers can become a few small actions to check off. You approve each one.'**
+  /// **'Turn your daily levers into small quests.'**
   String get todayNextLeversBody;
 
   /// No description provided for @todayNextLeversAction.
@@ -3703,7 +3661,7 @@ abstract class AppLocalizations {
   /// No description provided for @todayNextReviewBody.
   ///
   /// In en, this message translates to:
-  /// **'Three short questions: what went well, what got in the way, and what to try next.'**
+  /// **'What went well, what got in the way, what\'s next.'**
   String get todayNextReviewBody;
 
   /// No description provided for @todayNextReviewAction.
@@ -3721,7 +3679,7 @@ abstract class AppLocalizations {
   /// No description provided for @todayNextJournalBody.
   ///
   /// In en, this message translates to:
-  /// **'A few lines about today: what you noticed, what you tried, what you learned.'**
+  /// **'A few lines about today.'**
   String get todayNextJournalBody;
 
   /// No description provided for @todayNextJournalAction.
@@ -3757,7 +3715,7 @@ abstract class AppLocalizations {
   /// No description provided for @todayFocusEmptyBody.
   ///
   /// In en, this message translates to:
-  /// **'Quests are small actions you choose yourself. Add one whenever you\'re ready.'**
+  /// **'Add a small quest when you\'re ready.'**
   String get todayFocusEmptyBody;
 
   /// No description provided for @todayFocusAdd.
@@ -3817,7 +3775,7 @@ abstract class AppLocalizations {
   /// No description provided for @todayJourneyAllTouched.
   ///
   /// In en, this message translates to:
-  /// **'Every reflection is written or set aside. You can revisit any of them.'**
+  /// **'Every reflection is written or set aside.'**
   String get todayJourneyAllTouched;
 
   /// No description provided for @todayJourneyCompleted.
@@ -3901,7 +3859,7 @@ abstract class AppLocalizations {
   /// No description provided for @todayDirectionEmptyBody.
   ///
   /// In en, this message translates to:
-  /// **'It holds your vision, a one-month project and a few daily levers, in your own words.'**
+  /// **'Your vision, month project and daily levers.'**
   String get todayDirectionEmptyBody;
 
   /// You tab screen title (Cinzel, keep short).
@@ -3931,7 +3889,7 @@ abstract class AppLocalizations {
   /// No description provided for @youProfileBody.
   ///
   /// In en, this message translates to:
-  /// **'A name is optional and stays on this phone. Tap to change it.'**
+  /// **'Optional, stays on this phone. Tap to change.'**
   String get youProfileBody;
 
   /// No description provided for @youEditName.
@@ -3973,7 +3931,7 @@ abstract class AppLocalizations {
   /// No description provided for @youPaceHint.
   ///
   /// In en, this message translates to:
-  /// **'Nothing is ever locked by time. Change this whenever you like.'**
+  /// **'Nothing locks. Change anytime.'**
   String get youPaceHint;
 
   /// No description provided for @youSectionCredit.
@@ -4075,7 +4033,7 @@ abstract class AppLocalizations {
   /// No description provided for @youAboutBody.
   ///
   /// In en, this message translates to:
-  /// **'An independent self-reflection app. Everything stays on this phone.'**
+  /// **'Independent. Everything stays on this phone.'**
   String get youAboutBody;
 
   /// No description provided for @youLicences.
@@ -4117,7 +4075,7 @@ abstract class AppLocalizations {
   /// No description provided for @youReplayConfirmBody.
   ///
   /// In en, this message translates to:
-  /// **'You\'ll see the introduction again. Your writing, Compass and settings stay as they are.'**
+  /// **'See the introduction again. Your writing and settings stay.'**
   String get youReplayConfirmBody;
 
   /// No description provided for @youReplayConfirmAction.
@@ -4291,7 +4249,7 @@ abstract class AppLocalizations {
   /// No description provided for @youRemindersPrivacy.
   ///
   /// In en, this message translates to:
-  /// **'Notifications show only the check-in\'s title, never your words.'**
+  /// **'Notifications show the check-in title only, never your words.'**
   String get youRemindersPrivacy;
 
   /// No description provided for @youRemindersDeniedTitle.
@@ -4303,7 +4261,7 @@ abstract class AppLocalizations {
   /// No description provided for @youRemindersDeniedBody.
   ///
   /// In en, this message translates to:
-  /// **'Cartharise isn\'t allowed to send notifications on this phone, so reminders stay off. You can allow them in your phone\'s settings and try again, or add the check-ins to your calendar instead.'**
+  /// **'Notifications are blocked for Cartharise. Allow them in your phone settings, or add the check-ins to your calendar.'**
   String get youRemindersDeniedBody;
 
   /// No description provided for @youRemindersUnavailableTitle.
@@ -4315,13 +4273,13 @@ abstract class AppLocalizations {
   /// No description provided for @youRemindersUnavailableBody.
   ///
   /// In en, this message translates to:
-  /// **'This phone can\'t show Cartharise notifications, so reminders stay off. You can add the check-ins to your calendar instead.'**
+  /// **'This phone can\'t show notifications. Add the check-ins to your calendar instead.'**
   String get youRemindersUnavailableBody;
 
   /// No description provided for @youRemindersScheduleFailed.
   ///
   /// In en, this message translates to:
-  /// **'Cartharise couldn\'t schedule the notifications on this phone. Try again, or add the check-ins to your calendar instead.'**
+  /// **'Couldn\'t schedule the notifications. Try again, or use your calendar.'**
   String get youRemindersScheduleFailed;
 
   /// No description provided for @youRemindersCalendarInstead.
@@ -4339,7 +4297,7 @@ abstract class AppLocalizations {
   /// No description provided for @youRemindersTimesBody.
   ///
   /// In en, this message translates to:
-  /// **'In your phone\'s local time. Change any of them to suit your day.'**
+  /// **'Local time. Change any to suit your day.'**
   String get youRemindersTimesBody;
 
   /// No description provided for @youRemindersSourceDefault.
@@ -4417,7 +4375,7 @@ abstract class AppLocalizations {
   /// No description provided for @youRemindersCalendarBody.
   ///
   /// In en, this message translates to:
-  /// **'A calendar file (.ics) with your switched-on check-ins for the next 30 days. Open it with your calendar app to add them. It contains only the check-in titles.'**
+  /// **'A calendar file with your check-ins for 30 days. Titles only.'**
   String get youRemindersCalendarBody;
 
   /// No description provided for @youRemindersCalendarButton.
@@ -4453,7 +4411,7 @@ abstract class AppLocalizations {
   /// No description provided for @youRemindersCalendarShared.
   ///
   /// In en, this message translates to:
-  /// **'Calendar file shared. Open it with your calendar app to add the check-ins.'**
+  /// **'Calendar file shared. Open it in your calendar app.'**
   String get youRemindersCalendarShared;
 
   /// No description provided for @youShareDismissed.
@@ -4525,7 +4483,7 @@ abstract class AppLocalizations {
   /// No description provided for @youMotionHint.
   ///
   /// In en, this message translates to:
-  /// **'Gentle movement between screens and the animated emblem. Your phone\'s reduce-motion setting always turns it off.'**
+  /// **'Screen transitions and the animated emblem. Off when your phone reduces motion.'**
   String get youMotionHint;
 
   /// No description provided for @youDataTitle.
@@ -4555,7 +4513,7 @@ abstract class AppLocalizations {
   /// No description provided for @youDataExportBody.
   ///
   /// In en, this message translates to:
-  /// **'Saves everything you\'ve written and chosen as one JSON file you can keep or move to another phone. The file isn\'t encrypted, so keep it somewhere private.'**
+  /// **'Saves everything as one JSON file. It isn\'t encrypted, so keep it private.'**
   String get youDataExportBody;
 
   /// No description provided for @youDataExportButton.
@@ -4579,7 +4537,7 @@ abstract class AppLocalizations {
   /// No description provided for @youDataImportBody.
   ///
   /// In en, this message translates to:
-  /// **'Replaces everything on this phone with a Cartharise backup. You\'ll see the backup\'s date and confirm first.'**
+  /// **'Replaces everything with a backup. You\'ll confirm first.'**
   String get youDataImportBody;
 
   /// No description provided for @youDataImportButton.
@@ -4621,7 +4579,7 @@ abstract class AppLocalizations {
   /// No description provided for @youDataImportedNotSaved.
   ///
   /// In en, this message translates to:
-  /// **'The backup is open on screen, but it couldn\'t be saved on this phone yet. Use Retry at the top of this screen, or export a copy.'**
+  /// **'Backup opened but not saved yet. Retry at the top, or export a copy.'**
   String get youDataImportedNotSaved;
 
   /// No description provided for @youDataImportFailedTitle.
@@ -4651,7 +4609,7 @@ abstract class AppLocalizations {
   /// No description provided for @youDataImportUnsupported.
   ///
   /// In en, this message translates to:
-  /// **'This backup\'s format isn\'t supported by this version of Cartharise.'**
+  /// **'This backup format isn\'t supported by this version.'**
   String get youDataImportUnsupported;
 
   /// No description provided for @youDataImportDamaged.
@@ -4687,7 +4645,7 @@ abstract class AppLocalizations {
   /// No description provided for @youDataDeleteBody.
   ///
   /// In en, this message translates to:
-  /// **'Erases everything Cartharise keeps on this phone and cancels reminders. Export a backup first if you want to keep a copy.'**
+  /// **'Erases everything on this phone and cancels reminders. Export first to keep a copy.'**
   String get youDataDeleteBody;
 
   /// No description provided for @youDataDeleteButton.
@@ -4705,7 +4663,7 @@ abstract class AppLocalizations {
   /// No description provided for @youDataDeleteConfirm1Body.
   ///
   /// In en, this message translates to:
-  /// **'Your answers, Compass, quests, notes, reviews and settings will be erased from this phone, and reminders cancelled.'**
+  /// **'Answers, Compass, quests, notes, reviews and settings will be erased.'**
   String get youDataDeleteConfirm1Body;
 
   /// No description provided for @youDataDeleteConfirm1Action.
@@ -4723,7 +4681,7 @@ abstract class AppLocalizations {
   /// No description provided for @youDataDeleteConfirm2Body.
   ///
   /// In en, this message translates to:
-  /// **'Cartharise keeps no copy anywhere else. Once deleted, your writing can only come back from a backup you exported.'**
+  /// **'There\'s no other copy. Only an exported backup can bring it back.'**
   String get youDataDeleteConfirm2Body;
 
   /// No description provided for @youDataDeleteConfirm2Action.
@@ -4735,13 +4693,13 @@ abstract class AppLocalizations {
   /// No description provided for @youDataDeleteFailed.
   ///
   /// In en, this message translates to:
-  /// **'Couldn\'t delete your data. Your writing is still on this phone; please try again.'**
+  /// **'Couldn\'t delete. Your writing is still here; try again.'**
   String get youDataDeleteFailed;
 
   /// No description provided for @youDataDeleteCopiesLeft.
   ///
   /// In en, this message translates to:
-  /// **'Your data was deleted, but a temporary copy of an earlier export or import couldn\'t be removed. Removing the app erases it.'**
+  /// **'Deleted, but a temporary export copy couldn\'t be removed. Removing the app erases it.'**
   String get youDataDeleteCopiesLeft;
 
   /// No description provided for @youSupportTitle.
@@ -4765,7 +4723,7 @@ abstract class AppLocalizations {
   /// No description provided for @youSupportNotTherapyBody.
   ///
   /// In en, this message translates to:
-  /// **'Cartharise is a tool for self-reflection. It isn\'t therapy, counselling or medical advice, and it doesn\'t diagnose anything.'**
+  /// **'A self-reflection tool. Not therapy, counselling, medical advice or diagnosis.'**
   String get youSupportNotTherapyBody;
 
   /// No description provided for @youSupportHeavyTitle.
@@ -4807,7 +4765,7 @@ abstract class AppLocalizations {
   /// No description provided for @youSupportCrisisBody.
   ///
   /// In en, this message translates to:
-  /// **'If you\'re in danger or thinking about harming yourself, contact your local emergency services now, or reach a crisis line in your country.'**
+  /// **'In danger or thinking of harming yourself? Contact emergency services now, or a crisis line in your country.'**
   String get youSupportCrisisBody;
 
   /// No description provided for @youSupportFindHelpline.
@@ -4819,7 +4777,7 @@ abstract class AppLocalizations {
   /// No description provided for @youSupportHelplineHint.
   ///
   /// In en, this message translates to:
-  /// **'Opens findahelpline.com, a directory of helplines by country.'**
+  /// **'Opens findahelpline.com, helplines by country.'**
   String get youSupportHelplineHint;
 
   /// No description provided for @youSupportOngoingTitle.
@@ -4831,7 +4789,7 @@ abstract class AppLocalizations {
   /// No description provided for @youSupportOngoingBody.
   ///
   /// In en, this message translates to:
-  /// **'If difficult feelings last or get in the way of daily life, a doctor, psychologist or counsellor can help.'**
+  /// **'If hard feelings last, a doctor or counsellor can help.'**
   String get youSupportOngoingBody;
 }
 
