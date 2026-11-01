@@ -148,6 +148,36 @@ Set<Unlockable> unlockedBy(CampaignProgress progress, {required bool gameOn}) {
   };
 }
 
+/// Every extra in the order the Campaign points to them: the route stops
+/// along Hannibal's road first (XP always moves the user along it), then the
+/// achievements in the article's order.
+final List<Unlockable> kUnlockOrder = List.unmodifiable(
+  [...Unlockable.values]..sort((a, b) {
+    int rank(Unlockable u) => switch (unlockSource(u)) {
+      UnlockSource(waypoint: final w?) => w.index,
+      UnlockSource(achievement: final earned?) =>
+        Waypoint.values.length + earned.index,
+      _ => 1 << 20,
+    };
+    return rank(a).compareTo(rank(b));
+  }),
+);
+
+/// The next extra the Campaign can still open (game layer on), in
+/// [kUnlockOrder], skipping those already open or in [owned] (worn before
+/// the game layer was turned on: never taken away). Null once every extra is
+/// open.
+Unlockable? nextUnlock(
+  CampaignProgress progress, {
+  Set<Unlockable> owned = const {},
+}) {
+  final open = unlockedBy(progress, gameOn: true);
+  for (final u in kUnlockOrder) {
+    if (!open.contains(u) && !owned.contains(u)) return u;
+  }
+  return null;
+}
+
 /// The unlock an item needs, or null when it is free.
 Unlockable? requirementOf(Enum item) => switch (item) {
   Headwear.circlet => Unlockable.headwearCirclet,

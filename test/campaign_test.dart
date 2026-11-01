@@ -6,8 +6,10 @@ import 'package:cartharise/data/data_store.dart';
 import 'package:cartharise/domain/app_data.dart';
 import 'package:cartharise/domain/backup.dart';
 import 'package:cartharise/domain/campaign.dart';
+import 'package:cartharise/domain/persona.dart';
 import 'package:cartharise/state/app_state.dart';
 import 'package:cartharise/ui/campaign/campaign_ops.dart';
+import 'package:cartharise/ui/missions/quest_tile.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'support/fake_content.dart';
@@ -469,6 +471,125 @@ void main() {
         ),
       );
       expect(state.monthlyBoss, 'Launch the shop');
+    });
+  });
+
+  group('avatar extras along the Campaign (persona plan C)', () {
+    CampaignProgress at({int xp = 0, Set<Achievement> earned = const {}}) =>
+        CampaignProgress(
+          xp: xp,
+          chapters: const [],
+          earned: earned,
+          questsCompleted: 0,
+          pathDaysWritten: 0,
+          attempts: 0,
+        );
+
+    test('the order: route stops along the road, then achievements', () {
+      expect(kUnlockOrder, [
+        Unlockable.sigilPath, // New Carthage
+        Unlockable.garmentSage, // the Ebro
+        Unlockable.headwearCirclet, // the Pyrenees
+        Unlockable.accessoryCompass, // the Rhône
+        Unlockable.sigilStar, // the Alps
+        Unlockable.headwearLaurel, // Italy
+        Unlockable.accessoryScroll, // The Observer
+        Unlockable.sigilCompass, // The Pathfinder
+        Unlockable.garmentIndigo, // The Visionary
+        Unlockable.garmentCrimson, // The Watchful
+        Unlockable.accessoryAmulet, // The Strategist
+        Unlockable.garmentBronze, // The Practitioner
+        Unlockable.sigilLaurel, // The Challenger
+      ]);
+      expect(kUnlockOrder.toSet(), Unlockable.values.toSet());
+    });
+
+    test('next: the first extra not open yet', () {
+      expect(nextUnlock(at()), Unlockable.sigilPath);
+      // At the Rhône (level 5): the Alps' star is next.
+      expect(nextUnlock(at(xp: 420)), Unlockable.sigilStar);
+      // In Italy every stop is open: the achievements follow, in order,
+      // skipping those already earned.
+      expect(nextUnlock(at(xp: 600)), Unlockable.accessoryScroll);
+      expect(
+        nextUnlock(
+          at(xp: 600, earned: {Achievement.observer, Achievement.practitioner}),
+        ),
+        Unlockable.sigilCompass,
+      );
+      // An earned achievement before the road is walked changes nothing on
+      // the road.
+      expect(
+        nextUnlock(at(earned: {Achievement.observer})),
+        Unlockable.sigilPath,
+      );
+    });
+
+    test('next skips what the avatar already wears (never taken away)', () {
+      expect(
+        nextUnlock(at(), owned: {Unlockable.sigilPath, Unlockable.garmentSage}),
+        Unlockable.headwearCirclet,
+      );
+    });
+
+    test('none once everything is open', () {
+      final all = at(xp: 600, earned: Achievement.values.toSet());
+      expect(unlockedBy(all, gameOn: true), Unlockable.values.toSet());
+      expect(nextUnlock(all), isNull);
+      expect(nextUnlock(at(xp: 600), owned: Unlockable.values.toSet()), isNull);
+    });
+
+    test('reaching a stop or earning an achievement only ever adds', () {
+      var before = unlockedBy(at(), gameOn: true);
+      for (var xp = 0; xp <= 700; xp += 20) {
+        final now = unlockedBy(at(xp: xp), gameOn: true);
+        expect(now.containsAll(before), isTrue, reason: '$xp XP');
+        before = now;
+      }
+    });
+  });
+
+  group('quest XP preview (persona plan C)', () {
+    test('counts each quest once on the day, as the XP rules do', () {
+      final quests = [
+        _quest('a', {'2026-11-03', '2026-11-02'}, daily: true),
+        _quest('b', {'2026-11-03'}),
+        _quest('c', {'2026-11-01'}),
+        _quest('d', const {}),
+      ];
+      expect(questsDoneOn(quests, '2026-11-03'), 2);
+      expect(questsDoneOn(quests, '2026-11-02'), 1);
+      expect(questsDoneOn(quests, '2026-11-04'), 0);
+    });
+
+    Future<AppState> loaded(AppData data) async {
+      final state = AppState(
+        store: MemoryDataStore(data),
+        content: fakeContent,
+        reminders: FakeReminderScheduler(),
+        clock: () => _t,
+      );
+      await state.load();
+      return state;
+    }
+
+    test('open while the game is on and fewer than 3 are done today', () async {
+      final two = [
+        _quest('a', {'2026-11-03'}),
+        _quest('b', {'2026-11-03'}),
+        _quest('c', const {}),
+      ];
+      final state = await loaded(AppData(quests: two));
+      expect(questXpOpenOn(state, '2026-11-03'), isTrue);
+      // A third completion is the last that counts today.
+      await state.setQuestDone('c', true, day: '2026-11-03');
+      expect(questsDoneOn(state.data.quests, '2026-11-03'), kQuestDaysCap);
+      expect(questXpOpenOn(state, '2026-11-03'), isFalse);
+      // Another day starts open again.
+      expect(questXpOpenOn(state, '2026-11-04'), isTrue);
+      // Nothing to preview with the game layer off.
+      await state.setGameEnabled(false);
+      expect(questXpOpenOn(state, '2026-11-04'), isFalse);
     });
   });
 

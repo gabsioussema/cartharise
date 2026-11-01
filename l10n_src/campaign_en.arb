@@ -138,5 +138,18 @@
   "campaignToastXp": "+{xp} XP",
   "@campaignToastXp": {"placeholders": {"xp": {"type": "int"}}},
   "campaignToastAchievement": "Achievement earned: {name}",
-  "@campaignToastAchievement": {"placeholders": {"name": {"type": "String"}}}
+  "@campaignToastAchievement": {"placeholders": {"name": {"type": "String"}}},
+
+  "campaignStrategistEmpty": "Create an avatar to walk the route with you.",
+  "campaignExtrasCount": "{count} of {total} extras unlocked",
+  "@campaignExtrasCount": {"placeholders": {"count": {"type": "int"}, "total": {"type": "int"}}},
+  "campaignExtraNext": "Next: {item} · {how}",
+  "@campaignExtraNext": {"placeholders": {"item": {"type": "String"}, "how": {"type": "String"}}},
+  "campaignExtrasAll": "Every extra unlocked.",
+  "campaignAchievementExtra": "For your avatar: {item}",
+  "@campaignAchievementExtra": {"placeholders": {"item": {"type": "String"}}},
+  "campaignQuestXp": "+{xp} XP",
+  "@campaignQuestXp": {"placeholders": {"xp": {"type": "int"}}},
+  "campaignQuestXpLabel": "Earns {xp} XP when done",
+  "@campaignQuestXpLabel": {"placeholders": {"xp": {"type": "int"}}}
 }
