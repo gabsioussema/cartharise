@@ -42,7 +42,7 @@ dialogs), 16 (inputs), pill buttons. Flat, thin borders.
 
 | Widget | Notes |
 |---|---|
-| `CarthaEmblem(size, color)` | CustomPainter of the exact `emblem.svg` paths (stroke 14 round, trunk 13 square). Default colour `emblem`; use `heroAccent` on hero. |
+| `CarthaEmblem(size, color)` | CustomPainter of `EmblemGeometry` (the same paths as `emblem.svg`): 13-unit strokes with mitred corners and flat ends + filled tapers. Default colour `emblem`; use `heroAccent` on hero. |
 | `CarthaLoader(size, tile, startAt)` | Animated "charging" emblem — see below. |
 | `CarthaWordmark(layout, width, onHero)` | `horizontal` / `stacked` lockups and `lettering` (CARTHARISE + rule only) from the brand SVGs, re-tinted per theme (`BrandSvgColorMapper`), tagline in Inter. |
 | `PrimaryButton` / `SecondaryButton` / `TextLinkButton` | pill filled / outlined / accent text; `icon`, `trailingIcon`, `expand`, `busy` (a small `CarthaLoader` — the brand loader, still with reduced motion or Settings › Motion off — and taps ignored). Labels wrap at large text. |
@@ -60,27 +60,49 @@ dialogs), 16 (inputs), pill buttons. Flat, thin borders.
 | `DestructiveButton` | outlined pill in the error colour for irreversible actions (Delete all data); always paired with a confirm. |
 | `StorageTransparencyText` | where the data lives, from ARB (`storageTransparency`): only on this phone, private app folder, not encrypted by Cartharise, not synced, not in phone or cloud backups. Onboarding privacy page and You › Your data. |
 
+## Emblem (`EmblemGeometry`)
+
+The geometric elephant head of the brand board's "Icon construction" (v3,
+traced from `Cartharise Brand and App System Board.png` and redrawn as clean
+vectors in the 512 design space, centred at (256, 256)):
+
+* one outline for the brow and both ears — rounded top corners, sharp outer
+  tips, a hook at the bottom of each ear, small notches where the brow meets
+  the ears;
+* per side, a **face line** that grows from a crescent inside the ear, angles
+  down the cheek and becomes one side of the trunk (flat end);
+* per side, an **eye line** that starts as a pointed hook, crosses the face
+  line under the eye and sweeps out into a tapered tusk.
+
+Lines are one 13-unit stroke (miter joins, limit 6, butt caps); the crescents,
+eye tips and tusks are filled tapers that grow from a point to the stroke width
+and hand over to the stroke without a step. `EmblemGeometry` is the single
+source: `make brand` exports `emblem.svg`, `loader_reference.svg`, the emblem in
+both lockups and the icon / splash PNGs from it (then regenerates the launcher
+icons and native splash), and `test/brand_test.dart` fails when a committed
+asset drifts. Tiles (app icons, loader tile) show the emblem at 70 % of their
+width; the Android 12 splash keeps it inside the system's circular mask.
+
 ## Loader spec (`CarthaLoader`)
 
-A rebuild of `assets/brand/loader_reference.svg` (its CSS animation does not play
-in flutter_svg):
+The board's "loading / charging" animation, rebuilt from
+`assets/brand/loader_reference.svg` (its CSS animation plays in browsers only):
 
-* Paths: the emblem's four head lines + trunk. The SVG animates
-  `stroke-dashoffset` 1500→0 with `stroke-dasharray: 1500`; the loader emulates
-  that dash exactly: each path shows `extractPath(0, min(length, 1500 × draw))`
-  (`LoaderFrame.drawnLength`, `kLoaderDashLength`).
-* Cycle 3.4 s, each keyframe segment eased with CSS `ease-in-out`
-  (`Curves.easeInOut`): dash progress 0 at 0–10 %, 1 at 65 % (opacity .3→1),
-  held to 85 %, back to 0 by 100 % (opacity →.3). As the dash is far longer
-  than the lines (≈ 63–293 units), every line draws at the same speed: the
-  trunk is complete by ≈ 18 %, the whole emblem by ≈ 27 %, and it only
-  retracts after ≈ 95.5 % — like the reference.
-* Spark: the four-point star centred at (256, 123), scale .92→1.13 and opacity
-  .25→1 between 45 and 70 %, held to 85 %, back by 100 %.
+* Cycle 3.2 s, each keyframe segment eased with CSS `ease-in-out`
+  (`Curves.easeInOut`). **Charge**: dim (opacity .28) at 0–8 %, rises to full
+  by 55 %, held to 88 %, back to dim by 100 %. **Glow**: only while fully
+  charged — a warm halo (the emblem blurred, σ 14 units, 55 % of `glowColor`)
+  blooms from 55 % to 70 %, held to 80 %, gone by 88 %, while the line warms
+  35 % towards `glowColor`.
+* The emblem and its halo are composited as one layer, so the crossing lines
+  and the tapers fade together.
 * `tile: true` paints the rounded hero tile (rx 110/512) like the app icon.
-* Static full emblem + spark when `MediaQuery.disableAnimations` (device reduce
-  motion) or `settings.motion == false`. Semantics label "Loading".
-* `startAt: 0.7` starts fully drawn (boot hand-off from the static splash).
+  `showBar: true` adds a slim charge bar under the emblem that fills with the
+  charge (boot screen); the widget is then `size × 1.16` tall.
+* Static, fully charged emblem (no halo, no bar) when
+  `MediaQuery.disableAnimations` (device reduce motion) or
+  `settings.motion == false`. Semantics label "Loading".
+* `startAt: 0.6` starts fully charged (boot hand-off from the static splash).
 * In widget tests, use `pump(duration)` / `pumpFrames`, not `pumpAndSettle`,
   while a loader is on screen.
 
@@ -149,11 +171,13 @@ provided above `MaterialApp`; `AppNav` helpers: `switchTab`, `tabWidget`,
 | `test/ics_test.dart` | 6 events, COUNT=30, floating DTSTART, stable UIDs, CRLF, folding, escaping, no user text |
 | `test/merge_arb_test.dart` | ARB merge order, duplicate/invalid failures, `app_en.arb` up to date |
 | `test/ui/shell_test.dart` | boot loader → onboarding, onboarding → app, load error + Try again, 5 tabs & switching (dark + light), AppNav from pushed screens, notification tap, size matrix, SaveIndicator failure, localized notification channel, busy buttons (brand loader, still with reduced motion) |
-| `test/ui/loader_test.dart` | keyframes, the SVG's 1500-unit dash per line (trunk first, full emblem by ≈ 27 %, retract after ≈ 95.5 %), emblem geometry, animating vs static (device / setting), lockups render |
+| `test/ui/loader_test.dart` | charging keyframes (charge, glow only when fully charged), still frame, animating vs static (device / setting), charge bar size, lockups render |
+| `test/brand_test.dart` | every brand asset (SVGs, lockups, icon and splash PNGs) matches `EmblemGeometry`; measured ink bounds, symmetry, centring, tapers as wide as the stroke where lines start |
 | `test/ui/a11y_test.dart` | every main screen (+ onboarding), dark and light: `androidTapTargetGuideline`, `iOSTapTargetGuideline`, `labeledTapTargetGuideline`, `textContrastGuideline`; keyboard-only Tab traversal of the guided prompt (field → Save & continue → Back → Skip → Jump → Pause → Feeling heavy?, Enter activates) |
 | `test/privacy_test.dart` | Android manifest/backup rules, iOS backup-exclusion channel, `FileDataStore` exclusion after each write (failure keeps the save, retried), clear |
 | `test/splash_test.dart` | the Android 12 splash icon keeps the whole emblem inside the system's circular mask (`assets/brand/splash_android12.png`) |
-| `test/screenshots/foundation_screens_test.dart` | tagged `screenshots`: boot, load error, shell, UI-base gallery (Forest + Olive, dark + light) → `test/screenshots/out/` |
+| `test/screenshots/foundation_screens_test.dart` | tagged `screenshots`: boot, load error, shell, UI-base gallery (Forest + Olive, dark + light), the charging frames → `test/screenshots/out/` |
+| `test/brand/export_brand_assets_test.dart` | tagged `brand`: writes the brand assets from `EmblemGeometry` (`make brand`) |
 
 Test support (`test/support/`): `pumpCartha(tester, {data, home, size,
 textScale, brightness, theme, now, content, readDelay, frames})` returns a

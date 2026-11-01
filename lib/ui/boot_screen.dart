@@ -108,11 +108,12 @@ class _BootView extends StatelessWidget {
                                 const SizedBox(height: 24),
                                 CarthaLoader(
                                   size: 150,
-                                  startAt: 0.7,
+                                  startAt: 0.6,
+                                  showBar: true,
                                   color: p.heroAccent,
-                                  sparkColor: p.onHero,
+                                  glowColor: p.onHero,
                                 ),
-                                const SizedBox(height: 20),
+                                const SizedBox(height: 28),
                                 const CarthaWordmark(
                                   layout: WordmarkLayout.lettering,
                                   width: 230,

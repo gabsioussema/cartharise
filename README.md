@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/brand/emblem.svg" alt="Cartharise emblem" width="180">
+<img src="assets/brand/loader_reference.svg" alt="Cartharise emblem, charging" width="150">
 
 # Cartharise
 
@@ -189,7 +189,7 @@ domain layer is pure Dart and unit‑tested. Details: [`docs/architecture.md`](d
 |---|---|---|
 | <img src="https://cdn.simpleicons.org/flutter/02569B" width="22"> | App & UI | **Flutter 3.47**, Material 3, `provider`, "Carthage Dusk" role‑token palette (`CarthaPalette`), Forest & Olive themes |
 | <img src="https://cdn.simpleicons.org/dart/0175C2" width="22"> | Core logic | **Dart 3.13**: pure‑Dart domain, hand‑written JSON, `intl` + gen‑l10n from per‑area ARB fragments |
-| 🎨 | Brand & motion | `flutter_svg` (emblem, wordmarks), `CustomPainter` rebuild of the animated loader, vector brand scenes |
+| 🎨 | Brand & motion | `EmblemGeometry` (one source for the emblem, its SVGs and icons), the "charging" loader as a `CustomPainter`, `flutter_svg` lockups, vector brand scenes |
 | 🔔 | Reminders | `flutter_local_notifications` (inexact daily), `timezone` + `flutter_timezone`; pure `.ics` export |
 | 💾 | Files | `path_provider` (atomic JSON store), `share_plus` (export), `file_picker` (restore) |
 | 🔗 | Links | `url_launcher`, used only for the credited article links and the helpline directory |
@@ -229,9 +229,13 @@ make ios                    # iOS compile check (needs Xcode)
 
 ```bash
 make l10n                   # merge l10n_src/*_en.arb → lib/l10n, then generate AppLocalizations
+make brand                  # re-export emblem SVGs, lockups, icon + splash PNGs from EmblemGeometry
 make icons                  # launcher icons from assets/brand/app_icon_1024.png
 make splash                 # native splash screens (forest + emblem)
 ```
+
+The emblem is drawn in code (`EmblemGeometry` in `lib/ui/widgets/emblem.dart`); every brand
+asset is exported from it, and `make check` fails if one drifts.
 
 Add UI strings to your area's fragment in `l10n_src/<area>_en.arb`, not to `lib/l10n/` (that folder
 is generated).

@@ -20,126 +20,61 @@ bool _animating(WidgetTester tester) =>
     isLoaderAnimating(tester.state(find.byType(CarthaLoader)));
 
 void main() {
-  group('loader keyframes (loader_reference.svg)', () {
-    test('dash offset: hidden, 1500→0 at 10→65 %, held, back by 100 %', () {
-      expect(kLoaderDashLength, 1500);
-      expect(loaderFrameAt(0).draw, 0);
-      expect(loaderFrameAt(0.0999).draw, 0);
-      expect(loaderFrameAt(0.375).draw, closeTo(0.5, 1e-6));
-      expect(loaderFrameAt(0.65).draw, 1);
-      expect(loaderFrameAt(0.80).draw, 1);
-      expect(loaderFrameAt(0.925).draw, closeTo(0.5, 1e-6));
-      expect(loaderFrameAt(0.99999).draw, closeTo(0, 1e-3));
+  group('charging keyframes (loader_reference.svg)', () {
+    test('charge: dim at 0–8 %, full by 55 %, held to 88 %, dim by 100 %', () {
+      expect(loaderFrameAt(0).charge, 0);
+      expect(loaderFrameAt(0.0799).charge, 0);
+      expect(loaderFrameAt(0.315).charge, closeTo(0.5, 1e-6));
+      expect(loaderFrameAt(0.55).charge, 1);
+      expect(loaderFrameAt(0.80).charge, 1);
+      expect(loaderFrameAt(0.94).charge, closeTo(0.5, 1e-6));
+      expect(loaderFrameAt(0.99999).charge, closeTo(0, 1e-3));
       // Ease-in-out: slow start.
-      expect(loaderFrameAt(0.15).draw, lessThan((0.15 - 0.10) / 0.55));
+      expect(loaderFrameAt(0.12).charge, lessThan((0.12 - 0.08) / 0.47));
     });
 
-    // The SVG's dash (1500) is far longer than any emblem line (≈ 63–293),
-    // so every line draws at the same absolute speed: the trunk finishes
-    // first, the whole emblem is complete by ≈ 27 % of the cycle and it only
-    // retracts in the last ≈ 4.5 %.
-    group('drawn length per line (stroke-dasharray 1500)', () {
-      final lengths = [
-        for (final p in [...EmblemGeometry.lines, EmblemGeometry.trunk])
-          p.computeMetrics().first.length,
-      ];
-      final longest = lengths.reduce((a, b) => a > b ? a : b);
-      final trunk = lengths.last;
-
-      bool full(double t) =>
-          lengths.every((l) => loaderFrameAt(t).drawnLength(l) == l);
-
-      test('line lengths are the reference ones', () {
-        expect(longest, closeTo(293, 3));
-        expect(trunk, closeTo(63, 0.5));
-        expect(lengths.every((l) => l < kLoaderDashLength), isTrue);
-      });
-
-      test('the trunk is drawn first, by ≈ 18 %', () {
-        final early = loaderFrameAt(0.18);
-        expect(early.drawnLength(trunk), trunk);
-        expect(early.drawnLength(longest), lessThan(longest));
-        expect(loaderFrameAt(0.16).drawnLength(trunk), lessThan(trunk));
-      });
-
-      test('the full emblem by ≈ 27 % and still at 37.5 %', () {
-        expect(full(0.25), isFalse);
-        expect(full(0.28), isTrue);
-        expect(full(0.30), isTrue);
-        expect(full(0.375), isTrue);
-        expect(full(0.80), isTrue);
-      });
-
-      test('it stays complete until ≈ 95.5 %, then retracts', () {
-        expect(full(0.93), isTrue);
-        expect(full(0.95), isTrue);
-        expect(full(0.96), isFalse);
-        expect(loaderFrameAt(0.999).drawnLength(longest), lessThan(5));
-      });
-
-      test('every line grows at the same speed', () {
-        final f = loaderFrameAt(0.15);
-        final shown = f.drawnLength(longest);
-        expect(shown, greaterThan(0));
-        expect(shown, lessThan(trunk));
-        expect(f.drawnLength(trunk), shown);
-        expect(
-          f.drawnLength(longest),
-          closeTo(kLoaderDashLength * f.draw, 1e-9),
-        );
-      });
+    test('opacity follows the charge: .28 when empty, 1 when charged', () {
+      expect(loaderFrameAt(0.04).opacity, closeTo(0.28, 1e-9));
+      expect(loaderFrameAt(0.60).opacity, 1);
+      expect(loaderFrameAt(0.999999).opacity, closeTo(0.28, 1e-3));
     });
 
-    test('line opacity .3 → 1 → .3', () {
-      expect(loaderFrameAt(0.05).opacity, closeTo(0.3, 1e-9));
-      expect(loaderFrameAt(0.70).opacity, 1);
-      expect(loaderFrameAt(0.999999).opacity, closeTo(0.3, 1e-3));
+    test('glow blooms only once fully charged: 55→70 %, held to 80 %', () {
+      expect(loaderFrameAt(0.30).glow, 0);
+      expect(loaderFrameAt(0.55).glow, 0);
+      expect(loaderFrameAt(0.625).glow, closeTo(0.5, 1e-6));
+      expect(loaderFrameAt(0.75).glow, 1);
+      expect(loaderFrameAt(0.80).glow, 1);
+      expect(loaderFrameAt(0.88).glow, 0);
+      // Never a halo around a half-charged emblem.
+      for (var t = 0.0; t < 1; t += 0.01) {
+        final f = loaderFrameAt(t);
+        if (f.glow > 0) expect(f.charge, 1, reason: 't = $t');
+      }
     });
 
-    test(
-      'spark pulses .92 → 1.13 (opacity .25 → 1) at 45→70 %, held to 85 %',
-      () {
-        final rest = loaderFrameAt(0.30);
-        expect(rest.sparkScale, closeTo(0.92, 1e-9));
-        expect(rest.sparkOpacity, closeTo(0.25, 1e-9));
-        final peak = loaderFrameAt(0.78);
-        expect(peak.sparkScale, closeTo(1.13, 1e-9));
-        expect(peak.sparkOpacity, 1);
-        expect(
-          loaderFrameAt(0.575).sparkScale,
-          closeTo((0.92 + 1.13) / 2, 1e-6),
-        );
-      },
-    );
-
-    test('cycle is 3.4 s and repeats', () {
-      expect(kLoaderCycle, const Duration(milliseconds: 3400));
+    test('cycle is 3.2 s and repeats', () {
+      expect(kLoaderCycle, const Duration(milliseconds: 3200));
       expect(
-        loaderFrameAt(1.375).draw,
-        closeTo(loaderFrameAt(0.375).draw, 1e-9),
+        loaderFrameAt(1.315).charge,
+        closeTo(loaderFrameAt(0.315).charge, 1e-9),
       );
     });
 
-    test('the still frame is the full emblem with its spark', () {
-      expect(LoaderFrame.still.draw, 1);
+    test('the still frame is the fully charged emblem without a halo', () {
+      expect(LoaderFrame.still.charge, 1);
       expect(LoaderFrame.still.opacity, 1);
-      expect(LoaderFrame.still.sparkScale, 1);
+      expect(LoaderFrame.still.glow, 0);
     });
 
-    test('emblem geometry matches emblem.svg', () {
-      expect(EmblemGeometry.lines, hasLength(4));
-      final bounds = EmblemGeometry.lines
-          .map((p) => p.getBounds())
-          .reduce((a, b) => a.expandToInclude(b));
-      expect(bounds, const Rect.fromLTRB(121, 140, 391, 289));
-      expect(
-        EmblemGeometry.trunk.getBounds(),
-        const Rect.fromLTRB(256, 244, 256, 307),
-      );
-      expect(
-        EmblemGeometry.spark.getBounds().center,
-        EmblemGeometry.sparkCenter,
-      );
+    test('starting at 0.6 is fully charged (seamless after the splash)', () {
+      expect(loaderFrameAt(0.6).charge, 1);
+    });
+
+    // emblem.svg / loader_reference.svg equality: test/brand_test.dart.
+    test('emblem geometry: five lines and six tapers', () {
+      expect(EmblemGeometry.lines, hasLength(5));
+      expect(EmblemGeometry.fills, hasLength(6));
     });
   });
 
@@ -162,7 +97,36 @@ void main() {
       );
       expect(_animating(tester), isFalse);
       await tester.pumpAndSettle();
-      expect(find.byType(CarthaLoader), findsOneWidget);
+      final frame = loaderFrameOf(tester.state(find.byType(CarthaLoader)));
+      expect(frame.charge, 1);
+      expect(frame.glow, 0);
+    });
+
+    testWidgets('charges over time while animating', (tester) async {
+      await pumpCartha(tester, data: onboardedData(), home: _host());
+      State state() => tester.state(find.byType(CarthaLoader));
+      expect(loaderFrameOf(state()).charge, lessThan(1));
+      await tester.pump(kLoaderCycle * 0.6);
+      expect(loaderFrameOf(state()).charge, 1);
+      expect(loaderFrameOf(state()).glow, greaterThan(0));
+    });
+
+    testWidgets('the charge bar adds room under the emblem', (tester) async {
+      await pumpCartha(
+        tester,
+        data: onboardedData(),
+        home: const Scaffold(
+          body: Center(child: CarthaLoader(size: 150, showBar: true)),
+        ),
+      );
+      final size = tester.getSize(
+        find.descendant(
+          of: find.byType(CarthaLoader),
+          matching: find.byType(CustomPaint),
+        ),
+      );
+      expect(size, const Size(150, 150 * 1.16));
+      expect(tester.takeException(), isNull);
     });
 
     testWidgets('static when Settings › Motion is off', (tester) async {

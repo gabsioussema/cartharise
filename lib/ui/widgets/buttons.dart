@@ -163,7 +163,6 @@ class _ButtonContent extends StatelessWidget {
               key: const ValueKey('button-busy'),
               size: 20,
               color: color,
-              sparkColor: color,
             ),
             const SizedBox(width: 10),
           ] else if (icon != null) ...[

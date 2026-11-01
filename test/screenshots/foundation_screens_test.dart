@@ -187,5 +187,34 @@ void main() {
       );
       await captureScreenshot(tester, '05_gallery_olive_${b.name}');
     });
+
+    // The board's "loading / charging" strip: frozen frames of the loader
+    // (dim → charging → charged → glowing), then the boot loader with its
+    // charge bar.
+    testWidgets('charging frames ${b.name}', (tester) async {
+      await pumpCartha(
+        tester,
+        brightness: b,
+        data: onboardedData(),
+        home: Scaffold(
+          body: TickerMode(
+            enabled: false,
+            child: Center(
+              child: Wrap(
+                spacing: 12,
+                runSpacing: 24,
+                alignment: WrapAlignment.center,
+                children: [
+                  for (final t in [0.04, 0.3, 0.6, 0.75])
+                    CarthaLoader(size: 84, tile: true, startAt: t),
+                  const CarthaLoader(size: 150, showBar: true, startAt: 0.4),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+      await captureScreenshot(tester, '06_charging_${b.name}');
+    });
   }
 }

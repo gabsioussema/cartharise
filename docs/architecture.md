@@ -101,7 +101,7 @@ widget ──calls──▶ AppState.saveAnswer(...)        (or an area extensio
 1. **Native splash** (`flutter_native_splash`): forest `#1E3328` with the app
    icon (Android 12+ uses the system splash API with the same colours).
 2. **BootScreen** (first Flutter frame): the same forest background, the animated
-   `CarthaLoader` starting fully drawn (so the hand-off from the static splash is
+   `CarthaLoader` starting fully charged (so the hand-off from the static splash is
    seamless), the CARTHARISE lettering, the tagline and "Preparing your space…".
    `AppState.load()` runs after this first frame.
 3. **Then** (cross-fade, instant with reduced motion): `OnboardingFlow` while

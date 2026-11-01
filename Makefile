@@ -14,7 +14,7 @@ SYMBOLS      := build/symbols
 RELEASE_FLAGS := --obfuscate --split-debug-info=$(SYMBOLS)
 
 .DEFAULT_GOAL := help
-.PHONY: help deps l10n icons splash analyze test check screenshots \
+.PHONY: help deps l10n brand icons splash analyze test check screenshots \
         android android-release run ios clean _require-xcode
 
 ## —— General ————————————————————————————————————————————————
@@ -33,6 +33,10 @@ deps: ## flutter pub get
 l10n: ## Merge l10n_src/*_en.arb → lib/l10n/app_en.arb, then generate AppLocalizations
 	$(DART) run tool/merge_arb.dart
 	$(FLUTTER) gen-l10n
+
+brand: ## Re-export the brand SVGs + icon PNGs from EmblemGeometry, then icons + splash
+	$(FLUTTER) test --tags brand --run-skipped
+	$(MAKE) icons splash
 
 icons: ## Regenerate launcher icons from assets/brand/app_icon_1024.png
 	$(DART) run flutter_launcher_icons

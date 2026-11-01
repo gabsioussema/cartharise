@@ -107,7 +107,7 @@ flutter_native_splash:
   image: assets/brand/app_icon_1024.png
   # Android 12+ masks the icon to a circle 2/3 of its size: this 960 px
   # version keeps the whole emblem (ear tips included) inside that circle
-  # (emblem radius ≈ 290 px, mask 320 px; test/splash_test.dart pins it).
+  # (emblem radius ≈ 288 px, mask 320 px; test/splash_test.dart pins it).
   android_12:
     color: "#1E3328"
     image: assets/brand/splash_android12.png

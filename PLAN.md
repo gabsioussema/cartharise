@@ -88,10 +88,10 @@ ivory (not bronze) for paragraphs on dark; progress is never a judgement of wort
 
 | File | Use |
 |---|---|
-| `emblem.svg` | Geometric elephant head (512 viewBox, bronze stroke 14, round joins) — **source of the emblem paths** |
-| `loader_reference.svg` | The animated "charging" emblem: stroke-draw (`dasharray 1500`, 3.4 s ease-in-out, opacity .3→1, holds 65–85 %) + a 4-point spark above the head pulsing scale .92→1.13. Reduced motion → static. **CSS animation does not play in flutter_svg: rebuild it as `CarthaLoader` (CustomPainter + `PathMetric.extractPath`) from these exact paths and timings.** |
+| `emblem.svg` | Geometric elephant head (512 viewBox), redrawn from the board's "Icon construction" (emblem v3: 13-unit mitred strokes + filled tapers). Exported from `EmblemGeometry` by `make brand` — the Dart geometry is the source |
+| `loader_reference.svg` | The board's "loading / charging" tile: the emblem charges from dim (.28) to full, then a warm halo blooms while fully charged (3.2 s, ease-in-out). Reduced motion → static. **CSS animation does not play in flutter_svg: `CarthaLoader` rebuilds it (same keyframes) and adds the charge bar on the boot screen.** |
 | `wordmark_horizontal.svg`, `wordmark_stacked.svg` | Lockups (emblem + outlined CARTHARISE lettering) — render with `flutter_svg`, tinted per theme |
-| `app_icon_1024.png` | Launcher icon source (forest bg, bronze emblem) and native splash image |
+| `app_icon_1024.png` | Launcher icon source (forest bg, light-bronze emblem at 70 % width) and native splash image — exported by `make brand` |
 | `app_icon_forest/olive/light.png` | Alternate tiles (Appearance previews) |
 | `splash_android_reference.png` | Splash composition target: forest bg, faint concentric circles, emblem, Cinzel CARTHARISE, bronze tracking-wide tagline, short bronze rule |
 | `social_preview.png` | Store/marketing only |
