@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 12+ (API 31+): Cartharise keeps the user's writing on this phone
+     only. Nothing is uploaded to cloud backup and nothing is copied to a new
+     phone by device-to-device transfer; moving data is the user's own JSON
+     export (You › Your data). Keep in sync with full_backup_content.xml and
+     the storage text (common_en.arb › storageTransparency). -->
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="root" path="." />
+        <exclude domain="file" path="." />
+        <exclude domain="database" path="." />
+        <exclude domain="sharedpref" path="." />
+        <exclude domain="external" path="." />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="root" path="." />
+        <exclude domain="file" path="." />
+        <exclude domain="database" path="." />
+        <exclude domain="sharedpref" path="." />
+        <exclude domain="external" path="." />
+    </device-transfer>
+</data-extraction-rules>

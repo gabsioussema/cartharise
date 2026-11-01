@@ -41,6 +41,10 @@
   "bootStartFresh": "Start fresh and keep the unreadable file",
   "bootStartFreshConfirmTitle": "Start fresh?",
   "bootStartFreshConfirmBody": "The unreadable file is set aside on this phone, not deleted. Cartharise then starts empty.",
+  "storageTransparency": "Stored only on this phone, in Cartharise's private app folder. It is not encrypted by Cartharise, not synced, and not included in phone or cloud backups. Removing the app or using “Delete all data” erases it.",
+  "@storageTransparency": {
+    "description": "Where the user's data lives (onboarding privacy page, You › Your data). Must stay true: Android backups are off in the manifest, iOS excludes the data folder from backup."
+  },
   "storageErrorTitle": "Storage problem",
   "storageErrorBody": "Cartharise can't write to this phone's storage right now. Your current words stay on screen until you leave this screen.",
   "linkOpenFailed": "Couldn't open the link. You can visit it yourself: {url}",
@@ -52,6 +56,14 @@
     }
   },
   "shareFailed": "Couldn't open the share sheet on this phone.",
+  "reminderChannelName": "Check-in reminders",
+  "@reminderChannelName": {
+    "description": "Android notification channel name (system settings)."
+  },
+  "reminderChannelDescription": "Optional daytime check-ins from your Cartharise reset.",
+  "@reminderChannelDescription": {
+    "description": "Android notification channel description (system settings)."
+  },
   "loaderLabel": "Loading",
   "emblemLabel": "Cartharise emblem",
   "progressLabel": "{value} percent",
@@ -419,6 +431,15 @@
   "journalPastResetNone": "This reset has no written answers.",
   "journalPastResetOther": "Other answers",
   "journalPastResetMissingTitle": "This reset isn't here any more",
+  "journalPastResetUnfinished": "Not finished",
+  "journalPastResetLeftOpen": "{count, plural, =1{1 question was left open.} other{{count} questions were left open.}}",
+  "@journalPastResetLeftOpen": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "journalPhaseMorning": "Morning",
   "journalPhaseDaytime": "Daytime",
   "journalPhaseBonus": "Bonus",
@@ -746,7 +767,7 @@
   "onboardingDirectionBody": "Turn what you discover into a Life Compass: what you move away from, and what you move toward.",
   "onboardingStepsTitle": "Improve Step by Step",
   "onboardingStepsBody": "Small daily actions, looked at each week and adjusted as you learn. No streaks, no scores.",
-  "onboardingLimitsTitle": "What This Is, and Isn't",
+  "onboardingLimitsTitle": "What this is, and isn't",
   "onboardingLimitsIntro": "Before you begin, a few honest words.",
   "onboardingLimitsClarityTitle": "One day can bring clarity",
   "onboardingLimitsClarityBody": "A focused day of questions can show you where you stand and what you would like instead.",
@@ -761,7 +782,7 @@
   "onboardingAdultConfirm": "I'm 18 or older",
   "onboardingAdultConfirmHelp": "Cartharise is made for adults.",
   "onboardingAdultRequired": "Confirm you're 18 or older to continue.",
-  "onboardingCreditTitle": "Inspired By",
+  "onboardingCreditTitle": "Inspired by",
   "onboardingCreditIntro": "Cartharise is built around the ideas of this article:",
   "onboardingCreditByline": "by {author} · {date}",
   "@onboardingCreditByline": {
@@ -777,18 +798,18 @@
   "onboardingCreditArticle": "Read the original article",
   "onboardingCreditNewsletter": "Read it in the author's newsletter",
   "onboardingCreditNoNeed": "You don't need to read it first. Every idea is explained in plain words as you go.",
-  "onboardingPaceTitle": "Choose Your Pace",
+  "onboardingPaceTitle": "Choose your pace",
   "onboardingPaceIntro": "You can change this later in the You tab.",
   "onboardingPaceOneDayTitle": "One day",
   "onboardingPaceOneDayBody": "Do the morning, daytime and evening reflections within a single day.",
-  "onboardingPaceFlexibleTitle": "At my own pace",
+  "onboardingPaceFlexibleTitle": "Flexible",
   "onboardingPaceFlexibleBody": "Spread the reflections over days or weeks and pick up where you left off.",
   "onboardingPaceNoLock": "Either way, nothing ever locks or expires. Every part stays open.",
-  "onboardingNameTitle": "What Should We Call You?",
+  "onboardingNameTitle": "What should we call you?",
   "onboardingNameIntro": "Optional, never shared. It stays on this phone and is only used to greet you.",
   "onboardingNameLabel": "Name (optional)",
   "onboardingNameHelp": "Leave it empty and Cartharise will call you Traveler.",
-  "onboardingPrivacyTitle": "Your Words Stay Yours",
+  "onboardingPrivacyTitle": "Your words stay yours",
   "onboardingPrivacyStorageHeading": "Where your writing lives",
   "onboardingPrivacyNoAccount": "No account, no ads, no analytics. Nothing you write is sent anywhere.",
   "onboardingPrivacyControl": "You can export or delete everything at any time in You, under Your data.",
@@ -796,7 +817,7 @@
   "resetSubtitle": "One guided day: look honestly at where you are, picture where you want to go, and choose a first step.",
   "resetPaceOneDayTitle": "Your pace: one day",
   "resetPaceOneDayBody": "Morning questions, a few check-ins during the day, then the evening. Nothing locks if it takes you longer.",
-  "resetPaceFlexibleTitle": "Your pace: your own",
+  "resetPaceFlexibleTitle": "Your pace: flexible",
   "resetPaceFlexibleBody": "Take the parts in any order and come back whenever you like. Nothing locks and nothing expires.",
   "resetPaceChange": "Change pace",
   "resetProgressTitle": "Your reset",
@@ -939,18 +960,6 @@
       }
     }
   },
-  "resetPastScreenTitle": "Past reset",
-  "resetPastReadOnly": "Read-only: this is how you answered then. Your current reset is separate.",
-  "resetPastLeftOpen": "{count, plural, =1{1 question was left open.} other{{count} questions were left open.}}",
-  "@resetPastLeftOpen": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "resetPastEmpty": "Nothing was written in this reset.",
-  "resetPastMissing": "This reset isn't available any more.",
   "resetNewTitle": "Start a new reset",
   "resetNewBody": "Want to go through it again? Start fresh: this reset stays readable under Past resets.",
   "resetNewConfirmTitle": "Start a new reset?",
@@ -1151,6 +1160,15 @@
       }
     }
   },
+  "todayFocusLater": "{count, plural, =1{1 more for anytime or later} other{{count} more for anytime or later}}",
+  "@todayFocusLater": {
+    "description": "Link to Missions: open quests without a date or planned for a later day (not listed on Today).",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "todayQuestMarkDone": "Mark '{title}' done",
   "@todayQuestMarkDone": {
     "placeholders": {
@@ -1159,7 +1177,7 @@
       }
     }
   },
-  "todayQuestDaily": "Daily",
+  "todayQuestDaily": "Every day",
   "todayJourneyTitle": "Your journey",
   "todayJourneyWritten": "{answered} of {total} reflections written",
   "@todayJourneyWritten": {
@@ -1412,6 +1430,23 @@
   "youRemindersCalendarBody": "A calendar file (.ics) with your switched-on check-ins for the next 30 days. Open it with your calendar app to add them. It contains only the check-in titles.",
   "youRemindersCalendarButton": "Add to calendar (.ics)",
   "youRemindersCalendarNone": "Switch on at least one check-in to create the file.",
+  "youCalendarName": "Cartharise check-ins",
+  "@youCalendarName": {
+    "description": "Name of the calendar inside the exported .ics file."
+  },
+  "youCalendarEventTitle": "Cartharise check-in: {title}",
+  "@youCalendarEventTitle": {
+    "description": "Title of each calendar event; title = the check-in prompt's title.",
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "youCalendarEventDescription": "A short daytime pause from your Cartharise reset. Open the app when it suits you; every check-in is optional.",
+  "@youCalendarEventDescription": {
+    "description": "Notes of each calendar event. Never contains the user's words."
+  },
   "youRemindersCalendarShared": "Calendar file shared. Open it with your calendar app to add the check-ins.",
   "youShareDismissed": "Nothing was shared.",
   "youAppearanceTitle": "Appearance",
@@ -1447,6 +1482,7 @@
   "youDataImportConfirmAction": "Replace",
   "youDataImportUnknownDate": "an unknown date",
   "youDataImported": "Backup restored.",
+  "youDataImportedNotSaved": "The backup is open on screen, but it couldn't be saved on this phone yet. Use Retry at the top of this screen, or export a copy.",
   "youDataImportFailedTitle": "This file couldn't be used",
   "youDataImportUnchanged": "Your current data was not changed.",
   "youDataImportNotJson": "It isn't a readable backup file.",
@@ -1466,6 +1502,7 @@
   "youDataDeleteConfirm2Body": "Cartharise keeps no copy anywhere else. Once deleted, your writing can only come back from a backup you exported.",
   "youDataDeleteConfirm2Action": "Delete everything",
   "youDataDeleteFailed": "Couldn't delete your data. Your writing is still on this phone; please try again.",
+  "youDataDeleteCopiesLeft": "Your data was deleted, but a temporary copy of an earlier export or import couldn't be removed. Removing the app erases it.",
   "youSupportTitle": "Support & safety",
   "youSupportSubtitle": "Reflection can stir things up. That's normal.",
   "youSupportNotTherapyTitle": "Not therapy",

@@ -6,10 +6,10 @@ import '../../domain/content.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
 import '../awakening/lesson_card.dart';
+import '../journal/past_reset_screen.dart';
 import '../nav.dart';
 import '../theme/cartha_theme.dart';
 import '../widgets/widgets.dart';
-import 'past_reset_screen.dart';
 import 'reset_flow.dart';
 
 /// The Reset hub (PLAN.md §2): pace, optional lessons, the three phases with

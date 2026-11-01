@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:ui' show PathMetric;
 
 import 'package:flutter/material.dart';
@@ -18,8 +19,17 @@ class LoaderFrame {
     required this.sparkOpacity,
   });
 
-  /// Fraction of every emblem line that is drawn (0–1).
+  /// Progress of the stroke dash (0–1): `1 - stroke-dashoffset / 1500` in
+  /// `loader_reference.svg`. Every line shows its first
+  /// `kLoaderDashLength * draw` units (see [drawnLength]), so — as in the
+  /// SVG — all lines draw at the same speed, the short trunk finishes first
+  /// and the whole emblem is complete long before [draw] reaches 1.
   final double draw;
+
+  /// How much of a path [pathLength] units long is visible in this frame:
+  /// the SVG's `stroke-dasharray: 1500` dash, shifted by its offset.
+  double drawnLength(double pathLength) =>
+      math.min(pathLength, kLoaderDashLength * draw);
 
   /// Opacity of the emblem lines.
   final double opacity;
@@ -38,11 +48,18 @@ class LoaderFrame {
 /// Duration of one loader cycle (as `assets/brand/loader_reference.svg`).
 const Duration kLoaderCycle = Duration(milliseconds: 3400);
 
+/// `stroke-dasharray` / hidden `stroke-dashoffset` of the reference SVG, in
+/// emblem viewBox units (512). Longer than every emblem line (≈ 293 at most).
+const double kLoaderDashLength = 1500;
+
 /// The keyframes of `loader_reference.svg`, each segment eased with CSS
 /// `ease-in-out` (= [Curves.easeInOut]), at cycle position [t] (0–1):
 ///
-/// * lines: hidden at 0–10 %, drawn 10→65 % (opacity .3→1), held to 85 %,
-///   undrawn 85→100 % (opacity 1→.3);
+/// * lines: dash offset 1500 (hidden) at 0–10 %, 0 at 65 % (opacity .3→1),
+///   held to 85 %, back to 1500 at 100 % (opacity 1→.3). Because the dash
+///   (1500) is far longer than the lines, every line is fully drawn by about
+///   27 % of the cycle (the trunk by about 18 %) and only retracts in the
+///   last few percent — exactly like the SVG;
 /// * spark: scale .92 / opacity .25 at 0–45 %, grows to 1.13 / 1 by 70 %,
 ///   held to 85 %, back by 100 %.
 LoaderFrame loaderFrameAt(double t) {
@@ -230,10 +247,10 @@ class _LoaderPainter extends CustomPainter {
       final color = lineColor.withValues(alpha: lineColor.a * f.opacity);
       final line = EmblemGeometry.linePaint(color);
       for (final m in _lineMetrics) {
-        canvas.drawPath(m.extractPath(0, m.length * f.draw), line);
+        canvas.drawPath(m.extractPath(0, f.drawnLength(m.length)), line);
       }
       canvas.drawPath(
-        _trunkMetric.extractPath(0, _trunkMetric.length * f.draw),
+        _trunkMetric.extractPath(0, f.drawnLength(_trunkMetric.length)),
         EmblemGeometry.trunkPaint(color),
       );
     }

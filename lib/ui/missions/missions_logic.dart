@@ -65,6 +65,25 @@ extension MissionsOps on AppState {
     return MissionSections(today: todayList, later: later, done: done);
   }
 
+  /// Today's focus on the Today tab for [day] (default: today), so Today and
+  /// Missions agree on what is "for today" (F-029, F-036): exactly
+  /// Missions' Today section — every daily quest and the one-offs planned
+  /// for that day or earlier — plus such planned one-offs finished that day,
+  /// which stay listed (ticked) until the day ends, as daily quests do.
+  /// Undated and later quests stay in "Anytime & upcoming".
+  List<Quest> todayFocus([String? day]) {
+    final key = day ?? today;
+    final sections = missionSections(key);
+    return [
+      ...sections.today,
+      for (final q in sections.done)
+        if (q.completedOn.contains(key) &&
+            q.dueDate != null &&
+            q.dueDate!.compareTo(key) <= 0)
+          q,
+    ];
+  }
+
   /// Saves an edited quest. Switching a daily quest to one-off keeps it done
   /// only if it was done today (an old daily tick must not finish it).
   Future<void> editQuest(

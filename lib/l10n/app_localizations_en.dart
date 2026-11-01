@@ -120,6 +120,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'The unreadable file is set aside on this phone, not deleted. Cartharise then starts empty.';
 
   @override
+  String get storageTransparency =>
+      'Stored only on this phone, in Cartharise\'s private app folder. It is not encrypted by Cartharise, not synced, and not included in phone or cloud backups. Removing the app or using “Delete all data” erases it.';
+
+  @override
   String get storageErrorTitle => 'Storage problem';
 
   @override
@@ -133,6 +137,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get shareFailed => 'Couldn\'t open the share sheet on this phone.';
+
+  @override
+  String get reminderChannelName => 'Check-in reminders';
+
+  @override
+  String get reminderChannelDescription =>
+      'Optional daytime check-ins from your Cartharise reset.';
 
   @override
   String get loaderLabel => 'Loading';
@@ -790,6 +801,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get journalPastResetMissingTitle => 'This reset isn\'t here any more';
 
   @override
+  String get journalPastResetUnfinished => 'Not finished';
+
+  @override
+  String journalPastResetLeftOpen(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count questions were left open.',
+      one: '1 question was left open.',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get journalPhaseMorning => 'Morning';
 
   @override
@@ -1234,7 +1259,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Small daily actions, looked at each week and adjusted as you learn. No streaks, no scores.';
 
   @override
-  String get onboardingLimitsTitle => 'What This Is, and Isn\'t';
+  String get onboardingLimitsTitle => 'What this is, and isn\'t';
 
   @override
   String get onboardingLimitsIntro => 'Before you begin, a few honest words.';
@@ -1286,7 +1311,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Confirm you\'re 18 or older to continue.';
 
   @override
-  String get onboardingCreditTitle => 'Inspired By';
+  String get onboardingCreditTitle => 'Inspired by';
 
   @override
   String get onboardingCreditIntro =>
@@ -1309,7 +1334,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'You don\'t need to read it first. Every idea is explained in plain words as you go.';
 
   @override
-  String get onboardingPaceTitle => 'Choose Your Pace';
+  String get onboardingPaceTitle => 'Choose your pace';
 
   @override
   String get onboardingPaceIntro => 'You can change this later in the You tab.';
@@ -1322,7 +1347,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Do the morning, daytime and evening reflections within a single day.';
 
   @override
-  String get onboardingPaceFlexibleTitle => 'At my own pace';
+  String get onboardingPaceFlexibleTitle => 'Flexible';
 
   @override
   String get onboardingPaceFlexibleBody =>
@@ -1333,7 +1358,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Either way, nothing ever locks or expires. Every part stays open.';
 
   @override
-  String get onboardingNameTitle => 'What Should We Call You?';
+  String get onboardingNameTitle => 'What should we call you?';
 
   @override
   String get onboardingNameIntro =>
@@ -1347,7 +1372,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Leave it empty and Cartharise will call you Traveler.';
 
   @override
-  String get onboardingPrivacyTitle => 'Your Words Stay Yours';
+  String get onboardingPrivacyTitle => 'Your words stay yours';
 
   @override
   String get onboardingPrivacyStorageHeading => 'Where your writing lives';
@@ -1375,7 +1400,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Morning questions, a few check-ins during the day, then the evening. Nothing locks if it takes you longer.';
 
   @override
-  String get resetPaceFlexibleTitle => 'Your pace: your own';
+  String get resetPaceFlexibleTitle => 'Your pace: flexible';
 
   @override
   String get resetPaceFlexibleBody =>
@@ -1559,30 +1584,6 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
-
-  @override
-  String get resetPastScreenTitle => 'Past reset';
-
-  @override
-  String get resetPastReadOnly =>
-      'Read-only: this is how you answered then. Your current reset is separate.';
-
-  @override
-  String resetPastLeftOpen(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count questions were left open.',
-      one: '1 question was left open.',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get resetPastEmpty => 'Nothing was written in this reset.';
-
-  @override
-  String get resetPastMissing => 'This reset isn\'t available any more.';
 
   @override
   String get resetNewTitle => 'Start a new reset';
@@ -1892,12 +1893,23 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String todayFocusLater(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count more for anytime or later',
+      one: '1 more for anytime or later',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String todayQuestMarkDone(String title) {
     return 'Mark \'$title\' done';
   }
 
   @override
-  String get todayQuestDaily => 'Daily';
+  String get todayQuestDaily => 'Every day';
 
   @override
   String get todayJourneyTitle => 'Your journey';
@@ -2299,6 +2311,18 @@ class AppLocalizationsEn extends AppLocalizations {
       'Switch on at least one check-in to create the file.';
 
   @override
+  String get youCalendarName => 'Cartharise check-ins';
+
+  @override
+  String youCalendarEventTitle(String title) {
+    return 'Cartharise check-in: $title';
+  }
+
+  @override
+  String get youCalendarEventDescription =>
+      'A short daytime pause from your Cartharise reset. Open the app when it suits you; every check-in is optional.';
+
+  @override
   String get youRemindersCalendarShared =>
       'Calendar file shared. Open it with your calendar app to add the check-ins.';
 
@@ -2389,6 +2413,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get youDataImported => 'Backup restored.';
 
   @override
+  String get youDataImportedNotSaved =>
+      'The backup is open on screen, but it couldn\'t be saved on this phone yet. Use Retry at the top of this screen, or export a copy.';
+
+  @override
   String get youDataImportFailedTitle => 'This file couldn\'t be used';
 
   @override
@@ -2450,6 +2478,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get youDataDeleteFailed =>
       'Couldn\'t delete your data. Your writing is still on this phone; please try again.';
+
+  @override
+  String get youDataDeleteCopiesLeft =>
+      'Your data was deleted, but a temporary copy of an earlier export or import couldn\'t be removed. Removing the app erases it.';
 
   @override
   String get youSupportTitle => 'Support & safety';

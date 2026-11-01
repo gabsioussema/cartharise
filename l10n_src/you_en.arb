@@ -102,6 +102,12 @@
   "youRemindersCalendarBody": "A calendar file (.ics) with your switched-on check-ins for the next 30 days. Open it with your calendar app to add them. It contains only the check-in titles.",
   "youRemindersCalendarButton": "Add to calendar (.ics)",
   "youRemindersCalendarNone": "Switch on at least one check-in to create the file.",
+  "youCalendarName": "Cartharise check-ins",
+  "@youCalendarName": {"description": "Name of the calendar inside the exported .ics file."},
+  "youCalendarEventTitle": "Cartharise check-in: {title}",
+  "@youCalendarEventTitle": {"description": "Title of each calendar event; title = the check-in prompt's title.", "placeholders": {"title": {"type": "String"}}},
+  "youCalendarEventDescription": "A short daytime pause from your Cartharise reset. Open the app when it suits you; every check-in is optional.",
+  "@youCalendarEventDescription": {"description": "Notes of each calendar event. Never contains the user's words."},
   "youRemindersCalendarShared": "Calendar file shared. Open it with your calendar app to add the check-ins.",
   "youShareDismissed": "Nothing was shared.",
 
@@ -133,6 +139,7 @@
   "youDataImportConfirmAction": "Replace",
   "youDataImportUnknownDate": "an unknown date",
   "youDataImported": "Backup restored.",
+  "youDataImportedNotSaved": "The backup is open on screen, but it couldn't be saved on this phone yet. Use Retry at the top of this screen, or export a copy.",
   "youDataImportFailedTitle": "This file couldn't be used",
   "youDataImportUnchanged": "Your current data was not changed.",
   "youDataImportNotJson": "It isn't a readable backup file.",
@@ -152,6 +159,7 @@
   "youDataDeleteConfirm2Body": "Cartharise keeps no copy anywhere else. Once deleted, your writing can only come back from a backup you exported.",
   "youDataDeleteConfirm2Action": "Delete everything",
   "youDataDeleteFailed": "Couldn't delete your data. Your writing is still on this phone; please try again.",
+  "youDataDeleteCopiesLeft": "Your data was deleted, but a temporary copy of an earlier export or import couldn't be removed. Removing the app erases it.",
 
   "youSupportTitle": "Support & safety",
   "youSupportSubtitle": "Reflection can stir things up. That's normal.",

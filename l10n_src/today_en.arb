@@ -46,9 +46,11 @@
   "todayFocusAdd": "Add a quest",
   "todayFocusSeeAll": "See all {count} quests",
   "@todayFocusSeeAll": {"placeholders": {"count": {"type": "int"}}},
+  "todayFocusLater": "{count, plural, =1{1 more for anytime or later} other{{count} more for anytime or later}}",
+  "@todayFocusLater": {"description": "Link to Missions: open quests without a date or planned for a later day (not listed on Today).", "placeholders": {"count": {"type": "int"}}},
   "todayQuestMarkDone": "Mark '{title}' done",
   "@todayQuestMarkDone": {"placeholders": {"title": {"type": "String"}}},
-  "todayQuestDaily": "Daily",
+  "todayQuestDaily": "Every day",
 
   "todayJourneyTitle": "Your journey",
   "todayJourneyWritten": "{answered} of {total} reflections written",

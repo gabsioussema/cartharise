@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../theme/cartha_theme.dart';
+import 'loader.dart';
 
 /// The main action of a screen: a bronze pill (dark) / deep pill (light),
 /// like the board's "Next →" / "Get Started →". At most one per view.
@@ -27,7 +28,8 @@ class PrimaryButton extends StatelessWidget {
   /// Stretch to the available width.
   final bool expand;
 
-  /// Shows a small progress indicator and ignores taps.
+  /// Shows the small brand loader ([CarthaLoader], static with reduced
+  /// motion) and ignores taps.
   final bool busy;
 
   @override
@@ -156,9 +158,12 @@ class _ButtonContent extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (busy) ...[
-            SizedBox.square(
-              dimension: 18,
-              child: CircularProgressIndicator(strokeWidth: 2, color: color),
+            // The brand loader honours reduced motion and Settings › Motion.
+            CarthaLoader(
+              key: const ValueKey('button-busy'),
+              size: 20,
+              color: color,
+              sparkColor: color,
             ),
             const SizedBox(width: 10),
           ] else if (icon != null) ...[

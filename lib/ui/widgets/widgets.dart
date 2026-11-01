@@ -14,4 +14,5 @@ export 'pill_tabs.dart';
 export 'progress.dart';
 export 'save_indicator.dart';
 export 'scenes.dart';
+export 'storage_text.dart';
 export 'wordmark.dart';

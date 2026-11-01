@@ -21,5 +21,39 @@ import flutter_local_notifications
       GeneratedPluginRegistrant.register(with: registry)
     }
     GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
+    registerStorageChannel(messenger: engineBridge.applicationRegistrar.messenger())
+  }
+
+  /// Privacy: the user's writing stays on this phone. iOS includes
+  /// Library/Application Support in iCloud and computer backups by default,
+  /// so after every save the Dart side (lib/data/backup_exclusion.dart) asks
+  /// to mark the data folder as excluded from backup. Paths only; no user
+  /// text crosses this channel.
+  private func registerStorageChannel(messenger: FlutterBinaryMessenger) {
+    let channel = FlutterMethodChannel(
+      name: "app.cartharise/storage",
+      binaryMessenger: messenger
+    )
+    channel.setMethodCallHandler { call, result in
+      guard call.method == "excludeFromBackup", let path = call.arguments as? String else {
+        result(FlutterMethodNotImplemented)
+        return
+      }
+      do {
+        var url = URL(fileURLWithPath: path)
+        var values = URLResourceValues()
+        values.isExcludedFromBackup = true
+        try url.setResourceValues(values)
+        result(nil)
+      } catch {
+        result(
+          FlutterError(
+            code: "exclude_failed",
+            message: "Could not exclude the data folder from backup",
+            details: nil
+          )
+        )
+      }
+    }
   }
 }

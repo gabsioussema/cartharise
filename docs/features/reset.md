@@ -13,7 +13,7 @@ time. Nothing is locked by time or order (F-046). Lessons live in
    resets → start a new reset.
    * **Pace note** reads `profile.pace`: *one day* ("Morning questions, a few
      check-ins during the day, then the evening. Nothing locks if it takes you
-     longer.") or *your own* ("Take the parts in any order… Nothing locks and
+     longer.") or *flexible* ("Take the parts in any order… Nothing locks and
      nothing expires."). "Change pace" switches to the You tab.
    * **Your reset**: `ProgressRing` of `coreProgress`, "n of 27 core questions
      answered", "Next: {title}" with its phase and position, primary
@@ -37,7 +37,10 @@ time. Nothing is locked by time or order (F-046). Lessons live in
      "They don't count toward your progress.").
    * **Evening** card: *The Breakthrough* (insights, direction and a plan).
    * **Past resets** (only when there are some): "Started {date}" / "Finished
-     {date}" or "Not finished" / "n answers" → `PastResetScreen` (read-only).
+     {date}" or "Not finished" / "n answers" → `PastResetScreen` (read-only),
+     the same screen as Journal › Look back
+     (`lib/ui/journal/past_reset_screen.dart`), so an earlier reset reads the
+     same from both places.
    * **Start a new reset** (only when the current reset has answers or was
      finished): confirm dialog ("Your current answers are kept as a past reset
      you can read at any time… Your Compass, quests and journal don't change.")
@@ -131,7 +134,7 @@ Top to bottom (one scrolling column; nothing has a fixed height):
 | `lib/ui/reset/reset_tab.dart` | `ResetTab` hub: pace, progress card, phase cards, past resets, new reset |
 | `lib/ui/reset/guided_prompt_screen.dart` | `GuidedPromptScreen`, autosave, sheets, `kAnswerAutosaveDelay` |
 | `lib/ui/reset/reset_complete_screen.dart` | `ResetCompleteScreen` |
-| `lib/ui/reset/past_reset_screen.dart` | `PastResetScreen(journeyId:)` read-only answers |
+| `lib/ui/journal/past_reset_screen.dart` | `PastResetScreen(journeyId:)` read-only answers — shared with Journal (the former Reset copy was removed) |
 | `lib/ui/reset/reset_flow.dart` | `PromptStatus`, sequence/progress helpers, phase/subflow/group names, local time + date formatting, `ReadingColumn` (≤ 720 dp column), `Eyebrow`, `SectionTitle`, `showResetSheet` |
 | `l10n_src/reset_en.arb` | all `reset…` strings |
 

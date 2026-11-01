@@ -23,50 +23,101 @@ abstract class FileShare {
   /// Lets the user pick a text file; its contents, or null if cancelled.
   /// Throws [FormatException] for files that are not UTF-8 text or too large.
   Future<String?> pickTextFile();
+
+  /// Deletes every copy of the user's words made while moving files in and
+  /// out: export files in the app's private temporary folder (ours and the
+  /// share sheet's) and the file picker's cached copies of imported files.
+  /// Part of "Delete all data". Throws if something couldn't be deleted.
+  Future<void> clearTemporaryFiles();
 }
 
 /// Largest file [pickTextFile] accepts (a backup of years of writing is far smaller).
 const int kMaxImportBytes = 20 * 1024 * 1024;
 
 class SystemFileShare implements FileShare {
+  /// Our export copies, in the app's private temporary folder.
+  static const _shareFolder = 'share';
+
+  /// share_plus copies shared files here on Android (`cacheDir/share_plus`,
+  /// which is what `getTemporaryDirectory()` returns there) and only clears
+  /// it at the next share.
+  static const _sharePlusFolder = 'share_plus';
+
+  Future<Directory> _temp(String name) async =>
+      Directory('${(await getTemporaryDirectory()).path}/$name');
+
   @override
   Future<ShareOutcome> shareTextFile(
     String filename,
     String content,
     String mimeType,
   ) async {
-    final dir = Directory('${(await getTemporaryDirectory()).path}/share');
-    // Only the latest export is kept in the private temp folder.
+    final dir = await _temp(_shareFolder);
     if (await dir.exists()) await dir.delete(recursive: true);
     await dir.create(recursive: true);
     final file = File('${dir.path}/$filename');
-    await file.writeAsString(content, flush: true);
-    final result = await SharePlus.instance.share(
-      ShareParams(files: [XFile(file.path, mimeType: mimeType)]),
-    );
-    return switch (result.status) {
-      ShareResultStatus.success => ShareOutcome.shared,
-      ShareResultStatus.dismissed => ShareOutcome.dismissed,
-      ShareResultStatus.unavailable => ShareOutcome.unavailable,
-    };
+    try {
+      await file.writeAsString(content, flush: true);
+      final result = await SharePlus.instance.share(
+        ShareParams(files: [XFile(file.path, mimeType: mimeType)]),
+      );
+      return switch (result.status) {
+        ShareResultStatus.success => ShareOutcome.shared,
+        ShareResultStatus.dismissed => ShareOutcome.dismissed,
+        ShareResultStatus.unavailable => ShareOutcome.unavailable,
+      };
+    } finally {
+      // The share sheet is done with our copy (Android works from its own
+      // copy, see [clearTemporaryFiles]): keep no export lying around, even
+      // when the sheet was dismissed.
+      await _deleteQuietly(dir);
+    }
   }
 
   @override
   Future<String?> pickTextFile() async {
     final picked = await FilePicker.pickFile(type: FileType.any);
     if (picked == null) return null;
-    final length = await picked.length();
-    if (length != null && length > kMaxImportBytes) {
-      throw const FormatException('The file is too large');
-    }
-    final bytes = await picked.readAsBytes();
-    if (bytes.length > kMaxImportBytes) {
-      throw const FormatException('The file is too large');
-    }
     try {
-      return utf8.decode(bytes);
-    } on FormatException {
-      throw const FormatException('Not a text file');
+      final length = await picked.length();
+      if (length != null && length > kMaxImportBytes) {
+        throw const FormatException('The file is too large');
+      }
+      final bytes = await picked.readAsBytes();
+      if (bytes.length > kMaxImportBytes) {
+        throw const FormatException('The file is too large');
+      }
+      try {
+        return utf8.decode(bytes);
+      } on FormatException {
+        throw const FormatException('Not a text file');
+      }
+    } finally {
+      // The picker may have cached a copy of the file (Android:
+      // cache/file_picker): it has been read, so remove it now. A failure
+      // here doesn't block the import; "Delete all data" tries again.
+      try {
+        await FilePicker.clearTemporaryFiles();
+      } on Object {
+        // Best effort, see above.
+      }
+    }
+  }
+
+  @override
+  Future<void> clearTemporaryFiles() async {
+    for (final name in [_shareFolder, _sharePlusFolder]) {
+      final dir = await _temp(name);
+      if (await dir.exists()) await dir.delete(recursive: true);
+    }
+    await FilePicker.clearTemporaryFiles();
+  }
+
+  static Future<void> _deleteQuietly(Directory dir) async {
+    try {
+      if (await dir.exists()) await dir.delete(recursive: true);
+    } on Object {
+      // Cleared again by the next export or by "Delete all data".
     }
   }
 }

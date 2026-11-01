@@ -41,12 +41,20 @@
   "bootStartFreshConfirmTitle": "Start fresh?",
   "bootStartFreshConfirmBody": "The unreadable file is set aside on this phone, not deleted. Cartharise then starts empty.",
 
+  "storageTransparency": "Stored only on this phone, in Cartharise's private app folder. It is not encrypted by Cartharise, not synced, and not included in phone or cloud backups. Removing the app or using “Delete all data” erases it.",
+  "@storageTransparency": {"description": "Where the user's data lives (onboarding privacy page, You › Your data). Must stay true: Android backups are off in the manifest, iOS excludes the data folder from backup."},
+
   "storageErrorTitle": "Storage problem",
   "storageErrorBody": "Cartharise can't write to this phone's storage right now. Your current words stay on screen until you leave this screen.",
 
   "linkOpenFailed": "Couldn't open the link. You can visit it yourself: {url}",
   "@linkOpenFailed": {"placeholders": {"url": {"type": "String"}}},
   "shareFailed": "Couldn't open the share sheet on this phone.",
+
+  "reminderChannelName": "Check-in reminders",
+  "@reminderChannelName": {"description": "Android notification channel name (system settings)."},
+  "reminderChannelDescription": "Optional daytime check-ins from your Cartharise reset.",
+  "@reminderChannelDescription": {"description": "Android notification channel description (system settings)."},
 
   "loaderLabel": "Loading",
   "emblemLabel": "Cartharise emblem",

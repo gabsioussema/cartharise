@@ -45,11 +45,11 @@ dialogs), 16 (inputs), pill buttons. Flat, thin borders.
 | `CarthaEmblem(size, color)` | CustomPainter of the exact `emblem.svg` paths (stroke 14 round, trunk 13 square). Default colour `emblem`; use `heroAccent` on hero. |
 | `CarthaLoader(size, tile, startAt)` | Animated "charging" emblem — see below. |
 | `CarthaWordmark(layout, width, onHero)` | `horizontal` / `stacked` lockups and `lettering` (CARTHARISE + rule only) from the brand SVGs, re-tinted per theme (`BrandSvgColorMapper`), tagline in Inter. |
-| `PrimaryButton` / `SecondaryButton` / `TextLinkButton` | pill filled / outlined / accent text; `icon`, `trailingIcon`, `expand`, `busy`. Labels wrap at large text. |
+| `PrimaryButton` / `SecondaryButton` / `TextLinkButton` | pill filled / outlined / accent text; `icon`, `trailingIcon`, `expand`, `busy` (a small `CarthaLoader` — the brand loader, still with reduced motion or Settings › Motion off — and taps ignored). Labels wrap at large text. |
 | `SectionCard` | card section with optional title/icon/trailing; tappable (announced as button). |
 | `HeroCard` | forest hero surface in both modes; `eyebrow`, Cinzel `title`, `trailing`; text defaults to `onHero`. |
 | `ProgressRing(value, label, onHero)` | calm progress, labelled "n percent"; never a judgement. |
-| `PillTabs<T>` | segmented pills; selected = filled + bold + `selected` semantics. |
+| `PillTabs<T>` | segmented pills; selected = filled + bold + `selected` semantics; every segment ≥ 48 dp tall (Android tap-target guideline). |
 | `EmptyState` | emblem/icon, title, body, optional action. |
 | `SaveIndicator` | from `AppState.saveStatus`: "Saving…", "Saved on this device", or the failure with **Retry** and **Export a copy** (→ `AppNav.openData`). Live region; static (tests can settle). |
 | `confirmDialog(destructive:)`, `askText` | dialogs (askText returns text as typed). |
@@ -58,19 +58,23 @@ dialogs), 16 (inputs), pill buttons. Flat, thin borders.
 | `ChipTag(label, icon, tone)` | small non-interactive label. |
 | `openExternalLink(context, uri)` | url_launcher (external app); honest snackbar with the address on failure. |
 | `DestructiveButton` | outlined pill in the error colour for irreversible actions (Delete all data); always paired with a confirm. |
+| `StorageTransparencyText` | where the data lives, from ARB (`storageTransparency`): only on this phone, private app folder, not encrypted by Cartharise, not synced, not in phone or cloud backups. Onboarding privacy page and You › Your data. |
 
 ## Loader spec (`CarthaLoader`)
 
 A rebuild of `assets/brand/loader_reference.svg` (its CSS animation does not play
 in flutter_svg):
 
-* Paths: the emblem's four head lines + trunk, drawn with
-  `PathMetric.extractPath(0, length × draw)`.
+* Paths: the emblem's four head lines + trunk. The SVG animates
+  `stroke-dashoffset` 1500→0 with `stroke-dasharray: 1500`; the loader emulates
+  that dash exactly: each path shows `extractPath(0, min(length, 1500 × draw))`
+  (`LoaderFrame.drawnLength`, `kLoaderDashLength`).
 * Cycle 3.4 s, each keyframe segment eased with CSS `ease-in-out`
-  (`Curves.easeInOut`): lines hidden 0–10 %, drawn 10→65 % (opacity .3→1), held
-  to 85 %, undrawn 85→100 % (opacity →.3). Deliberate deviation: the drawn
-  fraction is per path (all lines complete together at 65 %); in the CSS a
-  1500-unit dash makes the short paths finish early.
+  (`Curves.easeInOut`): dash progress 0 at 0–10 %, 1 at 65 % (opacity .3→1),
+  held to 85 %, back to 0 by 100 % (opacity →.3). As the dash is far longer
+  than the lines (≈ 63–293 units), every line draws at the same speed: the
+  trunk is complete by ≈ 18 %, the whole emblem by ≈ 27 %, and it only
+  retracts after ≈ 95.5 % — like the reference.
 * Spark: the four-point star centred at (256, 123), scale .92→1.13 and opacity
   .25→1 between 45 and 70 %, held to 85 %, back by 100 %.
 * `tile: true` paints the rounded hero tile (rx 110/512) like the app icon.
@@ -101,8 +105,26 @@ excluded; journal/reviews newest first; reminders default from prompts; denial
 never enables; import validates fully first; delete cancels reminders.
 
 `FileShare` (`Provider<FileShare>`): `shareTextFile(filename, content, mimeType)`
-via share_plus (temp file in a private `share/` folder, only the latest kept) and
-`pickTextFile()` via file_picker (UTF-8 only, ≤ 20 MB, null when cancelled).
+via share_plus (temp file in a private `share/` folder, deleted as soon as the
+share sheet returns), `pickTextFile()` via file_picker (UTF-8 only, ≤ 20 MB,
+null when cancelled; the picker's cached copy is cleared right after reading)
+and `clearTemporaryFiles()` (our `share/`, share_plus's Android
+`cache/share_plus/` copy and the picker cache), run by "Delete all data".
+
+**Privacy: no OS backups.** `FileDataStore` keeps `cartharise.json` in the app
+support folder. Android: `allowBackup="false"` and
+`res/xml/data_extraction_rules.xml` / `full_backup_content.xml` exclude every
+domain from cloud backup and device transfer. iOS: after every write
+`FileDataStore.excludeFromBackup` (main.dart passes
+`platformBackupExclusion()`, `lib/data/backup_exclusion.dart`) asks
+`AppDelegate.swift` over the `app.cartharise/storage` channel to set
+`isExcludedFromBackup` on the folder; a refusal doesn't fail the save and is
+retried on the next write. `test/privacy_test.dart` pins all of it.
+
+**Localized platform texts.** The `.ics` words (`CalendarTexts`, built by
+`calendarTexts(l)` in the Reminders screen) and the Android notification
+channel name/description (`AppState.localizeReminders`, called from `app.dart`
+whenever localizations change) come from ARB, never hard-coded English.
 
 ## Shell & navigation
 
@@ -126,8 +148,11 @@ provided above `MaterialApp`; `AppNav` helpers: `switchTab`, `tabWidget`,
 | `test/reminder_test.dart` | planning, quiet hours (incl. midnight), DST-safe next occurrence |
 | `test/ics_test.dart` | 6 events, COUNT=30, floating DTSTART, stable UIDs, CRLF, folding, escaping, no user text |
 | `test/merge_arb_test.dart` | ARB merge order, duplicate/invalid failures, `app_en.arb` up to date |
-| `test/ui/shell_test.dart` | boot loader → onboarding, onboarding → app, load error + Try again, 5 tabs & switching (dark + light), AppNav from pushed screens, notification tap, size matrix, SaveIndicator failure |
-| `test/ui/loader_test.dart` | keyframes, emblem geometry, animating vs static (device / setting), lockups render |
+| `test/ui/shell_test.dart` | boot loader → onboarding, onboarding → app, load error + Try again, 5 tabs & switching (dark + light), AppNav from pushed screens, notification tap, size matrix, SaveIndicator failure, localized notification channel, busy buttons (brand loader, still with reduced motion) |
+| `test/ui/loader_test.dart` | keyframes, the SVG's 1500-unit dash per line (trunk first, full emblem by ≈ 27 %, retract after ≈ 95.5 %), emblem geometry, animating vs static (device / setting), lockups render |
+| `test/ui/a11y_test.dart` | every main screen (+ onboarding), dark and light: `androidTapTargetGuideline`, `iOSTapTargetGuideline`, `labeledTapTargetGuideline`, `textContrastGuideline`; keyboard-only Tab traversal of the guided prompt (field → Save & continue → Back → Skip → Jump → Pause → Feeling heavy?, Enter activates) |
+| `test/privacy_test.dart` | Android manifest/backup rules, iOS backup-exclusion channel, `FileDataStore` exclusion after each write (failure keeps the save, retried), clear |
+| `test/splash_test.dart` | the Android 12 splash icon keeps the whole emblem inside the system's circular mask (`assets/brand/splash_android12.png`) |
 | `test/screenshots/foundation_screens_test.dart` | tagged `screenshots`: boot, load error, shell, UI-base gallery (Forest + Olive, dark + light) → `test/screenshots/out/` |
 
 Test support (`test/support/`): `pumpCartha(tester, {data, home, size,

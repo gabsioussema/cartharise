@@ -51,7 +51,13 @@ widget ──calls──▶ AppState.saveAnswer(...)        (or an area extensio
 ## Persistence
 
 * One JSON file, `cartharise.json`, in the app's private support directory
-  (`getApplicationSupportDirectory()`), not encrypted by Cartharise, not synced.
+  (`getApplicationSupportDirectory()`), not encrypted by Cartharise, not synced,
+  and kept out of OS backups: Android `allowBackup="false"` + data-extraction
+  rules excluding everything (cloud backup and device transfer); iOS marks the
+  folder `isExcludedFromBackup` after every write (`backup_exclusion.dart` →
+  `AppDelegate.swift`, channel `app.cartharise/storage`). Removing the app or
+  "Delete all data" therefore really erases it; "Delete all data" also clears
+  the temporary export/import copies (`FileShare.clearTemporaryFiles`).
 * The file uses the documented backup envelope
   (`{"app":"cartharise","format":1,"exportedAt":…,"data":{…}}`, see
   `domain/backup.dart`), so the saved file is itself a valid backup.
@@ -87,7 +93,7 @@ widget ──calls──▶ AppState.saveAnswer(...)        (or an area extensio
   the prompt title only — never the user's words; tapping it opens that prompt.
 * AppState re-plans after any reminder/quiet-hour/enable change, after an import,
   and on every launch (the time zone may have changed).
-* `calendarExport()` builds a 30-day `.ics` (6 events, floating local time,
+* `calendarExport(texts)` builds a 30-day `.ics` (localized `CalendarTexts`, 6 events, floating local time,
   `RRULE:FREQ=DAILY;COUNT=30`, 10 minutes, stable UIDs, CRLF, 75-octet folding).
 
 ## Loading sequence

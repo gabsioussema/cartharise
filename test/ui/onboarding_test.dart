@@ -24,11 +24,11 @@ const _titles = {
   OnboardingStep.reset: 'Reset Your Life',
   OnboardingStep.direction: 'Choose a Direction',
   OnboardingStep.steps: 'Improve Step by Step',
-  OnboardingStep.limits: "What This Is, and Isn't",
-  OnboardingStep.credit: 'Inspired By',
-  OnboardingStep.pace: 'Choose Your Pace',
-  OnboardingStep.name: 'What Should We Call You?',
-  OnboardingStep.privacy: 'Your Words Stay Yours',
+  OnboardingStep.limits: "What this is, and isn't",
+  OnboardingStep.credit: 'Inspired by',
+  OnboardingStep.pace: 'Choose your pace',
+  OnboardingStep.name: 'What should we call you?',
+  OnboardingStep.privacy: 'Your words stay yours',
 };
 
 Future<void> _tap(WidgetTester tester, Finder finder) async {
@@ -325,10 +325,17 @@ void main() {
     testWidgets('privacy page states where the data lives, honestly', (
       tester,
     ) async {
-      final h = await pumpCartha(tester);
+      await pumpCartha(tester);
       await _goTo(tester, OnboardingStep.privacy);
-      expect(find.text(h.state.storageDescription), findsOneWidget);
-      expect(h.state.storageDescription, contains('not encrypted'));
+      final storage = tester.widget<Text>(
+        find.descendant(
+          of: find.byKey(const ValueKey('onboarding-storage')),
+          matching: find.byType(Text),
+        ),
+      );
+      expect(storage.data, contains('only on this phone'));
+      expect(storage.data, contains('not encrypted'));
+      expect(storage.data, contains('not included in phone or cloud backups'));
       expect(
         find.text(
           'No account, no ads, no analytics. Nothing you write is sent '

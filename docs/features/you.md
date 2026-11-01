@@ -34,8 +34,9 @@ and the share sheet / file picker when the user asks for them.
 - **Appearance.** Theme swatches (Forest / Olive), Light or dark (System /
   Light / Dark pills), Interface motion switch. Changes apply at once.
 - **Your data (F-040–F-043, F-055).** Where the data lives
-  (`AppState.storageDescription`); **Export backup**; **Choose a backup
-  file**; **Delete all data**. The save indicator sits on top (this is also
+  (`StorageTransparencyText`: only on this phone, private app folder, not
+  encrypted by Cartharise, not synced, not in phone or cloud backups);
+  **Export backup**; **Choose a backup file**; **Delete all data**. The save indicator sits on top (this is also
   the "Export a copy" target after a failed save).
 - **Support & safety (F-047, D-06).** "Not therapy" hero; what to do when a
   question feels heavy (skip, softer wording, pause, talk to someone); "If
@@ -52,7 +53,9 @@ and the share sheet / file picker when the user asks for them.
 - Times are stored as local `HH:MM` via `setReminder`; quiet hours via
   `updateSettings` (both bounds needed; `AppState` replans).
 - **Calendar file:** `FileShare.shareTextFile('cartharise-checkins.ics',
-  calendarExport(), 'text/calendar')`, only the switched-on check-ins (the
+  calendarExport(calendarTexts(l)), 'text/calendar')` — calendar name, event
+  title and notes come from ARB (`youCalendar…`) — only the switched-on
+  check-ins (the
   button is disabled with a hint when none are on). Shared / dismissed /
   unavailable outcomes and failures are reported, never claimed as success.
 - **Export:** `cartharise-backup-<yyyy-MM-dd>.json`, `application/json`, the
@@ -62,11 +65,27 @@ and the share sheet / file picker when the user asks for them.
   a Cartharise backup, unsupported version, damaged, too large, not text) and
   **"Your current data was not changed."**, with nothing written → otherwise
   ask "Replace everything on this phone with the backup from <date>?" →
-  `importBackup`. Cancel at any point changes nothing.
+  `importBackup`. Cancel at any point changes nothing. If the restored data
+  then can't be written (`saveStatus == failed`), the snackbar says "The
+  backup is open on screen, but it couldn't be saved on this phone yet…"
+  instead of "Backup restored." (F-055); the save indicator offers Retry
+  and Export a copy.
 - **Delete all:** two destructive confirmations ("Delete all data?" then
-  "This can't be undone") → `deleteAllData()`; `BootScreen` closes the
-  pushed pages and shows onboarding. If deleting fails, the user is told the
-  writing is still there.
+  "This can't be undone") → `FileShare.clearTemporaryFiles()` (export copies
+  in the private temp folder, ours and share_plus's, and the file picker's
+  cached imports) → `deleteAllData()`; `BootScreen` closes the pushed pages
+  and shows onboarding. If deleting fails, the user is told the writing is
+  still there; if only a temporary copy couldn't be removed, the data is
+  still deleted and the user is told so ("Removing the app erases it").
+- **No copies left behind:** every export's temp file is deleted when the
+  share sheet returns (also when dismissed), and the picker's cached copy
+  right after an import file is read (`SystemFileShare`).
+- **No OS backups:** Android `allowBackup="false"` plus
+  `res/xml/data_extraction_rules.xml` / `full_backup_content.xml` exclude
+  everything (cloud backup and device transfer); on iOS `FileDataStore`
+  marks the data folder `isExcludedFromBackup` after every write through
+  the `app.cartharise/storage` channel (`AppDelegate.swift`,
+  `lib/data/backup_exclusion.dart`). `test/privacy_test.dart` pins both.
 - No analytics, no logging of user text, no network calls.
 
 ## Edge cases
@@ -112,12 +131,16 @@ section label, local time formatting). Other areas reach these pages through
   back to default, per-row switch, 24-hour format, quiet hours set/clear,
   calendar share;
 - appearance: theme, mode, motion;
-- data: honest storage text, export shares valid JSON with the dated name,
-  failed share reported, malformed / foreign / damaged imports rejected with
-  data and store untouched, import confirm shows the backup date (cancel
-  keeps, replace restores), cancelled picker, delete all with two confirms
-  returns to onboarding with the store cleared and reminders cancelled,
-  failed delete reported; `previewBackup` and error-message unit tests;
+- data: honest storage text (incl. "not included in phone or cloud
+  backups"), export shares valid JSON with the dated name, failed share
+  reported, malformed / foreign / damaged imports rejected with data and
+  store untouched, import confirm shows the backup date (cancel keeps,
+  replace restores), a restore whose save fails is not called "restored"
+  (Retry then saves it), cancelled picker, delete all with two confirms
+  returns to onboarding with the store cleared, reminders cancelled and
+  temporary export/import copies cleared (also right after an export), a
+  copy that couldn't be removed is reported, failed delete reported;
+  `previewBackup` and error-message unit tests;
 - support: not therapy, heavy-question options, crisis text, helpline link;
 - size matrix (320×568 @ 2.0, 390×844, 1024×1366 @ 1.3) × dark/light,
   visiting every page including the denied warning and the import error.

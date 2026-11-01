@@ -6,7 +6,7 @@ import 'package:cartharise/ui/awakening/lesson_screen.dart';
 import 'package:cartharise/ui/compass/compass_import.dart';
 import 'package:cartharise/ui/nav.dart';
 import 'package:cartharise/ui/reset/guided_prompt_screen.dart';
-import 'package:cartharise/ui/reset/past_reset_screen.dart';
+import 'package:cartharise/ui/journal/past_reset_screen.dart';
 import 'package:cartharise/ui/reset/reset_complete_screen.dart';
 import 'package:cartharise/ui/reset/reset_tab.dart';
 import 'package:cartharise/ui/you/support_screen.dart';
@@ -205,7 +205,7 @@ void main() {
 
     testWidgets('own pace', (tester) async {
       await _pumpHub(tester);
-      expect(find.text('Your pace: your own'), findsOneWidget);
+      expect(find.text('Your pace: flexible'), findsOneWidget);
       expect(find.textContaining('Nothing locks'), findsOneWidget);
     });
 
@@ -906,7 +906,15 @@ void main() {
             data: _data(past: [_pastJourney()]),
             home: const PastResetScreen(journeyId: 'journey_before'),
           );
-          expect(find.text('Back then: tired evenings.'), findsOneWidget);
+          // The shared (Journal) screen builds its list lazily: on a small
+          // phone at 200 % text the answer is below the fold.
+          final words = find.text('Back then: tired evenings.');
+          await tester.scrollUntilVisible(
+            words,
+            200,
+            scrollable: find.byType(Scrollable).first,
+          );
+          expect(words, findsOneWidget);
           await expectNoOverflow(tester);
         });
       }

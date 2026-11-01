@@ -2,7 +2,9 @@ import 'package:cartharise/data/data_store.dart';
 import 'package:cartharise/domain/app_data.dart';
 import 'package:cartharise/domain/backup.dart';
 import 'package:cartharise/domain/content.dart';
+import 'package:cartharise/l10n/app_localizations.dart';
 import 'package:cartharise/state/app_state.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'support/fake_content.dart';
@@ -33,6 +35,12 @@ class Rig {
 }
 
 Future<AppState> loadedState({AppData? data}) => Rig(data: data).loaded();
+
+final _calendarTexts = CalendarTexts(
+  calendarName: 'Check-ins',
+  eventTitle: (title) => 'Check-in: $title',
+  description: 'Optional.',
+);
 
 void main() {
   group('loading & storage', () {
@@ -113,11 +121,15 @@ void main() {
       expect(rig.store.saved!.lessonsRead, {'lesson.01'});
     });
 
-    test('storage description is honest', () async {
-      final state = await loadedState();
-      expect(state.storageDescription, contains('only on this device'));
-      expect(state.storageDescription, contains('not encrypted by Cartharise'));
-      expect(state.storageDescription, contains('not synced'));
+    test('storage description is honest (and localized)', () {
+      // Shown on onboarding and in You › Your data (StorageTransparencyText).
+      final text = lookupAppLocalizations(const Locale('en'))
+          .storageTransparency;
+      expect(text, contains('only on this phone'));
+      expect(text, contains('not encrypted by Cartharise'));
+      expect(text, contains('not synced'));
+      expect(text, contains('not included in phone or cloud backups'));
+      expect(text, contains('erases it'));
     });
   });
 
@@ -590,12 +602,15 @@ void main() {
           enabled: false,
         ),
       );
-      final ics = state.calendarExport();
+      final ics = state.calendarExport(_calendarTexts);
       expect('BEGIN:VEVENT'.allMatches(ics), hasLength(5));
       await state.setReminder(
         const ReminderPreference(promptId: 'daytime.06', time: '21:00'),
       );
-      expect('BEGIN:VEVENT'.allMatches(state.calendarExport()), hasLength(6));
+      expect(
+        'BEGIN:VEVENT'.allMatches(state.calendarExport(_calendarTexts)),
+        hasLength(6),
+      );
     });
   });
 

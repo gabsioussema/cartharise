@@ -44,22 +44,37 @@ abstract class DataStore {
   /// Moves an unreadable saved file aside (kept, not deleted) so the app can
   /// start empty. Returns where it was kept, or null when there was nothing.
   Future<String?> moveAside();
-
-  /// Plain-language location, for storage transparency (F-043).
-  String get locationDescription;
 }
 
 /// JSON in the app's private support directory, written atomically
 /// (temporary file + rename) so a crash mid-write never corrupts the data.
+///
+/// The folder is kept out of OS backups (privacy, F-043): on Android by the
+/// manifest, on iOS through [excludeFromBackup] after every write (see
+/// `backup_exclusion.dart`). The UI describes this in the user's language
+/// (`StorageTransparencyText`).
 class FileDataStore implements DataStore {
   /// [directory] defaults to `getApplicationSupportDirectory()`.
-  FileDataStore({this.directory, DateTime Function()? clock})
-    : _clock = clock ?? DateTime.now;
+  FileDataStore({
+    this.directory,
+    this.excludeFromBackup,
+    DateTime Function()? clock,
+  }) : _clock = clock ?? DateTime.now;
 
   static const fileName = 'cartharise.json';
 
   /// Where the file lives; null = the platform's app support directory.
   final Directory? directory;
+
+  /// Called with the data folder's path after every successful write, to
+  /// keep it out of OS backups where that takes code (iOS). A failure here
+  /// does not fail the save — the words are on disk — and is retried on the
+  /// next write; it is kept in [backupExclusionError].
+  final Future<void> Function(String folderPath)? excludeFromBackup;
+
+  /// Why the last [excludeFromBackup] call failed, or null after a success.
+  Object? backupExclusionError;
+
   Directory? _resolved;
   final DateTime Function() _clock;
 
@@ -67,10 +82,6 @@ class FileDataStore implements DataStore {
       _resolved ??= directory ?? await getApplicationSupportDirectory();
 
   Future<File> _file() async => File('${(await _dir()).path}/$fileName');
-
-  @override
-  String get locationDescription =>
-      directory?.path ?? "Cartharise's private app folder on this device";
 
   @override
   Future<AppData?> read() async {
@@ -100,6 +111,18 @@ class FileDataStore implements DataStore {
       await tmp.rename(file.path);
     } on Object catch (e) {
       throw StorageWriteException('Saving to this device failed', e);
+    }
+    await _keepOutOfBackups();
+  }
+
+  Future<void> _keepOutOfBackups() async {
+    final exclude = excludeFromBackup;
+    if (exclude == null) return;
+    try {
+      await exclude((await _dir()).path);
+      backupExclusionError = null;
+    } on Object catch (e) {
+      backupExclusionError = e;
     }
   }
 
@@ -151,9 +174,6 @@ class MemoryDataStore implements DataStore {
 
   /// Makes [read] take this long (to see loading states in widget tests).
   Duration readDelay = Duration.zero;
-
-  @override
-  String get locationDescription => 'memory (test)';
 
   /// The currently saved data (decoded), or null.
   AppData? get saved => raw == null ? null : decodeBackup(raw!);

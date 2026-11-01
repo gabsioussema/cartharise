@@ -188,7 +188,7 @@ class AppState extends ChangeNotifier {
   Future<void> restoreCompassVersion(CompassVersion v);  // snapshots current first
 
   // Missions
-  List<Quest> questsFor(String day);                     // open + done-today, one-offs and dailies
+  List<Quest> questsFor(String day);                     // open + done-today, one-offs and dailies (Today's focus uses missions_logic `todayFocus()`, the Missions "today" rule)
   Future<Quest> addQuest(String title, {QuestRecurrence recurrence, String? dueDate, QuestSource source});
   Future<void> updateQuest(Quest quest);
   Future<void> setQuestDone(String id, bool done, {String? day});
@@ -211,13 +211,15 @@ class AppState extends ChangeNotifier {
   Future<void> setReminder(ReminderPreference pref);
   Future<ReminderPermission> enableReminders();          // granted | denied | unavailable — never claims success on denial
   Future<void> disableReminders();
-  String calendarExport();                               // .ics text
+  String calendarExport(CalendarTexts texts);            // .ics text, words localized by the UI
+  void localizeReminders({required String channelName, required String channelDescription});
 
   // Data (F-040–F-043)
   String exportBackup();
   Future<void> importBackup(String text);                // validate fully first; FormatException leaves data untouched
   Future<void> deleteAllData();                          // file + reminders; returns to onboarding
-  String get storageDescription;                         // honest: "on this device, not encrypted by Cartharise, not synced"
+  // Storage transparency is localized UI text (StorageTransparencyText, ARB `storageTransparency`):
+  // only on this phone, not encrypted by Cartharise, not synced, excluded from OS backups.
 }
 ```
 

@@ -11,6 +11,13 @@ import '../journal/journal_kit.dart';
 import '../theme/cartha_theme.dart';
 import '../widgets/widgets.dart';
 
+/// The calendar file's words in the user's language (F-018).
+CalendarTexts calendarTexts(AppLocalizations l) => CalendarTexts(
+  calendarName: l.youCalendarName,
+  eventTitle: l.youCalendarEventTitle,
+  description: l.youCalendarEventDescription,
+);
+
 /// The six daytime check-ins (F-016–F-018).
 ///
 /// * Notifications are opt-in: the switch asks for permission and turns on
@@ -103,7 +110,7 @@ class _RemindersScreenState extends State<RemindersScreen> {
     try {
       final outcome = await files.shareTextFile(
         kIcsFileName,
-        state.calendarExport(),
+        state.calendarExport(calendarTexts(l)),
         kIcsMimeType,
       );
       final message = switch (outcome) {

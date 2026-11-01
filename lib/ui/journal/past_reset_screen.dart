@@ -12,6 +12,9 @@ import 'journal_kit.dart';
 /// An earlier reset, read-only (F-034): the answers per prompt, grouped by
 /// phase, exactly as written. The user may choose to show their current
 /// answers alongside (F-035). No scores, ratings or labels.
+///
+/// The one screen for an earlier reset, opened from Journal › Look back and
+/// from Reset › Past resets, so it reads the same from both.
 class PastResetScreen extends StatefulWidget {
   const PastResetScreen({super.key, required this.journeyId});
 
@@ -101,8 +104,15 @@ class _PastResetScreenState extends State<PastResetScreen> {
     final subtitle = [
       l.journalResetStarted(formatDay(context, journey.startedAt)),
       if (journey.completedAt != null)
-        l.journalResetCompleted(formatDay(context, journey.completedAt!)),
+        l.journalResetCompleted(formatDay(context, journey.completedAt!))
+      else
+        l.journalPastResetUnfinished,
     ].join(' · ');
+    // Core questions neither answered nor skipped then (said calmly).
+    final leftOpen = state.content.corePrompts.where((prompt) {
+      final a = journey.answer(prompt.id);
+      return a == null || (!a.answered && !a.skipped);
+    }).length;
 
     return Scaffold(
       appBar: AppBar(),
@@ -136,8 +146,14 @@ class _PastResetScreenState extends State<PastResetScreen> {
             ],
             if (sections.isEmpty)
               EmptyState(icon: Icons.history, title: l.journalPastResetNone)
-            else
+            else ...[
               ...sections,
+              if (leftOpen > 0)
+                Text(
+                  l.journalPastResetLeftOpen(leftOpen),
+                  style: theme.textTheme.bodySmall,
+                ),
+            ],
           ],
         ),
       ),

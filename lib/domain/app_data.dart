@@ -80,8 +80,12 @@ DateTime _time(Map<String, Object?> j, String key) {
 DateTime? _optTime(Map<String, Object?> j, String key) =>
     j[key] == null ? null : _time(j, key);
 
-T _enum<T extends Enum>(List<T> values, Map<String, Object?> j, String key,
-    {T? fallback}) {
+T _enum<T extends Enum>(
+  List<T> values,
+  Map<String, Object?> j,
+  String key, {
+  T? fallback,
+}) {
   final v = j[key];
   for (final e in values) {
     if (e.name == v) return e;
@@ -125,22 +129,21 @@ class UserProfile {
     Pace? pace,
     DateTime? Function()? onboardedAt,
     bool? adultConfirmed,
-  }) =>
-      UserProfile(
-        createdAt: createdAt,
-        displayName: displayName != null ? displayName() : this.displayName,
-        pace: pace ?? this.pace,
-        onboardedAt: onboardedAt != null ? onboardedAt() : this.onboardedAt,
-        adultConfirmed: adultConfirmed ?? this.adultConfirmed,
-      );
+  }) => UserProfile(
+    createdAt: createdAt,
+    displayName: displayName != null ? displayName() : this.displayName,
+    pace: pace ?? this.pace,
+    onboardedAt: onboardedAt != null ? onboardedAt() : this.onboardedAt,
+    adultConfirmed: adultConfirmed ?? this.adultConfirmed,
+  );
 
   Map<String, Object?> toJson() => {
-        'displayName': displayName,
-        'pace': pace.name,
-        'createdAt': _iso(createdAt),
-        'onboardedAt': onboardedAt == null ? null : _iso(onboardedAt!),
-        'adultConfirmed': adultConfirmed,
-      };
+    'displayName': displayName,
+    'pace': pace.name,
+    'createdAt': _iso(createdAt),
+    'onboardedAt': onboardedAt == null ? null : _iso(onboardedAt!),
+    'adultConfirmed': adultConfirmed,
+  };
 
   factory UserProfile.fromJson(Object? json) {
     final j = _map(json, 'profile');
@@ -184,24 +187,23 @@ class AppSettings {
     bool? remindersEnabled,
     String? Function()? quietStart,
     String? Function()? quietEnd,
-  }) =>
-      AppSettings(
-        appearance: appearance ?? this.appearance,
-        theme: theme ?? this.theme,
-        motion: motion ?? this.motion,
-        remindersEnabled: remindersEnabled ?? this.remindersEnabled,
-        quietStart: quietStart != null ? quietStart() : this.quietStart,
-        quietEnd: quietEnd != null ? quietEnd() : this.quietEnd,
-      );
+  }) => AppSettings(
+    appearance: appearance ?? this.appearance,
+    theme: theme ?? this.theme,
+    motion: motion ?? this.motion,
+    remindersEnabled: remindersEnabled ?? this.remindersEnabled,
+    quietStart: quietStart != null ? quietStart() : this.quietStart,
+    quietEnd: quietEnd != null ? quietEnd() : this.quietEnd,
+  );
 
   Map<String, Object?> toJson() => {
-        'appearance': appearance.name,
-        'theme': theme.name,
-        'motion': motion,
-        'remindersEnabled': remindersEnabled,
-        'quietStart': quietStart,
-        'quietEnd': quietEnd,
-      };
+    'appearance': appearance.name,
+    'theme': theme.name,
+    'motion': motion,
+    'remindersEnabled': remindersEnabled,
+    'quietStart': quietStart,
+    'quietEnd': quietEnd,
+  };
 
   factory AppSettings.fromJson(Object? json) {
     if (json == null) return const AppSettings();
@@ -211,8 +213,12 @@ class AppSettings {
     if (quietStart != null) parseClock(quietStart);
     if (quietEnd != null) parseClock(quietEnd);
     return AppSettings(
-      appearance: _enum(AppearanceMode.values, j, 'appearance',
-          fallback: AppearanceMode.system),
+      appearance: _enum(
+        AppearanceMode.values,
+        j,
+        'appearance',
+        fallback: AppearanceMode.system,
+      ),
       theme: _enum(AppTheme.values, j, 'theme', fallback: AppTheme.forest),
       motion: _bool(j, 'motion', fallback: true),
       remindersEnabled: _bool(j, 'remindersEnabled'),
@@ -241,8 +247,11 @@ class ReminderPreference {
         enabled: enabled ?? this.enabled,
       );
 
-  Map<String, Object?> toJson() =>
-      {'promptId': promptId, 'time': time, 'enabled': enabled};
+  Map<String, Object?> toJson() => {
+    'promptId': promptId,
+    'time': time,
+    'enabled': enabled,
+  };
 
   factory ReminderPreference.fromJson(Object? json) {
     final j = _map(json, 'reminder');
@@ -277,11 +286,11 @@ class ReflectionAnswer {
   bool get answered => body.trim().isNotEmpty;
 
   Map<String, Object?> toJson() => {
-        'promptId': promptId,
-        'body': body,
-        'skipped': skipped,
-        'updatedAt': _iso(updatedAt),
-      };
+    'promptId': promptId,
+    'body': body,
+    'skipped': skipped,
+    'updatedAt': _iso(updatedAt),
+  };
 
   factory ReflectionAnswer.fromJson(Object? json) {
     final j = _map(json, 'answer');
@@ -320,28 +329,31 @@ class Journey {
     DateTime? Function()? completedAt,
     String? Function()? activePromptId,
     Map<String, ReflectionAnswer>? answers,
-  }) =>
-      Journey(
-        id: id,
-        startedAt: startedAt,
-        completedAt: completedAt != null ? completedAt() : this.completedAt,
-        activePromptId:
-            activePromptId != null ? activePromptId() : this.activePromptId,
-        answers: answers ?? this.answers,
-      );
+  }) => Journey(
+    id: id,
+    startedAt: startedAt,
+    completedAt: completedAt != null ? completedAt() : this.completedAt,
+    activePromptId: activePromptId != null
+        ? activePromptId()
+        : this.activePromptId,
+    answers: answers ?? this.answers,
+  );
 
   Map<String, Object?> toJson() => {
-        'id': id,
-        'startedAt': _iso(startedAt),
-        'completedAt': completedAt == null ? null : _iso(completedAt!),
-        'activePromptId': activePromptId,
-        'answers': [for (final a in answers.values) a.toJson()],
-      };
+    'id': id,
+    'startedAt': _iso(startedAt),
+    'completedAt': completedAt == null ? null : _iso(completedAt!),
+    'activePromptId': activePromptId,
+    'answers': [for (final a in answers.values) a.toJson()],
+  };
 
   factory Journey.fromJson(Object? json) {
     final j = _map(json, 'journey');
     final answers = <String, ReflectionAnswer>{
-      for (final a in _list(j['answers'], 'answers').map(ReflectionAnswer.fromJson))
+      for (final a in _list(
+        j['answers'],
+        'answers',
+      ).map(ReflectionAnswer.fromJson))
         a.promptId: a,
     };
     return Journey(
@@ -381,13 +393,13 @@ class LifeCompass {
   final DateTime? updatedAt;
 
   String get(CompassField field) => switch (field) {
-        CompassField.antiVision => antiVision,
-        CompassField.vision => vision,
-        CompassField.yearGoal => yearGoal,
-        CompassField.monthProject => monthProject,
-        CompassField.dailyLevers => dailyLevers,
-        CompassField.constraints => constraints,
-      };
+    CompassField.antiVision => antiVision,
+    CompassField.vision => vision,
+    CompassField.yearGoal => yearGoal,
+    CompassField.monthProject => monthProject,
+    CompassField.dailyLevers => dailyLevers,
+    CompassField.constraints => constraints,
+  };
 
   LifeCompass withField(CompassField field, String value, DateTime now) =>
       LifeCompass(
@@ -400,13 +412,12 @@ class LifeCompass {
         updatedAt: now,
       );
 
-  bool get isEmpty =>
-      CompassField.values.every((f) => get(f).trim().isEmpty);
+  bool get isEmpty => CompassField.values.every((f) => get(f).trim().isEmpty);
 
   Map<String, Object?> toJson() => {
-        for (final f in CompassField.values) f.name: get(f),
-        'updatedAt': updatedAt == null ? null : _iso(updatedAt!),
-      };
+    for (final f in CompassField.values) f.name: get(f),
+    'updatedAt': updatedAt == null ? null : _iso(updatedAt!),
+  };
 
   factory LifeCompass.fromJson(Object? json) {
     if (json == null) return const LifeCompass();
@@ -436,18 +447,22 @@ class CompassVersion {
   final CompassVersionReason reason;
 
   Map<String, Object?> toJson() => {
-        'savedAt': _iso(savedAt),
-        'compass': compass.toJson(),
-        'reason': reason.name,
-      };
+    'savedAt': _iso(savedAt),
+    'compass': compass.toJson(),
+    'reason': reason.name,
+  };
 
   factory CompassVersion.fromJson(Object? json) {
     final j = _map(json, 'compassVersion');
     return CompassVersion(
       savedAt: _time(j, 'savedAt'),
       compass: LifeCompass.fromJson(j['compass']),
-      reason: _enum(CompassVersionReason.values, j, 'reason',
-          fallback: CompassVersionReason.manual),
+      reason: _enum(
+        CompassVersionReason.values,
+        j,
+        'reason',
+        fallback: CompassVersionReason.manual,
+      ),
     );
   }
 }
@@ -492,28 +507,27 @@ class Quest {
     String? Function()? dueDate,
     Set<String>? completedOn,
     String? Function()? note,
-  }) =>
-      Quest(
-        id: id,
-        title: title ?? this.title,
-        createdAt: createdAt,
-        recurrence: recurrence ?? this.recurrence,
-        dueDate: dueDate != null ? dueDate() : this.dueDate,
-        completedOn: completedOn ?? this.completedOn,
-        source: source,
-        note: note != null ? note() : this.note,
-      );
+  }) => Quest(
+    id: id,
+    title: title ?? this.title,
+    createdAt: createdAt,
+    recurrence: recurrence ?? this.recurrence,
+    dueDate: dueDate != null ? dueDate() : this.dueDate,
+    completedOn: completedOn ?? this.completedOn,
+    source: source,
+    note: note != null ? note() : this.note,
+  );
 
   Map<String, Object?> toJson() => {
-        'id': id,
-        'title': title,
-        'createdAt': _iso(createdAt),
-        'recurrence': recurrence.name,
-        'dueDate': dueDate,
-        'completedOn': completedOn.toList()..sort(),
-        'source': source.name,
-        'note': note,
-      };
+    'id': id,
+    'title': title,
+    'createdAt': _iso(createdAt),
+    'recurrence': recurrence.name,
+    'dueDate': dueDate,
+    'completedOn': completedOn.toList()..sort(),
+    'source': source.name,
+    'note': note,
+  };
 
   factory Quest.fromJson(Object? json) {
     final j = _map(json, 'quest');
@@ -527,11 +541,20 @@ class Quest {
       id: _str(j, 'id'),
       title: _str(j, 'title'),
       createdAt: _time(j, 'createdAt'),
-      recurrence: _enum(QuestRecurrence.values, j, 'recurrence',
-          fallback: QuestRecurrence.none),
+      recurrence: _enum(
+        QuestRecurrence.values,
+        j,
+        'recurrence',
+        fallback: QuestRecurrence.none,
+      ),
       dueDate: _optDateKey(j, 'dueDate'),
       completedOn: done,
-      source: _enum(QuestSource.values, j, 'source', fallback: QuestSource.manual),
+      source: _enum(
+        QuestSource.values,
+        j,
+        'source',
+        fallback: QuestSource.manual,
+      ),
       note: _optStr(j, 'note'),
     );
   }
@@ -581,31 +604,35 @@ class MonthProject {
     List<Milestone>? milestones,
     String? retrospective,
     required DateTime now,
-  }) =>
-      MonthProject(
-        title: title ?? this.title,
-        status: status ?? this.status,
-        milestones: milestones ?? this.milestones,
-        retrospective: retrospective ?? this.retrospective,
-        updatedAt: now,
-      );
+  }) => MonthProject(
+    title: title ?? this.title,
+    status: status ?? this.status,
+    milestones: milestones ?? this.milestones,
+    retrospective: retrospective ?? this.retrospective,
+    updatedAt: now,
+  );
 
   Map<String, Object?> toJson() => {
-        'title': title,
-        'status': status.name,
-        'milestones': [for (final m in milestones) m.toJson()],
-        'retrospective': retrospective,
-        'updatedAt': _iso(updatedAt),
-      };
+    'title': title,
+    'status': status.name,
+    'milestones': [for (final m in milestones) m.toJson()],
+    'retrospective': retrospective,
+    'updatedAt': _iso(updatedAt),
+  };
 
   factory MonthProject.fromJson(Object? json) {
     final j = _map(json, 'project');
     return MonthProject(
       title: _str(j, 'title'),
-      status: _enum(ProjectStatus.values, j, 'status',
-          fallback: ProjectStatus.planned),
+      status: _enum(
+        ProjectStatus.values,
+        j,
+        'status',
+        fallback: ProjectStatus.planned,
+      ),
       milestones: [
-        for (final m in _list(j['milestones'], 'milestones')) Milestone.fromJson(m),
+        for (final m in _list(j['milestones'], 'milestones'))
+          Milestone.fromJson(m),
       ],
       retrospective: _str(j, 'retrospective'),
       updatedAt: _time(j, 'updatedAt'),
@@ -631,12 +658,12 @@ class JournalEntry {
   final DateTime? editedAt;
 
   Map<String, Object?> toJson() => {
-        'id': id,
-        'title': title,
-        'body': body,
-        'createdAt': _iso(createdAt),
-        'editedAt': editedAt == null ? null : _iso(editedAt!),
-      };
+    'id': id,
+    'title': title,
+    'body': body,
+    'createdAt': _iso(createdAt),
+    'editedAt': editedAt == null ? null : _iso(editedAt!),
+  };
 
   factory JournalEntry.fromJson(Object? json) {
     final j = _map(json, 'journalEntry');
@@ -673,14 +700,14 @@ class WeeklyReview {
   final DateTime? editedAt;
 
   Map<String, Object?> toJson() => {
-        'id': id,
-        'weekStart': weekStart,
-        'wins': wins,
-        'friction': friction,
-        'nextExperiment': nextExperiment,
-        'createdAt': _iso(createdAt),
-        'editedAt': editedAt == null ? null : _iso(editedAt!),
-      };
+    'id': id,
+    'weekStart': weekStart,
+    'wins': wins,
+    'friction': friction,
+    'nextExperiment': nextExperiment,
+    'createdAt': _iso(createdAt),
+    'editedAt': editedAt == null ? null : _iso(editedAt!),
+  };
 
   factory WeeklyReview.fromJson(Object? json) {
     final j = _map(json, 'review');
@@ -700,20 +727,33 @@ class WeeklyReview {
 
 /// The user's note for one day of the thirty-day path (F-057).
 class PathAnswer {
-  const PathAnswer({required this.day, required this.body, required this.updatedAt});
+  const PathAnswer({
+    required this.day,
+    required this.body,
+    required this.updatedAt,
+  });
 
   final int day;
   final String body;
   final DateTime updatedAt;
 
-  Map<String, Object?> toJson() =>
-      {'day': day, 'body': body, 'updatedAt': _iso(updatedAt)};
+  Map<String, Object?> toJson() => {
+    'day': day,
+    'body': body,
+    'updatedAt': _iso(updatedAt),
+  };
 
   factory PathAnswer.fromJson(Object? json) {
     final j = _map(json, 'pathAnswer');
     final day = _int(j, 'day');
-    if (day < 1 || day > 30) throw FormatException('Path day out of range', day);
-    return PathAnswer(day: day, body: _str(j, 'body'), updatedAt: _time(j, 'updatedAt'));
+    if (day < 1 || day > 30) {
+      throw FormatException('Path day out of range', day);
+    }
+    return PathAnswer(
+      day: day,
+      body: _str(j, 'body'),
+      updatedAt: _time(j, 'updatedAt'),
+    );
   }
 }
 
@@ -788,40 +828,40 @@ class AppData {
     Map<int, PathAnswer>? pathAnswers,
     List<ReminderPreference>? reminders,
     Set<String>? lessonsRead,
-  }) =>
-      AppData(
-        profile: profile != null ? profile() : this.profile,
-        settings: settings ?? this.settings,
-        journeys: journeys ?? this.journeys,
-        currentJourneyId:
-            currentJourneyId != null ? currentJourneyId() : this.currentJourneyId,
-        compass: compass ?? this.compass,
-        compassHistory: compassHistory ?? this.compassHistory,
-        quests: quests ?? this.quests,
-        project: project != null ? project() : this.project,
-        journal: journal ?? this.journal,
-        reviews: reviews ?? this.reviews,
-        pathAnswers: pathAnswers ?? this.pathAnswers,
-        reminders: reminders ?? this.reminders,
-        lessonsRead: lessonsRead ?? this.lessonsRead,
-      );
+  }) => AppData(
+    profile: profile != null ? profile() : this.profile,
+    settings: settings ?? this.settings,
+    journeys: journeys ?? this.journeys,
+    currentJourneyId: currentJourneyId != null
+        ? currentJourneyId()
+        : this.currentJourneyId,
+    compass: compass ?? this.compass,
+    compassHistory: compassHistory ?? this.compassHistory,
+    quests: quests ?? this.quests,
+    project: project != null ? project() : this.project,
+    journal: journal ?? this.journal,
+    reviews: reviews ?? this.reviews,
+    pathAnswers: pathAnswers ?? this.pathAnswers,
+    reminders: reminders ?? this.reminders,
+    lessonsRead: lessonsRead ?? this.lessonsRead,
+  );
 
   Map<String, Object?> toJson() => {
-        'schemaVersion': kSchemaVersion,
-        'profile': profile?.toJson(),
-        'settings': settings.toJson(),
-        'journeys': [for (final j in journeys) j.toJson()],
-        'currentJourneyId': currentJourneyId,
-        'compass': compass.toJson(),
-        'compassHistory': [for (final v in compassHistory) v.toJson()],
-        'quests': [for (final q in quests) q.toJson()],
-        'project': project?.toJson(),
-        'journal': [for (final e in journal) e.toJson()],
-        'reviews': [for (final r in reviews) r.toJson()],
-        'pathAnswers': [for (final a in pathAnswers.values) a.toJson()],
-        'reminders': [for (final r in reminders) r.toJson()],
-        'lessonsRead': lessonsRead.toList()..sort(),
-      };
+    'schemaVersion': kSchemaVersion,
+    'profile': profile?.toJson(),
+    'settings': settings.toJson(),
+    'journeys': [for (final j in journeys) j.toJson()],
+    'currentJourneyId': currentJourneyId,
+    'compass': compass.toJson(),
+    'compassHistory': [for (final v in compassHistory) v.toJson()],
+    'quests': [for (final q in quests) q.toJson()],
+    'project': project?.toJson(),
+    'journal': [for (final e in journal) e.toJson()],
+    'reviews': [for (final r in reviews) r.toJson()],
+    'pathAnswers': [for (final a in pathAnswers.values) a.toJson()],
+    'reminders': [for (final r in reminders) r.toJson()],
+    'lessonsRead': lessonsRead.toList()..sort(),
+  };
 
   factory AppData.fromJson(Object? json) {
     final j = _map(json, 'data');
@@ -852,15 +892,22 @@ class AppData {
           CompassVersion.fromJson(v),
       ],
       quests: [for (final q in _list(j['quests'], 'quests')) Quest.fromJson(q)],
-      project: j['project'] == null ? null : MonthProject.fromJson(j['project']),
+      project: j['project'] == null
+          ? null
+          : MonthProject.fromJson(j['project']),
       journal: [
-        for (final e in _list(j['journal'], 'journal')) JournalEntry.fromJson(e),
+        for (final e in _list(j['journal'], 'journal'))
+          JournalEntry.fromJson(e),
       ],
       reviews: [
-        for (final r in _list(j['reviews'], 'reviews')) WeeklyReview.fromJson(r),
+        for (final r in _list(j['reviews'], 'reviews'))
+          WeeklyReview.fromJson(r),
       ],
       pathAnswers: {
-        for (final a in _list(j['pathAnswers'], 'pathAnswers').map(PathAnswer.fromJson))
+        for (final a in _list(
+          j['pathAnswers'],
+          'pathAnswers',
+        ).map(PathAnswer.fromJson))
           a.day: a,
       },
       reminders: [

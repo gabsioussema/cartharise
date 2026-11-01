@@ -29,8 +29,10 @@ never goes into notifications or logs.
   "Same in both". *Earlier resets* lists past resets (started, completed,
   number of written answers); **PastResetScreen** shows that reset's
   answers per phase exactly as written, skipped prompts marked "Skipped",
-  and an optional "Show my current answers too" switch that adds the
-  current reset's answer under each one.
+  "Not finished" when it was never completed, "n questions were left open."
+  for untouched core prompts, and an optional "Show my current answers too"
+  switch that adds the current reset's answer under each one. It is the one
+  past-reset screen: Reset › Past resets opens it too.
 
 ## Behaviour rules
 

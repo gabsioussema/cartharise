@@ -86,11 +86,37 @@ class _CarthaMaterialApp extends StatelessWidget {
               disableAnimations:
                   !motion || MediaQuery.disableAnimationsOf(context),
             ),
-            child: child!,
+            child: _LocalizeReminders(child: child!),
           ),
         );
       },
       home: home,
     );
   }
+}
+
+/// Gives the reminder scheduler its notification channel text in the
+/// user's language (shown in the system's notification settings).
+class _LocalizeReminders extends StatefulWidget {
+  const _LocalizeReminders({required this.child});
+
+  final Widget child;
+
+  @override
+  State<_LocalizeReminders> createState() => _LocalizeRemindersState();
+}
+
+class _LocalizeRemindersState extends State<_LocalizeReminders> {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final l = AppLocalizations.of(context);
+    context.read<AppState>().localizeReminders(
+      channelName: l.reminderChannelName,
+      channelDescription: l.reminderChannelDescription,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) => widget.child;
 }

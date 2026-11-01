@@ -1,3 +1,4 @@
+import 'package:cartharise/domain/app_data.dart';
 import 'package:cartharise/state/app_state.dart';
 import 'package:cartharise/ui/boot_screen.dart';
 import 'package:cartharise/ui/nav.dart';
@@ -5,6 +6,7 @@ import 'package:cartharise/ui/onboarding/onboarding_flow.dart';
 import 'package:cartharise/ui/root_shell.dart';
 import 'package:cartharise/ui/today/today_tab.dart';
 import 'package:cartharise/ui/widgets/loader.dart';
+import 'package:cartharise/ui/widgets/buttons.dart';
 import 'package:cartharise/ui/widgets/save_indicator.dart';
 import 'package:cartharise/ui/you/data_screen.dart';
 import 'package:cartharise/ui/you/reminders_screen.dart';
@@ -222,6 +224,71 @@ void main() {
       await tester.tap(find.text('Export a copy'));
       await pumpFrames(tester);
       expect(find.byType(DataScreen), findsOneWidget);
+    });
+  });
+
+  group('localized platform texts', () {
+    testWidgets('the notification channel is named from ARB', (tester) async {
+      final h = await pumpCartha(tester, data: onboardedData());
+      expect(h.reminders.channelName, 'Check-in reminders');
+      expect(
+        h.reminders.channelDescription,
+        'Optional daytime check-ins from your Cartharise reset.',
+      );
+    });
+  });
+
+  group('busy buttons', () {
+    Widget busyButton() => Scaffold(
+      body: Center(
+        child: PrimaryButton(label: 'Export', busy: true, onPressed: () {}),
+      ),
+    );
+
+    bool loaderAnimating(WidgetTester tester) => isLoaderAnimating(
+      tester.state(find.byKey(const ValueKey('button-busy'))),
+    );
+
+    testWidgets('show the brand loader, not a spinner, and ignore taps', (
+      tester,
+    ) async {
+      await pumpCartha(tester, data: onboardedData(), home: busyButton());
+      expect(find.byType(CircularProgressIndicator), findsNothing);
+      expect(find.byType(CarthaLoader), findsOneWidget);
+      expect(loaderAnimating(tester), isTrue);
+      expect(
+        tester.widget<FilledButton>(find.byType(FilledButton)).onPressed,
+        isNull,
+      );
+    });
+
+    testWidgets('stay still when Settings › Motion is off', (tester) async {
+      await pumpCartha(
+        tester,
+        data: onboardedData(settings: const AppSettings(motion: false)),
+        home: busyButton(),
+      );
+      expect(find.byType(CarthaLoader), findsOneWidget);
+      expect(loaderAnimating(tester), isFalse);
+      // Nothing animates, so the frame settles.
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('stay still when the device asks for reduced motion', (
+      tester,
+    ) async {
+      await pumpCartha(
+        tester,
+        data: onboardedData(),
+        home: Builder(
+          builder: (context) => MediaQuery(
+            data: MediaQuery.of(context).copyWith(disableAnimations: true),
+            child: busyButton(),
+          ),
+        ),
+      );
+      expect(loaderAnimating(tester), isFalse);
+      await tester.pumpAndSettle();
     });
   });
 }

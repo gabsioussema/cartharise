@@ -187,7 +187,7 @@ void main() {
     for (var i = 0; i < 5; i++) {
       await _tap(tester, find.byKey(_next)); // brand + four carousel pages
     }
-    expect(find.text("What This Is, and Isn't"), findsOneWidget);
+    expect(find.text("What this is, and isn't"), findsOneWidget);
     await _tap(tester, find.byKey(_adult));
     await _tap(tester, find.byKey(_next));
     // Inspired by: title, author and the exact article link.

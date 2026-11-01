@@ -304,6 +304,12 @@ abstract class AppLocalizations {
   /// **'The unreadable file is set aside on this phone, not deleted. Cartharise then starts empty.'**
   String get bootStartFreshConfirmBody;
 
+  /// Where the user's data lives (onboarding privacy page, You › Your data). Must stay true: Android backups are off in the manifest, iOS excludes the data folder from backup.
+  ///
+  /// In en, this message translates to:
+  /// **'Stored only on this phone, in Cartharise\'s private app folder. It is not encrypted by Cartharise, not synced, and not included in phone or cloud backups. Removing the app or using “Delete all data” erases it.'**
+  String get storageTransparency;
+
   /// No description provided for @storageErrorTitle.
   ///
   /// In en, this message translates to:
@@ -327,6 +333,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Couldn\'t open the share sheet on this phone.'**
   String get shareFailed;
+
+  /// Android notification channel name (system settings).
+  ///
+  /// In en, this message translates to:
+  /// **'Check-in reminders'**
+  String get reminderChannelName;
+
+  /// Android notification channel description (system settings).
+  ///
+  /// In en, this message translates to:
+  /// **'Optional daytime check-ins from your Cartharise reset.'**
+  String get reminderChannelDescription;
 
   /// No description provided for @loaderLabel.
   ///
@@ -1414,6 +1432,18 @@ abstract class AppLocalizations {
   /// **'This reset isn\'t here any more'**
   String get journalPastResetMissingTitle;
 
+  /// No description provided for @journalPastResetUnfinished.
+  ///
+  /// In en, this message translates to:
+  /// **'Not finished'**
+  String get journalPastResetUnfinished;
+
+  /// No description provided for @journalPastResetLeftOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 question was left open.} other{{count} questions were left open.}}'**
+  String journalPastResetLeftOpen(int count);
+
   /// No description provided for @journalPhaseMorning.
   ///
   /// In en, this message translates to:
@@ -2119,7 +2149,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingLimitsTitle.
   ///
   /// In en, this message translates to:
-  /// **'What This Is, and Isn\'t'**
+  /// **'What this is, and isn\'t'**
   String get onboardingLimitsTitle;
 
   /// No description provided for @onboardingLimitsIntro.
@@ -2209,7 +2239,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingCreditTitle.
   ///
   /// In en, this message translates to:
-  /// **'Inspired By'**
+  /// **'Inspired by'**
   String get onboardingCreditTitle;
 
   /// No description provided for @onboardingCreditIntro.
@@ -2245,7 +2275,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingPaceTitle.
   ///
   /// In en, this message translates to:
-  /// **'Choose Your Pace'**
+  /// **'Choose your pace'**
   String get onboardingPaceTitle;
 
   /// No description provided for @onboardingPaceIntro.
@@ -2269,7 +2299,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingPaceFlexibleTitle.
   ///
   /// In en, this message translates to:
-  /// **'At my own pace'**
+  /// **'Flexible'**
   String get onboardingPaceFlexibleTitle;
 
   /// No description provided for @onboardingPaceFlexibleBody.
@@ -2287,7 +2317,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingNameTitle.
   ///
   /// In en, this message translates to:
-  /// **'What Should We Call You?'**
+  /// **'What should we call you?'**
   String get onboardingNameTitle;
 
   /// No description provided for @onboardingNameIntro.
@@ -2311,7 +2341,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingPrivacyTitle.
   ///
   /// In en, this message translates to:
-  /// **'Your Words Stay Yours'**
+  /// **'Your words stay yours'**
   String get onboardingPrivacyTitle;
 
   /// No description provided for @onboardingPrivacyStorageHeading.
@@ -2359,7 +2389,7 @@ abstract class AppLocalizations {
   /// No description provided for @resetPaceFlexibleTitle.
   ///
   /// In en, this message translates to:
-  /// **'Your pace: your own'**
+  /// **'Your pace: flexible'**
   String get resetPaceFlexibleTitle;
 
   /// No description provided for @resetPaceFlexibleBody.
@@ -2661,36 +2691,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =0{No answers} =1{1 answer} other{{count} answers}}'**
   String resetPastAnswerCount(int count);
-
-  /// No description provided for @resetPastScreenTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Past reset'**
-  String get resetPastScreenTitle;
-
-  /// No description provided for @resetPastReadOnly.
-  ///
-  /// In en, this message translates to:
-  /// **'Read-only: this is how you answered then. Your current reset is separate.'**
-  String get resetPastReadOnly;
-
-  /// No description provided for @resetPastLeftOpen.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{1 question was left open.} other{{count} questions were left open.}}'**
-  String resetPastLeftOpen(int count);
-
-  /// No description provided for @resetPastEmpty.
-  ///
-  /// In en, this message translates to:
-  /// **'Nothing was written in this reset.'**
-  String get resetPastEmpty;
-
-  /// No description provided for @resetPastMissing.
-  ///
-  /// In en, this message translates to:
-  /// **'This reset isn\'t available any more.'**
-  String get resetPastMissing;
 
   /// No description provided for @resetNewTitle.
   ///
@@ -3154,6 +3154,12 @@ abstract class AppLocalizations {
   /// **'See all {count} quests'**
   String todayFocusSeeAll(int count);
 
+  /// Link to Missions: open quests without a date or planned for a later day (not listed on Today).
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 more for anytime or later} other{{count} more for anytime or later}}'**
+  String todayFocusLater(int count);
+
   /// No description provided for @todayQuestMarkDone.
   ///
   /// In en, this message translates to:
@@ -3163,7 +3169,7 @@ abstract class AppLocalizations {
   /// No description provided for @todayQuestDaily.
   ///
   /// In en, this message translates to:
-  /// **'Daily'**
+  /// **'Every day'**
   String get todayQuestDaily;
 
   /// No description provided for @todayJourneyTitle.
@@ -3808,6 +3814,24 @@ abstract class AppLocalizations {
   /// **'Switch on at least one check-in to create the file.'**
   String get youRemindersCalendarNone;
 
+  /// Name of the calendar inside the exported .ics file.
+  ///
+  /// In en, this message translates to:
+  /// **'Cartharise check-ins'**
+  String get youCalendarName;
+
+  /// Title of each calendar event; title = the check-in prompt's title.
+  ///
+  /// In en, this message translates to:
+  /// **'Cartharise check-in: {title}'**
+  String youCalendarEventTitle(String title);
+
+  /// Notes of each calendar event. Never contains the user's words.
+  ///
+  /// In en, this message translates to:
+  /// **'A short daytime pause from your Cartharise reset. Open the app when it suits you; every check-in is optional.'**
+  String get youCalendarEventDescription;
+
   /// No description provided for @youRemindersCalendarShared.
   ///
   /// In en, this message translates to:
@@ -3976,6 +4000,12 @@ abstract class AppLocalizations {
   /// **'Backup restored.'**
   String get youDataImported;
 
+  /// No description provided for @youDataImportedNotSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'The backup is open on screen, but it couldn\'t be saved on this phone yet. Use Retry at the top of this screen, or export a copy.'**
+  String get youDataImportedNotSaved;
+
   /// No description provided for @youDataImportFailedTitle.
   ///
   /// In en, this message translates to:
@@ -4089,6 +4119,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Couldn\'t delete your data. Your writing is still on this phone; please try again.'**
   String get youDataDeleteFailed;
+
+  /// No description provided for @youDataDeleteCopiesLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'Your data was deleted, but a temporary copy of an earlier export or import couldn\'t be removed. Removing the app erases it.'**
+  String get youDataDeleteCopiesLeft;
 
   /// No description provided for @youSupportTitle.
   ///

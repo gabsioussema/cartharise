@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 
 import 'app.dart';
 import 'content/content.dart';
+import 'data/backup_exclusion.dart';
 import 'data/data_store.dart';
 import 'reminders/reminder_scheduler.dart';
 import 'services/file_share.dart';
@@ -22,7 +23,8 @@ Future<void> main() async {
   registerFontLicenses();
 
   final state = AppState(
-    store: FileDataStore(),
+    // Kept out of OS backups: Android by the manifest, iOS per write.
+    store: FileDataStore(excludeFromBackup: platformBackupExclusion()),
     content: contentFor(PlatformDispatcher.instance.locale.languageCode),
     reminders: LocalReminderScheduler(),
   );

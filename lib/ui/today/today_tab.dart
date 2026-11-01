@@ -8,6 +8,7 @@ import '../../domain/content.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
 import '../compass/compass_import.dart';
+import '../missions/missions_logic.dart';
 import '../nav.dart';
 import '../theme/cartha_theme.dart';
 import '../widgets/widgets.dart';
@@ -61,7 +62,12 @@ class TodayTab extends StatelessWidget {
                 ],
                 _NextStepHero(step: nextStepFor(NextStepFacts.of(state))),
                 const SizedBox(height: 16),
-                _FocusCard(quests: state.questsFor(today), today: today),
+                _FocusCard(
+                  // The same "today" as Missions (missions_logic.dart).
+                  quests: state.todayFocus(today),
+                  laterCount: state.missionSections(today).later.length,
+                  today: today,
+                ),
                 const SizedBox(height: 16),
                 _JourneyCard(summary: JourneySummary.of(state)),
                 const SizedBox(height: 16),
@@ -265,9 +271,17 @@ class _NextStepHero extends StatelessWidget {
 
 /// "Today's focus": today's quests with accessible checkboxes.
 class _FocusCard extends StatelessWidget {
-  const _FocusCard({required this.quests, required this.today});
+  const _FocusCard({
+    required this.quests,
+    required this.laterCount,
+    required this.today,
+  });
 
   final List<Quest> quests;
+
+  /// Open quests without a date or planned for later (Missions' "Anytime &
+  /// upcoming"): not listed here, only counted, with a way there.
+  final int laterCount;
   final String today;
 
   @override
@@ -307,6 +321,12 @@ class _FocusCard extends StatelessWidget {
               if (quests.length > shown.length)
                 TextLinkButton(
                   label: l.todayFocusSeeAll(quests.length),
+                  onPressed: () => AppNav.openMissions(context),
+                ),
+              if (laterCount > 0)
+                TextLinkButton(
+                  key: const ValueKey('today-focus-later'),
+                  label: l.todayFocusLater(laterCount),
                   onPressed: () => AppNav.openMissions(context),
                 ),
             ],

@@ -46,6 +46,16 @@ class FakeReminderScheduler implements ReminderScheduler {
     launchPayload = null;
     return p;
   }
+
+  /// The localized notification channel text the UI set, if any.
+  String? channelName;
+  String? channelDescription;
+
+  @override
+  void setChannelText({required String name, required String description}) {
+    channelName = name;
+    channelDescription = description;
+  }
 }
 
 /// A shared file, as the fake share sheet saw it.
@@ -64,6 +74,10 @@ class FakeFileShare implements FileShare {
   String? pickResult;
   Object? pickError;
 
+  /// How often [clearTemporaryFiles] ran; [failClear] makes it throw.
+  int clearCount = 0;
+  bool failClear = false;
+
   @override
   Future<ShareOutcome> shareTextFile(
     String filename,
@@ -79,5 +93,11 @@ class FakeFileShare implements FileShare {
   Future<String?> pickTextFile() async {
     if (pickError != null) throw pickError!;
     return pickResult;
+  }
+
+  @override
+  Future<void> clearTemporaryFiles() async {
+    clearCount++;
+    if (failClear) throw StateError('Simulated cleanup failure');
   }
 }

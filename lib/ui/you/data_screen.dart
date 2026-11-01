@@ -20,9 +20,11 @@ const String kBackupMimeType = 'application/json';
 ///   sheet (also the "Export a copy" target after a failed save);
 /// * restore a backup: the file is fully validated first — a bad file is
 ///   rejected with "your current data was not changed" — then the user
-///   confirms replacing everything with the backup from its date;
-/// * delete all data after two explicit confirmations; the app then
-///   returns to onboarding.
+///   confirms replacing everything with the backup from its date; if the
+///   restored data couldn't be saved, it says so instead of "restored";
+/// * delete all data after two explicit confirmations: the saved file,
+///   reminders and every temporary export/import copy
+///   ([FileShare.clearTemporaryFiles]); the app then returns to onboarding.
 class DataScreen extends StatefulWidget {
   const DataScreen({super.key});
 
@@ -111,7 +113,17 @@ class _DataScreenState extends State<DataScreen> {
         _fail(backupErrorMessage(l, e));
         return;
       }
-      messenger.showSnackBar(SnackBar(content: Text(l.youDataImported)));
+      // Never claim a restore that wasn't saved (F-055): the backup is on
+      // screen, but only Retry (SaveIndicator) makes it stick.
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(
+            state.saveStatus == SaveStatus.failed
+                ? l.youDataImportedNotSaved
+                : l.youDataImported,
+          ),
+        ),
+      );
     } finally {
       if (mounted) setState(() => _importing = false);
     }
@@ -124,6 +136,7 @@ class _DataScreenState extends State<DataScreen> {
   Future<void> _deleteAll() async {
     final l = AppLocalizations.of(context);
     final state = context.read<AppState>();
+    final files = context.read<FileShare>();
     final messenger = ScaffoldMessenger.of(context);
     final first = await confirmDialog(
       context,
@@ -143,10 +156,26 @@ class _DataScreenState extends State<DataScreen> {
     if (!second || !mounted) return;
     setState(() => _deleting = true);
     try {
-      // The app returns to onboarding by itself (BootScreen).
-      await state.deleteAllData();
-    } on Object {
-      messenger.showSnackBar(SnackBar(content: Text(l.youDataDeleteFailed)));
+      // Export and import copies first (share sheet, file picker), so no
+      // copy of the user's words outlives "Delete all data".
+      var copiesLeft = false;
+      try {
+        await files.clearTemporaryFiles();
+      } on Object {
+        copiesLeft = true;
+      }
+      try {
+        // The app returns to onboarding by itself (BootScreen).
+        await state.deleteAllData();
+      } on Object {
+        messenger.showSnackBar(SnackBar(content: Text(l.youDataDeleteFailed)));
+        return;
+      }
+      if (copiesLeft) {
+        messenger.showSnackBar(
+          SnackBar(content: Text(l.youDataDeleteCopiesLeft)),
+        );
+      }
     } finally {
       if (mounted) setState(() => _deleting = false);
     }
@@ -179,8 +208,8 @@ class _DataScreenState extends State<DataScreen> {
             SectionCard(
               icon: Icons.phone_android,
               title: l.youDataWhereTitle,
-              child: Text(
-                state.storageDescription,
+              child: StorageTransparencyText(
+                key: const ValueKey('data-storage'),
                 style: theme.textTheme.bodyMedium,
               ),
             ),

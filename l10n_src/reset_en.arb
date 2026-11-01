@@ -4,7 +4,7 @@
 
   "resetPaceOneDayTitle": "Your pace: one day",
   "resetPaceOneDayBody": "Morning questions, a few check-ins during the day, then the evening. Nothing locks if it takes you longer.",
-  "resetPaceFlexibleTitle": "Your pace: your own",
+  "resetPaceFlexibleTitle": "Your pace: flexible",
   "resetPaceFlexibleBody": "Take the parts in any order and come back whenever you like. Nothing locks and nothing expires.",
   "resetPaceChange": "Change pace",
 
@@ -73,12 +73,6 @@
   "resetPastUnfinished": "Not finished",
   "resetPastAnswerCount": "{count, plural, =0{No answers} =1{1 answer} other{{count} answers}}",
   "@resetPastAnswerCount": {"placeholders": {"count": {"type": "int"}}},
-  "resetPastScreenTitle": "Past reset",
-  "resetPastReadOnly": "Read-only: this is how you answered then. Your current reset is separate.",
-  "resetPastLeftOpen": "{count, plural, =1{1 question was left open.} other{{count} questions were left open.}}",
-  "@resetPastLeftOpen": {"placeholders": {"count": {"type": "int"}}},
-  "resetPastEmpty": "Nothing was written in this reset.",
-  "resetPastMissing": "This reset isn't available any more.",
 
   "resetNewTitle": "Start a new reset",
   "resetNewBody": "Want to go through it again? Start fresh: this reset stays readable under Past resets.",

@@ -27,6 +27,10 @@ abstract class ReminderScheduler {
 
   /// Prompt id of the notification that launched the app, once.
   Future<String?> takeLaunchPayload();
+
+  /// The notification channel's name and description as shown in the
+  /// system settings (Android), in the user's language. Set by the UI.
+  void setChannelText({required String name, required String description});
 }
 
 bool _timeZoneReady = false;
@@ -51,14 +55,16 @@ Future<void> initTimeZone() async {
 /// alarms: a few minutes of drift is fine for a gentle check-in and needs no
 /// exact-alarm permission. The notification shows the prompt title only.
 class LocalReminderScheduler implements ReminderScheduler {
-  LocalReminderScheduler({
-    this.channelName = 'Check-in reminders',
-    this.channelDescription =
-        'Optional daytime check-ins from your Cartharise reset.',
-  });
+  /// Localized by the UI through [setChannelText] before anything is
+  /// scheduled; the (untranslated) app name is only a fallback.
+  String channelName = 'Cartharise';
+  String channelDescription = '';
 
-  final String channelName;
-  final String channelDescription;
+  @override
+  void setChannelText({required String name, required String description}) {
+    channelName = name;
+    channelDescription = description;
+  }
 
   final _plugin = FlutterLocalNotificationsPlugin();
   final _taps = StreamController<String>.broadcast();

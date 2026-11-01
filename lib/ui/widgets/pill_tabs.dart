@@ -13,7 +13,8 @@ class PillTab<T> {
 /// A segmented pill control (the board's "Week · Month · Year"): the
 /// selected segment is a filled pill. Labels wrap instead of clipping at
 /// large text sizes. Selection is announced, not shown by colour alone
-/// (the selected pill is also bold and filled).
+/// (the selected pill is also bold and filled). Every segment is at least
+/// 48 dp tall (Android / Material tap-target guideline).
 class PillTabs<T> extends StatelessWidget {
   const PillTabs({
     super.key,
@@ -86,7 +87,9 @@ class _Segment extends StatelessWidget {
           onTap: onTap,
           customBorder: const StadiumBorder(),
           child: ConstrainedBox(
-            constraints: const BoxConstraints(minHeight: 44),
+            constraints: const BoxConstraints(
+              minHeight: kMinInteractiveDimension,
+            ),
             child: Padding(
               padding: const EdgeInsetsDirectional.symmetric(
                 horizontal: 10,

@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:cartharise/domain/app_data.dart';
 import 'package:cartharise/domain/backup.dart';
 import 'package:cartharise/l10n/app_localizations_en.dart';
-import 'package:cartharise/reminders/reminder_scheduler.dart';
+import 'package:cartharise/state/app_state.dart';
 import 'package:cartharise/ui/onboarding/onboarding_flow.dart';
 import 'package:cartharise/ui/you/app_version.dart';
 import 'package:cartharise/ui/you/appearance_screen.dart';
@@ -370,7 +370,11 @@ void main() {
       final file = h.files.shared.single;
       expect(file.filename, 'cartharise-checkins.ics');
       expect(file.mimeType, 'text/calendar');
-      expect(file.content, h.state.calendarExport());
+      expect(
+        file.content,
+        h.state.calendarExport(calendarTexts(AppLocalizationsEn())),
+      );
+      expect(file.content, contains('Cartharise check-ins'));
       expect(find.textContaining('Calendar file shared'), findsOneWidget);
     });
   });
@@ -401,9 +405,14 @@ void main() {
 
     testWidgets('storage is described honestly', (tester) async {
       await pumpCartha(tester, data: withNote('x'), home: const DataScreen());
-      expect(find.textContaining('Stored only on this device'), findsOneWidget);
+      expect(find.textContaining('Stored only on this phone'), findsOneWidget);
       expect(
         find.textContaining('not encrypted by Cartharise'),
+        findsOneWidget,
+      );
+      // Android backups are off (manifest) and iOS excludes the folder.
+      expect(
+        find.textContaining('not included in phone or cloud backups'),
         findsOneWidget,
       );
     });
@@ -494,6 +503,44 @@ void main() {
       expect(find.text('Backup restored.'), findsOneWidget);
     });
 
+    testWidgets('a restore that could not be saved is not called restored', (
+      tester,
+    ) async {
+      final h = await pumpCartha(tester, data: withNote('Old'));
+      h.files.pickResult = encodeBackup(
+        withNote('Restored'),
+        DateTime(2026, 10, 1, 12),
+      );
+      await _openHub(tester, 'you-data');
+      h.store.failWrites = true;
+      await _tap(tester, find.byKey(const ValueKey('data-import')));
+      await tester.tap(find.widgetWithText(FilledButton, 'Replace'));
+      await pumpFrames(tester);
+      expect(h.state.saveStatus, SaveStatus.failed);
+      // On screen, but not on disk: say so, never "Backup restored."
+      expect(h.state.data.journal.single.body, 'Restored');
+      expect(h.store.saved!.journal.single.body, 'Old');
+      expect(find.text('Backup restored.'), findsNothing);
+      expect(
+        find.text(
+          "The backup is open on screen, but it couldn't be saved on this "
+          'phone yet. Use Retry at the top of this screen, or export a copy.',
+        ),
+        findsOneWidget,
+      );
+      expect(find.text("Your last change couldn't be saved."), findsOneWidget);
+      // Retry makes it stick.
+      h.store.failWrites = false;
+      final retry = find.text('Retry');
+      await tester.ensureVisible(retry);
+      await pumpFrames(tester);
+      await tester.tap(retry);
+      await tester.runAsync(() => Future<void>.delayed(Duration.zero));
+      await pumpFrames(tester);
+      expect(h.state.saveStatus, SaveStatus.saved);
+      expect(h.store.saved!.journal.single.body, 'Restored');
+    });
+
     testWidgets('a cancelled file picker changes nothing', (tester) async {
       final h = await pumpCartha(
         tester,
@@ -528,6 +575,53 @@ void main() {
       expect(h.store.raw, isNull);
       expect(h.state.data.journal, isEmpty);
       expect(h.reminders.cancelCount, greaterThan(0));
+      // Export and import copies are erased too (share sheet, file picker).
+      expect(h.files.clearCount, 1);
+    });
+
+    testWidgets('delete all clears export copies even after an export', (
+      tester,
+    ) async {
+      final h = await pumpCartha(
+        tester,
+        data: withNote('Exported then deleted'),
+        home: const DataScreen(),
+      );
+      await _tap(tester, find.byKey(const ValueKey('data-export')));
+      expect(h.files.shared, hasLength(1));
+      expect(h.files.clearCount, 0);
+      await _tap(tester, find.byKey(const ValueKey('data-delete')));
+      await tester.tap(find.widgetWithText(FilledButton, 'Continue'));
+      await pumpFrames(tester);
+      await tester.tap(find.widgetWithText(FilledButton, 'Delete everything'));
+      await pumpFrames(tester);
+      expect(h.files.clearCount, 1);
+      expect(h.store.raw, isNull);
+    });
+
+    testWidgets('a copy that could not be removed is reported honestly', (
+      tester,
+    ) async {
+      final h = await pumpCartha(
+        tester,
+        data: withNote('Gone soon'),
+        home: const DataScreen(),
+      );
+      h.files.failClear = true;
+      await _tap(tester, find.byKey(const ValueKey('data-delete')));
+      await tester.tap(find.widgetWithText(FilledButton, 'Continue'));
+      await pumpFrames(tester);
+      await tester.tap(find.widgetWithText(FilledButton, 'Delete everything'));
+      await pumpFrames(tester);
+      // The saved data is still deleted, and the leftover copy is named.
+      expect(h.store.raw, isNull);
+      expect(
+        find.textContaining(
+          "a temporary copy of an earlier export or import "
+          "couldn't be removed",
+        ),
+        findsOneWidget,
+      );
     });
 
     testWidgets('a failed delete is reported; data stays', (tester) async {

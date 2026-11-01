@@ -991,16 +991,14 @@ class _PrivacyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
-    final state = context.read<AppState>();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         SectionCard(
           title: l.onboardingPrivacyStorageHeading,
           icon: Icons.phone_android_outlined,
-          child: Text(
-            state.storageDescription,
-            key: const ValueKey('onboarding-storage'),
+          child: const StorageTransparencyText(
+            key: ValueKey('onboarding-storage'),
           ),
         ),
         const SizedBox(height: 16),

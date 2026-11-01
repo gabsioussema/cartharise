@@ -24,6 +24,25 @@ class IcsCheckin {
   final int minute;
 }
 
+/// The words the user sees in their calendar app, in their language (built
+/// by the UI from ARB strings; this file stays pure Dart).
+class CalendarTexts {
+  const CalendarTexts({
+    required this.calendarName,
+    required this.eventTitle,
+    required this.description,
+  });
+
+  /// Name of the imported calendar.
+  final String calendarName;
+
+  /// Event title for the check-in whose prompt is titled `promptTitle`.
+  final String Function(String promptTitle) eventTitle;
+
+  /// Event notes (the same for every check-in; never the user's words).
+  final String description;
+}
+
 const String kIcsMimeType = 'text/calendar';
 const String kIcsFileName = 'cartharise-checkins.ics';
 
@@ -32,12 +51,8 @@ const String kIcsFileName = 'cartharise-checkins.ics';
 String buildCheckinCalendar({
   required List<IcsCheckin> checkins,
   required DateTime now,
+  required CalendarTexts texts,
   int days = 30,
-  String calendarName = 'Cartharise check-ins',
-  String summaryPrefix = 'Cartharise check-in: ',
-  String description =
-      'A short daytime pause from your Cartharise reset. Open the app when it '
-      'suits you; every check-in is optional.',
 }) {
   final local = now.toLocal();
   final first = DateTime(local.year, local.month, local.day + 1);
@@ -48,7 +63,7 @@ String buildCheckinCalendar({
     'PRODID:-//Cartharise//Check-ins 1.0//EN',
     'CALSCALE:GREGORIAN',
     'METHOD:PUBLISH',
-    'X-WR-CALNAME:${escapeIcsText(calendarName)}',
+    'X-WR-CALNAME:${escapeIcsText(texts.calendarName)}',
   ];
   for (final c in checkins) {
     final start = DateTime(
@@ -65,8 +80,8 @@ String buildCheckinCalendar({
       'DTSTART:${_floating(start)}',
       'DURATION:PT10M',
       'RRULE:FREQ=DAILY;COUNT=$days',
-      'SUMMARY:${escapeIcsText('$summaryPrefix${c.title}')}',
-      'DESCRIPTION:${escapeIcsText(description)}',
+      'SUMMARY:${escapeIcsText(texts.eventTitle(c.title))}',
+      'DESCRIPTION:${escapeIcsText(texts.description)}',
       'TRANSP:TRANSPARENT',
       'END:VEVENT',
     ]);

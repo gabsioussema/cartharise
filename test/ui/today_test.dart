@@ -10,6 +10,7 @@ import 'package:cartharise/ui/awakening/awakening_screen.dart';
 import 'package:cartharise/ui/compass/compass_tab.dart';
 import 'package:cartharise/ui/journal/journal_entry_screen.dart';
 import 'package:cartharise/ui/journal/review_screen.dart';
+import 'package:cartharise/ui/missions/missions_logic.dart';
 import 'package:cartharise/ui/missions/path_day_screen.dart';
 import 'package:cartharise/ui/nav.dart';
 import 'package:cartharise/ui/reset/guided_prompt_screen.dart';
@@ -45,51 +46,49 @@ const _month = 'Write and publish four short essays.';
 
 /// Three morning answers, resume point morning.04, three quests (one daily
 /// quest already done today), a vision and month project, path day 3.
-AppData inProgressData({String? name = 'Sam'}) => onboardedData(name: name)
-    .copyWith(
-      journeys: [
-        Journey(
-          id: 'journey_1',
-          startedAt: _at,
-          activePromptId: 'morning.04',
-          answers: {
-            for (var i = 1; i <= 3; i++)
-              'morning.${_two(i)}': _answer('morning.${_two(i)}'),
-          },
-        ),
-      ],
-      currentJourneyId: () => 'journey_1',
-      lessonsRead: {'lesson.01'},
-      quests: [
-        Quest(
-          id: 'q1',
-          title: _walk,
-          createdAt: _at,
-          recurrence: QuestRecurrence.daily,
-          completedOn: {dateKey(kTestNow)},
-          source: QuestSource.dailyLever,
-        ),
-        Quest(id: 'q2', title: _page, createdAt: _at),
-        Quest(
-          id: 'q3',
-          title: _phone,
-          createdAt: _at,
-          recurrence: QuestRecurrence.daily,
-        ),
-      ],
-      compass: LifeCompass(
-        vision: _vision,
-        monthProject: _month,
-        updatedAt: _at,
-      ),
-      pathAnswers: {
-        3: PathAnswer(
-          day: 3,
-          body: 'Noticed I reach for my phone first thing.',
-          updatedAt: _at,
-        ),
+AppData inProgressData({
+  String? name = 'Sam',
+}) => onboardedData(name: name).copyWith(
+  journeys: [
+    Journey(
+      id: 'journey_1',
+      startedAt: _at,
+      activePromptId: 'morning.04',
+      answers: {
+        for (var i = 1; i <= 3; i++)
+          'morning.${_two(i)}': _answer('morning.${_two(i)}'),
       },
-    );
+    ),
+  ],
+  currentJourneyId: () => 'journey_1',
+  lessonsRead: {'lesson.01'},
+  quests: [
+    Quest(
+      id: 'q1',
+      title: _walk,
+      createdAt: _at,
+      recurrence: QuestRecurrence.daily,
+      completedOn: {dateKey(kTestNow)},
+      source: QuestSource.dailyLever,
+    ),
+    // Planned for today, so it is in Today's focus (as in Missions).
+    Quest(id: 'q2', title: _page, createdAt: _at, dueDate: dateKey(kTestNow)),
+    Quest(
+      id: 'q3',
+      title: _phone,
+      createdAt: _at,
+      recurrence: QuestRecurrence.daily,
+    ),
+  ],
+  compass: LifeCompass(vision: _vision, monthProject: _month, updatedAt: _at),
+  pathAnswers: {
+    3: PathAnswer(
+      day: 3,
+      body: 'Noticed I reach for my phone first thing.',
+      updatedAt: _at,
+    ),
+  },
+);
 
 /// A completed reset (every core prompt answered), a full Compass, quests
 /// and twelve days of the thirty-day path.
@@ -542,7 +541,8 @@ void main() {
         for (final t in [_walk, _page, _phone]) {
           expect(find.text(t), findsOneWidget);
         }
-        expect(find.text('Daily'), findsNWidgets(2));
+        // The same label as Missions.
+        expect(find.text('Every day'), findsNWidgets(2));
         expect(find.text('No quests for today'), findsNothing);
 
         // Your journey, in words.
@@ -630,7 +630,12 @@ void main() {
         data: base.copyWith(
           quests: [
             for (var i = 1; i <= 7; i++)
-              Quest(id: 'q$i', title: 'Quest $i', createdAt: _at),
+              Quest(
+                id: 'q$i',
+                title: 'Quest $i',
+                createdAt: _at,
+                dueDate: dateKey(kTestNow),
+              ),
           ],
         ),
       );
@@ -639,6 +644,70 @@ void main() {
       await _tapVisible(tester, find.text('See all 7 quests'));
       expect(h.shell.tab, AppTab.compass);
       expect(h.shell.compassSection.value, CompassSection.missions);
+    });
+
+    testWidgets("Today's focus and Missions agree on what is for today", (
+      tester,
+    ) async {
+      final base = inProgressData();
+      final h = await _pumpToday(
+        tester,
+        data: base.copyWith(
+          quests: [
+            ...base.quests,
+            Quest(id: 'anytime', title: 'Anytime task', createdAt: _at),
+            Quest(
+              id: 'later',
+              title: 'Plan next week',
+              createdAt: _at,
+              dueDate: '2026-11-20',
+            ),
+            Quest(
+              id: 'overdue',
+              title: 'Call the bank',
+              createdAt: _at,
+              dueDate: '2026-11-01',
+            ),
+          ],
+        ),
+      );
+      final sections = h.state.missionSections();
+      expect(sections.later.map((q) => q.title), [
+        'Anytime task',
+        'Plan next week',
+      ]);
+      // Exactly Missions' Today section, nothing from "Anytime & upcoming".
+      expect(
+        h.state.todayFocus().map((q) => q.id).toSet(),
+        sections.today.map((q) => q.id).toSet(),
+      );
+      for (final q in sections.today) {
+        expect(find.text(q.title), findsOneWidget, reason: q.title);
+      }
+      expect(find.text('Call the bank'), findsOneWidget);
+      expect(find.text('Anytime task'), findsNothing);
+      expect(find.text('Plan next week'), findsNothing);
+      // The other quests are counted, with a way to them.
+      await _tapVisible(tester, find.text('2 more for anytime or later'));
+      expect(h.shell.tab, AppTab.compass);
+      expect(h.shell.compassSection.value, CompassSection.missions);
+    });
+
+    testWidgets('a planned one-off ticked on Today stays listed, ticked', (
+      tester,
+    ) async {
+      final semantics = tester.ensureSemantics();
+      final h = await _pumpToday(tester, data: inProgressData());
+      await _tapVisible(tester, find.text(_page));
+      await tester.runAsync(() => Future<void>.delayed(Duration.zero));
+      await pumpFrames(tester, count: 2);
+      expect(h.state.missionSections().done.map((q) => q.id), ['q2']);
+      expect(h.state.todayFocus().map((q) => q.id), contains('q2'));
+      expect(
+        tester.getSemantics(find.bySemanticsLabel("Mark '$_page' done")),
+        isSemantics(isChecked: true, hasCheckedState: true, hasTapAction: true),
+      );
+      semantics.dispose();
     });
 
     testWidgets('"Add a quest" opens Missions', (tester) async {

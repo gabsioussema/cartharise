@@ -14,6 +14,7 @@ import '../services/ics_export.dart';
 import 'state_types.dart';
 
 export '../reminders/reminder_scheduler.dart' show ReminderPermission;
+export '../services/ics_export.dart' show CalendarTexts;
 export 'state_types.dart';
 
 /// Most Compass versions kept (newest first).
@@ -77,13 +78,6 @@ class AppState extends ChangeNotifier {
 
   /// Today's local date key (`yyyy-MM-dd`).
   String get today => dateKey(now());
-
-  /// Where the data lives — honest: on this device, not encrypted by
-  /// Cartharise, not synced (F-043).
-  String get storageDescription =>
-      'Stored only on this device (${_store.locationDescription}). '
-      'It is not encrypted by Cartharise, not synced and not sent anywhere. '
-      'Removing the app or using "Delete all data" erases it.';
 
   Future<void> load() async {
     if (_loading) return;
@@ -839,10 +833,22 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// The 30-day `.ics` of the enabled check-ins (prompt titles only).
-  String calendarExport() {
+  /// Names the Android notification channel in the user's language (the
+  /// UI calls this whenever its localizations change).
+  void localizeReminders({
+    required String channelName,
+    required String channelDescription,
+  }) => _scheduler.setChannelText(
+    name: channelName,
+    description: channelDescription,
+  );
+
+  /// The 30-day `.ics` of the enabled check-ins (prompt titles only), worded
+  /// with [texts] (localized by the UI).
+  String calendarExport(CalendarTexts texts) {
     final titles = {for (final p in _content.prompts) p.id: p.title};
     return buildCheckinCalendar(
+      texts: texts,
       now: now(),
       checkins: [
         for (final r in reminders)

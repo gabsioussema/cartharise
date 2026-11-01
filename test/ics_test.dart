@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:cartharise/l10n/app_localizations_en.dart';
 import 'package:cartharise/services/ics_export.dart';
 import 'package:cartharise/state/app_state.dart';
+import 'package:cartharise/ui/you/reminders_screen.dart' show calendarTexts;
 import 'package:flutter_test/flutter_test.dart';
 
 import 'support/fake_content.dart';
@@ -18,13 +20,20 @@ const _checkins = [
   IcsCheckin(promptId: 'daytime.06', title: 'Energy', hour: 21, minute: 0),
 ];
 
+/// The English calendar wording, exactly as the app builds it from ARB.
+final _texts = calendarTexts(AppLocalizationsEn());
+
 /// Unfolds RFC 5545 content lines.
 List<String> _unfold(String ics) =>
     ics.replaceAll('\r\n ', '').split('\r\n')..removeLast();
 
 void main() {
   final now = DateTime(2026, 11, 3, 9, 30);
-  final ics = buildCheckinCalendar(checkins: _checkins, now: now);
+  final ics = buildCheckinCalendar(
+    checkins: _checkins,
+    now: now,
+    texts: _texts,
+  );
   final lines = _unfold(ics);
 
   test('a calendar with six daily events × 30, starting tomorrow', () {
@@ -60,6 +69,7 @@ void main() {
       buildCheckinCalendar(
         checkins: _checkins,
         now: now.add(const Duration(days: 9)),
+        texts: _texts,
       ),
     );
     expect([
@@ -70,6 +80,25 @@ void main() {
 
   test('summary names the check-in', () {
     expect(lines, contains('SUMMARY:Cartharise check-in: Avoidance'));
+  });
+
+  test('calendar name and notes come from the localized texts', () {
+    expect(lines, contains('X-WR-CALNAME:Cartharise check-ins'));
+    final custom = _unfold(
+      buildCheckinCalendar(
+        checkins: _checkins.take(1).toList(),
+        now: now,
+        texts: CalendarTexts(
+          calendarName: 'Mes pauses',
+          eventTitle: (t) => 'Pause : $t',
+          description: 'Facultatif.',
+        ),
+      ),
+    );
+    expect(custom, contains('X-WR-CALNAME:Mes pauses'));
+    expect(custom, contains('SUMMARY:Pause : Avoidance'));
+    expect(custom, contains('DESCRIPTION:Facultatif.'));
+    expect(custom.join('\n'), isNot(contains('Cartharise check-in')));
   });
 
   test('CRLF line endings only, every physical line ≤ 75 octets', () {
@@ -113,6 +142,7 @@ void main() {
         ),
       ],
       now: now,
+      texts: _texts,
     );
     expect(
       _unfold(odd),
@@ -132,7 +162,7 @@ void main() {
       await state.load();
       await state.saveAnswer('daytime.01', 'SECRET-ANSWER private words');
       await state.addJournalEntry(body: 'SECRET-JOURNAL');
-      final export = state.calendarExport();
+      final export = state.calendarExport(_texts);
       expect(export, isNot(contains('SECRET')));
       expect(
         _unfold(export),

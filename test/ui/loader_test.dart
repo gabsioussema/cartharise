@@ -21,7 +21,8 @@ bool _animating(WidgetTester tester) =>
 
 void main() {
   group('loader keyframes (loader_reference.svg)', () {
-    test('lines: hidden, drawn 10→65 %, held to 85 %, undrawn to 100 %', () {
+    test('dash offset: hidden, 1500→0 at 10→65 %, held, back by 100 %', () {
+      expect(kLoaderDashLength, 1500);
       expect(loaderFrameAt(0).draw, 0);
       expect(loaderFrameAt(0.0999).draw, 0);
       expect(loaderFrameAt(0.375).draw, closeTo(0.5, 1e-6));
@@ -31,6 +32,62 @@ void main() {
       expect(loaderFrameAt(0.99999).draw, closeTo(0, 1e-3));
       // Ease-in-out: slow start.
       expect(loaderFrameAt(0.15).draw, lessThan((0.15 - 0.10) / 0.55));
+    });
+
+    // The SVG's dash (1500) is far longer than any emblem line (≈ 63–293),
+    // so every line draws at the same absolute speed: the trunk finishes
+    // first, the whole emblem is complete by ≈ 27 % of the cycle and it only
+    // retracts in the last ≈ 4.5 %.
+    group('drawn length per line (stroke-dasharray 1500)', () {
+      final lengths = [
+        for (final p in [...EmblemGeometry.lines, EmblemGeometry.trunk])
+          p.computeMetrics().first.length,
+      ];
+      final longest = lengths.reduce((a, b) => a > b ? a : b);
+      final trunk = lengths.last;
+
+      bool full(double t) =>
+          lengths.every((l) => loaderFrameAt(t).drawnLength(l) == l);
+
+      test('line lengths are the reference ones', () {
+        expect(longest, closeTo(293, 3));
+        expect(trunk, closeTo(63, 0.5));
+        expect(lengths.every((l) => l < kLoaderDashLength), isTrue);
+      });
+
+      test('the trunk is drawn first, by ≈ 18 %', () {
+        final early = loaderFrameAt(0.18);
+        expect(early.drawnLength(trunk), trunk);
+        expect(early.drawnLength(longest), lessThan(longest));
+        expect(loaderFrameAt(0.16).drawnLength(trunk), lessThan(trunk));
+      });
+
+      test('the full emblem by ≈ 27 % and still at 37.5 %', () {
+        expect(full(0.25), isFalse);
+        expect(full(0.28), isTrue);
+        expect(full(0.30), isTrue);
+        expect(full(0.375), isTrue);
+        expect(full(0.80), isTrue);
+      });
+
+      test('it stays complete until ≈ 95.5 %, then retracts', () {
+        expect(full(0.93), isTrue);
+        expect(full(0.95), isTrue);
+        expect(full(0.96), isFalse);
+        expect(loaderFrameAt(0.999).drawnLength(longest), lessThan(5));
+      });
+
+      test('every line grows at the same speed', () {
+        final f = loaderFrameAt(0.15);
+        final shown = f.drawnLength(longest);
+        expect(shown, greaterThan(0));
+        expect(shown, lessThan(trunk));
+        expect(f.drawnLength(trunk), shown);
+        expect(
+          f.drawnLength(longest),
+          closeTo(kLoaderDashLength * f.draw, 1e-9),
+        );
+      });
     });
 
     test('line opacity .3 → 1 → .3', () {

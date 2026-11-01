@@ -22,7 +22,7 @@
   "onboardingStepsTitle": "Improve Step by Step",
   "onboardingStepsBody": "Small daily actions, looked at each week and adjusted as you learn. No streaks, no scores.",
 
-  "onboardingLimitsTitle": "What This Is, and Isn't",
+  "onboardingLimitsTitle": "What this is, and isn't",
   "onboardingLimitsIntro": "Before you begin, a few honest words.",
   "onboardingLimitsClarityTitle": "One day can bring clarity",
   "onboardingLimitsClarityBody": "A focused day of questions can show you where you stand and what you would like instead.",
@@ -38,7 +38,7 @@
   "onboardingAdultConfirmHelp": "Cartharise is made for adults.",
   "onboardingAdultRequired": "Confirm you're 18 or older to continue.",
 
-  "onboardingCreditTitle": "Inspired By",
+  "onboardingCreditTitle": "Inspired by",
   "onboardingCreditIntro": "Cartharise is built around the ideas of this article:",
   "onboardingCreditByline": "by {author} · {date}",
   "@onboardingCreditByline": {"placeholders": {"author": {"type": "String"}, "date": {"type": "String"}}},
@@ -46,20 +46,20 @@
   "onboardingCreditNewsletter": "Read it in the author's newsletter",
   "onboardingCreditNoNeed": "You don't need to read it first. Every idea is explained in plain words as you go.",
 
-  "onboardingPaceTitle": "Choose Your Pace",
+  "onboardingPaceTitle": "Choose your pace",
   "onboardingPaceIntro": "You can change this later in the You tab.",
   "onboardingPaceOneDayTitle": "One day",
   "onboardingPaceOneDayBody": "Do the morning, daytime and evening reflections within a single day.",
-  "onboardingPaceFlexibleTitle": "At my own pace",
+  "onboardingPaceFlexibleTitle": "Flexible",
   "onboardingPaceFlexibleBody": "Spread the reflections over days or weeks and pick up where you left off.",
   "onboardingPaceNoLock": "Either way, nothing ever locks or expires. Every part stays open.",
 
-  "onboardingNameTitle": "What Should We Call You?",
+  "onboardingNameTitle": "What should we call you?",
   "onboardingNameIntro": "Optional, never shared. It stays on this phone and is only used to greet you.",
   "onboardingNameLabel": "Name (optional)",
   "onboardingNameHelp": "Leave it empty and Cartharise will call you Traveler.",
 
-  "onboardingPrivacyTitle": "Your Words Stay Yours",
+  "onboardingPrivacyTitle": "Your words stay yours",
   "onboardingPrivacyStorageHeading": "Where your writing lives",
   "onboardingPrivacyNoAccount": "No account, no ads, no analytics. Nothing you write is sent anywhere.",
   "onboardingPrivacyControl": "You can export or delete everything at any time in You, under Your data."

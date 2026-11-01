@@ -1,14 +1,23 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     <!-- Opt-in daily check-in reminders: local notifications only. Inexact
          alarms, so no SCHEDULE_EXACT_ALARM permission; rescheduled after a
          reboot or an app update. The app itself makes no network calls. -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+    <!-- Privacy: the user's writing stays on this phone. No Auto Backup to
+         the cloud and no device-to-device transfer (Android 12+ rules), so
+         "Delete all data" or removing the app really erases it. Moving data
+         is the user's own export (You › Your data). -->
     <application
         android:label="Cartharise"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:allowBackup="false"
+        android:fullBackupContent="@xml/full_backup_content"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        tools:targetApi="31">
         <activity
             android:name=".MainActivity"
             android:exported="true"
