@@ -2,19 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../domain/app_data.dart';
+import '../../domain/persona.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
 import '../campaign/campaign_ops.dart';
 import '../journal/journal_kit.dart';
 import '../nav.dart';
+import '../persona/avatar_view.dart';
+import '../persona/persona_ops.dart';
 import '../theme/cartha_theme.dart';
 import '../widgets/widgets.dart';
 import 'app_version.dart';
 import 'appearance_screen.dart';
 import 'font_licenses.dart';
 
-/// The You hub (qarta settings pattern, sectioned): profile (optional name,
-/// pace), then Credit (Inspiration), Settings (Reminders, Appearance, Your
+/// The You hub (qarta settings pattern, sectioned): profile (avatar or
+/// emblem, optional name and motto; pace), then Credit (Inspiration), Settings (Reminders, Appearance, Your
 /// data), Care (Support & safety) and About (version, licences, replay the
 /// welcome). Detail pages open full screen.
 class YouTab extends StatelessWidget {
@@ -88,32 +91,10 @@ class YouTab extends StatelessWidget {
               subtitle: l.youSubtitle,
               padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 16),
             ),
-            HeroCard(
-              key: const ValueKey('you-profile'),
-              eyebrow: l.youProfileEyebrow,
-              title: name ?? l.youNoName,
-              trailing: CarthaEmblem(
-                size: 48,
-                color: p.heroAccent,
-                excludeFromSemantics: true,
-              ),
-              onTap: () => _editName(context),
-              semanticLabel: l.youEditName,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Text(
-                      l.youProfileBody,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: p.onHeroMuted,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Icon(Icons.edit_outlined, color: p.heroAccent, size: 20),
-                ],
-              ),
+            _ProfileCard(
+              name: name,
+              persona: state.persona,
+              onEditName: () => _editName(context),
             ),
             const SizedBox(height: 12),
             SectionCard(
@@ -244,6 +225,138 @@ class YouTab extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// The profile hero: the avatar (or the emblem before one exists), the
+/// optional name (tap to edit) and motto, and "Create your avatar" / "Edit
+/// your avatar". Two separate targets, never a button inside a button.
+class _ProfileCard extends StatelessWidget {
+  const _ProfileCard({
+    required this.name,
+    required this.persona,
+    required this.onEditName,
+  });
+
+  final String? name;
+  final Persona? persona;
+  final VoidCallback onEditName;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final motto = persona?.motto ?? '';
+    void openBuilder() => AppNav.openPersonaBuilder(context);
+    return HeroCard(
+      key: const ValueKey('you-profile'),
+      eyebrow: l.youProfileEyebrow,
+      child: OnHeroTheme(
+        child: Builder(
+          builder: (context) {
+            final p = CarthaPalette.of(context);
+            final theme = Theme.of(context);
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  children: [
+                    // The portrait opens the builder for a tap; screen
+                    // readers get the image here and the button below.
+                    Semantics(
+                      container: true,
+                      image: true,
+                      label: persona == null
+                          ? l.personaNoAvatar
+                          : l.personaAvatarLabel,
+                      excludeSemantics: true,
+                      child: InkWell(
+                        key: const ValueKey('you-portrait'),
+                        customBorder: const CircleBorder(),
+                        onTap: openBuilder,
+                        child: AvatarView(
+                          avatar: persona?.avatar,
+                          size: 64,
+                          excludeFromSemantics: true,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: Semantics(
+                        container: true,
+                        button: true,
+                        label: l.youEditName,
+                        child: InkWell(
+                          key: const ValueKey('you-edit-name'),
+                          borderRadius: BorderRadius.circular(
+                            CarthaTheme.radiusSmall - 4,
+                          ),
+                          onTap: onEditName,
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(
+                              minHeight: kMinInteractiveDimension,
+                            ),
+                            child: Row(
+                              children: [
+                                Flexible(
+                                  child: Text(
+                                    name ?? l.youNoName,
+                                    style: theme.textTheme.headlineSmall
+                                        ?.copyWith(color: p.onHero),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Icon(
+                                  Icons.edit_outlined,
+                                  color: p.heroAccent,
+                                  size: 20,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                if (motto.trim().isNotEmpty) ...[
+                  const SizedBox(height: 10),
+                  Text(
+                    l.personaBuilderMottoQuoted(motto),
+                    key: const ValueKey('you-motto'),
+                    style: theme.textTheme.bodyLarge?.copyWith(color: p.onHero),
+                  ),
+                ],
+                const SizedBox(height: 10),
+                Text(
+                  l.personaBuilderProfileHint,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: p.onHeroMuted,
+                  ),
+                ),
+                const SizedBox(height: 14),
+                Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: persona == null
+                      ? PrimaryButton(
+                          key: const ValueKey('you-avatar'),
+                          label: l.personaCreate,
+                          icon: Icons.face_outlined,
+                          onPressed: openBuilder,
+                        )
+                      : SecondaryButton(
+                          key: const ValueKey('you-avatar'),
+                          label: l.personaEdit,
+                          icon: Icons.edit_outlined,
+                          onPressed: openBuilder,
+                        ),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
