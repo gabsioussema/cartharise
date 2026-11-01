@@ -1782,6 +1782,262 @@ class AppLocalizationsEn extends AppLocalizations {
       'Export or delete anytime in You › Your data.';
 
   @override
+  String get personaFeatureTitle => 'Your strategist';
+
+  @override
+  String get personaAvatarLabel => 'Your avatar';
+
+  @override
+  String get personaNoAvatar => 'No avatar yet';
+
+  @override
+  String get personaCreate => 'Create your avatar';
+
+  @override
+  String get personaEdit => 'Edit your avatar';
+
+  @override
+  String get personaSilhouette => 'Silhouette';
+
+  @override
+  String get personaLocked => 'Locked';
+
+  @override
+  String personaUnlockStop(String place) {
+    return 'Reach $place';
+  }
+
+  @override
+  String personaUnlockAchievement(String achievement) {
+    return 'Earn $achievement';
+  }
+
+  @override
+  String personaUnlocked(String item) {
+    return 'New for your avatar: $item';
+  }
+
+  @override
+  String get personaCategorySkin => 'Skin';
+
+  @override
+  String get personaCategoryFace => 'Face';
+
+  @override
+  String get personaCategoryHair => 'Hair';
+
+  @override
+  String get personaCategoryHairColor => 'Hair colour';
+
+  @override
+  String get personaCategoryFacialHair => 'Facial hair';
+
+  @override
+  String get personaCategoryEyewear => 'Glasses';
+
+  @override
+  String get personaCategoryMark => 'Marks';
+
+  @override
+  String get personaCategoryExpression => 'Expression';
+
+  @override
+  String get personaCategoryHeadwear => 'Headwear';
+
+  @override
+  String get personaCategoryGarment => 'Clothing';
+
+  @override
+  String get personaCategoryGarmentColor => 'Colour';
+
+  @override
+  String get personaCategoryAccessory => 'Carry';
+
+  @override
+  String get personaCategorySigil => 'Banner';
+
+  @override
+  String personaSkinTone(String value) {
+    String _temp0 = intl.Intl.selectLogic(value, {
+      'sand': 'Sand',
+      'honey': 'Honey',
+      'clay': 'Clay',
+      'copper': 'Copper',
+      'chestnut': 'Chestnut',
+      'walnut': 'Walnut',
+      'umber': 'Umber',
+      'ebony': 'Ebony',
+      'other': '—',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String personaFace(String value) {
+    String _temp0 = intl.Intl.selectLogic(value, {
+      'oval': 'Oval',
+      'round': 'Round',
+      'square': 'Square',
+      'long': 'Long',
+      'other': '—',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String personaHair(String value) {
+    String _temp0 = intl.Intl.selectLogic(value, {
+      'bald': 'Bald',
+      'buzz': 'Buzz cut',
+      'short': 'Short',
+      'wavy': 'Wavy',
+      'curly': 'Curly',
+      'coily': 'Coily',
+      'afro': 'Afro',
+      'locs': 'Locs',
+      'braids': 'Braids',
+      'bun': 'Bun',
+      'long': 'Long',
+      'ponytail': 'Ponytail',
+      'other': '—',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String personaHairColor(String value) {
+    String _temp0 = intl.Intl.selectLogic(value, {
+      'black': 'Black',
+      'darkBrown': 'Dark brown',
+      'brown': 'Brown',
+      'auburn': 'Auburn',
+      'copper': 'Copper',
+      'blonde': 'Blonde',
+      'grey': 'Grey',
+      'white': 'White',
+      'other': '—',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String personaFacialHair(String value) {
+    String _temp0 = intl.Intl.selectLogic(value, {
+      'none': 'None',
+      'stubble': 'Stubble',
+      'moustache': 'Moustache',
+      'beard': 'Beard',
+      'fullBeard': 'Full beard',
+      'other': '—',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String personaEyewear(String value) {
+    String _temp0 = intl.Intl.selectLogic(value, {
+      'none': 'None',
+      'round': 'Round glasses',
+      'square': 'Square glasses',
+      'other': '—',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String personaMark(String value) {
+    String _temp0 = intl.Intl.selectLogic(value, {
+      'none': 'None',
+      'freckles': 'Freckles',
+      'beautyMark': 'Beauty mark',
+      'vitiligo': 'Vitiligo',
+      'other': '—',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String personaExpression(String value) {
+    String _temp0 = intl.Intl.selectLogic(value, {
+      'calm': 'Calm',
+      'smile': 'Smile',
+      'focused': 'Focused',
+      'other': '—',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String personaHeadwear(String value) {
+    String _temp0 = intl.Intl.selectLogic(value, {
+      'none': 'None',
+      'headscarf': 'Headscarf',
+      'turban': 'Turban',
+      'hood': 'Hood',
+      'circlet': 'Circlet',
+      'laurel': 'Laurel wreath',
+      'other': '—',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String personaGarment(String value) {
+    String _temp0 = intl.Intl.selectLogic(value, {
+      'tunic': 'Tunic',
+      'cloak': 'Cloak',
+      'robe': 'Robe',
+      'wrap': 'Wrap',
+      'other': '—',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String personaGarmentColor(String value) {
+    String _temp0 = intl.Intl.selectLogic(value, {
+      'forest': 'Forest',
+      'olive': 'Olive',
+      'sand': 'Sand',
+      'ivory': 'Ivory',
+      'sage': 'Sage',
+      'indigo': 'Indigo',
+      'crimson': 'Crimson',
+      'bronze': 'Bronze',
+      'other': '—',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String personaAccessory(String value) {
+    String _temp0 = intl.Intl.selectLogic(value, {
+      'none': 'None',
+      'satchel': 'Satchel',
+      'scroll': 'Scroll',
+      'compass': 'Compass',
+      'amulet': 'Amulet of Tanit',
+      'other': '—',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String personaSigil(String value) {
+    String _temp0 = intl.Intl.selectLogic(value, {
+      'none': 'None',
+      'elephant': 'Elephant',
+      'sun': 'Rising sun',
+      'path': 'Path',
+      'compass': 'Compass',
+      'star': 'North star',
+      'laurel': 'Laurel',
+      'other': '—',
+    });
+    return '$_temp0';
+  }
+
+  @override
   String get resetTitle => 'The Reset';
 
   @override

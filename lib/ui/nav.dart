@@ -9,6 +9,7 @@ import 'journal/journal_tab.dart';
 import 'journal/review_screen.dart';
 import 'missions/path_day_screen.dart';
 import 'missions/project_screen.dart';
+import 'persona/persona_builder.dart';
 import 'reset/guided_prompt_screen.dart';
 import 'reset/reset_complete_screen.dart';
 import 'reset/reset_tab.dart';
@@ -107,6 +108,10 @@ abstract final class AppNav {
 
   static Future<void> openMissions(BuildContext context) =>
       openCompass(context, section: CompassSection.missions);
+
+  /// Create or edit the avatar.
+  static Future<void> openPersonaBuilder(BuildContext context) =>
+      _push<void>(context, const PersonaBuilderScreen());
 
   /// The Campaign section (the Compass when the game layer is off).
   static Future<void> openCampaign(BuildContext context) =>

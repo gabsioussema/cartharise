@@ -2998,6 +2998,222 @@ abstract class AppLocalizations {
   /// **'Export or delete anytime in You › Your data.'**
   String get onboardingPrivacyControl;
 
+  /// No description provided for @personaFeatureTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your strategist'**
+  String get personaFeatureTitle;
+
+  /// No description provided for @personaAvatarLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your avatar'**
+  String get personaAvatarLabel;
+
+  /// No description provided for @personaNoAvatar.
+  ///
+  /// In en, this message translates to:
+  /// **'No avatar yet'**
+  String get personaNoAvatar;
+
+  /// No description provided for @personaCreate.
+  ///
+  /// In en, this message translates to:
+  /// **'Create your avatar'**
+  String get personaCreate;
+
+  /// No description provided for @personaEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit your avatar'**
+  String get personaEdit;
+
+  /// No description provided for @personaSilhouette.
+  ///
+  /// In en, this message translates to:
+  /// **'Silhouette'**
+  String get personaSilhouette;
+
+  /// No description provided for @personaLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Locked'**
+  String get personaLocked;
+
+  /// No description provided for @personaUnlockStop.
+  ///
+  /// In en, this message translates to:
+  /// **'Reach {place}'**
+  String personaUnlockStop(String place);
+
+  /// No description provided for @personaUnlockAchievement.
+  ///
+  /// In en, this message translates to:
+  /// **'Earn {achievement}'**
+  String personaUnlockAchievement(String achievement);
+
+  /// No description provided for @personaUnlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'New for your avatar: {item}'**
+  String personaUnlocked(String item);
+
+  /// No description provided for @personaCategorySkin.
+  ///
+  /// In en, this message translates to:
+  /// **'Skin'**
+  String get personaCategorySkin;
+
+  /// No description provided for @personaCategoryFace.
+  ///
+  /// In en, this message translates to:
+  /// **'Face'**
+  String get personaCategoryFace;
+
+  /// No description provided for @personaCategoryHair.
+  ///
+  /// In en, this message translates to:
+  /// **'Hair'**
+  String get personaCategoryHair;
+
+  /// No description provided for @personaCategoryHairColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Hair colour'**
+  String get personaCategoryHairColor;
+
+  /// No description provided for @personaCategoryFacialHair.
+  ///
+  /// In en, this message translates to:
+  /// **'Facial hair'**
+  String get personaCategoryFacialHair;
+
+  /// No description provided for @personaCategoryEyewear.
+  ///
+  /// In en, this message translates to:
+  /// **'Glasses'**
+  String get personaCategoryEyewear;
+
+  /// No description provided for @personaCategoryMark.
+  ///
+  /// In en, this message translates to:
+  /// **'Marks'**
+  String get personaCategoryMark;
+
+  /// No description provided for @personaCategoryExpression.
+  ///
+  /// In en, this message translates to:
+  /// **'Expression'**
+  String get personaCategoryExpression;
+
+  /// No description provided for @personaCategoryHeadwear.
+  ///
+  /// In en, this message translates to:
+  /// **'Headwear'**
+  String get personaCategoryHeadwear;
+
+  /// No description provided for @personaCategoryGarment.
+  ///
+  /// In en, this message translates to:
+  /// **'Clothing'**
+  String get personaCategoryGarment;
+
+  /// No description provided for @personaCategoryGarmentColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Colour'**
+  String get personaCategoryGarmentColor;
+
+  /// No description provided for @personaCategoryAccessory.
+  ///
+  /// In en, this message translates to:
+  /// **'Carry'**
+  String get personaCategoryAccessory;
+
+  /// No description provided for @personaCategorySigil.
+  ///
+  /// In en, this message translates to:
+  /// **'Banner'**
+  String get personaCategorySigil;
+
+  /// No description provided for @personaSkinTone.
+  ///
+  /// In en, this message translates to:
+  /// **'{value, select, sand{Sand} honey{Honey} clay{Clay} copper{Copper} chestnut{Chestnut} walnut{Walnut} umber{Umber} ebony{Ebony} other{—}}'**
+  String personaSkinTone(String value);
+
+  /// No description provided for @personaFace.
+  ///
+  /// In en, this message translates to:
+  /// **'{value, select, oval{Oval} round{Round} square{Square} long{Long} other{—}}'**
+  String personaFace(String value);
+
+  /// No description provided for @personaHair.
+  ///
+  /// In en, this message translates to:
+  /// **'{value, select, bald{Bald} buzz{Buzz cut} short{Short} wavy{Wavy} curly{Curly} coily{Coily} afro{Afro} locs{Locs} braids{Braids} bun{Bun} long{Long} ponytail{Ponytail} other{—}}'**
+  String personaHair(String value);
+
+  /// No description provided for @personaHairColor.
+  ///
+  /// In en, this message translates to:
+  /// **'{value, select, black{Black} darkBrown{Dark brown} brown{Brown} auburn{Auburn} copper{Copper} blonde{Blonde} grey{Grey} white{White} other{—}}'**
+  String personaHairColor(String value);
+
+  /// No description provided for @personaFacialHair.
+  ///
+  /// In en, this message translates to:
+  /// **'{value, select, none{None} stubble{Stubble} moustache{Moustache} beard{Beard} fullBeard{Full beard} other{—}}'**
+  String personaFacialHair(String value);
+
+  /// No description provided for @personaEyewear.
+  ///
+  /// In en, this message translates to:
+  /// **'{value, select, none{None} round{Round glasses} square{Square glasses} other{—}}'**
+  String personaEyewear(String value);
+
+  /// No description provided for @personaMark.
+  ///
+  /// In en, this message translates to:
+  /// **'{value, select, none{None} freckles{Freckles} beautyMark{Beauty mark} vitiligo{Vitiligo} other{—}}'**
+  String personaMark(String value);
+
+  /// No description provided for @personaExpression.
+  ///
+  /// In en, this message translates to:
+  /// **'{value, select, calm{Calm} smile{Smile} focused{Focused} other{—}}'**
+  String personaExpression(String value);
+
+  /// No description provided for @personaHeadwear.
+  ///
+  /// In en, this message translates to:
+  /// **'{value, select, none{None} headscarf{Headscarf} turban{Turban} hood{Hood} circlet{Circlet} laurel{Laurel wreath} other{—}}'**
+  String personaHeadwear(String value);
+
+  /// No description provided for @personaGarment.
+  ///
+  /// In en, this message translates to:
+  /// **'{value, select, tunic{Tunic} cloak{Cloak} robe{Robe} wrap{Wrap} other{—}}'**
+  String personaGarment(String value);
+
+  /// No description provided for @personaGarmentColor.
+  ///
+  /// In en, this message translates to:
+  /// **'{value, select, forest{Forest} olive{Olive} sand{Sand} ivory{Ivory} sage{Sage} indigo{Indigo} crimson{Crimson} bronze{Bronze} other{—}}'**
+  String personaGarmentColor(String value);
+
+  /// No description provided for @personaAccessory.
+  ///
+  /// In en, this message translates to:
+  /// **'{value, select, none{None} satchel{Satchel} scroll{Scroll} compass{Compass} amulet{Amulet of Tanit} other{—}}'**
+  String personaAccessory(String value);
+
+  /// No description provided for @personaSigil.
+  ///
+  /// In en, this message translates to:
+  /// **'{value, select, none{None} elephant{Elephant} sun{Rising sun} path{Path} compass{Compass} star{North star} laurel{Laurel} other{—}}'**
+  String personaSigil(String value);
+
   /// No description provided for @resetTitle.
   ///
   /// In en, this message translates to:

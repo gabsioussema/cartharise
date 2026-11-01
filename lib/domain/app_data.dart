@@ -10,6 +10,7 @@ library;
 
 import 'content.dart';
 import 'local_date.dart';
+import 'persona.dart';
 
 const int kSchemaVersion = 1;
 
@@ -832,6 +833,7 @@ class AppData {
     this.reminders = const [],
     this.lessonsRead = const {},
     this.campaignLog = const [],
+    this.persona,
   });
 
   /// Null until onboarding creates it.
@@ -866,6 +868,9 @@ class AppData {
   /// The Campaign's battle log, newest first.
   final List<BattleLogEntry> campaignLog;
 
+  /// The user's avatar and motto; null until they create one.
+  final Persona? persona;
+
   static const empty = AppData();
 
   Journey? get currentJourney {
@@ -890,6 +895,7 @@ class AppData {
     List<ReminderPreference>? reminders,
     Set<String>? lessonsRead,
     List<BattleLogEntry>? campaignLog,
+    Persona? Function()? persona,
   }) => AppData(
     profile: profile != null ? profile() : this.profile,
     settings: settings ?? this.settings,
@@ -907,6 +913,7 @@ class AppData {
     reminders: reminders ?? this.reminders,
     lessonsRead: lessonsRead ?? this.lessonsRead,
     campaignLog: campaignLog ?? this.campaignLog,
+    persona: persona != null ? persona() : this.persona,
   );
 
   Map<String, Object?> toJson() => {
@@ -925,6 +932,7 @@ class AppData {
     'reminders': [for (final r in reminders) r.toJson()],
     'lessonsRead': lessonsRead.toList()..sort(),
     'campaignLog': [for (final e in campaignLog) e.toJson()],
+    'persona': persona?.toJson(),
   };
 
   factory AppData.fromJson(Object? json) {
@@ -983,6 +991,7 @@ class AppData {
         for (final e in _list(j['campaignLog'], 'campaignLog'))
           BattleLogEntry.fromJson(e),
       ],
+      persona: j['persona'] == null ? null : Persona.fromJson(j['persona']),
     );
   }
 }
