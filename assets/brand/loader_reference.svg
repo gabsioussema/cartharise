@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+<rect width="512" height="512" rx="110" fill="#1E3328"/>
+<style>
+@keyframes draw{0%,10%{stroke-dashoffset:1500;opacity:.3}65%,85%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:1500;opacity:.3}}
+@keyframes pulse{0%,45%,100%{opacity:.25;transform:scale(.92)}70%,85%{opacity:1;transform:scale(1.13)}}
+.lines path{stroke-dasharray:1500;stroke-dashoffset:1500;animation:draw 3.4s ease-in-out infinite}
+.spark{transform-box:fill-box;transform-origin:center;animation:pulse 3.4s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){.lines path,.spark{animation:none;stroke-dashoffset:0;opacity:1;transform:none}}
+</style>
+<g class="lines"><g fill="none" stroke="#D4B57B" stroke-width="14" stroke-linejoin="round" stroke-linecap="round"><path d="M256 158 C238 148 218 145 198 151 L162 140 L121 188 L158 230 L181 240 L198 211 L214 205"/>
+<path d="M256 158 C274 148 294 145 314 151 L350 140 L391 188 L354 230 L331 240 L314 211 L298 205"/><path d="M212 159 L230 175 L223 205 L213 224 L237 249 L231 289 C247 282 251 263 255 245"/>
+<path d="M300 159 L282 175 L289 205 L299 224 L275 249 L281 289 C265 282 261 263 257 245"/></g><g fill="none" stroke="#D4B57B" stroke-width="13" stroke-linejoin="round" stroke-linecap="round"><path d="M256 244 L256 307" stroke-linecap="square"/></g></g>
+<path class="spark" d="M256 103 L262 117 L276 123 L262 129 L256 143 L250 129 L236 123 L250 117Z" fill="#F1EBDD"/>
+</svg>
