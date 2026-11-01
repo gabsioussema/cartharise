@@ -129,7 +129,7 @@ void main() {
     testWidgets('edit the optional name (and clear it)', (tester) async {
       final h = await pumpCartha(tester, data: onboardedData());
       await _openYou(tester);
-      await _tap(tester, find.byKey(const ValueKey('you-profile')));
+      await _tap(tester, find.byKey(const ValueKey('you-edit-name')));
       expect(find.text('Your name'), findsOneWidget);
       await tester.enterText(find.byType(TextField), 'Alex');
       await tester.tap(find.widgetWithText(FilledButton, 'Save'));
@@ -137,7 +137,7 @@ void main() {
       expect(h.state.data.profile!.displayName, 'Alex');
       expect(find.text('Alex'), findsOneWidget);
 
-      await _tap(tester, find.byKey(const ValueKey('you-profile')));
+      await _tap(tester, find.byKey(const ValueKey('you-edit-name')));
       await tester.enterText(find.byType(TextField), '   ');
       await tester.tap(find.widgetWithText(FilledButton, 'Save'));
       await pumpFrames(tester);

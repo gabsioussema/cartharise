@@ -2038,6 +2038,98 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get personaBuilderSurprise => 'Surprise me';
+
+  @override
+  String get personaBuilderSurprised => 'New look. Not saved yet.';
+
+  @override
+  String get personaBuilderUndo => 'Undo';
+
+  @override
+  String get personaBuilderParts => 'Avatar parts';
+
+  @override
+  String personaBuilderPartLabel(String category, String value) {
+    return '$category: $value';
+  }
+
+  @override
+  String personaBuilderPreviewLabel(String parts) {
+    return 'Avatar preview. $parts';
+  }
+
+  @override
+  String get personaBuilderLockedNote =>
+      'Locked extras open along the Campaign.';
+
+  @override
+  String get personaBuilderKept => 'Yours while worn';
+
+  @override
+  String get personaBuilderMottoLabel => 'Motto (optional)';
+
+  @override
+  String get personaBuilderMottoHint => 'A few words of your own';
+
+  @override
+  String personaBuilderMottoCount(int count, int max) {
+    return '$count/$max';
+  }
+
+  @override
+  String get personaBuilderMottoTooLong =>
+      'A little too long. Shorten it to save.';
+
+  @override
+  String personaBuilderMottoQuoted(String motto) {
+    return '“$motto”';
+  }
+
+  @override
+  String get personaBuilderSaved => 'Avatar saved.';
+
+  @override
+  String get personaBuilderNotSaved =>
+      'Not saved on this phone yet. Retry at the top, or export a copy.';
+
+  @override
+  String get personaBuilderRemove => 'Remove avatar';
+
+  @override
+  String get personaBuilderRemoveTitle => 'Remove your avatar?';
+
+  @override
+  String get personaBuilderRemoveBody =>
+      'Your profile shows the emblem again. Make a new one anytime.';
+
+  @override
+  String get personaBuilderRemoveAction => 'Remove';
+
+  @override
+  String get personaBuilderRemoved => 'Avatar removed.';
+
+  @override
+  String get personaBuilderRemovedNotSaved =>
+      'Removed here, but not saved on this phone yet. Retry at the top.';
+
+  @override
+  String get personaBuilderLeaveTitle => 'Leave without saving?';
+
+  @override
+  String get personaBuilderLeaveBody => 'Your avatar changes won\'t be kept.';
+
+  @override
+  String get personaBuilderLeaveAction => 'Leave';
+
+  @override
+  String get personaBuilderKeepEditing => 'Keep editing';
+
+  @override
+  String get personaBuilderProfileHint =>
+      'Name and avatar are optional and stay on this phone.';
+
+  @override
   String get resetTitle => 'The Reset';
 
   @override

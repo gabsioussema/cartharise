@@ -3214,6 +3214,162 @@ abstract class AppLocalizations {
   /// **'{value, select, none{None} elephant{Elephant} sun{Rising sun} path{Path} compass{Compass} star{North star} laurel{Laurel} other{—}}'**
   String personaSigil(String value);
 
+  /// No description provided for @personaBuilderSurprise.
+  ///
+  /// In en, this message translates to:
+  /// **'Surprise me'**
+  String get personaBuilderSurprise;
+
+  /// No description provided for @personaBuilderSurprised.
+  ///
+  /// In en, this message translates to:
+  /// **'New look. Not saved yet.'**
+  String get personaBuilderSurprised;
+
+  /// No description provided for @personaBuilderUndo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get personaBuilderUndo;
+
+  /// No description provided for @personaBuilderParts.
+  ///
+  /// In en, this message translates to:
+  /// **'Avatar parts'**
+  String get personaBuilderParts;
+
+  /// One part of the avatar preview's screen-reader description, e.g. 'Hair: Locs'.
+  ///
+  /// In en, this message translates to:
+  /// **'{category}: {value}'**
+  String personaBuilderPartLabel(String category, String value);
+
+  /// Screen-reader label of the large live preview; parts is a list of 'Category: value'.
+  ///
+  /// In en, this message translates to:
+  /// **'Avatar preview. {parts}'**
+  String personaBuilderPreviewLabel(String parts);
+
+  /// No description provided for @personaBuilderLockedNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Locked extras open along the Campaign.'**
+  String get personaBuilderLockedNote;
+
+  /// Under an extra the saved avatar already wears but the user has not unlocked: it stays usable.
+  ///
+  /// In en, this message translates to:
+  /// **'Yours while worn'**
+  String get personaBuilderKept;
+
+  /// No description provided for @personaBuilderMottoLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Motto (optional)'**
+  String get personaBuilderMottoLabel;
+
+  /// No description provided for @personaBuilderMottoHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A few words of your own'**
+  String get personaBuilderMottoHint;
+
+  /// No description provided for @personaBuilderMottoCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}/{max}'**
+  String personaBuilderMottoCount(int count, int max);
+
+  /// No description provided for @personaBuilderMottoTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'A little too long. Shorten it to save.'**
+  String get personaBuilderMottoTooLong;
+
+  /// The user's motto, shown exactly as typed, in quotes.
+  ///
+  /// In en, this message translates to:
+  /// **'“{motto}”'**
+  String personaBuilderMottoQuoted(String motto);
+
+  /// No description provided for @personaBuilderSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Avatar saved.'**
+  String get personaBuilderSaved;
+
+  /// No description provided for @personaBuilderNotSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Not saved on this phone yet. Retry at the top, or export a copy.'**
+  String get personaBuilderNotSaved;
+
+  /// No description provided for @personaBuilderRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove avatar'**
+  String get personaBuilderRemove;
+
+  /// No description provided for @personaBuilderRemoveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove your avatar?'**
+  String get personaBuilderRemoveTitle;
+
+  /// No description provided for @personaBuilderRemoveBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your profile shows the emblem again. Make a new one anytime.'**
+  String get personaBuilderRemoveBody;
+
+  /// No description provided for @personaBuilderRemoveAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get personaBuilderRemoveAction;
+
+  /// No description provided for @personaBuilderRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Avatar removed.'**
+  String get personaBuilderRemoved;
+
+  /// No description provided for @personaBuilderRemovedNotSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Removed here, but not saved on this phone yet. Retry at the top.'**
+  String get personaBuilderRemovedNotSaved;
+
+  /// No description provided for @personaBuilderLeaveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave without saving?'**
+  String get personaBuilderLeaveTitle;
+
+  /// No description provided for @personaBuilderLeaveBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your avatar changes won\'t be kept.'**
+  String get personaBuilderLeaveBody;
+
+  /// No description provided for @personaBuilderLeaveAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave'**
+  String get personaBuilderLeaveAction;
+
+  /// No description provided for @personaBuilderKeepEditing.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep editing'**
+  String get personaBuilderKeepEditing;
+
+  /// No description provided for @personaBuilderProfileHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Name and avatar are optional and stay on this phone.'**
+  String get personaBuilderProfileHint;
+
   /// No description provided for @resetTitle.
   ///
   /// In en, this message translates to:
