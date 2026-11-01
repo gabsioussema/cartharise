@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import '../../domain/persona.dart';
 import '../../l10n/app_localizations.dart';
 import '../theme/cartha_theme.dart';
-import '../widgets/emblem.dart';
+import 'avatar_painter.dart';
 
 /// The user's avatar as a round portrait of [size]. With no [avatar], the
 /// Cartharise emblem stands in. [showSigil] draws the banner behind.
 ///
-/// CONTRACT STUB (persona plan, phase 0): the avatar-art agent replaces the
-/// body with the real painter; the constructor stays exactly as is.
+/// A calm flat-vector bust on the theme's hero disc with a thin bronze rim
+/// ([AvatarPainter]); details are simplified below 40 px. With no skin tone
+/// chosen the figure is a monochrome silhouette (no skin is assumed).
 class AvatarView extends StatelessWidget {
   const AvatarView({
     super.key,
@@ -31,17 +32,15 @@ class AvatarView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
-    final p = CarthaPalette.of(context);
+    final scene = AvatarScene.of(CarthaPalette.of(context));
+    final a = avatar;
     final view = SizedBox.square(
       dimension: size,
-      child: DecoratedBox(
-        decoration: BoxDecoration(color: p.hero, shape: BoxShape.circle),
-        child: Center(
-          child: CarthaEmblem(
-            size: size * 0.6,
-            color: p.heroAccent,
-            excludeFromSemantics: true,
-          ),
+      child: RepaintBoundary(
+        child: CustomPaint(
+          painter: a == null
+              ? AvatarEmblemPainter(scene: scene)
+              : AvatarPainter(avatar: a, scene: scene, showSigil: showSigil),
         ),
       ),
     );
@@ -50,7 +49,7 @@ class AvatarView extends StatelessWidget {
       image: true,
       label:
           semanticLabel ??
-          (avatar == null ? l.personaNoAvatar : l.personaAvatarLabel),
+          (a == null ? l.personaNoAvatar : l.personaAvatarLabel),
       child: view,
     );
   }
