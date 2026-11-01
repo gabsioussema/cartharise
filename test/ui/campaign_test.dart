@@ -10,6 +10,7 @@ import 'package:cartharise/ui/compass/compass_tab.dart';
 import 'package:cartharise/ui/nav.dart';
 import 'package:cartharise/ui/persona/avatar_view.dart';
 import 'package:cartharise/ui/persona/persona_builder.dart';
+import 'package:cartharise/ui/persona/persona_ops.dart';
 import 'package:cartharise/ui/reset/guided_prompt_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -526,6 +527,91 @@ void main() {
       await tester.pump();
       expect(h.state.campaign.waypoint, Waypoint.newCarthage);
       expect(find.byKey(const ValueKey('campaign-toast')), findsNothing);
+    });
+
+    testWidgets('finishing a chapter by typing stays quiet (its achievement '
+        'and extra too)', (tester) async {
+      ReflectionAnswer answer(String id) =>
+          ReflectionAnswer(promptId: id, body: 'Typed', updatedAt: _t);
+      // Three of the four "See the terrain" answers; the fourth earns The
+      // Observer and opens the Scroll.
+      final h = await pumpCartha(
+        tester,
+        data: onboardedData().copyWith(
+          journeys: [
+            Journey(
+              id: 'j1',
+              startedAt: _t,
+              answers: {
+                for (final id in ['morning.01', 'morning.02', 'morning.03'])
+                  id: answer(id),
+              },
+            ),
+          ],
+          currentJourneyId: () => 'j1',
+        ),
+      );
+      // The same path as the answer screen's autosave.
+      unawaited(h.state.saveAnswer('morning.04', 'Typed'));
+      await tester.pump(CampaignFeedback.settle);
+      await tester.pump();
+      expect(h.state.campaign.earned, contains(Achievement.observer));
+      expect(h.state.canUse(Accessory.scroll), isTrue);
+      expect(find.byKey(const ValueKey('campaign-toast')), findsNothing);
+      expect(find.textContaining('The Observer'), findsNothing);
+      expect(find.textContaining('New for your avatar'), findsNothing);
+
+      // Nor is it saved up for the next action.
+      await completeQuest(h, 'next');
+      await tester.pump(CampaignFeedback.settle);
+      await tester.pump();
+      expect(find.byKey(const ValueKey('campaign-toast')), findsOneWidget);
+      expect(find.textContaining('Scroll'), findsNothing);
+      expect(find.textContaining('The Observer'), findsNothing);
+      await tester.pump(CampaignFeedback.visible);
+    });
+
+    testWidgets('an extra earned again is not announced again', (tester) async {
+      final h = await pumpCartha(
+        tester,
+        data: _data(withAttempt: false).copyWith(quests: []),
+      );
+      Future<void> setDone(bool done) => h.state.mutate(
+        (d) => d.copyWith(
+          quests: [
+            Quest(
+              id: 'q',
+              title: 'Walk',
+              createdAt: _t,
+              completedOn: done ? const {'2026-11-03'} : const {},
+            ),
+          ],
+        ),
+      );
+      unawaited(setDone(true));
+      await tester.pump(CampaignFeedback.settle);
+      await tester.pump();
+      expect(
+        find.textContaining('New for your avatar: Bronze'),
+        findsOneWidget,
+      );
+      await tester.pump(CampaignFeedback.visible);
+
+      // Untick: Bronze stays open, nothing to say.
+      unawaited(setDone(false));
+      await tester.pump(CampaignFeedback.settle);
+      await tester.pump();
+      expect(h.state.canUse(GarmentColor.bronze), isTrue);
+      expect(find.byKey(const ValueKey('campaign-toast')), findsNothing);
+
+      // Tick again: the XP is back, but nothing is "new" a second time.
+      unawaited(setDone(true));
+      await tester.pump(CampaignFeedback.settle);
+      await tester.pump();
+      expect(find.text('+20 XP'), findsOneWidget);
+      expect(find.textContaining('New for your avatar'), findsNothing);
+      expect(find.textContaining('Achievement earned'), findsNothing);
+      await tester.pump(CampaignFeedback.visible);
     });
 
     testWidgets('quiet when a restore opens many extras at once', (

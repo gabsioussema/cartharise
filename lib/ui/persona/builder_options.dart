@@ -157,7 +157,7 @@ class BuilderOptionTile extends StatelessWidget {
   final bool selected;
   final OptionAccess access;
 
-  /// Under the name: the unlock reason, or "Yours while worn".
+  /// Under the name: the unlock reason, or "Yours to keep".
   final String? note;
 
   /// Null when the choice is locked.

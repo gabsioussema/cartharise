@@ -28,7 +28,8 @@ Flutter imports and are unit-tested directly.
 
 ```
 widget ──calls──▶ AppState.saveAnswer(...)        (or an area extension built on mutate)
-                    │ 1. _data = change(_data)    (immutable AppData snapshot)
+                    │ 1. _data = change(_data)    (immutable AppData snapshot; avatar
+                    │                              extras it opens are kept: withProgressUnlocks)
                     │ 2. notifyListeners()        → widgets rebuild with the new words at once
                     │ 3. saveStatus = saving      → SaveIndicator
                     ▼

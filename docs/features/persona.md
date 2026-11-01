@@ -15,7 +15,12 @@ disc. `AvatarPainter` (`lib/ui/persona/avatar_painter.dart`) does the drawing.
 olive in the Olive theme, in both brightnesses) with a thin bronze rim. There
 are no gradients and no outlines. Depth comes from one darker tone per
 material, with light from the upper left: the far shoulder, the cheek edge and
-the shadow under the chin. The face is kept simple and friendly: eyes with a
+the shadow under the chin. One exception: a garment colour that would blend
+into the disc (forest, olive, indigo, crimson on the forest or olive disc;
+below 2.5:1, `AvatarPalette.minGarmentContrast`) gets a thin, lighter edge of
+its own colour (`AvatarPalette.garmentEdge`, ≥ 3:1 against the disc) along
+the shoulders and around a headscarf, hood or turban, so the figure stays
+clear at 36–48 dp (the silhouette uses a lighter theme tone instead). The face is kept simple and friendly: eyes with a
 catchlight (so they read on every skin tone), soft brows, a small nose and a
 mouth.
 
@@ -83,7 +88,8 @@ full beard uses a path union.
   (colour choices change nothing, shapes do, and no face is drawn);
 * the palette: distinct colours, glasses frames at ≥ 2.5:1 on every skin tone,
   vitiligo patches lighter but never white, trims stand out from their
-  garment;
+  garment; dark garments get an edge at ≥ 3:1 on every hero disc (and light
+  ones none), drawn on every garment and on the headscarf, hood and turban;
 * no raw colours in the persona files;
 * level of detail, repaint rules, semantics labels, the emblem fallback, and
   the size matrix in dark and light.
@@ -106,6 +112,14 @@ detail sheet and a 24–120 px size ladder, in dark and light) come from
 2. **Categories**: one row of scrollable choice chips — Skin, Face, Hair, Hair
    colour, Facial hair, Glasses, Marks, Expression, Headwear, Clothing, Colour,
    Carry, Banner. One category is shown at a time, so the screen stays short.
+   The row runs to the screen edges (the page gutter is inside it), so a chip
+   is only ever cut at the edge of the screen; a newly chosen chip scrolls
+   fully into view (the row only, once the chips' check animation settles).
+   When a category's choices can't be seen on the portrait, one line says
+   why: "Pick a skin tone to see the face and colours." on Marks, Expression,
+   Hair colour and Colour while the avatar is the silhouette, and "Hair is
+   hidden under your headwear." on Hair and Hair colour under a headscarf or
+   turban (`hiddenChoices`).
 3. **Choices** of that category as a grid of tiles: a small portrait of the
    draft wearing that choice (colours are seen in place, next to their name)
    and the name. Colour choices (skin, hair colour, garment colour) also
@@ -132,8 +146,12 @@ detail sheet and a 24–120 px size ladder, in dark and light) come from
   "Earn The Challenger" — `unlockReason`), and cannot be chosen (no tap
   action; announced as disabled). Categories with a locked choice say
   "Locked extras open along the Campaign." With the game layer off everything
-  is open. An extra the saved avatar already wears stays selected and usable,
-  marked "Yours while worn" (`PersonaOps.canUse`).
+  is open. An extra the saved avatar already wears but hasn't unlocked (worn
+  while the game layer was off) stays selected and usable, marked "Yours to
+  keep" (`PersonaOps.canUse`): saving or removing the avatar keeps every
+  extra it wore for good (`AppData.avatarUnlocked`), so "Surprise me" or
+  another choice never takes it away. Extras the Campaign opened stay open
+  even if the progress goes down later (see `campaign.md`, "Kept for good").
 - **Surprise me** picks a random choice in every category among usable parts
   only, always a skin tone, never the same avatar twice in a row; "New look.
   Not saved yet." with **Undo**.
@@ -175,7 +193,10 @@ is off).
 
 `test/ui/persona_builder_test.dart`: create from You, edit, silhouette,
 tone order, Surprise me (+ unit test of `surpriseAvatar`), locked extras,
-game off, worn locked kept, remove with confirm, unsaved-changes prompt
+game off, worn locked kept (also after saving without it, or a surprise that
+drops it), the "can't be seen yet" notes (+ unit test of `hiddenChoices`),
+the chip row reaching the screen edges and a cut chip scrolled into view,
+remove with confirm, unsaved-changes prompt
 (button and system back), failed save and failed removal, motto limits, You
 profile, categories, guidelines (dark + light), size matrix (dark + light).
 Screenshots: `test/screenshots/persona_builder_screenshots_test.dart`.
@@ -190,8 +211,11 @@ Screenshots: `test/screenshots/persona_builder_screenshots_test.dart`.
   current stop, and the "Your strategist" card shows the avatar, the motto
   as typed, "n of 13 extras unlocked", the next extra and Create / Edit (see
   `campaign.md`).
-- **Data:** the persona is part of the JSON backup and is removed by
-  "Delete all data" (`AppData.persona`).
+- **Data:** the persona and the kept extras are part of the JSON backup and
+  are removed by "Delete all data" (`AppData.persona`,
+  `AppData.avatarUnlocked`); `test/persona_test.dart` covers the kept set
+  (only grows, game off adds nothing, worn extras kept on save and remove,
+  backup and delete).
 
 **Journey test:** `test/ui/persona_journey_test.dart` creates an avatar in
 the builder from You, then checks You, the Campaign (route and card) and

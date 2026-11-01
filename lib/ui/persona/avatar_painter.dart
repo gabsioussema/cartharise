@@ -305,19 +305,21 @@ class _Look {
     required this.ribbon,
     required this.frame,
     required this.lens,
+    this.edge,
   });
 
   factory _Look.of(Avatar a, AvatarScene scene) {
     final tone = a.skinTone;
     if (tone == null) {
       Color m(double t) => Color.lerp(scene.disc, scene.mono, t)!;
+      final garment = m(0.37);
       return _Look(
         mono: true,
         skin: SkinColors(base: m(0.5), shade: m(0.43), lip: m(0.43)),
         skinLight: m(0.6),
         hair: HairColors(base: m(0.3), shade: m(0.24), shine: m(0.37)),
         garment: GarmentColors(
-          base: m(0.37),
+          base: garment,
           shade: m(0.3),
           trim: m(0.58),
           under: m(0.45),
@@ -336,15 +338,22 @@ class _Look {
         ribbon: m(0.3),
         frame: m(0.82),
         lens: m(1).withValues(alpha: 0),
+        // Monochrome too: a lighter theme tone, never a garment colour.
+        edge:
+            AvatarPalette.contrast(garment, scene.disc) <
+                AvatarPalette.minGarmentContrast
+            ? m(0.62)
+            : null,
       );
     }
     final skin = AvatarPalette.skin(tone);
+    final garment = AvatarPalette.garment(a.garmentColor);
     return _Look(
       mono: false,
       skin: skin,
       skinLight: skin.light,
       hair: AvatarPalette.hair(a.hairColor),
-      garment: AvatarPalette.garment(a.garmentColor),
+      garment: garment,
       ink: AvatarColors.ink,
       catchlight: AvatarColors.catchlight,
       metal: AvatarColors.metal,
@@ -358,6 +367,7 @@ class _Look {
       ribbon: AvatarColors.ribbon,
       frame: AvatarPalette.frameFor(skin),
       lens: AvatarColors.lens.withValues(alpha: 0.14),
+      edge: AvatarPalette.garmentEdge(garment, scene.disc),
     );
   }
 
@@ -379,6 +389,10 @@ class _Look {
   final Color ribbon;
   final Color frame;
   final Color lens;
+
+  /// A lighter edge for the garment (and headwear in its colour) where it
+  /// would blend into the disc; null when it stands clear.
+  final Color? edge;
 }
 
 /// A hanging strand (a loc or a braid) as a quadratic curve.
@@ -441,6 +455,22 @@ class _Artist {
     canvas.clipPath(clip);
     draw();
     canvas.restore();
+  }
+
+  /// A thin, lighter edge along the first contour of [outline] (from
+  /// [from] design units in, skipping where it meets the neck), where the
+  /// garment or headwear would blend into the disc. Also on the mirrored
+  /// side with [mirror].
+  void _edge(Path outline, {double from = 0, bool mirror = false}) {
+    final c = look.edge;
+    if (c == null) return;
+    final paint = _line(c, w(0.9, 1.0));
+    for (final metric in outline.computeMetrics()) {
+      final part = metric.extractPath(from, metric.length);
+      canvas.drawPath(part, paint);
+      if (mirror) canvas.drawPath(_mirrored(part), paint);
+      return;
+    }
   }
 
   /// Draws in the oval head's space, fitted to the chosen face shape.
@@ -681,6 +711,10 @@ class _Artist {
       canvas.drawPath(head.face.shift(const Offset(0, 2.8)), _fill(skin.shade));
     });
     final g = look.garment;
+    // The garment's outer edge against the disc, from the neck out (on
+    // both sides unless said otherwise).
+    var edge = _shoulder;
+    var both = true;
     switch (avatar.garment) {
       case Garment.tunic:
         final body = _torso(_uNeck);
@@ -708,6 +742,11 @@ class _Artist {
           ..cubicTo(39.6, 92, 41.4, 78, 44.2, 68.6)
           ..close();
         sym(panel, _fill(g.base));
+        edge = Path()
+          ..moveTo(42.2, 65.6)
+          ..cubicTo(37.5, 68.2, 30.5, 68.8, 23.8, 71.6)
+          ..cubicTo(15.5, 75.4, 11.2, 82.6, 10.2, 94)
+          ..lineTo(9.8, 104);
         clipped(panel, () {
           canvas.drawPath(
             Path()
@@ -783,6 +822,13 @@ class _Artist {
           ..cubicTo(30, 95, 46, 82, 55.4, 65.8)
           ..close();
         canvas.drawPath(drape, _fill(g.base));
+        // The linen under it shows on the other shoulder.
+        edge = Path()
+          ..moveTo(55.4, 65.8)
+          ..cubicTo(61.5, 67.4, 70, 69, 76.8, 72)
+          ..cubicTo(84.8, 76, 88.8, 83, 89.8, 94)
+          ..lineTo(90.4, 104);
+        both = false;
         clipped(drape, () {
           canvas.drawPath(
             Path()
@@ -815,7 +861,16 @@ class _Artist {
           _line(g.trim, w(1.5, 1.0)),
         );
     }
+    _edge(edge, from: 3, mirror: both);
   }
+
+  /// The right shoulder's outline, from the neck down the arm (the torso's
+  /// edge against the disc).
+  static final Path _shoulder = Path()
+    ..moveTo(57.6, 66.4)
+    ..cubicTo(62, 69, 69, 69.6, 75.6, 72.4)
+    ..cubicTo(83.6, 76, 87.6, 83, 88.6, 94)
+    ..lineTo(89.2, 104);
 
   void _uNeck(Path p) => p.cubicTo(43.8, 72.8, 56.2, 72.8, 57.6, 66.4);
 
@@ -2062,8 +2117,9 @@ class _Artist {
             50,
             h.top - 5.2,
           )
-          ..close()
-          ..addOval(opening);
+          ..close();
+        final outline = Path.from(scarf);
+        scarf.addOval(opening);
         canvas.drawPath(scarf, _fill(g.base));
         if (!tiny) {
           clipped(scarf, () {
@@ -2090,6 +2146,7 @@ class _Artist {
             );
           });
         }
+        _edge(outline);
       case Headwear.turban:
         inHeadSpace(() {
           final turban = Path()
@@ -2135,6 +2192,15 @@ class _Artist {
               );
             }
           });
+          // The crown against the disc (not the brim on the forehead).
+          _edge(
+            Path()
+              ..moveTo(34.8, 39.4)
+              ..cubicTo(32.6, 33, 32.2, 24.6, 36.4, 18.4)
+              ..cubicTo(40, 13, 45, 10.6, 50, 10.6)
+              ..cubicTo(55, 10.6, 60, 13, 63.6, 18.4)
+              ..cubicTo(67.8, 24.6, 67.4, 33, 65.2, 39.4),
+          );
         });
       case Headwear.hood:
         final w0 = h.w + 7;
@@ -2217,6 +2283,7 @@ class _Artist {
             h.top + 1.6,
           )
           ..close();
+        final outline = Path.from(hood);
         hood.addPath(opening, Offset.zero);
         canvas.drawPath(hood, _fill(g.base));
         clipped(hood, () {
@@ -2245,6 +2312,7 @@ class _Artist {
             );
           }
         });
+        _edge(outline);
       case Headwear.circlet:
         inHeadSpace(() {
           clipped(Path()..addOval(_skull(2.2)), () {

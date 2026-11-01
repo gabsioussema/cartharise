@@ -1,7 +1,7 @@
 # Plan: Persona (avatar) + richer gamification
 
-**Status:** phases 0–2 done and integrated on `main`; phase 3 (audit, then
-fix) is next.
+**Status:** phases 0–3 done on `main` (the audit's findings F1–F7 are fixed;
+see phase 3).
 
 Goal: the user creates their own avatar ("Your strategist"), sees it across the
 app, and the Campaign gains cosmetic, never-punitive rewards around it.
@@ -100,8 +100,9 @@ keys), `test/ui/campaign_test.dart`, `test/campaign_test.dart`,
   next extra and how to get it ("Reach the Rhône for the compass"), and
   Create / Edit → `AppNav.openPersonaBuilder`.
 * Unlock moments: `CampaignFeedback` adds "New for your avatar: Laurel
-  wreath" when `avatarUnlocks` grows (same rules: never while typing, never
-  for bulk changes, never with the game off).
+  wreath" when an action opens an extra (same rules: never while typing —
+  which includes a chapter's achievement and extra — never for bulk changes,
+  never with the game off, never twice for a kept extra).
 * XP preview: open quests show a small "+20 XP" chip while the game layer is
   on and today's quest XP cap isn't reached.
 * Tests for each, plus the pure "next unlock" helper.
@@ -122,3 +123,21 @@ Read-only audit against this plan and CLAUDE.md: inclusiveness and no labels,
 non-punitive unlocks, accessibility (labels, targets, contrast, 200 % text),
 palette guard, privacy (local only, in backup / delete), copy length,
 performance of the painter, tests. Then fix every blocker / major finding.
+
+**Status: done.** Fixed, each with tests:
+
+* F1 (major) — unlocked extras could lock again when progress went down:
+  `AppData.avatarUnlocked` keeps them for good (grown in `AppState.mutate` /
+  `load` while the game is on; in backups; cleared by "Delete all data");
+  `avatarUnlocks` = derived ∪ kept; moments compare with the kept set.
+* F2 (major) — a chapter finished by typing showed "Achievement earned · New
+  for your avatar" over the answer screen: only actions (or the two action
+  achievements) make a moment now.
+* F3 — choices that don't show on the portrait (silhouette, hair under a
+  headscarf or turban) get a one-line note above the grid.
+* F4 — the chip row runs to the screen edges; a chosen chip scrolls into
+  view.
+* F5 — Today's quest rows show the same "+20 XP" chip as Missions.
+* F6 — dark garments and headwear get a lighter edge on the hero disc.
+* F7 — extras worn by a saved avatar are kept for good on save and removal
+  ("Yours to keep").

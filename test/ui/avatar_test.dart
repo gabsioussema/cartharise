@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:ui' as ui;
 
+import 'package:cartharise/domain/app_data.dart' show AppTheme;
 import 'package:cartharise/domain/persona.dart';
 import 'package:cartharise/ui/persona/avatar_painter.dart';
 import 'package:cartharise/ui/persona/avatar_view.dart';
@@ -336,6 +337,75 @@ void main() {
         );
       }
     });
+
+    test('dark garments get a lighter edge on every hero disc (≥ 3:1)', () {
+      for (final theme in AppTheme.values) {
+        for (final b in Brightness.values) {
+          final disc = AvatarScene.of(
+            CarthaTheme.build(theme, b).extension<CarthaPalette>()!,
+          ).disc;
+          for (final c in GarmentColor.values) {
+            final g = AvatarPalette.garment(c);
+            final edge = AvatarPalette.garmentEdge(g, disc);
+            final why = '${theme.name} ${b.name} ${c.name}';
+            if (_contrast(g.base, disc) < AvatarPalette.minGarmentContrast) {
+              expect(edge, isNotNull, reason: why);
+              expect(
+                _contrast(edge!, disc),
+                greaterThanOrEqualTo(3),
+                reason: why,
+              );
+            } else {
+              expect(edge, isNull, reason: '$why stands clear');
+            }
+          }
+          // The default garment colour is one that needs it.
+          expect(
+            AvatarPalette.garmentEdge(
+              AvatarPalette.garment(const Avatar().garmentColor),
+              disc,
+            ),
+            isNotNull,
+          );
+        }
+      }
+    });
+
+    test(
+      'the edge is drawn on the shoulders, scarf, hood and turban',
+      () async {
+        final edge = AvatarPalette.garmentEdge(
+          AvatarPalette.garment(GarmentColor.forest),
+          _scene.disc,
+        )!;
+        for (final g in Garment.values) {
+          expect(
+            _colours(await _render(_base.copyWith(garment: g), size: 240)),
+            contains(_rgb(edge)),
+            reason: g.name,
+          );
+        }
+        // Around the head (the top 40 %), only headwear in the garment's
+        // colour has the edge.
+        Future<int> edgeAroundHead(Headwear hw) async {
+          final px = await _render(_base.copyWith(headwear: hw), size: 240);
+          var n = 0;
+          for (var i = 0; i < 240 * 96 * 4; i += 4) {
+            final rgb = (px[i] << 16) | (px[i + 1] << 8) | px[i + 2];
+            if (px[i + 3] == 255 && rgb == _rgb(edge)) n++;
+          }
+          return n;
+        }
+
+        expect(await edgeAroundHead(Headwear.none), 0);
+        for (final hw in [Headwear.headscarf, Headwear.hood, Headwear.turban]) {
+          expect(await edgeAroundHead(hw), greaterThan(0), reason: hw.name);
+        }
+        // A light garment stands clear on its own: no edge.
+        final sand = AvatarPalette.garment(GarmentColor.sand);
+        expect(AvatarPalette.garmentEdge(sand, _scene.disc), isNull);
+      },
+    );
 
     test('raw colours live only in lib/ui/theme/', () {
       final raw = RegExp(

@@ -3298,11 +3298,23 @@ abstract class AppLocalizations {
   /// **'Locked extras open along the Campaign.'**
   String get personaBuilderLockedNote;
 
-  /// Under an extra the saved avatar already wears but the user has not unlocked: it stays usable.
+  /// Under an extra the saved avatar already wears but the user has not unlocked: it stays theirs for good, worn or not.
   ///
   /// In en, this message translates to:
-  /// **'Yours while worn'**
+  /// **'Yours to keep'**
   String get personaBuilderKept;
+
+  /// Above Marks, Expression, Hair colour and Colour while the avatar is the silhouette (these choices don't show on it yet).
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a skin tone to see the face and colours.'**
+  String get personaBuilderHiddenSilhouette;
+
+  /// Above Hair and Hair colour while a headscarf or turban covers the hair.
+  ///
+  /// In en, this message translates to:
+  /// **'Hair is hidden under your headwear.'**
+  String get personaBuilderHiddenHeadwear;
 
   /// No description provided for @personaBuilderMottoLabel.
   ///

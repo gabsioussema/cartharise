@@ -8,6 +8,7 @@ import '../domain/app_data.dart';
 import '../domain/backup.dart';
 import '../domain/content.dart';
 import '../domain/local_date.dart';
+import '../domain/persona.dart';
 import '../reminders/reminder_plan.dart';
 import '../reminders/reminder_scheduler.dart';
 import '../services/ics_export.dart';
@@ -86,7 +87,9 @@ class AppState extends ChangeNotifier {
     notifyListeners();
     try {
       final saved = await _store.read();
-      _data = saved ?? AppData.empty;
+      // Extras already open stay open from here on (in memory; written with
+      // the next change).
+      _data = withProgressUnlocks(saved ?? AppData.empty, _content);
       _loaded = true;
     } on Object catch (e) {
       _loadError = e;
@@ -113,12 +116,14 @@ class AppState extends ChangeNotifier {
   }
 
   /// Applies [change] to [data], notifies, then persists. Never throws for a
-  /// failed write — that is reported through [saveStatus].
+  /// failed write — that is reported through [saveStatus]. Avatar extras the
+  /// change opens are kept for good ([withProgressUnlocks]): nothing
+  /// unlocked is taken away when progress goes down later.
   Future<void> mutate(AppData Function(AppData) change) async {
     if (!_loaded) {
       throw StateError('AppState.mutate before a successful load()');
     }
-    _data = change(_data);
+    _data = withProgressUnlocks(change(_data), _content);
     notifyListeners();
     await _persist();
   }

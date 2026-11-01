@@ -399,7 +399,7 @@ void main() {
       expect(data.flagsCollection.isSelected == Tristate.isTrue, isTrue);
       expect(data.flagsCollection.isEnabled == Tristate.isTrue, isTrue);
       expect(
-        find.descendant(of: laurel, matching: find.text('Yours while worn')),
+        find.descendant(of: laurel, matching: find.text('Yours to keep')),
         findsOneWidget,
       );
       // The circlet is not worn: still locked.
@@ -423,6 +423,194 @@ void main() {
       await _tap(tester, _save);
       expect(h.state.persona!.avatar.headwear, Headwear.laurel);
       expect(h.state.persona!.avatar.skinTone, SkinTone.umber);
+    });
+  });
+
+  group('kept extras (never taken away)', () {
+    testWidgets('a kept extra stays the user\'s after saving without it', (
+      tester,
+    ) async {
+      final h = await _pumpYou(
+        tester,
+        data: _data(persona: _persona(const Avatar(headwear: Headwear.laurel))),
+      );
+      await _openBuilder(tester);
+      await _pick(tester, BuilderCategory.headwear, Headwear.hood);
+      await _tap(tester, _save);
+      expect(h.state.persona!.avatar.headwear, Headwear.hood);
+      expect(h.state.canUse(Headwear.laurel), isTrue);
+      expect(h.store.saved!.avatarUnlocked, {Unlockable.headwearLaurel});
+
+      // Back in the builder: the laurel is open (no lock), and can be worn.
+      await _openBuilder(tester);
+      await _tap(tester, _chip(BuilderCategory.headwear));
+      final laurel = _option(BuilderCategory.headwear, Headwear.laurel);
+      expect(
+        find.descendant(of: laurel, matching: find.byIcon(Icons.lock_outline)),
+        findsNothing,
+      );
+      expect(
+        find.descendant(of: laurel, matching: find.text('Yours to keep')),
+        findsNothing,
+      );
+      await _tap(tester, laurel);
+      expect(_preview(tester).headwear, Headwear.laurel);
+    });
+
+    testWidgets('"Surprise me" may drop a kept extra; it stays the user\'s', (
+      tester,
+    ) async {
+      final h = await _pumpYou(
+        tester,
+        data: _data(persona: _persona(const Avatar(sigil: Sigil.star))),
+      );
+      await _openBuilder(tester);
+      final surprise = find.byKey(const ValueKey('persona-surprise'));
+      for (var i = 0; i < 20 && _preview(tester).sigil == Sigil.star; i++) {
+        await _tap(tester, surprise);
+      }
+      expect(_preview(tester).sigil, isNot(Sigil.star));
+      await _tap(tester, _save);
+      expect(h.state.canUse(Sigil.star), isTrue);
+    });
+  });
+
+  group('choices that do not show yet', () {
+    Finder note(String text) => find.descendant(
+      of: find.byKey(const ValueKey('persona-hidden-note')),
+      matching: find.text(text),
+    );
+    const silhouette = 'Pick a skin tone to see the face and colours.';
+    const covered = 'Hair is hidden under your headwear.';
+
+    testWidgets('the silhouette: marks, expression and colours say why', (
+      tester,
+    ) async {
+      await _pumpYou(tester);
+      await _openBuilder(tester);
+      expect(_preview(tester).skinTone, isNull);
+      for (final c in [
+        BuilderCategory.mark,
+        BuilderCategory.expression,
+        BuilderCategory.hairColor,
+        BuilderCategory.garmentColor,
+      ]) {
+        await _tap(tester, _chip(c));
+        expect(note(silhouette), findsOneWidget, reason: '$c');
+      }
+      for (final c in [
+        BuilderCategory.skin,
+        BuilderCategory.face,
+        BuilderCategory.hair,
+        BuilderCategory.garment,
+      ]) {
+        await _tap(tester, _chip(c));
+        expect(
+          find.byKey(const ValueKey('persona-hidden-note')),
+          findsNothing,
+          reason: '$c',
+        );
+      }
+      // A tone shows the face and the colours.
+      await _pick(tester, BuilderCategory.skin, SkinTone.copper);
+      await _tap(tester, _chip(BuilderCategory.mark));
+      expect(find.byKey(const ValueKey('persona-hidden-note')), findsNothing);
+    });
+
+    testWidgets('a headscarf or turban: hair and hair colour say why', (
+      tester,
+    ) async {
+      await _pumpYou(
+        tester,
+        data: _data(
+          persona: _persona(_saved.copyWith(headwear: Headwear.turban)),
+        ),
+      );
+      await _openBuilder(tester);
+      for (final c in [BuilderCategory.hair, BuilderCategory.hairColor]) {
+        await _tap(tester, _chip(c));
+        expect(note(covered), findsOneWidget, reason: '$c');
+      }
+      await _pick(tester, BuilderCategory.headwear, Headwear.headscarf);
+      await _tap(tester, _chip(BuilderCategory.hair));
+      expect(note(covered), findsOneWidget);
+      // A hood leaves the hair in view.
+      await _pick(tester, BuilderCategory.headwear, Headwear.hood);
+      await _tap(tester, _chip(BuilderCategory.hair));
+      expect(find.byKey(const ValueKey('persona-hidden-note')), findsNothing);
+    });
+
+    test('hiddenChoices covers exactly what the portrait leaves out', () {
+      const toned = Avatar(skinTone: SkinTone.clay);
+      for (final c in BuilderCategory.values) {
+        expect(hiddenChoices(c, toned), isNull, reason: '$c');
+      }
+      expect(
+        hiddenChoices(BuilderCategory.hairColor, const Avatar()),
+        HiddenChoices.silhouette,
+      );
+      expect(
+        hiddenChoices(
+          BuilderCategory.hair,
+          const Avatar(headwear: Headwear.headscarf),
+        ),
+        HiddenChoices.headwear,
+      );
+      expect(
+        hiddenChoices(
+          BuilderCategory.hairColor,
+          toned.copyWith(headwear: Headwear.turban),
+        ),
+        HiddenChoices.headwear,
+      );
+    });
+  });
+
+  group('category chips', () {
+    /// The chip row's scrollable.
+    Finder row() => find.byWidgetPredicate(
+      (w) =>
+          w is Scrollable &&
+          axisDirectionToAxis(w.axisDirection) == Axis.horizontal,
+    );
+
+    testWidgets('the row runs to the screen edges', (tester) async {
+      await _pumpYou(tester, size: const Size(320, 568), textScale: 2);
+      await _openBuilder(tester);
+      final rect = tester.getRect(row());
+      expect(rect.left, 0);
+      expect(rect.right, 320);
+      // The first chip starts at the page gutter.
+      expect(tester.getRect(_chip(BuilderCategory.skin)).left, 20);
+    });
+
+    testWidgets('a chip cut at the edge is scrolled fully into view', (
+      tester,
+    ) async {
+      await _pumpYou(tester, size: const Size(320, 568), textScale: 2);
+      await _openBuilder(tester);
+      final position = tester.state<ScrollableState>(row()).position;
+      final page = tester.state<ScrollableState>(_list).position;
+      // Find a chip cut by the right edge of the screen.
+      final cut = BuilderCategory.values.firstWhere((c) {
+        final r = tester.getRect(_chip(c));
+        return r.left < 320 && r.right > 320;
+      });
+      final before = page.pixels;
+      final visible = tester.getRect(_chip(cut));
+      await tester.tapAt(Offset((visible.left + 320) / 2, visible.center.dy));
+      await pumpFrames(tester);
+      await tester.pump(const Duration(milliseconds: 400));
+      final after = tester.getRect(_chip(cut));
+      expect(after.left, greaterThanOrEqualTo(0));
+      expect(after.right, lessThanOrEqualTo(320 - 20 + 0.5));
+      expect(position.pixels, greaterThan(0));
+      expect(page.pixels, before, reason: 'only the row moves');
+      expect(
+        _semantics(tester, _chip(cut)).flagsCollection.isSelected ==
+            Tristate.isTrue,
+        isTrue,
+      );
     });
   });
 

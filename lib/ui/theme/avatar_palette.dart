@@ -332,4 +332,25 @@ abstract final class AvatarPalette {
   /// Glasses frames that read on [skin].
   static Color frameFor(SkinColors skin) =>
       skin.isDeep ? AvatarColors.metal : AvatarColors.frameDark;
+
+  /// The WCAG contrast ratio of two colours (1 to 21).
+  static double contrast(Color a, Color b) {
+    final la = a.computeLuminance();
+    final lb = b.computeLuminance();
+    final (hi, lo) = la > lb ? (la, lb) : (lb, la);
+    return (hi + 0.05) / (lo + 0.05);
+  }
+
+  /// Below this contrast with the disc, a garment (and headwear in its
+  /// colour) would blend into it: forest, olive, indigo and crimson on the
+  /// forest or olive hero disc.
+  static const double minGarmentContrast = 2.5;
+
+  /// A lighter tone of [garment] drawn along its edges where it meets
+  /// [disc], so the shoulders, scarf or hood stay clear even at 36 dp; null
+  /// when the garment already stands clear of the disc.
+  static Color? garmentEdge(GarmentColors garment, Color disc) =>
+      contrast(garment.base, disc) < minGarmentContrast
+      ? Color.lerp(garment.base, AvatarColors.glow, 0.4)
+      : null;
 }

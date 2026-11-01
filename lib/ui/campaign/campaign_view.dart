@@ -252,6 +252,10 @@ class _CampaignViewState extends State<CampaignView> {
                 _AchievementTile(
                   achievement: a,
                   earned: progress.earned.contains(a),
+                  extraOpen: switch (_extraOf(a)) {
+                    final u? => state.ownsExtra(u),
+                    null => false,
+                  },
                 ),
             ],
           ),
@@ -549,13 +553,10 @@ class _StrategistCard extends StatelessWidget {
     final state = context.watch<AppState>();
     final persona = state.persona;
     final avatar = persona?.avatar;
-    // Extras the avatar already wears stay theirs (never taken away).
-    final worn = {
-      for (final u in Unlockable.values)
-        if (avatar?.uses(u) ?? false) u,
-    };
-    final open = {...unlockedBy(progress, gameOn: state.gameEnabled), ...worn};
-    final next = state.gameEnabled ? nextUnlock(progress, owned: worn) : null;
+    // Extras kept for good or worn stay theirs (never taken away).
+    final owned = {...state.data.avatarUnlocked, ...wornBy(avatar)};
+    final open = {...unlockedBy(progress, gameOn: state.gameEnabled), ...owned};
+    final next = state.gameEnabled ? nextUnlock(progress, owned: owned) : null;
     final motto = persona?.motto ?? '';
     final hasMotto = motto.trim().isNotEmpty;
     final secondary = theme.textTheme.bodyMedium?.copyWith(
@@ -1035,10 +1036,18 @@ class _LogRow extends StatelessWidget {
 
 /// An achievement: earned or not shown by icon and words, not colour alone.
 class _AchievementTile extends StatelessWidget {
-  const _AchievementTile({required this.achievement, required this.earned});
+  const _AchievementTile({
+    required this.achievement,
+    required this.earned,
+    required this.extraOpen,
+  });
 
   final Achievement achievement;
   final bool earned;
+
+  /// Whether the avatar extra it opens is the user's (kept for good once
+  /// opened, even if the achievement's record is gone later).
+  final bool extraOpen;
 
   @override
   Widget build(BuildContext context) {
@@ -1099,16 +1108,16 @@ class _AchievementTile extends StatelessWidget {
                 Row(
                   children: [
                     Icon(
-                      earned ? Icons.lock_open : Icons.lock_outline,
+                      extraOpen ? Icons.lock_open : Icons.lock_outline,
                       size: 16,
-                      color: earned ? p.accent : p.textSecondary,
+                      color: extraOpen ? p.accent : p.textSecondary,
                     ),
                     const SizedBox(width: 6),
                     Flexible(
                       child: Text(
                         reward,
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: earned ? p.textPrimary : p.textSecondary,
+                          color: extraOpen ? p.textPrimary : p.textSecondary,
                         ),
                       ),
                     ),

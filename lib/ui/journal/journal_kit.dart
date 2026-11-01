@@ -37,15 +37,17 @@ class AreaListView extends StatelessWidget {
   final double top;
   final ScrollController? controller;
 
+  /// The side gutter for a page [width] wide: 20 dp on phones, wider on
+  /// tablets so the content is centred at [kReadableWidth].
+  static double gutterFor(double width) =>
+      math.max(20.0, (width - kReadableWidth) / 2);
+
   @override
   Widget build(BuildContext context) {
     final bottom = MediaQuery.paddingOf(context).bottom + 32;
     return LayoutBuilder(
       builder: (context, constraints) {
-        final side = math.max(
-          20.0,
-          (constraints.maxWidth - kReadableWidth) / 2,
-        );
+        final side = gutterFor(constraints.maxWidth);
         return ListView(
           controller: controller,
           padding: EdgeInsetsDirectional.fromSTEB(side, top, side, bottom),

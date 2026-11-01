@@ -28,7 +28,9 @@ F-054 (gentle progress), F-031 (non-punitive), F-055 (honest save failure).
    the day ends), so Today and Missions agree. Up to five, then "See all n
    quests"; undated and later quests are only counted ("n more for anytime
    or later" → Missions); "Add a quest" → Missions. Daily quests carry the
-   same "Every day" label as Missions.
+   same "Every day" label as Missions, and open quests the same "+20 XP"
+   chip (`questXpOpenOn`: game layer on, today's quest XP not used up; read
+   out with the row as "Earns 20 XP when done").
 6. **Your direction** — the Compass vision and this month's project (the
    Missions project title if set, else Compass › month project) → Compass.
 
@@ -101,7 +103,9 @@ assumes anything that isn't stored.
 - Widgets (real app via `pumpCartha`): greetings with and without a name at
   three times; the avatar beside the greeting only once one exists; first-day card, lessons link and empty states; resume text and
   `GuidedPromptScreen(promptId: morning.04)`; checkbox semantics and toggling
-  (persisted for today); five quests + "See all"; Add a quest / Choose quests →
+  (persisted for today); the "+20 XP" chip on open quests (not on done ones,
+  a used-up day or with the game layer off); five quests + "See all"; Add a
+  quest / Choose quests →
   Missions; Open day 4 → `PathDayScreen(day: 4)`; Open Compass; Open the
   reset; Build your Compass opens the import sheet; note and Friday review
   open their screens; failed save shown with Retry; no streak/score/guilt

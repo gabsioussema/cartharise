@@ -12,7 +12,9 @@
 /// visible differences (glasses, freckles, vitiligo).
 library;
 
+import 'app_data.dart';
 import 'campaign.dart';
+import 'content.dart';
 
 /// Skin tones (named after earth and wood, never ranked).
 enum SkinTone { sand, honey, clay, copper, chestnut, walnut, umber, ebony }
@@ -148,6 +150,25 @@ Set<Unlockable> unlockedBy(CampaignProgress progress, {required bool gameOn}) {
   };
 }
 
+/// The extras [avatar] wears or carries (none for no avatar).
+Set<Unlockable> wornBy(Avatar? avatar) => {
+  if (avatar != null)
+    for (final u in Unlockable.values)
+      if (avatar.uses(u)) u,
+};
+
+/// [data] with every extra its Campaign progress opens now added to
+/// [AppData.avatarUnlocked], while the game layer is on. The kept set only
+/// grows: an extra stays open when progress goes down later (a quest
+/// unticked, an attempt deleted). With the game layer off nothing is added
+/// (everything is open anyway). Returns [data] itself when nothing is new.
+AppData withProgressUnlocks(AppData data, ContentLibrary content) {
+  if (!data.settings.game) return data;
+  final open = unlockedBy(campaignProgress(data, content), gameOn: true);
+  if (data.avatarUnlocked.containsAll(open)) return data;
+  return data.copyWith(avatarUnlocked: {...data.avatarUnlocked, ...open});
+}
+
 /// Every extra in the order the Campaign points to them: the route stops
 /// along Hannibal's road first (XP always moves the user along it), then the
 /// achievements in the article's order.
@@ -164,9 +185,9 @@ final List<Unlockable> kUnlockOrder = List.unmodifiable(
 );
 
 /// The next extra the Campaign can still open (game layer on), in
-/// [kUnlockOrder], skipping those already open or in [owned] (worn before
-/// the game layer was turned on: never taken away). Null once every extra is
-/// open.
+/// [kUnlockOrder], skipping those already open or in [owned] (kept for good
+/// in [AppData.avatarUnlocked], or worn: never taken away). Null once every
+/// extra is open.
 Unlockable? nextUnlock(
   CampaignProgress progress, {
   Set<Unlockable> owned = const {},

@@ -78,8 +78,9 @@ Nothing is copied or inferred: the map shows the user's own Compass words, or
 **Today** shows a Campaign tile (level, XP, bar → Campaign) while the game
 layer is on.
 
-**Missions** (XP preview): each open quest shows a small "+20 XP" chip (read
-out as "Earns 20 XP when done") while the game layer is on and fewer than 3
+**Missions and Today** (XP preview): each open quest shows a small "+20 XP"
+chip (read out as "Earns 20 XP when done") while the game layer is on and
+fewer than 3
 quests are done today (`kQuestDaysCap`, the same count as the XP rules:
 each quest once per day). Done quests, a used-up day and the game layer off
 show no chip; the quest itself never changes.
@@ -94,20 +95,38 @@ layer off everything is open. `kUnlockOrder` lists them as the Campaign
 points to them: the route stops along the road first (XP always moves the
 user along it), then the achievements in the article's order;
 `nextUnlock(progress, owned:)` is the first one not open yet, skipping
-extras the avatar already wears.
+extras the user keeps or the avatar wears.
+
+**Kept for good.** Progress is derived from the records, so it can go down
+(a quest unticked, an attempt deleted, XP below a stop). Extras never do:
+`AppData.avatarUnlocked` is a set that only grows. `AppState.mutate` (and
+`load`, for data from before it existed) adds every extra the progress opens
+while the game layer is on (`withProgressUnlocks`); `savePersona` and
+`clearPersona` add every extra the old and the new avatar wear.
+`PersonaOps.avatarUnlocks` is what the progress opens now plus the kept set
+(everything with the game layer off). It is in the backup and cleared by
+"Delete all data". The Strategist card and the achievement tiles' "For your
+avatar" lock use it too, so an extra stays open after its record is gone.
 
 ## Moments (`CampaignFeedback`, F-060)
 
 A calm pill at the top for about two seconds, announced to screen readers:
 "+20 XP" when a quest, an attempt or a weekly review adds XP,
-"Achievement earned: …", and "New for your avatar: …" when an extra opens
-(`PersonaOps.avatarUnlocks` grows; name from `persona_copy.unlockableName`).
-Changes within 0.7 s become one moment. Never while typing an answer
-(reflection and path XP stay quiet, and so does a route stop they reach — the
-Strategist card shows it), never for a bulk change such as a restored backup
-(more than 60 XP, or 3+ achievements or extras at once), never with the game
-layer off, never for an extra the avatar already wears; no fade with reduced
-motion.
+"Achievement earned: …", and "New for your avatar: …" when the progress
+opens an extra the user didn't keep already (name from
+`persona_copy.unlockableName`). Changes within 0.7 s become one moment.
+
+Only an action is a moment: XP from a quest, an attempt or a review, or the
+two action achievements (The Practitioner, The Challenger) and their
+extras. Never while typing an answer: reflection and path XP stay quiet, and
+so does what typing opens — a route stop, a chapter's achievement (The
+Observer … The Strategist) and its extra. These are not saved up for later
+either; the Campaign's achievement tiles and the Strategist card show them.
+Never twice: an extra opened again (after its record went and came back) is
+already kept, and an achievement seen this session isn't announced again.
+Never for a bulk change such as a restored backup (more than 60 XP, or 3+
+achievements or extras at once), never with the game layer off, never for an
+extra the avatar already wears; no fade with reduced motion.
 
 ## XP rules (`lib/domain/campaign.dart`, F-060)
 

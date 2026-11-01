@@ -11,6 +11,7 @@ import '../../state/app_state.dart';
 import '../campaign/campaign_ops.dart';
 import '../compass/compass_import.dart';
 import '../missions/missions_logic.dart';
+import '../missions/quest_tile.dart' show questXpOpenOn;
 import '../nav.dart';
 import '../persona/avatar_view.dart';
 import '../persona/persona_ops.dart';
@@ -368,12 +369,20 @@ class _QuestRow extends StatelessWidget {
     final p = CarthaPalette.of(context);
     final theme = Theme.of(context);
     final done = quest.isDoneOn(today);
+    final daily = quest.recurrence == QuestRecurrence.daily;
+    // The same XP preview as in Missions: while the game layer is on and
+    // today's quest XP isn't used up.
+    final xpOpen = context.select<AppState, bool>(
+      (s) => questXpOpenOn(s, today),
+    );
+    final showXp = xpOpen && !done;
     void toggle() =>
         context.read<AppState>().setQuestDone(quest.id, !done, day: today);
     return Semantics(
       container: true,
       checked: done,
       label: l.todayQuestMarkDone(quest.title),
+      hint: showXp ? l.campaignQuestXpLabel(kXpPerQuest) : null,
       onTap: toggle,
       excludeSemantics: true,
       child: InkWell(
@@ -399,9 +408,26 @@ class _QuestRow extends StatelessWidget {
                           decorationColor: p.textSecondary,
                         ),
                       ),
-                      if (quest.recurrence == QuestRecurrence.daily) ...[
+                      if (daily || showXp) ...[
                         const SizedBox(height: 4),
-                        ChipTag(label: l.todayQuestDaily, icon: Icons.repeat),
+                        Wrap(
+                          spacing: 6,
+                          runSpacing: 4,
+                          children: [
+                            if (daily)
+                              ChipTag(
+                                label: l.todayQuestDaily,
+                                icon: Icons.repeat,
+                              ),
+                            if (showXp)
+                              ChipTag(
+                                key: ValueKey('today-quest-xp-${quest.id}'),
+                                label: l.campaignQuestXp(kXpPerQuest),
+                                icon: Icons.auto_awesome,
+                                tone: ChipTone.accent,
+                              ),
+                          ],
+                        ),
                       ],
                     ],
                   ),

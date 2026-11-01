@@ -2096,7 +2096,15 @@ class AppLocalizationsEn extends AppLocalizations {
       'Locked extras open along the Campaign.';
 
   @override
-  String get personaBuilderKept => 'Yours while worn';
+  String get personaBuilderKept => 'Yours to keep';
+
+  @override
+  String get personaBuilderHiddenSilhouette =>
+      'Pick a skin tone to see the face and colours.';
+
+  @override
+  String get personaBuilderHiddenHeadwear =>
+      'Hair is hidden under your headwear.';
 
   @override
   String get personaBuilderMottoLabel => 'Motto (optional)';

@@ -96,6 +96,39 @@ enum BuilderCategory {
       options.any((o) => o != null && requirementOf(o) != null);
 }
 
+/// Why the choices of a category don't show on the portrait right now.
+enum HiddenChoices {
+  /// The silhouette draws no face and no colours (no skin is assumed).
+  silhouette,
+
+  /// A headscarf or turban covers the hair.
+  headwear,
+}
+
+/// Why [category]'s choices can't be seen on [avatar] now (so the preview
+/// doesn't look stuck), or null when they show.
+HiddenChoices? hiddenChoices(BuilderCategory category, Avatar avatar) {
+  final covered =
+      avatar.headwear == Headwear.headscarf ||
+      avatar.headwear == Headwear.turban;
+  final silhouette = avatar.skinTone == null;
+  return switch (category) {
+    BuilderCategory.hair when covered => HiddenChoices.headwear,
+    BuilderCategory.mark ||
+    BuilderCategory.expression ||
+    BuilderCategory.hairColor ||
+    BuilderCategory.garmentColor when silhouette => HiddenChoices.silhouette,
+    BuilderCategory.hairColor when covered => HiddenChoices.headwear,
+    _ => null,
+  };
+}
+
+/// The one-line note for [hidden] ("Pick a skin tone to see …").
+String hiddenNote(AppLocalizations l, HiddenChoices hidden) => switch (hidden) {
+  HiddenChoices.silhouette => l.personaBuilderHiddenSilhouette,
+  HiddenChoices.headwear => l.personaBuilderHiddenHeadwear,
+};
+
 /// The name of one choice ("Silhouette" for the null skin tone).
 String optionName(AppLocalizations l, Enum? value) =>
     value == null ? l.personaSilhouette : partName(l, value);

@@ -209,7 +209,6 @@ class _PersonaBuilderScreenState extends State<PersonaBuilderScreen> {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     final p = CarthaPalette.of(context);
-    final theme = Theme.of(context);
     final state = context.watch<AppState>();
     final saved = state.persona;
     final failed = state.saveStatus == SaveStatus.failed;
@@ -218,6 +217,7 @@ class _PersonaBuilderScreenState extends State<PersonaBuilderScreen> {
         _category.options.any(
           (o) => o != null && _accessOf(o) == OptionAccess.locked,
         );
+    final hidden = hiddenChoices(_category, _draft);
 
     return PopScope(
       canPop: _leaving || !_dirty,
@@ -231,53 +231,79 @@ class _PersonaBuilderScreenState extends State<PersonaBuilderScreen> {
         body: SafeArea(
           top: false,
           bottom: false,
-          child: AreaListView(
-            controller: _scroll,
-            children: [
-              if (failed) ...[const SizedBox(height: 8), const SaveIndicator()],
-              const SizedBox(height: 8),
-              BuilderPreview(avatar: _draft, onSurprise: _surprise),
-              const SizedBox(height: 16),
-              BuilderCategoryBar(
-                selected: _category,
-                onChanged: (c) => setState(() => _category = c),
-              ),
-              const SizedBox(height: 12),
-              if (hasLocked) ...[
-                Row(
-                  children: [
-                    Icon(Icons.lock_outline, size: 16, color: p.textSecondary),
-                    const SizedBox(width: 6),
-                    Flexible(
-                      child: Text(
-                        l.personaBuilderLockedNote,
-                        style: theme.textTheme.bodySmall,
+          // Like AreaListView, but the category chips run to the screen
+          // edges (a chip scrolled part-way is cut there, not at the gutter).
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final side = AreaListView.gutterFor(constraints.maxWidth);
+              Widget padded(Widget child) => Padding(
+                padding: EdgeInsetsDirectional.symmetric(horizontal: side),
+                child: child,
+              );
+              return ListView(
+                controller: _scroll,
+                padding: EdgeInsetsDirectional.only(
+                  bottom: MediaQuery.paddingOf(context).bottom + 32,
+                ),
+                children: [
+                  if (failed) ...[
+                    const SizedBox(height: 8),
+                    padded(const SaveIndicator()),
+                  ],
+                  const SizedBox(height: 8),
+                  padded(BuilderPreview(avatar: _draft, onSurprise: _surprise)),
+                  const SizedBox(height: 16),
+                  BuilderCategoryBar(
+                    selected: _category,
+                    padding: side,
+                    onChanged: (c) => setState(() => _category = c),
+                  ),
+                  const SizedBox(height: 12),
+                  if (hidden != null) ...[
+                    padded(
+                      _Note(
+                        key: const ValueKey('persona-hidden-note'),
+                        icon: Icons.visibility_off_outlined,
+                        text: hiddenNote(l, hidden),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                  ],
+                  if (hasLocked) ...[
+                    padded(
+                      _Note(
+                        icon: Icons.lock_outline,
+                        text: l.personaBuilderLockedNote,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                  ],
+                  padded(
+                    BuilderOptionGrid(
+                      key: ValueKey('persona-options-${_category.name}'),
+                      category: _category,
+                      draft: _draft,
+                      accessOf: _accessOf,
+                      reasonOf: (v) => unlockReason(l, requirementOf(v)!),
+                      onPick: _pick,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  padded(BuilderMottoField(controller: _motto)),
+                  if (saved != null) ...[
+                    const SizedBox(height: 24),
+                    padded(
+                      DestructiveButton(
+                        key: const ValueKey('persona-remove'),
+                        label: l.personaBuilderRemove,
+                        icon: Icons.person_remove_outlined,
+                        onPressed: _busy ? null : _remove,
                       ),
                     ),
                   ],
-                ),
-                const SizedBox(height: 10),
-              ],
-              BuilderOptionGrid(
-                key: ValueKey('persona-options-${_category.name}'),
-                category: _category,
-                draft: _draft,
-                accessOf: _accessOf,
-                reasonOf: (v) => unlockReason(l, requirementOf(v)!),
-                onPick: _pick,
-              ),
-              const SizedBox(height: 24),
-              BuilderMottoField(controller: _motto),
-              if (saved != null) ...[
-                const SizedBox(height: 24),
-                DestructiveButton(
-                  key: const ValueKey('persona-remove'),
-                  label: l.personaBuilderRemove,
-                  icon: Icons.person_remove_outlined,
-                  onPressed: _busy ? null : _remove,
-                ),
-              ],
-            ],
+                ],
+              );
+            },
           ),
         ),
         bottomNavigationBar: DecoratedBox(
@@ -307,6 +333,28 @@ class _PersonaBuilderScreenState extends State<PersonaBuilderScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// A one-line note above the choices (locked extras, choices not visible).
+class _Note extends StatelessWidget {
+  const _Note({super.key, required this.icon, required this.text});
+
+  final IconData icon;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = CarthaPalette.of(context);
+    return Row(
+      children: [
+        Icon(icon, size: 16, color: p.textSecondary),
+        const SizedBox(width: 6),
+        Flexible(
+          child: Text(text, style: Theme.of(context).textTheme.bodySmall),
+        ),
+      ],
     );
   }
 }

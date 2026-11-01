@@ -17,10 +17,13 @@ import 'campaign_ops.dart';
 
 /// Calm Campaign moments (F-060): a short "+20 XP" when a quest, an attempt
 /// or a weekly review adds XP, "Achievement earned: …" when one is earned,
-/// and "New for your avatar: …" when an extra opens. Never while typing an
-/// answer (reflection XP, and a route stop it reaches, stay quiet), never for
-/// a restore (large jumps are ignored), never with the game layer off.
-/// Shown at the top for about two seconds and announced to screen readers.
+/// and "New for your avatar: …" when an extra opens. Only for an action
+/// (a quest, an attempt, a review): never while typing an answer (reflection
+/// XP, a chapter it completes, its achievement and extra, and a route stop
+/// it reaches all stay quiet; the Campaign shows them), never twice for the
+/// same extra (extras are kept for good), never for a restore (large jumps
+/// are ignored), never with the game layer off. Shown at the top for about
+/// two seconds and announced to screen readers.
 class CampaignFeedback extends StatefulWidget {
   const CampaignFeedback({super.key, required this.child});
 
@@ -43,10 +46,20 @@ class CampaignFeedback extends StatefulWidget {
   State<CampaignFeedback> createState() => _CampaignFeedbackState();
 }
 
+/// Achievements earned by a discrete action (a quest, an attempt), not by
+/// typing answers: the only ones a moment may announce on their own.
+const _actionAchievements = {Achievement.practitioner, Achievement.challenger};
+
 class _CampaignFeedbackState extends State<CampaignFeedback> {
   AppState? _state;
   int _actionXp = 0;
+
+  /// Achievements seen this session: earning one again (a quest unticked,
+  /// then ticked) is not a new moment.
   Set<Achievement> _earned = const {};
+
+  /// Extras open before the last change (kept for good, so it only grows
+  /// while the game layer is on).
   Set<Unlockable> _unlocks = const {};
   int _pendingXp = 0;
   final _pendingAchievements = <Achievement>[];
@@ -69,21 +82,26 @@ class _CampaignFeedbackState extends State<CampaignFeedback> {
     final c = state.campaign;
     _actionXp = c.xpFromActions;
     _earned = c.earned;
-    _unlocks = unlockedBy(c, gameOn: state.gameEnabled);
+    _unlocks = state.avatarUnlocks;
   }
 
   void _onChange() {
     final state = _state;
     if (state == null || !state.loaded || !mounted) return;
+    // "Delete all data": start over, nothing to celebrate.
+    if (state.data.profile == null) return _rebase();
     final c = state.campaign;
     final gained = c.xpFromActions - _actionXp;
     final newly = c.earned.difference(_earned);
-    // Same derivation as PersonaOps.avatarUnlocks, from the progress above.
-    final unlocks = unlockedBy(c, gameOn: state.gameEnabled);
-    final opened = unlocks.difference(_unlocks);
+    // Opened by progress just now, and not kept from before (the change has
+    // already been folded into the kept set, so compare with the last one).
+    final opened = unlockedBy(
+      c,
+      gameOn: state.gameEnabled,
+    ).difference(_unlocks);
     _actionXp = c.xpFromActions;
-    _earned = c.earned;
-    _unlocks = unlocks;
+    _earned = {..._earned, ...c.earned};
+    _unlocks = state.avatarUnlocks;
     // A bulk change (a restored backup) is not a moment to celebrate.
     const most = CampaignFeedback.maxCelebratedUnlocks;
     final bulk =
@@ -91,16 +109,22 @@ class _CampaignFeedbackState extends State<CampaignFeedback> {
         newly.length > most ||
         opened.length > most;
     if (!state.gameEnabled || bulk) return;
+    // Only an action is a moment: what typing answers opens (a chapter's
+    // achievement and its extra, a route stop) stays quiet.
+    bool byAction(Achievement? a) =>
+        gained > 0 || (a != null && _actionAchievements.contains(a));
     if (gained > 0) _pendingXp += gained;
-    _pendingAchievements.addAll(newly);
+    _pendingAchievements.addAll([
+      for (final a in Achievement.values)
+        if (newly.contains(a) && byAction(a)) a,
+    ]);
     final worn = state.persona?.avatar;
     _pendingUnlocks.addAll([
       for (final u in kUnlockOrder)
         if (opened.contains(u) &&
             // Already worn (from before the game layer was on): not new.
             !(worn?.uses(u) ?? false) &&
-            // A stop reached by typing answers alone stays quiet.
-            (gained > 0 || unlockSource(u).achievement != null))
+            byAction(unlockSource(u).achievement))
           u,
     ]);
     if (_pendingXp == 0 &&

@@ -834,6 +834,7 @@ class AppData {
     this.lessonsRead = const {},
     this.campaignLog = const [],
     this.persona,
+    this.avatarUnlocked = const {},
   });
 
   /// Null until onboarding creates it.
@@ -871,6 +872,12 @@ class AppData {
   /// The user's avatar and motto; null until they create one.
   final Persona? persona;
 
+  /// Avatar extras the user keeps for good: each one the Campaign opened
+  /// while the game layer was on, and each one a saved avatar wore. It only
+  /// ever grows (nothing unlocked or worn is taken away when progress goes
+  /// down); "Delete all data" clears it with everything else.
+  final Set<Unlockable> avatarUnlocked;
+
   static const empty = AppData();
 
   Journey? get currentJourney {
@@ -896,6 +903,7 @@ class AppData {
     Set<String>? lessonsRead,
     List<BattleLogEntry>? campaignLog,
     Persona? Function()? persona,
+    Set<Unlockable>? avatarUnlocked,
   }) => AppData(
     profile: profile != null ? profile() : this.profile,
     settings: settings ?? this.settings,
@@ -914,6 +922,7 @@ class AppData {
     lessonsRead: lessonsRead ?? this.lessonsRead,
     campaignLog: campaignLog ?? this.campaignLog,
     persona: persona != null ? persona() : this.persona,
+    avatarUnlocked: avatarUnlocked ?? this.avatarUnlocked,
   );
 
   Map<String, Object?> toJson() => {
@@ -933,6 +942,10 @@ class AppData {
     'lessonsRead': lessonsRead.toList()..sort(),
     'campaignLog': [for (final e in campaignLog) e.toJson()],
     'persona': persona?.toJson(),
+    'avatarUnlocked': [
+      for (final u in Unlockable.values)
+        if (avatarUnlocked.contains(u)) u.name,
+    ],
   };
 
   factory AppData.fromJson(Object? json) {
@@ -952,6 +965,14 @@ class AppData {
     for (final l in _list(j['lessonsRead'], 'lessonsRead')) {
       if (l is! String) throw const FormatException('Bad lesson id');
       lessons.add(l);
+    }
+    // Extras from a newer version this one doesn't know are left out.
+    final unlocked = <Unlockable>{};
+    for (final u in _list(j['avatarUnlocked'], 'avatarUnlocked')) {
+      if (u is! String) throw const FormatException('Bad avatar extra');
+      for (final known in Unlockable.values) {
+        if (known.name == u) unlocked.add(known);
+      }
     }
     return AppData(
       profile: j['profile'] == null ? null : UserProfile.fromJson(j['profile']),
@@ -992,6 +1013,7 @@ class AppData {
           BattleLogEntry.fromJson(e),
       ],
       persona: j['persona'] == null ? null : Persona.fromJson(j['persona']),
+      avatarUnlocked: unlocked,
     );
   }
 }

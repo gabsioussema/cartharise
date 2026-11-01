@@ -660,6 +660,67 @@ void main() {
       semantics.dispose();
     });
 
+    testWidgets('open quests show "+20 XP", as in Missions', (tester) async {
+      final semantics = tester.ensureSemantics();
+      await _pumpToday(tester, data: inProgressData());
+      Finder chip(String id) => find.byKey(ValueKey('today-quest-xp-$id'));
+      // q1 is done today; q2 and q3 are open.
+      expect(chip('q1'), findsNothing);
+      expect(chip('q2'), findsOneWidget);
+      expect(chip('q3'), findsOneWidget);
+      expect(
+        find.descendant(of: chip('q2'), matching: find.text('+20 XP')),
+        findsOneWidget,
+      );
+      // Read out with the row: never by the chip's colour alone.
+      expect(
+        tester.getSemantics(find.bySemanticsLabel("Mark '$_page' done")),
+        isSemantics(hint: 'Earns 20 XP when done'),
+      );
+      expect(
+        tester
+            .getSemantics(find.bySemanticsLabel("Mark '$_walk' done"))
+            .getSemanticsData()
+            .hint,
+        isEmpty,
+      );
+      semantics.dispose();
+    });
+
+    testWidgets("no XP chip once today's quest XP is used up", (tester) async {
+      final base = inProgressData();
+      final today = dateKey(kTestNow);
+      await _pumpToday(
+        tester,
+        data: base.copyWith(
+          quests: [
+            ...base.quests,
+            for (final id in ['d1', 'd2'])
+              Quest(
+                id: id,
+                title: 'Done $id',
+                createdAt: _at,
+                completedOn: {today},
+              ),
+          ],
+        ),
+      );
+      expect(find.text(_page), findsOneWidget);
+      expect(find.byKey(const ValueKey('today-quest-xp-q2')), findsNothing);
+      expect(find.text('+20 XP'), findsNothing);
+    });
+
+    testWidgets('no XP chip with the game layer off', (tester) async {
+      final base = inProgressData();
+      await _pumpToday(
+        tester,
+        data: base.copyWith(settings: const AppSettings(game: false)),
+      );
+      expect(find.text(_page), findsOneWidget);
+      expect(find.byKey(const ValueKey('today-quest-xp-q2')), findsNothing);
+      expect(find.text('+20 XP'), findsNothing);
+    });
+
     testWidgets('only the first quests are listed, with a way to see all', (
       tester,
     ) async {
