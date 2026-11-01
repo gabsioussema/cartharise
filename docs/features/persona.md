@@ -108,8 +108,11 @@ detail sheet and a 24–120 px size ladder, in dark and light) come from
    Carry, Banner. One category is shown at a time, so the screen stays short.
 3. **Choices** of that category as a grid of tiles: a small portrait of the
    draft wearing that choice (colours are seen in place, next to their name)
-   and the name. The selected tile has a check, a bold name and an accent
-   ring, and is announced as selected. Skin starts with **Silhouette** (no
+   and the name. Colour choices (skin, hair colour, garment colour) also
+   carry a small swatch dot of that colour on the portrait's corner
+   (`optionSwatch`, from `AvatarPalette`), always next to the name. The
+   selected tile has a check, a bold name and an accent ring, and is
+   announced as selected. Skin starts with **Silhouette** (no
    skin assumed), then the tones in `kSkinTonePresentation`'s mixed order.
    No gender choice: every option is open to everyone.
 4. **Motto (optional)**, then **Remove avatar** when one is saved.
@@ -176,3 +179,23 @@ game off, worn locked kept, remove with confirm, unsaved-changes prompt
 (button and system back), failed save and failed removal, motto limits, You
 profile, categories, guidelines (dark + light), size matrix (dark + light).
 Screenshots: `test/screenshots/persona_builder_screenshots_test.dart`.
+
+## Across the app
+
+- **You:** the profile hero (see "You profile" above).
+- **Today:** a 48 dp portrait beside the greeting once an avatar exists
+  (`ValueKey('today-avatar')`, no banner, hidden from screen readers since
+  the greeting already speaks). Nothing is shown before one is made.
+- **The Campaign:** a 36 dp portrait walks Hannibal's route above the
+  current stop, and the "Your strategist" card shows the avatar, the motto
+  as typed, "n of 13 extras unlocked", the next extra and Create / Edit (see
+  `campaign.md`).
+- **Data:** the persona is part of the JSON backup and is removed by
+  "Delete all data" (`AppData.persona`).
+
+**Journey test:** `test/ui/persona_journey_test.dart` creates an avatar in
+the builder from You, then checks You, the Campaign (route and card) and
+Today show it; the exported backup carries it; "Delete all data" removes it
+everywhere; restoring the backup brings it back as it was. The builder is
+also in the accessibility matrix (`test/ui/a11y_test.dart`) and the AppNav
+route check (`test/ui/journeys_test.dart`).

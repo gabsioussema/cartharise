@@ -6,6 +6,7 @@ library;
 
 import 'package:cartharise/content/en.dart';
 import 'package:cartharise/domain/app_data.dart';
+import 'package:cartharise/domain/persona.dart';
 import 'package:cartharise/ui/compass/compass_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -18,7 +19,7 @@ final _at = DateTime(2026, 11, 2, 21, 10);
 String _two(int i) => i.toString().padLeft(2, '0');
 
 /// Mid-campaign: the morning written, two check-ins, a Compass, quests done
-/// on a few days, path notes and two battle-log attempts.
+/// on a few days, path notes, two battle-log attempts and an avatar.
 AppData _data() {
   ReflectionAnswer answer(String id) =>
       ReflectionAnswer(promptId: id, body: 'My answer', updatedAt: _at);
@@ -66,6 +67,18 @@ AppData _data() {
       ),
       2: PathAnswer(day: 2, body: 'Energy dips after lunch.', updatedAt: _at),
     },
+    persona: () => Persona(
+      avatar: const Avatar(
+        skinTone: SkinTone.copper,
+        hair: HairStyle.locs,
+        hairColor: HairColor.black,
+        garment: Garment.cloak,
+        garmentColor: GarmentColor.sand,
+        accessory: Accessory.satchel,
+      ),
+      motto: 'Slow is smooth, smooth is far.',
+      updatedAt: _at,
+    ),
     campaignLog: [
       BattleLogEntry(
         id: 'a2',
@@ -108,6 +121,21 @@ void main() {
         home: const CompassTab(initial: CompassSection.campaign),
       );
       await captureScreenshot(tester, 'campaign_02_phone_$b');
+    });
+
+    testWidgets('your strategist on a phone ($b)', (tester) async {
+      await pumpCartha(
+        tester,
+        data: _data(),
+        brightness: brightness,
+        content: englishContent,
+        home: const CompassTab(initial: CompassSection.campaign),
+      );
+      await tester.ensureVisible(
+        find.byKey(const ValueKey('campaign-strategist')),
+      );
+      await pumpFrames(tester);
+      await captureScreenshot(tester, 'campaign_04_strategist_$b');
     });
 
     testWidgets('battle log and achievements on a phone ($b)', (tester) async {

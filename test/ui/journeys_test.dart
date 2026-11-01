@@ -20,6 +20,7 @@ import 'package:cartharise/ui/missions/path_day_screen.dart';
 import 'package:cartharise/ui/missions/project_screen.dart';
 import 'package:cartharise/ui/nav.dart';
 import 'package:cartharise/ui/onboarding/onboarding_flow.dart';
+import 'package:cartharise/ui/persona/persona_builder.dart';
 import 'package:cartharise/ui/reset/guided_prompt_screen.dart';
 import 'package:cartharise/ui/reset/reset_complete_screen.dart';
 import 'package:cartharise/ui/reset/reset_tab.dart';
@@ -720,6 +721,7 @@ void main() {
         ('support', AppNav.openSupport, SupportScreen),
         ('reminders', AppNav.openReminders, RemindersScreen),
         ('data', AppNav.openData, DataScreen),
+        ('avatar', AppNav.openPersonaBuilder, PersonaBuilderScreen),
       ];
       for (final (name, open, type) in routes) {
         unawaited(open(tester.element(find.byType(TodayTab))));

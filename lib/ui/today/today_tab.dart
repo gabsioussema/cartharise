@@ -12,6 +12,8 @@ import '../campaign/campaign_ops.dart';
 import '../compass/compass_import.dart';
 import '../missions/missions_logic.dart';
 import '../nav.dart';
+import '../persona/avatar_view.dart';
+import '../persona/persona_ops.dart';
 import '../theme/cartha_theme.dart';
 import '../widgets/widgets.dart';
 import 'next_step.dart';
@@ -30,6 +32,9 @@ class TodayTab extends StatelessWidget {
   /// Content column width on tablets.
   static const maxContentWidth = 720.0;
 
+  /// The avatar beside the greeting.
+  static const avatarSize = 48.0;
+
   @override
   Widget build(BuildContext context) {
     final state = context.watch<AppState>();
@@ -41,6 +46,7 @@ class TodayTab extends StatelessWidget {
       DayPart.evening => l.todayGreetingEvening(name),
     };
     final today = state.today;
+    final avatar = state.persona?.avatar;
     return Scaffold(
       body: SafeArea(
         bottom: false,
@@ -54,6 +60,17 @@ class TodayTab extends StatelessWidget {
               padding: EdgeInsetsDirectional.fromSTEB(side, 0, side, 32),
               children: [
                 ScreenHeader(
+                  // The user's own avatar beside the greeting, once they
+                  // made one (decorative: the greeting says who it is for).
+                  leading: avatar == null
+                      ? null
+                      : AvatarView(
+                          key: const ValueKey('today-avatar'),
+                          avatar: avatar,
+                          size: avatarSize,
+                          showSigil: false,
+                          excludeFromSemantics: true,
+                        ),
                   title: greeting,
                   subtitle: l.todaySubtitle,
                   padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 16),

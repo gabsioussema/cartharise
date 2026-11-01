@@ -6,6 +6,7 @@ import 'package:cartharise/ui/journal/past_reset_screen.dart';
 import 'package:cartharise/ui/missions/path_day_screen.dart';
 import 'package:cartharise/ui/missions/project_screen.dart';
 import 'package:cartharise/ui/nav.dart';
+import 'package:cartharise/ui/persona/persona_builder.dart';
 import 'package:cartharise/ui/reset/guided_prompt_screen.dart';
 import 'package:cartharise/ui/reset/reset_complete_screen.dart';
 import 'package:cartharise/ui/you/appearance_screen.dart';
@@ -137,6 +138,7 @@ final List<_Screen> _screens = [
   _home('Appearance', const AppearanceScreen()),
   _home('Your data', const DataScreen()),
   _home('Support', const SupportScreen()),
+  _home('Persona builder', const PersonaBuilderScreen()),
   (name: 'Onboarding', tab: null, home: null, pill: null, firstLaunch: true),
 ];
 

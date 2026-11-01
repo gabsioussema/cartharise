@@ -5,6 +5,7 @@
 library;
 
 import 'package:cartharise/content/en.dart';
+import 'package:cartharise/domain/persona.dart';
 import 'package:cartharise/ui/widgets/scenes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -74,6 +75,27 @@ void main() {
       );
       await _settleScenes(tester);
       await captureScreenshot(tester, '21_today_in_progress_${b.name}');
+    });
+
+    testWidgets('today with an avatar ${b.name}', (tester) async {
+      await pumpCartha(
+        tester,
+        brightness: b,
+        data: inProgressData().copyWith(
+          persona: () => Persona(
+            avatar: const Avatar(
+              skinTone: SkinTone.copper,
+              hair: HairStyle.locs,
+              garment: Garment.cloak,
+              garmentColor: GarmentColor.sand,
+            ),
+            updatedAt: DateTime(2026, 11, 2, 8),
+          ),
+        ),
+        content: englishContent,
+      );
+      await _settleScenes(tester);
+      await captureScreenshot(tester, '21b_today_avatar_${b.name}');
     });
 
     testWidgets('today settled ${b.name}', (tester) async {

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../domain/persona.dart';
 import '../../l10n/app_localizations.dart';
+import '../theme/avatar_palette.dart';
 import '../theme/cartha_theme.dart';
 import 'avatar_view.dart';
 import 'builder_categories.dart';
@@ -23,6 +24,18 @@ enum OptionAccess {
 
 /// Size of the small portrait inside each choice.
 const double kOptionPortrait = 48;
+
+/// Size of the colour swatch on a colour choice.
+const double kOptionSwatch = 18;
+
+/// The plain colour of a colour choice (skin tone, hair colour, garment
+/// colour), shown as a swatch next to its name; null for other choices.
+Color? optionSwatch(Enum? value) => switch (value) {
+  final SkinTone t => AvatarPalette.skin(t).base,
+  final HairColor c => AvatarPalette.hair(c).base,
+  final GarmentColor c => AvatarPalette.garment(c).base,
+  _ => null,
+};
 
 /// The choices of one [category] as a grid of labelled tiles. Each tile shows
 /// a small portrait of the draft with that choice (so colours are seen in
@@ -100,6 +113,7 @@ class BuilderOptionGrid extends StatelessWidget {
         'persona-option-${category.name}-${value?.name ?? 'silhouette'}',
       ),
       label: optionName(l, value),
+      swatch: optionSwatch(value),
       selected: selected,
       access: access,
       note: switch (access) {
@@ -131,10 +145,15 @@ class BuilderOptionTile extends StatelessWidget {
     required this.onTap,
     this.access = OptionAccess.open,
     this.note,
+    this.swatch,
   });
 
   final String label;
   final Widget preview;
+
+  /// A colour choice's plain colour, drawn as a dot on the portrait's corner
+  /// (always next to its name, never instead of it).
+  final Color? swatch;
   final bool selected;
   final OptionAccess access;
 
@@ -199,7 +218,35 @@ class BuilderOptionTile extends StatelessWidget {
                         dimension: kOptionPortrait,
                         child: Opacity(
                           opacity: locked ? 0.45 : 1,
-                          child: preview,
+                          child: swatch == null
+                              ? preview
+                              : Stack(
+                                  clipBehavior: Clip.none,
+                                  children: [
+                                    Positioned.fill(child: preview),
+                                    PositionedDirectional(
+                                      end: -4,
+                                      bottom: -2,
+                                      child: Container(
+                                        key: const ValueKey(
+                                          'persona-option-swatch',
+                                        ),
+                                        width: kOptionSwatch,
+                                        height: kOptionSwatch,
+                                        decoration: BoxDecoration(
+                                          color: swatch,
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                            color: selected
+                                                ? p.selection
+                                                : p.card,
+                                            width: 2,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                         ),
                       ),
                       const SizedBox(height: 6),

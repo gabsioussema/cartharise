@@ -1,5 +1,8 @@
 # Plan: Persona (avatar) + richer gamification
 
+**Status:** phases 0–2 done and integrated on `main`; phase 3 (audit, then
+fix) is next.
+
 Goal: the user creates their own avatar ("Your strategist"), sees it across the
 app, and the Campaign gains cosmetic, never-punitive rewards around it.
 
@@ -104,6 +107,10 @@ keys), `test/ui/campaign_test.dart`, `test/campaign_test.dart`,
 * Tests for each, plus the pure "next unlock" helper.
 
 ## Phase 2 — integrate
+**Status: done** — A, B and C merged on `main`; Today shows the avatar; the
+persona journey test, screenshots, README row and a debug APK are in place.
+Next: phase 3 (audit).
+
 Merge `swarm/avatar-art`, `swarm/persona-builder`, `swarm/campaign-plus`;
 `make l10n`; Today shows the small avatar beside the greeting when one exists;
 a journey test (create avatar → You, Campaign and Today show it; backup /

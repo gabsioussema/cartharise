@@ -60,6 +60,16 @@ void main() {
       await captureScreenshot(tester, 'persona_builder_new_$b');
     });
 
+    testWidgets('builder: edit, skin tones with swatches ($b)', (tester) async {
+      await pumpCartha(
+        tester,
+        data: _data(),
+        home: const PersonaBuilderScreen(),
+        brightness: brightness,
+      );
+      await captureScreenshot(tester, 'persona_builder_edit_$b');
+    });
+
     testWidgets('builder: banner extras, locked ($b)', (tester) async {
       await pumpCartha(
         tester,

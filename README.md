@@ -98,6 +98,11 @@ and credited, and the article itself is never reproduced (see [Credits](#credits
     <td align="center"><img src="docs/screenshots/campaign-log-dark.png" width="220" alt="Battle log and achievements"><br><sub>Battle log & achievements</sub></td>
     <td align="center"><img src="docs/screenshots/campaign-light.png" width="220" alt="The Campaign, light"><br><sub>The Campaign · light</sub></td>
   </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/avatar-builder-dark.png" width="220" alt="Edit your avatar"><br><sub>Your avatar</sub></td>
+    <td align="center"><img src="docs/screenshots/campaign-avatar-dark.png" width="220" alt="Your avatar on Hannibal's route"><br><sub>Your strategist on the route</sub></td>
+    <td align="center"><img src="docs/screenshots/you-avatar-light.png" width="220" alt="You, with your avatar, light"><br><sub>You · light</sub></td>
+  </tr>
 </table>
 
 <sub>Rendered from the real widgets with <code>make screenshots</code>, then cropped to one phone screen. See <a href="#testing">Testing</a>.</sub>
@@ -139,6 +144,7 @@ Five tabs: **Today · Reset · Compass · Journal · You**.
 - 🗺️ **Hannibal's route:** each level is the next stop from Carthage to Italy, with the XP to the next one
 - 🛡️ **Monthly boss fight:** the boss weakens as your project's milestones are reached; record what you tried and learned in a battle log you can correct or delete
 - ✨ **Calm moments:** a short "+20 XP" or "Achievement earned" when you complete a quest or an attempt, never while you type
+- 🏺 **Avatar extras:** banners, garment colours, a circlet or laurel, a scroll, compass or amulet open along the route and with achievements. Purely cosmetic, never taken away, and all open with the game off
 - 🏅 **XP, levels and seven achievements**, earned only by doing: answering a question, completing a quest, writing a 30-day note, recording an attempt, a weekly review. XP never looks at what you write, rest never costs anything, and one switch in You turns the whole layer off
 
 **Journal: write and look back**
@@ -146,6 +152,7 @@ Five tabs: **Today · Reset · Compass · Journal · You**.
 - 🔍 **Look back:** compare two Compass moments side by side and reread earlier resets
 
 **You: your space, your choices**
+- 🧑 **Your avatar ("Your strategist"):** pick skin tone, face, hair, headwear (headscarf, turban…), glasses, marks and clothes, plus an optional motto. No gender choice, no default skin. It shows on You, beside Today's greeting and on Hannibal's route
 - 🙏 **Inspiration:** the article, its author and both links, and what is from the source vs added by Cartharise
 - 🔔 **Reminders:** opt‑in, six editable check‑in times, quiet hours, or **Add to calendar (.ics)** if you'd rather not get notifications
 - 🎨 **Appearance:** Forest or Olive theme · system / light / dark · motion on/off
@@ -326,8 +333,8 @@ failures, reminder planning (quiet hours across midnight, DST), the `.ics` forma
 (ids, mapping to the Compass, no banned words) and the l10n merge. It also includes:
 
 - One widget test file per area, each run across a **size matrix**: 320×568 at 200 % text, 390×844, and 1024×1366 at 130 %, in dark and light
-- **Accessibility** checks (tap size, labels, text contrast) on 21 screens, plus a keyboard‑only pass
-- **End‑to‑end journeys** through the real app and content: onboarding → full reset → previewed Compass import → quests → journal → `.ics` → export, delete everything, restore
+- **Accessibility** checks (tap size, labels, text contrast) on 23 screens, plus a keyboard‑only pass
+- **End‑to‑end journeys** through the real app and content: onboarding → full reset → previewed Compass import → quests → journal → `.ics` → export, delete everything, restore; and create an avatar → You, the Campaign and Today show it → backup, delete, restore
 - Guard tests: no hard‑coded colours outside the theme, no streak or guilt copy, privacy settings pinned in the manifest
 
 Notifications, the share sheet and the file picker are tested with fakes. The real ones still need a

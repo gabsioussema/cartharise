@@ -7,8 +7,10 @@ import 'package:cartharise/l10n/app_localizations_en.dart';
 import 'package:cartharise/ui/nav.dart';
 import 'package:cartharise/ui/persona/avatar_view.dart';
 import 'package:cartharise/ui/persona/builder_categories.dart';
+import 'package:cartharise/ui/persona/builder_options.dart';
 import 'package:cartharise/ui/persona/persona_builder.dart';
 import 'package:cartharise/ui/persona/persona_ops.dart';
+import 'package:cartharise/ui/theme/avatar_palette.dart';
 import 'package:cartharise/ui/you/you_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
@@ -703,6 +705,58 @@ void main() {
           findsOneWidget,
         );
       }
+    });
+  });
+
+  group('colour swatches', () {
+    test('colour choices carry their own colour; other choices none', () {
+      expect(
+        optionSwatch(SkinTone.ebony),
+        AvatarPalette.skin(SkinTone.ebony).base,
+      );
+      expect(
+        optionSwatch(HairColor.grey),
+        AvatarPalette.hair(HairColor.grey).base,
+      );
+      expect(
+        optionSwatch(GarmentColor.crimson),
+        AvatarPalette.garment(GarmentColor.crimson).base,
+      );
+      expect(optionSwatch(null), isNull, reason: 'silhouette: no skin');
+      expect(optionSwatch(HairStyle.afro), isNull);
+      expect(optionSwatch(Sigil.elephant), isNull);
+    });
+
+    testWidgets('colour tiles show a swatch next to the name', (tester) async {
+      await _pumpYou(tester);
+      await _openBuilder(tester);
+      Finder swatchIn(BuilderCategory c, Enum? value) => find.descendant(
+        of: _option(c, value),
+        matching: find.byKey(const ValueKey('persona-option-swatch')),
+      );
+      for (final (c, value, name) in <(BuilderCategory, Enum, String)>[
+        (BuilderCategory.skin, SkinTone.umber, 'Umber'),
+        (BuilderCategory.hairColor, HairColor.auburn, 'Auburn'),
+        (BuilderCategory.garmentColor, GarmentColor.sand, 'Sand'),
+      ]) {
+        await _tap(tester, _chip(c));
+        await _reveal(tester, _option(c, value));
+        final dot = tester.widget<Container>(swatchIn(c, value));
+        expect(
+          (dot.decoration! as BoxDecoration).color,
+          optionSwatch(value),
+          reason: '$c',
+        );
+        expect(
+          find.descendant(of: _option(c, value), matching: find.text(name)),
+          findsOneWidget,
+          reason: 'never colour alone',
+        );
+      }
+      await _tap(tester, _chip(BuilderCategory.skin));
+      expect(swatchIn(BuilderCategory.skin, null), findsNothing);
+      await _tap(tester, _chip(BuilderCategory.hair));
+      expect(swatchIn(BuilderCategory.hair, HairStyle.afro), findsNothing);
     });
   });
 

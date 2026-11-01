@@ -5,6 +5,7 @@ import 'package:cartharise/data/data_store.dart';
 import 'package:cartharise/domain/app_data.dart';
 import 'package:cartharise/domain/content.dart';
 import 'package:cartharise/domain/local_date.dart';
+import 'package:cartharise/domain/persona.dart';
 import 'package:cartharise/state/app_state.dart';
 import 'package:cartharise/ui/awakening/awakening_screen.dart';
 import 'package:cartharise/ui/compass/compass_tab.dart';
@@ -13,6 +14,7 @@ import 'package:cartharise/ui/journal/review_screen.dart';
 import 'package:cartharise/ui/missions/missions_logic.dart';
 import 'package:cartharise/ui/missions/path_day_screen.dart';
 import 'package:cartharise/ui/nav.dart';
+import 'package:cartharise/ui/persona/avatar_view.dart';
 import 'package:cartharise/ui/reset/guided_prompt_screen.dart';
 import 'package:cartharise/ui/today/next_step.dart';
 import 'package:cartharise/ui/today/today_model.dart';
@@ -36,6 +38,17 @@ ReflectionAnswer _answer(String id, {String? body, bool skipped = false}) =>
     );
 
 String _two(int i) => i.toString().padLeft(2, '0');
+
+const _avatar = Avatar(
+  skinTone: SkinTone.copper,
+  hair: HairStyle.coily,
+  garment: Garment.cloak,
+);
+
+/// [data] with a saved avatar.
+AppData _withAvatar(AppData data) => data.copyWith(
+  persona: () => Persona(avatar: _avatar, motto: 'One step', updatedAt: _at),
+);
 
 const _walk = 'Walk 20 minutes';
 const _page = 'Write one page';
@@ -467,6 +480,36 @@ void main() {
       expect(find.text('Clarity today. Progress tomorrow.'), findsOneWidget);
     });
 
+    testWidgets('the avatar stands beside the greeting once made', (
+      tester,
+    ) async {
+      await _pumpToday(tester);
+      expect(find.byKey(const ValueKey('today-avatar')), findsNothing);
+      expect(
+        find.descendant(
+          of: find.byType(TodayTab),
+          matching: find.byType(AvatarView),
+        ),
+        findsNothing,
+        reason: 'no emblem stand-in on Today',
+      );
+
+      await _pumpToday(tester, data: _withAvatar(onboardedData()));
+      final view = tester.widget<AvatarView>(
+        find.byKey(const ValueKey('today-avatar')),
+      );
+      expect(view.avatar, _avatar);
+      expect(view.excludeFromSemantics, isTrue, reason: 'the greeting says it');
+      expect(find.text('Good morning, Sam.'), findsOneWidget);
+      // Beside the greeting, on the same line.
+      final avatarBox = tester.getRect(
+        find.byKey(const ValueKey('today-avatar')),
+      );
+      final greetingBox = tester.getRect(find.text('Good morning, Sam.'));
+      expect(avatarBox.right, lessThanOrEqualTo(greetingBox.left));
+      expect(avatarBox.top, lessThan(greetingBox.bottom));
+    });
+
     for (final (hour, text) in [
       (14, 'Good afternoon, Traveler.'),
       (21, 'Good evening, Traveler.'),
@@ -837,6 +880,7 @@ void main() {
             onboardedData(name: null),
             inProgressData(),
             settledData(),
+            _withAvatar(inProgressData()),
           ]) {
             await _pumpToday(
               tester,

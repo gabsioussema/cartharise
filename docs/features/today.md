@@ -9,7 +9,8 @@ F-054 (gentle progress), F-031 (non-punitive), F-055 (honest save failure).
 1. **Greeting** (`ScreenHeader`, Cinzel): "Good morning / afternoon / evening,
    <name>." — the optional name, else "Traveler". Morning 04:00–11:59,
    afternoon 12:00–17:59, evening otherwise (local time). Subtitle
-   "Clarity today. Progress tomorrow."
+   "Clarity today. Progress tomorrow." Once the user made an avatar, it
+   stands beside the greeting (48 dp `AvatarView`, decorative, no banner).
 2. **Save problem** (only when the last write failed): the shared
    `SaveIndicator` with Retry and Export a copy.
 3. **Your next step** — a forest `HeroCard` with `DawnRuinsScene` (rises once;
@@ -98,7 +99,7 @@ assumes anything that isn't stored.
 - Model: part of day boundaries; path day (latest written, blanks ignored,
   ties → higher day); `JourneySummary` counts core prompts only.
 - Widgets (real app via `pumpCartha`): greetings with and without a name at
-  three times; first-day card, lessons link and empty states; resume text and
+  three times; the avatar beside the greeting only once one exists; first-day card, lessons link and empty states; resume text and
   `GuidedPromptScreen(promptId: morning.04)`; checkbox semantics and toggling
   (persisted for today); five quests + "See all"; Add a quest / Choose quests →
   Missions; Open day 4 → `PathDayScreen(day: 4)`; Open Compass; Open the

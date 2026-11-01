@@ -7,9 +7,10 @@ and the share sheet / file picker when the user asks for them.
 
 ## User flow
 
-- **Hub (`YouTab`).** Cinzel title, then a forest **profile** hero card (the
-  optional name, or "No name set"; tapping opens `askText`; a blank name
-  clears it), a **Pace** card (One day / Flexible, "nothing is ever locked by
+- **Hub (`YouTab`).** Cinzel title, then a forest **profile** hero card: the
+  avatar (or the emblem), the optional name as its own **Edit name** button
+  ("No name set"; it opens `askText`; a blank name clears it), the motto in
+  quotes, and **Create / Edit your avatar** (see `persona.md`); then a **Pace** card (One day / Flexible, "nothing is ever locked by
   time"), and grouped rows:
   - *Credit*: **Inspiration**
   - *Settings*: **Reminders** (On/Off), **Appearance** (e.g. "Forest ·
