@@ -143,6 +143,8 @@ class _CampaignViewState extends State<CampaignView> {
                       : state.monthlyBoss,
                   muted: state.monthlyBoss.trim().isEmpty,
                 ),
+                const SizedBox(height: 12),
+                _BossStrength(progress: progress),
                 const SizedBox(height: 16),
                 TextField(
                   key: const ValueKey('campaign-attempt'),
@@ -223,6 +225,17 @@ class _CampaignViewState extends State<CampaignView> {
             ),
             style: theme.textTheme.labelLarge,
           ),
+          if (progress.nextAchievement != null) ...[
+            const SizedBox(height: 4),
+            Text(
+              l.campaignNextAchievement(
+                achievementName(l, progress.nextAchievement!),
+                achievementBody(l, progress.nextAchievement!),
+              ),
+              key: const ValueKey('campaign-next-achievement'),
+              style: secondary,
+            ),
+          ],
           const SizedBox(height: 12),
           _Grid(
             minWidth: 170,
@@ -308,11 +321,6 @@ class _StatusCard extends StatelessWidget {
     final l = AppLocalizations.of(context);
     final p = CarthaPalette.of(context);
     final theme = Theme.of(context);
-    final toNext = l.campaignLevelProgress(
-      progress.levelXp,
-      kXpPerLevel,
-      progress.level + 1,
-    );
     return HeroCard(
       eyebrow: l.campaignStatusEyebrow,
       title: l.campaignLevel(progress.level, progress.xp),
@@ -320,20 +328,21 @@ class _StatusCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(999),
-              child: LinearProgressIndicator(
-                value: progress.levelXp / kXpPerLevel,
-                minHeight: 8,
-                color: p.heroAccent,
-                backgroundColor: p.heroBorder,
-                semanticsLabel: toNext,
-              ),
+            _RouteMap(progress: progress),
+            const SizedBox(height: 12),
+            Text(
+              l.campaignRouteHere(place(l, progress.waypoint)),
+              style: theme.textTheme.titleSmall?.copyWith(color: p.onHero),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 2),
             ExcludeSemantics(
               child: Text(
-                toNext,
+                progress.nextWaypoint == null
+                    ? l.campaignRouteEnd
+                    : l.campaignRouteNext(
+                        progress.xpToNext,
+                        place(l, progress.nextWaypoint!),
+                      ),
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: p.onHeroMuted,
                 ),
@@ -359,6 +368,101 @@ class _StatusCard extends StatelessWidget {
       ),
     );
   }
+}
+
+/// The waypoint's localized name.
+String place(AppLocalizations l, Waypoint w) => l.campaignWaypoint(w.name);
+
+/// Hannibal's route: one stop per level, the road behind filled, the next
+/// stretch filled as far as the XP towards it. Static (no motion).
+class _RouteMap extends StatelessWidget {
+  const _RouteMap({required this.progress});
+
+  final CampaignProgress progress;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final p = CarthaPalette.of(context);
+    final stop = progress.waypoint.index;
+    final total = Waypoint.values.length;
+    return Semantics(
+      label: l.campaignRouteLabel(place(l, progress.waypoint), stop + 1, total),
+      excludeSemantics: true,
+      child: SizedBox(
+        height: 28,
+        width: double.infinity,
+        child: CustomPaint(
+          painter: _RoutePainter(
+            stop: stop,
+            toward: progress.nextWaypoint == null
+                ? 0
+                : progress.levelXp / kXpPerLevel,
+            count: total,
+            road: p.heroBorder,
+            walked: p.heroAccent,
+            current: p.onHero,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _RoutePainter extends CustomPainter {
+  _RoutePainter({
+    required this.stop,
+    required this.toward,
+    required this.count,
+    required this.road,
+    required this.walked,
+    required this.current,
+  });
+
+  final int stop;
+  final double toward;
+  final int count;
+  final Color road;
+  final Color walked;
+  final Color current;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    const r = 6.0;
+    final y = size.height / 2;
+    final step = (size.width - 2 * r - 4) / (count - 1);
+    Offset at(int i) => Offset(r + 2 + i * step, y);
+    final line = Paint()
+      ..strokeWidth = 3
+      ..strokeCap = StrokeCap.round;
+    canvas.drawLine(at(0), at(count - 1), line..color = road);
+    final reached = Offset.lerp(
+      at(stop),
+      at((stop + 1).clamp(0, count - 1)),
+      toward,
+    )!;
+    canvas.drawLine(at(0), reached, line..color = walked);
+    for (var i = 0; i < count; i++) {
+      final dot = Paint()..color = i <= stop ? walked : road;
+      canvas.drawCircle(at(i), i == stop ? r + 2 : r - 1, dot);
+    }
+    canvas.drawCircle(
+      at(stop),
+      r + 2,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2
+        ..color = current,
+    );
+  }
+
+  @override
+  bool shouldRepaint(_RoutePainter old) =>
+      old.stop != stop ||
+      old.toward != toward ||
+      old.road != road ||
+      old.walked != walked ||
+      old.current != current;
 }
 
 /// The XP rules, stated plainly (F-060).
@@ -580,6 +684,65 @@ class _StrategistMap extends StatelessWidget {
             ),
           ],
         ),
+      ],
+    );
+  }
+}
+
+/// The boss weakens only as real project milestones are reached; with none
+/// yet, a pointer to add some.
+class _BossStrength extends StatelessWidget {
+  const _BossStrength({required this.progress});
+
+  final CampaignProgress progress;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final p = CarthaPalette.of(context);
+    final theme = Theme.of(context);
+    if (progress.milestones == 0) {
+      return Wrap(
+        crossAxisAlignment: WrapCrossAlignment.center,
+        spacing: 4,
+        children: [
+          Text(
+            l.campaignBossNoMilestones,
+            style: theme.textTheme.bodySmall?.copyWith(color: p.textSecondary),
+          ),
+          TextLinkButton(
+            key: const ValueKey('campaign-boss-project'),
+            label: l.campaignBossOpenProject,
+            trailingIcon: Icons.arrow_forward,
+            onPressed: () => AppNav.openProject(context),
+          ),
+        ],
+      );
+    }
+    final remaining = progress.milestones - progress.milestonesDone;
+    final status = remaining == 0
+        ? l.campaignBossBeaten
+        : l.campaignBossMilestones(
+            progress.milestonesDone,
+            progress.milestones,
+          );
+    return Column(
+      key: const ValueKey('campaign-boss-strength'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(l.campaignBossStrength, style: theme.textTheme.labelLarge),
+        const SizedBox(height: 6),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(999),
+          child: LinearProgressIndicator(
+            value: remaining / progress.milestones,
+            minHeight: 8,
+            color: p.accent,
+            semanticsLabel: '${l.campaignBossStrength}: $status',
+          ),
+        ),
+        const SizedBox(height: 4),
+        ExcludeSemantics(child: Text(status, style: theme.textTheme.bodySmall)),
       ],
     );
   }

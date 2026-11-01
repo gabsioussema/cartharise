@@ -110,7 +110,7 @@ Five tabs: **Today · Reset · Compass · Journal · You**.
 
 **Today: where you left off**
 - 🧭 **Your next step**, worked out from what you've actually done: start, resume, build your Compass, turn levers into quests, or reflect on your week
-- ✅ Today's quests, a gentle progress ring ("3 of 27 reflections written"), and your vision and month project at a glance
+- ✅ At a glance: three small tiles for your reset (3/27), your Campaign level and your 30-day path day, then today's quests and your direction
 
 **Reset: the one‑day reset, one question at a time**
 - 🌅 **Morning:** 14 questions (*The Mirror*: current reality, possible futures, identity; *The Vision*: a good ordinary day and who you want to become)
@@ -136,7 +136,9 @@ Five tabs: **Today · Reset · Compass · Journal · You**.
 **Campaign: the article as a game (optional)**
 - ♜ Section VII of the article made playable: your vision is the **win condition**, the anti-vision is **what's at stake**, the one-year mission is the **main campaign**, the one-month project is your **boss fight**, daily levers are **quests** and your boundaries are the **rules of engagement**
 - 📜 **Act I:** five chapters built from the reset's exercises (4 · 7 · 3 · 6 · 7 questions), each opening its first open question
-- 🛡️ **Monthly boss fight:** record what you tried and what you learned in a battle log you can correct or delete
+- 🗺️ **Hannibal's route:** each level is the next stop from Carthage to Italy, with the XP to the next one
+- 🛡️ **Monthly boss fight:** the boss weakens as your project's milestones are reached; record what you tried and learned in a battle log you can correct or delete
+- ✨ **Calm moments:** a short "+20 XP" or "Achievement earned" when you complete a quest or an attempt, never while you type
 - 🏅 **XP, levels and seven achievements**, earned only by doing: answering a question, completing a quest, writing a 30-day note, recording an attempt, a weekly review. XP never looks at what you write, rest never costs anything, and one switch in You turns the whole layer off
 
 **Journal: write and look back**

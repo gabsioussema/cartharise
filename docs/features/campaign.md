@@ -23,10 +23,12 @@ Nothing is copied or inferred: the map shows the user's own Compass words, or
 
 ## User flow
 
-1. **Status** (forest hero): "Level n · x XP", a bar towards the next level
-   ("x / 100 XP to level n+1"), "XP counts participation and practice, never
-   your worth. Rest days cost nothing, and nothing is ever taken away." and
-   **How XP is earned** (a dialog listing every rule below).
+1. **Status** (forest hero): "Level n · x XP" and **Hannibal's route** — one
+   stop per level (Carthage, New Carthage, the Ebro, the Pyrenees, the Rhône,
+   the Alps, Italy; places, never labels for the person), the road walked so
+   far and the stretch towards the next stop ("You're at New Carthage", "10 XP
+   to the Ebro"; from Italy on "The campaign goes on"). Then "XP counts what
+   you do, never your worth. Rest costs nothing." and **How XP is earned**.
 2. **Act I · The one-day awakening** (F-059): five chapter cards with the
    article's counts — See the terrain (4), Find the pattern (7), Raise your
    banner (3), Break autopilot (6 daytime check-ins), Plan the campaign (7
@@ -38,6 +40,10 @@ Nothing is copied or inferred: the map shows the user's own Compass words, or
    Compass section) and **Open daily quests** (→ Missions).
 4. **Monthly boss fight** (F-061): "The boss is the project or obstacle, never
    you or other people." The month project as a callout, then **What did you
+   actually try?** (required). **Boss strength** shows the Missions project's
+   milestones: the bar shrinks only as milestones are reached ("1 of 3
+   milestones reached", then "Boss beaten"); with none, "Add milestones to
+   your project to weaken the boss" → `ProjectScreen`. Then **What did you
    actually try?** (required) and **What did you learn? (optional)** →
    **Record this attempt**. The battle log lists attempts newest first (five,
    then "Show all n"); tapping one opens a sheet to correct it or **Delete
@@ -46,7 +52,8 @@ Nothing is copied or inferred: the map shows the user's own Compass words, or
    The Pathfinder, The Visionary, The Watchful, The Strategist (one per
    completed chapter, in any reset), The Practitioner (a completed quest), The
    Challenger (a first attempt). Status is an icon **and** the word "Earned" /
-   "Not yet", never colour alone.
+   "Not yet", never colour alone. Above them, "Next: <achievement> · <how>"
+   points to the closest one not earned yet.
 6. **Act II · The 30-day becoming** (F-064): quests completed, 30-day notes
    written, attempts recorded; **Continue the 30-day path** (→ Missions) and
    **Read the article**. Revising the strategy happens in the Compass, which
@@ -54,8 +61,17 @@ Nothing is copied or inferred: the map shows the user's own Compass words, or
 7. A note: XP, levels, chapters, achievement names and the battle log are
    Cartharise additions, not part of the article.
 
-**Today** shows "The Campaign" (level, XP bar, "n of 7 achievements",
-**Open the Campaign**) while the game layer is on.
+**Today** shows a Campaign tile (level, XP, bar → Campaign) while the game
+layer is on.
+
+## Moments (`CampaignFeedback`, F-060)
+
+A calm pill at the top for about two seconds, announced to screen readers:
+"+20 XP" when a quest, an attempt or a weekly review adds XP, and
+"Achievement earned: …". Changes within 0.7 s become one moment. Never while
+typing an answer (reflection and path XP stay quiet), never for a bulk change
+such as a restored backup (more than 60 XP or 3+ achievements at once), never
+with the game layer off; no fade with reduced motion.
 
 ## XP rules (`lib/domain/campaign.dart`, F-060)
 

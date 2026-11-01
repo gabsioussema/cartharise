@@ -538,12 +538,6 @@ abstract class AppLocalizations {
   /// **'Level {level} · {xp} XP'**
   String campaignLevel(int level, int xp);
 
-  /// No description provided for @campaignLevelProgress.
-  ///
-  /// In en, this message translates to:
-  /// **'{current} / {step} XP to level {next}'**
-  String campaignLevelProgress(int current, int step, int next);
-
   /// No description provided for @campaignXpNote.
   ///
   /// In en, this message translates to:
@@ -1060,18 +1054,6 @@ abstract class AppLocalizations {
   /// **'XP, levels and achievements are Cartharise additions, not part of the article. Turn them off in You.'**
   String get campaignNote;
 
-  /// No description provided for @campaignTodayTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'The Campaign'**
-  String get campaignTodayTitle;
-
-  /// No description provided for @campaignTodayAchievements.
-  ///
-  /// In en, this message translates to:
-  /// **'{earned} of {total} achievements'**
-  String campaignTodayAchievements(int earned, int total);
-
   /// No description provided for @campaignTodayOpen.
   ///
   /// In en, this message translates to:
@@ -1089,6 +1071,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'XP, levels and achievements. Your battle log is kept if you turn it off.'**
   String get campaignSettingHint;
+
+  /// No description provided for @campaignWaypoint.
+  ///
+  /// In en, this message translates to:
+  /// **'{place, select, carthage{Carthage} newCarthage{New Carthage} ebro{the Ebro} pyrenees{the Pyrenees} rhone{the Rhône} alps{the Alps} italy{Italy} other{the road}}'**
+  String campaignWaypoint(String place);
+
+  /// No description provided for @campaignRouteHere.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re at {place}'**
+  String campaignRouteHere(String place);
+
+  /// No description provided for @campaignRouteNext.
+  ///
+  /// In en, this message translates to:
+  /// **'{xp} XP to {place}'**
+  String campaignRouteNext(int xp, String place);
+
+  /// No description provided for @campaignRouteEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve crossed into Italy. The campaign goes on.'**
+  String get campaignRouteEnd;
+
+  /// No description provided for @campaignRouteLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Hannibal\'s route: {place}, stop {stop} of {total}.'**
+  String campaignRouteLabel(String place, int stop, int total);
+
+  /// No description provided for @campaignBossStrength.
+  ///
+  /// In en, this message translates to:
+  /// **'Boss strength'**
+  String get campaignBossStrength;
+
+  /// No description provided for @campaignBossMilestones.
+  ///
+  /// In en, this message translates to:
+  /// **'{done} of {total} milestones reached'**
+  String campaignBossMilestones(int done, int total);
+
+  /// No description provided for @campaignBossBeaten.
+  ///
+  /// In en, this message translates to:
+  /// **'Every milestone reached. Boss beaten.'**
+  String get campaignBossBeaten;
+
+  /// No description provided for @campaignBossNoMilestones.
+  ///
+  /// In en, this message translates to:
+  /// **'Add milestones to your project to weaken the boss.'**
+  String get campaignBossNoMilestones;
+
+  /// No description provided for @campaignBossOpenProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Open project'**
+  String get campaignBossOpenProject;
+
+  /// No description provided for @campaignNextAchievement.
+  ///
+  /// In en, this message translates to:
+  /// **'Next: {name} · {how}'**
+  String campaignNextAchievement(String name, String how);
+
+  /// No description provided for @campaignToastXp.
+  ///
+  /// In en, this message translates to:
+  /// **'+{xp} XP'**
+  String campaignToastXp(int xp);
+
+  /// No description provided for @campaignToastAchievement.
+  ///
+  /// In en, this message translates to:
+  /// **'Achievement earned: {name}'**
+  String campaignToastAchievement(String name);
 
   /// Cinzel screen title of the Compass tab.
   ///
@@ -3748,41 +3808,11 @@ abstract class AppLocalizations {
   /// **'Every day'**
   String get todayQuestDaily;
 
-  /// No description provided for @todayJourneyTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Your journey'**
-  String get todayJourneyTitle;
-
   /// No description provided for @todayJourneyWritten.
   ///
   /// In en, this message translates to:
   /// **'{answered} of {total} reflections written'**
   String todayJourneyWritten(int answered, int total);
-
-  /// No description provided for @todayJourneyNotStarted.
-  ///
-  /// In en, this message translates to:
-  /// **'Your reset hasn\'t started yet. It\'s ready whenever you are.'**
-  String get todayJourneyNotStarted;
-
-  /// No description provided for @todayJourneyInProgress.
-  ///
-  /// In en, this message translates to:
-  /// **'Your reset is waiting where you left it.'**
-  String get todayJourneyInProgress;
-
-  /// No description provided for @todayJourneyAllTouched.
-  ///
-  /// In en, this message translates to:
-  /// **'Every reflection is written or set aside.'**
-  String get todayJourneyAllTouched;
-
-  /// No description provided for @todayJourneyCompleted.
-  ///
-  /// In en, this message translates to:
-  /// **'You finished this reset. Your answers stay here to revisit.'**
-  String get todayJourneyCompleted;
 
   /// No description provided for @todayJourneyOpenReset.
   ///
@@ -3790,29 +3820,11 @@ abstract class AppLocalizations {
   /// **'Open the reset'**
   String get todayJourneyOpenReset;
 
-  /// No description provided for @todayPhaseProgress.
-  ///
-  /// In en, this message translates to:
-  /// **'{phase, select, morning{Morning} daytime{Daytime} evening{Evening} other{Reset}} {answered}/{total}'**
-  String todayPhaseProgress(String phase, int answered, int total);
-
-  /// No description provided for @todayPhaseProgressLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'{phase, select, morning{Morning} daytime{Daytime} evening{Evening} other{Reset}}: {answered} of {total} written'**
-  String todayPhaseProgressLabel(String phase, int answered, int total);
-
   /// No description provided for @todayPathDay.
   ///
   /// In en, this message translates to:
   /// **'Day {day} of 30'**
   String todayPathDay(int day);
-
-  /// No description provided for @todayPathStage.
-  ///
-  /// In en, this message translates to:
-  /// **'Thirty-day path · {stage, select, observe{Observe} experiment{Experiment} build{Build} adjust{Adjust} other{Path}}'**
-  String todayPathStage(String stage);
 
   /// No description provided for @todayPathOpen.
   ///
@@ -3861,6 +3873,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your vision, month project and daily levers.'**
   String get todayDirectionEmptyBody;
+
+  /// No description provided for @todayTileReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get todayTileReset;
+
+  /// No description provided for @todayTileResetValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{answered}/{total}'**
+  String todayTileResetValue(int answered, int total);
+
+  /// No description provided for @todayTileResetStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get todayTileResetStart;
+
+  /// No description provided for @todayTileResetDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get todayTileResetDone;
+
+  /// No description provided for @todayTileResetDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'reflections'**
+  String get todayTileResetDetail;
+
+  /// No description provided for @todayTileCampaign.
+  ///
+  /// In en, this message translates to:
+  /// **'Campaign'**
+  String get todayTileCampaign;
+
+  /// No description provided for @todayTileCampaignValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Level {level}'**
+  String todayTileCampaignValue(int level);
+
+  /// No description provided for @todayTilePath.
+  ///
+  /// In en, this message translates to:
+  /// **'30-day path'**
+  String get todayTilePath;
+
+  /// No description provided for @todayTilePathValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Day {day}'**
+  String todayTilePathValue(int day);
+
+  /// No description provided for @todayPathStageName.
+  ///
+  /// In en, this message translates to:
+  /// **'{stage, select, observe{Observe} experiment{Experiment} build{Build} adjust{Adjust} other{Path}}'**
+  String todayPathStageName(String stage);
+
+  /// No description provided for @todayTileLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{title}: {value}. {detail}'**
+  String todayTileLabel(String title, String value, String detail);
 
   /// You tab screen title (Cinzel, keep short).
   ///

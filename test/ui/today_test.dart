@@ -17,7 +17,6 @@ import 'package:cartharise/ui/reset/guided_prompt_screen.dart';
 import 'package:cartharise/ui/today/next_step.dart';
 import 'package:cartharise/ui/today/today_model.dart';
 import 'package:cartharise/ui/today/today_tab.dart';
-import 'package:cartharise/ui/widgets/progress.dart';
 import 'package:cartharise/ui/widgets/scenes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -497,17 +496,19 @@ void main() {
         expect(find.text('Learn the 7 ideas (optional)'), findsOneWidget);
         expect(find.text('No quests for today'), findsOneWidget);
         expect(find.text('Your Compass is empty'), findsOneWidget);
-        expect(
-          find.text(
-            "Your reset hasn't started yet. It's ready whenever you are.",
-          ),
-          findsOneWidget,
-        );
-        // No progress ring and no path day before anything was written.
+        // The reset tile invites a start; no progress bar and no path day
+        // before anything was written.
         expect(
           find.descendant(
             of: find.byKey(const ValueKey('today-journey')),
-            matching: find.byType(ProgressRing),
+            matching: find.text('Start'),
+          ),
+          findsOneWidget,
+        );
+        expect(
+          find.descendant(
+            of: find.byKey(const ValueKey('today-journey')),
+            matching: find.byType(LinearProgressIndicator),
           ),
           findsNothing,
         );
@@ -545,19 +546,14 @@ void main() {
         expect(find.text('Every day'), findsNWidgets(2));
         expect(find.text('No quests for today'), findsNothing);
 
-        // Your journey, in words.
-        expect(find.text('3 of 27 reflections written'), findsOneWidget);
+        // At a glance: progress in words, the path day once written.
+        expect(find.text('3/27'), findsOneWidget);
         expect(
-          find.text('Your reset is waiting where you left it.'),
+          find.bySemanticsLabel('Reset: 3/27. 3 of 27 reflections written'),
           findsOneWidget,
         );
-        expect(find.text('Morning 3/14'), findsOneWidget);
-        expect(
-          find.bySemanticsLabel('Morning: 3 of 14 written'),
-          findsOneWidget,
-        );
-        expect(find.text('Day 3 of 30'), findsOneWidget);
-        expect(find.text('Thirty-day path · Observe'), findsOneWidget);
+        expect(find.text('Day 3'), findsOneWidget);
+        expect(find.text('Observe'), findsOneWidget);
 
         // Your direction.
         expect(find.text(_vision), findsOneWidget);
@@ -721,7 +717,7 @@ void main() {
       tester,
     ) async {
       final h = await _pumpToday(tester, data: inProgressData());
-      await _tapVisible(tester, find.text('Open day 4'));
+      await _tapVisible(tester, find.byKey(const ValueKey('today-path-day')));
       expect(tester.widget<PathDayScreen>(find.byType(PathDayScreen)).day, 4);
       Navigator.of(tester.element(find.byType(PathDayScreen))).pop();
       await pumpFrames(tester);
@@ -730,9 +726,9 @@ void main() {
       expect(h.shell.compassSection.value, CompassSection.compass);
     });
 
-    testWidgets('"Open the reset" switches to the Reset tab', (tester) async {
+    testWidgets('the reset tile switches to the Reset tab', (tester) async {
       final h = await _pumpToday(tester, data: inProgressData());
-      await _tapVisible(tester, find.text('Open the reset'));
+      await _tapVisible(tester, find.byKey(const ValueKey('today-journey')));
       expect(h.shell.tab, AppTab.reset);
     });
 
@@ -746,8 +742,9 @@ void main() {
       await _pumpToday(tester, data: data);
       expect(_inNextStep(find.text('Build your Compass')), findsOneWidget);
       expect(
-        find.text(
-          'You finished this reset. Your answers stay here to revisit.',
+        find.descendant(
+          of: find.byKey(const ValueKey('today-journey')),
+          matching: find.text('Done'),
         ),
         findsOneWidget,
       );
@@ -773,8 +770,11 @@ void main() {
     ) async {
       await _pumpToday(tester, data: settledData());
       expect(_inNextStep(find.text('Write a note')), findsOneWidget);
-      expect(find.text('Day 12 of 30'), findsOneWidget);
-      expect(find.text('27 of 27 reflections written'), findsOneWidget);
+      expect(find.text('Day 12'), findsOneWidget);
+      expect(
+        find.bySemanticsLabel(RegExp('27 of 27 reflections written')),
+        findsOneWidget,
+      );
       await _tapVisible(tester, find.text('New note'));
       expect(find.byType(JournalEntryScreen), findsOneWidget);
     });

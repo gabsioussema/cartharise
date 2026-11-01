@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:cartharise/domain/app_data.dart';
 import 'package:cartharise/domain/campaign.dart';
+import 'package:cartharise/ui/campaign/campaign_feedback.dart';
 import 'package:cartharise/ui/campaign/campaign_ops.dart';
 import 'package:cartharise/ui/campaign/campaign_view.dart';
 import 'package:cartharise/ui/compass/compass_tab.dart';
@@ -103,7 +106,29 @@ void main() {
       await _pumpCampaign(tester);
       expect(find.byType(CampaignView), findsOneWidget);
       expect(find.text('Level 1 · 55 XP'), findsOneWidget);
-      expect(find.text('55 / 100 XP to level 2'), findsOneWidget);
+      // Hannibal's route: level 1 is Carthage; 45 XP more reaches the next stop.
+      expect(find.text("You're at Carthage"), findsOneWidget);
+      expect(find.text('45 XP to New Carthage'), findsOneWidget);
+      expect(
+        // Read as part of the status card.
+        find.bySemanticsLabel(
+          RegExp("Hannibal's route: Carthage, stop 1 of 7"),
+        ),
+        findsOneWidget,
+      );
+      // The closest achievement not earned yet.
+      expect(
+        find.text(
+          'Next: The Pathfinder · Explored the anti-vision and identity '
+          'questions',
+        ),
+        findsOneWidget,
+      );
+      // No project milestones yet: a pointer to add some.
+      expect(
+        find.text('Add milestones to your project to weaken the boss.'),
+        findsOneWidget,
+      );
       expect(find.text('1 of 5 chapters explored'), findsOneWidget);
       for (final name in [
         'See the terrain',
@@ -263,15 +288,120 @@ void main() {
     });
   });
 
+  group('boss strength', () {
+    AppData withMilestones(List<bool> done) => _data().copyWith(
+      project: () => MonthProject(
+        title: 'Finish the first essay',
+        updatedAt: _t,
+        milestones: [
+          for (final (i, d) in done.indexed)
+            Milestone(id: 'm$i', title: 'Step $i', done: d),
+        ],
+      ),
+    );
+
+    testWidgets('weakens as milestones are reached', (tester) async {
+      await _pumpCampaign(tester, data: withMilestones([true, false, false]));
+      expect(find.byKey(const ValueKey('campaign-boss-strength')), findsOne);
+      expect(find.text('1 of 3 milestones reached'), findsOneWidget);
+      final bar = tester.widget<LinearProgressIndicator>(
+        find.descendant(
+          of: find.byKey(const ValueKey('campaign-boss-strength')),
+          matching: find.byType(LinearProgressIndicator),
+        ),
+      );
+      expect(bar.value, closeTo(2 / 3, 1e-9));
+    });
+
+    testWidgets('beaten when every milestone is reached', (tester) async {
+      await _pumpCampaign(tester, data: withMilestones([true, true]));
+      expect(find.text('Every milestone reached. Boss beaten.'), findsOne);
+    });
+  });
+
+  group('XP moments (CampaignFeedback)', () {
+    Future<void> completeQuest(CarthaHarness h, String id) async {
+      unawaited(
+        h.state.mutate(
+          (d) => d.copyWith(
+            quests: [
+              ...d.quests,
+              Quest(
+                id: id,
+                title: 'Quest $id',
+                createdAt: _t,
+                completedOn: const {'2026-11-03'},
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    testWidgets('a completed quest shows "+20 XP" and a new achievement', (
+      tester,
+    ) async {
+      final h = await pumpCartha(
+        tester,
+        data: _data(withAttempt: false).copyWith(quests: []),
+      );
+      await completeQuest(h, 'new');
+      await tester.pump(CampaignFeedback.settle);
+      await tester.pump();
+      expect(find.byKey(const ValueKey('campaign-toast')), findsOneWidget);
+      expect(find.textContaining('+20 XP'), findsOneWidget);
+      expect(
+        find.textContaining('Achievement earned: The Practitioner'),
+        findsOneWidget,
+      );
+      await tester.pump(CampaignFeedback.visible);
+      expect(find.byKey(const ValueKey('campaign-toast')), findsNothing);
+    });
+
+    testWidgets('quiet with the game layer off', (tester) async {
+      final h = await pumpCartha(
+        tester,
+        data: _data(game: false, withAttempt: false).copyWith(quests: []),
+      );
+      await completeQuest(h, 'new');
+      await tester.pump(CampaignFeedback.settle);
+      await tester.pump();
+      expect(find.byKey(const ValueKey('campaign-toast')), findsNothing);
+    });
+
+    testWidgets('quiet for a restore-sized jump', (tester) async {
+      final h = await pumpCartha(
+        tester,
+        data: _data(withAttempt: false).copyWith(quests: []),
+      );
+      unawaited(
+        h.state.mutate(
+          (d) => d.copyWith(
+            quests: [
+              for (var i = 1; i <= 6; i++)
+                Quest(
+                  id: 'r$i',
+                  title: 'Restored $i',
+                  createdAt: _t,
+                  completedOn: {'2026-10-${_two(i)}'},
+                ),
+            ],
+          ),
+        ),
+      );
+      await tester.pump(CampaignFeedback.settle);
+      await tester.pump();
+      expect(find.byKey(const ValueKey('campaign-toast')), findsNothing);
+    });
+  });
+
   group('turning the game layer off (F-060)', () {
     testWidgets('Today shows the Campaign card while it is on', (tester) async {
       await pumpCartha(tester, data: _data(), size: const Size(390, 2400));
       expect(find.byKey(const ValueKey('today-campaign')), findsOneWidget);
-      expect(find.text('3 of 7 achievements'), findsOneWidget);
-      await _tapVisible(
-        tester,
-        find.byKey(const ValueKey('today-campaign-open')),
-      );
+      expect(find.text('Level 1'), findsOneWidget);
+      expect(find.text('55 XP'), findsOneWidget);
+      await _tapVisible(tester, find.byKey(const ValueKey('today-campaign')));
       expect(find.byType(CampaignView), findsOneWidget);
     });
 

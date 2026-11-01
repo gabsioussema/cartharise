@@ -259,11 +259,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String campaignLevelProgress(int current, int step, int next) {
-    return '$current / $step XP to level $next';
-  }
-
-  @override
   String get campaignXpNote =>
       'XP counts what you do, never your worth. Rest costs nothing.';
 
@@ -583,14 +578,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'XP, levels and achievements are Cartharise additions, not part of the article. Turn them off in You.';
 
   @override
-  String get campaignTodayTitle => 'The Campaign';
-
-  @override
-  String campaignTodayAchievements(int earned, int total) {
-    return '$earned of $total achievements';
-  }
-
-  @override
   String get campaignTodayOpen => 'Open the Campaign';
 
   @override
@@ -599,6 +586,73 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get campaignSettingHint =>
       'XP, levels and achievements. Your battle log is kept if you turn it off.';
+
+  @override
+  String campaignWaypoint(String place) {
+    String _temp0 = intl.Intl.selectLogic(place, {
+      'carthage': 'Carthage',
+      'newCarthage': 'New Carthage',
+      'ebro': 'the Ebro',
+      'pyrenees': 'the Pyrenees',
+      'rhone': 'the Rhône',
+      'alps': 'the Alps',
+      'italy': 'Italy',
+      'other': 'the road',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String campaignRouteHere(String place) {
+    return 'You\'re at $place';
+  }
+
+  @override
+  String campaignRouteNext(int xp, String place) {
+    return '$xp XP to $place';
+  }
+
+  @override
+  String get campaignRouteEnd =>
+      'You\'ve crossed into Italy. The campaign goes on.';
+
+  @override
+  String campaignRouteLabel(String place, int stop, int total) {
+    return 'Hannibal\'s route: $place, stop $stop of $total.';
+  }
+
+  @override
+  String get campaignBossStrength => 'Boss strength';
+
+  @override
+  String campaignBossMilestones(int done, int total) {
+    return '$done of $total milestones reached';
+  }
+
+  @override
+  String get campaignBossBeaten => 'Every milestone reached. Boss beaten.';
+
+  @override
+  String get campaignBossNoMilestones =>
+      'Add milestones to your project to weaken the boss.';
+
+  @override
+  String get campaignBossOpenProject => 'Open project';
+
+  @override
+  String campaignNextAchievement(String name, String how) {
+    return 'Next: $name · $how';
+  }
+
+  @override
+  String campaignToastXp(int xp) {
+    return '+$xp XP';
+  }
+
+  @override
+  String campaignToastAchievement(String name) {
+    return 'Achievement earned: $name';
+  }
 
   @override
   String get compassTitle => 'Compass';
@@ -2246,69 +2300,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get todayQuestDaily => 'Every day';
 
   @override
-  String get todayJourneyTitle => 'Your journey';
-
-  @override
   String todayJourneyWritten(int answered, int total) {
     return '$answered of $total reflections written';
   }
 
   @override
-  String get todayJourneyNotStarted =>
-      'Your reset hasn\'t started yet. It\'s ready whenever you are.';
-
-  @override
-  String get todayJourneyInProgress =>
-      'Your reset is waiting where you left it.';
-
-  @override
-  String get todayJourneyAllTouched =>
-      'Every reflection is written or set aside.';
-
-  @override
-  String get todayJourneyCompleted =>
-      'You finished this reset. Your answers stay here to revisit.';
-
-  @override
   String get todayJourneyOpenReset => 'Open the reset';
-
-  @override
-  String todayPhaseProgress(String phase, int answered, int total) {
-    String _temp0 = intl.Intl.selectLogic(phase, {
-      'morning': 'Morning',
-      'daytime': 'Daytime',
-      'evening': 'Evening',
-      'other': 'Reset',
-    });
-    return '$_temp0 $answered/$total';
-  }
-
-  @override
-  String todayPhaseProgressLabel(String phase, int answered, int total) {
-    String _temp0 = intl.Intl.selectLogic(phase, {
-      'morning': 'Morning',
-      'daytime': 'Daytime',
-      'evening': 'Evening',
-      'other': 'Reset',
-    });
-    return '$_temp0: $answered of $total written';
-  }
 
   @override
   String todayPathDay(int day) {
     return 'Day $day of 30';
-  }
-
-  @override
-  String todayPathStage(String stage) {
-    String _temp0 = intl.Intl.selectLogic(stage, {
-      'observe': 'Observe',
-      'experiment': 'Experiment',
-      'build': 'Build',
-      'adjust': 'Adjust',
-      'other': 'Path',
-    });
-    return 'Thirty-day path · $_temp0';
   }
 
   @override
@@ -2337,6 +2338,56 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get todayDirectionEmptyBody =>
       'Your vision, month project and daily levers.';
+
+  @override
+  String get todayTileReset => 'Reset';
+
+  @override
+  String todayTileResetValue(int answered, int total) {
+    return '$answered/$total';
+  }
+
+  @override
+  String get todayTileResetStart => 'Start';
+
+  @override
+  String get todayTileResetDone => 'Done';
+
+  @override
+  String get todayTileResetDetail => 'reflections';
+
+  @override
+  String get todayTileCampaign => 'Campaign';
+
+  @override
+  String todayTileCampaignValue(int level) {
+    return 'Level $level';
+  }
+
+  @override
+  String get todayTilePath => '30-day path';
+
+  @override
+  String todayTilePathValue(int day) {
+    return 'Day $day';
+  }
+
+  @override
+  String todayPathStageName(String stage) {
+    String _temp0 = intl.Intl.selectLogic(stage, {
+      'observe': 'Observe',
+      'experiment': 'Experiment',
+      'build': 'Build',
+      'adjust': 'Adjust',
+      'other': 'Path',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String todayTileLabel(String title, String value, String detail) {
+    return '$title: $value. $detail';
+  }
 
   @override
   String get youTitle => 'You';

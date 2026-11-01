@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../domain/app_data.dart';
+import '../../domain/campaign.dart';
 import '../../domain/content.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
-import '../campaign/campaign_card.dart';
+import '../campaign/campaign_ops.dart';
 import '../compass/compass_import.dart';
 import '../missions/missions_logic.dart';
 import '../nav.dart';
@@ -63,18 +64,14 @@ class TodayTab extends StatelessWidget {
                 ],
                 _NextStepHero(step: nextStepFor(NextStepFacts.of(state))),
                 const SizedBox(height: 16),
+                _GlanceRow(summary: JourneySummary.of(state)),
+                const SizedBox(height: 16),
                 _FocusCard(
                   // The same "today" as Missions (missions_logic.dart).
                   quests: state.todayFocus(today),
                   laterCount: state.missionSections(today).later.length,
                   today: today,
                 ),
-                const SizedBox(height: 16),
-                _JourneyCard(summary: JourneySummary.of(state)),
-                if (state.settings.game) ...[
-                  const SizedBox(height: 16),
-                  const CampaignTodayCard(),
-                ],
                 const SizedBox(height: 16),
                 const _DirectionCard(),
               ],
@@ -401,121 +398,156 @@ class _QuestRow extends StatelessWidget {
   }
 }
 
-/// "Your journey": reset progress in words (never a judgement) and the
-/// thirty-day path day when the user has written on the path.
-class _JourneyCard extends StatelessWidget {
-  const _JourneyCard({required this.summary});
+/// "At a glance": small tappable tiles — reset progress, the Campaign level
+/// (while the game layer is on) and the thirty-day path day (only once the
+/// user has written on the path). Each opens its place in the app.
+class _GlanceRow extends StatelessWidget {
+  const _GlanceRow({required this.summary});
 
   final JourneySummary summary;
 
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
+    final state = context.watch<AppState>();
+    final s = summary;
+    final campaign = state.settings.game ? state.campaign : null;
+    final tiles = <Widget>[
+      _GlanceTile(
+        key: const ValueKey('today-journey'),
+        icon: Icons.wb_twilight,
+        title: l.todayTileReset,
+        value: !s.started
+            ? l.todayTileResetStart
+            : s.completed
+            ? l.todayTileResetDone
+            : l.todayTileResetValue(s.answered, s.total),
+        detail: l.todayTileResetDetail,
+        label: l.todayJourneyWritten(s.answered, s.total),
+        progress: s.started ? s.fraction : null,
+        action: l.todayJourneyOpenReset,
+        onTap: () => AppNav.switchTab(context, AppTab.reset),
+      ),
+      if (campaign != null)
+        _GlanceTile(
+          key: const ValueKey('today-campaign'),
+          icon: Icons.flag_outlined,
+          title: l.todayTileCampaign,
+          value: l.todayTileCampaignValue(campaign.level),
+          detail: '${campaign.xp} XP',
+          progress: campaign.levelXp / kXpPerLevel,
+          action: l.campaignTodayOpen,
+          onTap: () => AppNav.openCampaign(context),
+        ),
+      if (s.pathDay != null)
+        _GlanceTile(
+          key: const ValueKey('today-path-day'),
+          icon: Icons.route_outlined,
+          title: l.todayTilePath,
+          value: l.todayTilePathValue(s.pathDay!),
+          detail: l.todayPathStageName(s.pathStage?.name ?? ''),
+          action: l.todayPathOpen(s.pathNextDay ?? s.pathDay!),
+          onTap: () => AppNav.openPathDay(context, s.pathNextDay ?? s.pathDay!),
+        ),
+    ];
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        const gap = 12.0;
+        final scale = MediaQuery.textScalerOf(context).scale(1);
+        final fit = (constraints.maxWidth / (104 * scale)).floor();
+        final columns = fit.clamp(1, tiles.length);
+        final width = (constraints.maxWidth - gap * (columns - 1)) / columns;
+        return Wrap(
+          spacing: gap,
+          runSpacing: gap,
+          children: [
+            for (final tile in tiles) SizedBox(width: width, child: tile),
+          ],
+        );
+      },
+    );
+  }
+}
+
+/// One glance tile: icon, title, a big value, one detail line, an optional
+/// progress bar. The whole tile is one button.
+class _GlanceTile extends StatelessWidget {
+  const _GlanceTile({
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.value,
+    required this.detail,
+    required this.action,
+    required this.onTap,
+    this.progress,
+    this.label,
+  });
+
+  final IconData icon;
+  final String title;
+  final String value;
+  final String detail;
+  final String action;
+  final VoidCallback onTap;
+  final double? progress;
+
+  /// What a screen reader hears instead of [detail] (defaults to it).
+  final String? label;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     final p = CarthaPalette.of(context);
     final theme = Theme.of(context);
-    final s = summary;
-    final status = !s.started
-        ? l.todayJourneyNotStarted
-        : s.completed
-        ? l.todayJourneyCompleted
-        : s.allTouched
-        ? l.todayJourneyAllTouched
-        : l.todayJourneyInProgress;
-    final written = l.todayJourneyWritten(s.answered, s.total);
-    return SectionCard(
-      key: const ValueKey('today-journey'),
-      title: l.todayJourneyTitle,
-      icon: Icons.route_outlined,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            children: [
-              if (s.started) ...[
-                ProgressRing(value: s.fraction, semanticLabel: written),
-                const SizedBox(width: 16),
+    return Semantics(
+      button: true,
+      label: l.todayTileLabel(title, value, label ?? detail),
+      hint: action,
+      excludeSemantics: true,
+      child: SectionCard(
+        onTap: onTap,
+        padding: const EdgeInsetsDirectional.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(icon, size: 16, color: p.accent),
+                const SizedBox(width: 4),
+                Flexible(
+                  child: Text(
+                    title,
+                    style: theme.textTheme.labelMedium?.copyWith(
+                      color: p.textSecondary,
+                    ),
+                  ),
+                ),
               ],
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (s.started) ...[
-                      Text(written, style: theme.textTheme.titleSmall),
-                      const SizedBox(height: 4),
-                    ],
-                    Text(
-                      status,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: p.textSecondary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              for (final phase in s.phases)
-                Semantics(
-                  container: true,
-                  label: l.todayPhaseProgressLabel(
-                    phase.phase.name,
-                    phase.progress.answered,
-                    phase.progress.total,
-                  ),
-                  excludeSemantics: true,
-                  child: ChipTag(
-                    label: l.todayPhaseProgress(
-                      phase.phase.name,
-                      phase.progress.answered,
-                      phase.progress.total,
-                    ),
-                    icon: phase.progress.finished ? Icons.check : null,
-                    tone: phase.progress.finished
-                        ? ChipTone.success
-                        : ChipTone.neutral,
-                  ),
-                ),
-            ],
-          ),
-          if (s.pathDay != null) ...[
-            const SizedBox(height: 16),
-            const Divider(),
-            const SizedBox(height: 12),
+            ),
+            const SizedBox(height: 6),
             Text(
-              l.todayPathDay(s.pathDay!),
-              key: const ValueKey('today-path-day'),
-              style: theme.textTheme.titleSmall,
+              value,
+              style: theme.textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
             ),
             const SizedBox(height: 2),
             Text(
-              l.todayPathStage(s.pathStage?.name ?? ''),
-              style: theme.textTheme.bodySmall,
-            ),
-            Align(
-              alignment: AlignmentDirectional.centerStart,
-              child: TextLinkButton(
-                label: l.todayPathOpen(s.pathNextDay ?? s.pathDay!),
-                trailingIcon: Icons.arrow_forward,
-                onPressed: () =>
-                    AppNav.openPathDay(context, s.pathNextDay ?? s.pathDay!),
+              detail,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: p.textSecondary,
               ),
             ),
-          ] else
-            const SizedBox(height: 4),
-          Align(
-            alignment: AlignmentDirectional.centerStart,
-            child: TextLinkButton(
-              label: l.todayJourneyOpenReset,
-              trailingIcon: Icons.arrow_forward,
-              onPressed: () => AppNav.switchTab(context, AppTab.reset),
-            ),
-          ),
-        ],
+            if (progress != null) ...[
+              const SizedBox(height: 10),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(999),
+                child: LinearProgressIndicator(value: progress, minHeight: 4),
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }

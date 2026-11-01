@@ -281,6 +281,81 @@ void main() {
     });
   });
 
+  group('route, next achievement and boss', () {
+    test("Hannibal's route: one stop per level, Italy from level 7 on", () {
+      expect(waypointFor(1), Waypoint.carthage);
+      expect(waypointFor(2), Waypoint.newCarthage);
+      expect(waypointFor(6), Waypoint.alps);
+      expect(waypointFor(7), Waypoint.italy);
+      expect(waypointFor(40), Waypoint.italy);
+      expect(Waypoint.values, hasLength(7));
+    });
+
+    test('next stop and XP to it; none once in Italy', () {
+      final start = campaignProgress(AppData.empty, fakeContent);
+      expect(start.waypoint, Waypoint.carthage);
+      expect(start.nextWaypoint, Waypoint.newCarthage);
+      expect(start.xpToNext, kXpPerLevel);
+
+      final far = campaignProgress(
+        AppData(
+          quests: [
+            for (var d = 1; d <= 30; d++) _quest('q$d', {'2026-10-${_two(d)}'}),
+          ],
+        ),
+        fakeContent,
+      );
+      expect(far.level, 7);
+      expect(far.waypoint, Waypoint.italy);
+      expect(far.nextWaypoint, isNull);
+    });
+
+    test('the next achievement is the first not earned, in order', () {
+      expect(
+        campaignProgress(AppData.empty, fakeContent).nextAchievement,
+        Achievement.observer,
+      );
+      final p = campaignProgress(_withJourney(_ids('morning', 4)), fakeContent);
+      expect(p.nextAchievement, Achievement.pathfinder);
+    });
+
+    test('action XP counts quests, attempts and reviews, not typing', () {
+      final p = campaignProgress(
+        AppData(
+          journeys: [_journey('j1', _ids('morning', 14))],
+          currentJourneyId: 'j1',
+          pathAnswers: {1: PathAnswer(day: 1, body: 'Noticed', updatedAt: _t)},
+          quests: [
+            _quest('a', {'2026-11-03'}),
+          ],
+          campaignLog: [_attempt('x', '2026-11-03')],
+        ),
+        fakeContent,
+      );
+      expect(p.xpFromActions, kXpPerQuest + kXpPerAttemptDay);
+      expect(p.xp, greaterThan(p.xpFromActions));
+    });
+
+    test('the boss counts the project milestones', () {
+      final p = campaignProgress(
+        AppData(
+          project: MonthProject(
+            title: 'Essay',
+            updatedAt: _t,
+            milestones: const [
+              Milestone(id: 'm1', title: 'Outline', done: true),
+              Milestone(id: 'm2', title: 'Draft'),
+              Milestone(id: 'm3', title: 'Share'),
+            ],
+          ),
+        ),
+        fakeContent,
+      );
+      expect(p.milestones, 3);
+      expect(p.milestonesDone, 1);
+    });
+  });
+
   group('data (F-061)', () {
     test('battle log and the game setting round-trip through a backup', () {
       final data = AppData(

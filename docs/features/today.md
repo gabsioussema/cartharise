@@ -15,15 +15,19 @@ F-054 (gentle progress), F-031 (non-punitive), F-055 (honest save failure).
 3. **Your next step** — a forest `HeroCard` with `DawnRuinsScene` (rises once;
    static with reduced motion), eyebrow, title, one or two lines, a bronze pill
    and an optional secondary link.
-4. **Today's focus** — `todayFocus()` (`lib/ui/missions/missions_logic.dart`):
+4. **At a glance** — up to three small tappable tiles (three across on a
+   phone, fewer with large text): **Reset** "3/27 reflections" with a bar (→
+   Reset tab; "Start" / "Done" before and after), **Campaign** "Level n · x
+   XP" with a bar (→ Campaign; only while the game layer is on), **30-day
+   path** "Day n · stage" (→ the next day; only once the user wrote on the
+   path). Each tile is one button whose label reads the full sentence.
+5. **Today's focus** — `todayFocus()` (`lib/ui/missions/missions_logic.dart`):
    exactly Missions' Today section (every daily quest, one-offs planned for
    today or earlier) plus planned one-offs ticked today (shown ticked until
    the day ends), so Today and Missions agree. Up to five, then "See all n
    quests"; undated and later quests are only counted ("n more for anytime
    or later" → Missions); "Add a quest" → Missions. Daily quests carry the
    same "Every day" label as Missions.
-5. **Your journey** — reset progress in words, phase chips, the thirty-day
-   path day when the user has written on it, "Open the reset".
 6. **Your direction** — the Compass vision and this month's project (the
    Missions project title if set, else Compass › month project) → Compass.
 

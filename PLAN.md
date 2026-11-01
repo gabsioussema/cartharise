@@ -62,8 +62,8 @@ cream `#FFFDF8`, green-grey `#687870`, mist `#B9C6B8`.
 
 | Token (minimum set) | Dark (default look of the board) | Light |
 |---|---|---|
-| `background` | deep forest `#17261E` | paper `#F7F4EC` |
-| `card` / `raised` / `raisedHigh` | forest `#1E3328` / `#24392D` / `#2B4235` | cream `#FFFDF8` / `#EFE9DB` / `#E7E0CF` |
+| `background` | charcoal `#151716` (was deep forest; neutral since the "less green" pass) | paper `#F7F4EC` |
+| `card` / `raised` / `raisedHigh` | `#1C1F1D` / `#242826` / `#2D322F` | cream `#FFFDF8` / `#EFE9DB` / `#E7E0CF` |
 | `border` / `borderStrong` | ≥3:1 vs card for strong | ≥3:1 vs card for strong |
 | `textPrimary` / `textSecondary` | ivory / mist (≥4.5:1) | forest / `#4A5A50` (≥4.5:1) |
 | `accent` (icons, links, selected) | light bronze `#D4B57B` | text-safe bronze (≈ `#7A5C30`, ≥4.5:1 on paper) |

@@ -108,21 +108,27 @@ void main() {
       }
     }
 
-    test(
-      'dark Forest is the board: deep forest, bronze buttons, ivory text',
-      () {
-        final p = CarthaPalette.from(
-          CarthaThemeSpec.of(AppTheme.forest),
-          Brightness.dark,
+    test('dark Forest: calm neutral surfaces, forest heroes, bronze buttons, '
+        'ivory text', () {
+      final p = CarthaPalette.from(
+        CarthaThemeSpec.of(AppTheme.forest),
+        Brightness.dark,
+      );
+      // The brand colour is kept for heroes and accents (≈10 %); the
+      // surfaces around them stay close to neutral so the app isn't green.
+      for (final surface in [p.background, p.card, p.raised]) {
+        expect(
+          HSLColor.fromColor(surface).saturation,
+          lessThan(0.12),
+          reason: '$surface',
         );
-        expect(p.background, CarthaColors.deepForest);
-        expect(p.card, CarthaColors.forest);
-        expect(p.primary, CarthaColors.bronze);
-        expect(p.textPrimary, CarthaColors.ivory);
-        expect(p.accent, CarthaColors.lightBronze);
-        expect(p.emblem, CarthaColors.bronze);
-      },
-    );
+      }
+      expect(p.hero, CarthaColors.forest);
+      expect(p.primary, CarthaColors.bronze);
+      expect(p.textPrimary, CarthaColors.ivory);
+      expect(p.accent, CarthaColors.lightBronze);
+      expect(p.emblem, CarthaColors.bronze);
+    });
 
     test('appearance setting maps to ThemeMode', () {
       expect(CarthaTheme.modeFor(AppearanceMode.system), ThemeMode.system);

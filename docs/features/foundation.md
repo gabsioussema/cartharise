@@ -17,10 +17,10 @@ outside `lib/ui/theme/`.
 
 | Token | Forest dark (board) | Forest light | Use |
 |---|---|---|---|
-| `background` | `#17261E` deep forest | `#F7F4EC` paper | page |
-| `card` / `raised` / `raisedHigh` | `#1E3328` / `#24392D` / `#2B4235` | `#FFFDF8` / `#EFE9DB` / `#E7E0CF` | surfaces |
+| `background` | `#151716` charcoal (a trace of forest) | `#F7F4EC` paper | page |
+| `card` / `raised` / `raisedHigh` | `#1C1F1D` / `#242826` / `#2D322F` | `#FFFDF8` / `#EFE9DB` / `#E7E0CF` | surfaces — near-neutral so forest stays a ~10 % brand accent |
 | `border` / `borderStrong` | ivory 12 % / `#7F9285` | forest 10 % / `#6B7A70` | hairline / control outline (≥ 3:1) |
-| `textPrimary` / `textSecondary` | `#F1EBDD` ivory / `#B9C6B8` mist | `#1E3328` / `#4A5A50` | text (≥ 4.5:1 on every surface) |
+| `textPrimary` / `textSecondary` | `#F1EBDD` ivory / `#BDB9AF` warm grey | `#1D2420` / `#54554F` | text (≥ 4.5:1 on every surface) |
 | `accent` / `onAccent` | `#D4B57B` light bronze / background | `#7A5C30` / card | icons, links, selection, focus |
 | `primary` / `onPrimary` | `#B08D57` bronze / deep forest | `#1E3328` forest / ivory | main pill buttons |
 | `hero` / `heroRaised` | `#1E3328` / `#24392D` | same (both modes) | hero cards, boot, onboarding |

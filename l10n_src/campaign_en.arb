@@ -5,8 +5,6 @@
   "campaignStatusEyebrow": "Your campaign",
   "campaignLevel": "Level {level} · {xp} XP",
   "@campaignLevel": {"placeholders": {"level": {"type": "int"}, "xp": {"type": "int"}}},
-  "campaignLevelProgress": "{current} / {step} XP to level {next}",
-  "@campaignLevelProgress": {"placeholders": {"current": {"type": "int"}, "step": {"type": "int"}, "next": {"type": "int"}}},
   "campaignXpNote": "XP counts what you do, never your worth. Rest costs nothing.",
   "campaignXpHow": "How XP is earned",
   "campaignXpRuleReflection": "+{xp} XP for each reset question you answer (once per question)",
@@ -115,11 +113,30 @@
   "campaignReadArticle": "Read the article",
   "campaignNote": "XP, levels and achievements are Cartharise additions, not part of the article. Turn them off in You.",
 
-  "campaignTodayTitle": "The Campaign",
-  "campaignTodayAchievements": "{earned} of {total} achievements",
-  "@campaignTodayAchievements": {"placeholders": {"earned": {"type": "int"}, "total": {"type": "int"}}},
   "campaignTodayOpen": "Open the Campaign",
 
   "campaignSettingTitle": "The Campaign",
-  "campaignSettingHint": "XP, levels and achievements. Your battle log is kept if you turn it off."
+  "campaignSettingHint": "XP, levels and achievements. Your battle log is kept if you turn it off.",
+
+  "campaignWaypoint": "{place, select, carthage{Carthage} newCarthage{New Carthage} ebro{the Ebro} pyrenees{the Pyrenees} rhone{the Rhône} alps{the Alps} italy{Italy} other{the road}}",
+  "@campaignWaypoint": {"placeholders": {"place": {"type": "String"}}},
+  "campaignRouteHere": "You're at {place}",
+  "@campaignRouteHere": {"placeholders": {"place": {"type": "String"}}},
+  "campaignRouteNext": "{xp} XP to {place}",
+  "@campaignRouteNext": {"placeholders": {"xp": {"type": "int"}, "place": {"type": "String"}}},
+  "campaignRouteEnd": "You've crossed into Italy. The campaign goes on.",
+  "campaignRouteLabel": "Hannibal's route: {place}, stop {stop} of {total}.",
+  "@campaignRouteLabel": {"placeholders": {"place": {"type": "String"}, "stop": {"type": "int"}, "total": {"type": "int"}}},
+  "campaignBossStrength": "Boss strength",
+  "campaignBossMilestones": "{done} of {total} milestones reached",
+  "@campaignBossMilestones": {"placeholders": {"done": {"type": "int"}, "total": {"type": "int"}}},
+  "campaignBossBeaten": "Every milestone reached. Boss beaten.",
+  "campaignBossNoMilestones": "Add milestones to your project to weaken the boss.",
+  "campaignBossOpenProject": "Open project",
+  "campaignNextAchievement": "Next: {name} · {how}",
+  "@campaignNextAchievement": {"placeholders": {"name": {"type": "String"}, "how": {"type": "String"}}},
+  "campaignToastXp": "+{xp} XP",
+  "@campaignToastXp": {"placeholders": {"xp": {"type": "int"}}},
+  "campaignToastAchievement": "Achievement earned: {name}",
+  "@campaignToastAchievement": {"placeholders": {"name": {"type": "String"}}}
 }

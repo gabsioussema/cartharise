@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../l10n/app_localizations.dart';
 import '../state/app_state.dart';
+import 'campaign/campaign_feedback.dart';
 import 'nav.dart';
 import 'widgets/motion.dart';
 
@@ -69,28 +70,30 @@ class _RootShellState extends State<RootShell> {
     final l = AppLocalizations.of(context);
     final shell = context.watch<ShellController>();
     final tab = shell.tab;
-    return Scaffold(
-      body: CarthaPageMotion(
-        page: tab,
-        child: IndexedStack(
-          index: tab.index,
-          children: [
+    return CampaignFeedback(
+      child: Scaffold(
+        body: CarthaPageMotion(
+          page: tab,
+          child: IndexedStack(
+            index: tab.index,
+            children: [
+              for (final t in AppTab.values)
+                TickerMode(enabled: t == tab, child: AppNav.tabWidget(t)),
+            ],
+          ),
+        ),
+        bottomNavigationBar: NavigationBar(
+          selectedIndex: tab.index,
+          onDestinationSelected: (i) => shell.select(AppTab.values[i]),
+          destinations: [
             for (final t in AppTab.values)
-              TickerMode(enabled: t == tab, child: AppNav.tabWidget(t)),
+              NavigationDestination(
+                icon: Icon(_icons[t]!.$1),
+                selectedIcon: Icon(_icons[t]!.$2),
+                label: _label(l, t),
+              ),
           ],
         ),
-      ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: tab.index,
-        onDestinationSelected: (i) => shell.select(AppTab.values[i]),
-        destinations: [
-          for (final t in AppTab.values)
-            NavigationDestination(
-              icon: Icon(_icons[t]!.$1),
-              selectedIcon: Icon(_icons[t]!.$2),
-              label: _label(l, t),
-            ),
-        ],
       ),
     );
   }

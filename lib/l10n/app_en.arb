@@ -157,20 +157,6 @@
       }
     }
   },
-  "campaignLevelProgress": "{current} / {step} XP to level {next}",
-  "@campaignLevelProgress": {
-    "placeholders": {
-      "current": {
-        "type": "int"
-      },
-      "step": {
-        "type": "int"
-      },
-      "next": {
-        "type": "int"
-      }
-    }
-  },
   "campaignXpNote": "XP counts what you do, never your worth. Rest costs nothing.",
   "campaignXpHow": "How XP is earned",
   "campaignXpRuleReflection": "+{xp} XP for each reset question you answer (once per question)",
@@ -387,11 +373,44 @@
   "campaignContinuePath": "Continue the 30-day path",
   "campaignReadArticle": "Read the article",
   "campaignNote": "XP, levels and achievements are Cartharise additions, not part of the article. Turn them off in You.",
-  "campaignTodayTitle": "The Campaign",
-  "campaignTodayAchievements": "{earned} of {total} achievements",
-  "@campaignTodayAchievements": {
+  "campaignTodayOpen": "Open the Campaign",
+  "campaignSettingTitle": "The Campaign",
+  "campaignSettingHint": "XP, levels and achievements. Your battle log is kept if you turn it off.",
+  "campaignWaypoint": "{place, select, carthage{Carthage} newCarthage{New Carthage} ebro{the Ebro} pyrenees{the Pyrenees} rhone{the Rhône} alps{the Alps} italy{Italy} other{the road}}",
+  "@campaignWaypoint": {
     "placeholders": {
-      "earned": {
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "campaignRouteHere": "You're at {place}",
+  "@campaignRouteHere": {
+    "placeholders": {
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "campaignRouteNext": "{xp} XP to {place}",
+  "@campaignRouteNext": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      },
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "campaignRouteEnd": "You've crossed into Italy. The campaign goes on.",
+  "campaignRouteLabel": "Hannibal's route: {place}, stop {stop} of {total}.",
+  "@campaignRouteLabel": {
+    "placeholders": {
+      "place": {
+        "type": "String"
+      },
+      "stop": {
         "type": "int"
       },
       "total": {
@@ -399,9 +418,48 @@
       }
     }
   },
-  "campaignTodayOpen": "Open the Campaign",
-  "campaignSettingTitle": "The Campaign",
-  "campaignSettingHint": "XP, levels and achievements. Your battle log is kept if you turn it off.",
+  "campaignBossStrength": "Boss strength",
+  "campaignBossMilestones": "{done} of {total} milestones reached",
+  "@campaignBossMilestones": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "campaignBossBeaten": "Every milestone reached. Boss beaten.",
+  "campaignBossNoMilestones": "Add milestones to your project to weaken the boss.",
+  "campaignBossOpenProject": "Open project",
+  "campaignNextAchievement": "Next: {name} · {how}",
+  "@campaignNextAchievement": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "how": {
+        "type": "String"
+      }
+    }
+  },
+  "campaignToastXp": "+{xp} XP",
+  "@campaignToastXp": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      }
+    }
+  },
+  "campaignToastAchievement": "Achievement earned: {name}",
+  "@campaignToastAchievement": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "compassTitle": "Compass",
   "@compassTitle": {
     "description": "Cinzel screen title of the Compass tab."
@@ -1437,7 +1495,6 @@
     }
   },
   "todayQuestDaily": "Every day",
-  "todayJourneyTitle": "Your journey",
   "todayJourneyWritten": "{answered} of {total} reflections written",
   "@todayJourneyWritten": {
     "placeholders": {
@@ -1449,52 +1506,12 @@
       }
     }
   },
-  "todayJourneyNotStarted": "Your reset hasn't started yet. It's ready whenever you are.",
-  "todayJourneyInProgress": "Your reset is waiting where you left it.",
-  "todayJourneyAllTouched": "Every reflection is written or set aside.",
-  "todayJourneyCompleted": "You finished this reset. Your answers stay here to revisit.",
   "todayJourneyOpenReset": "Open the reset",
-  "todayPhaseProgress": "{phase, select, morning{Morning} daytime{Daytime} evening{Evening} other{Reset}} {answered}/{total}",
-  "@todayPhaseProgress": {
-    "placeholders": {
-      "phase": {
-        "type": "String"
-      },
-      "answered": {
-        "type": "int"
-      },
-      "total": {
-        "type": "int"
-      }
-    }
-  },
-  "todayPhaseProgressLabel": "{phase, select, morning{Morning} daytime{Daytime} evening{Evening} other{Reset}}: {answered} of {total} written",
-  "@todayPhaseProgressLabel": {
-    "placeholders": {
-      "phase": {
-        "type": "String"
-      },
-      "answered": {
-        "type": "int"
-      },
-      "total": {
-        "type": "int"
-      }
-    }
-  },
   "todayPathDay": "Day {day} of 30",
   "@todayPathDay": {
     "placeholders": {
       "day": {
         "type": "int"
-      }
-    }
-  },
-  "todayPathStage": "Thirty-day path · {stage, select, observe{Observe} experiment{Experiment} build{Build} adjust{Adjust} other{Path}}",
-  "@todayPathStage": {
-    "placeholders": {
-      "stage": {
-        "type": "String"
       }
     }
   },
@@ -1513,6 +1530,61 @@
   "todayDirectionNoMonth": "No month project yet.",
   "todayDirectionEmptyTitle": "Your Compass is empty",
   "todayDirectionEmptyBody": "Your vision, month project and daily levers.",
+  "todayTileReset": "Reset",
+  "todayTileResetValue": "{answered}/{total}",
+  "@todayTileResetValue": {
+    "placeholders": {
+      "answered": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "todayTileResetStart": "Start",
+  "todayTileResetDone": "Done",
+  "todayTileResetDetail": "reflections",
+  "todayTileCampaign": "Campaign",
+  "todayTileCampaignValue": "Level {level}",
+  "@todayTileCampaignValue": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "todayTilePath": "30-day path",
+  "todayTilePathValue": "Day {day}",
+  "@todayTilePathValue": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "todayPathStageName": "{stage, select, observe{Observe} experiment{Experiment} build{Build} adjust{Adjust} other{Path}}",
+  "@todayPathStageName": {
+    "placeholders": {
+      "stage": {
+        "type": "String"
+      }
+    }
+  },
+  "todayTileLabel": "{title}: {value}. {detail}",
+  "@todayTileLabel": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "value": {
+        "type": "String"
+      },
+      "detail": {
+        "type": "String"
+      }
+    }
+  },
   "youTitle": "You",
   "@youTitle": {
     "description": "You tab screen title (Cinzel, keep short)."

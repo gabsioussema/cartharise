@@ -53,6 +53,15 @@ enum CampaignChapter {
   ];
 }
 
+/// The level route: Hannibal's march from Carthage into Italy (218 BC). Each
+/// level is the next waypoint; places, never labels for the person. From
+/// [italy] on, levels keep counting — the campaign has no end.
+enum Waypoint { carthage, newCarthage, ebro, pyrenees, rhone, alps, italy }
+
+/// The waypoint reached at [level].
+Waypoint waypointFor(int level) =>
+    Waypoint.values[(level - 1).clamp(0, Waypoint.values.length - 1)];
+
 /// Article-based achievements (F-062), earned only for observable
 /// activities — never for what was written or how it felt.
 enum Achievement {
@@ -92,9 +101,21 @@ class CampaignProgress {
     required this.questsCompleted,
     required this.pathDaysWritten,
     required this.attempts,
+    this.xpFromActions = 0,
+    this.milestones = 0,
+    this.milestonesDone = 0,
   });
 
   final int xp;
+
+  /// The part of [xp] from discrete actions (quests, attempts, reviews) —
+  /// what a "+XP" moment celebrates; typing answers is never interrupted.
+  final int xpFromActions;
+
+  /// The monthly boss's milestones (the Missions project) and how many are
+  /// done: the boss weakens only as real milestones are reached.
+  final int milestones;
+  final int milestonesDone;
   final List<ChapterProgress> chapters;
   final Set<Achievement> earned;
 
@@ -111,6 +132,24 @@ class CampaignProgress {
   int get levelXp => xp % kXpPerLevel;
 
   int get chaptersExplored => chapters.where((c) => c.explored).length;
+
+  Waypoint get waypoint => waypointFor(level);
+
+  /// The next waypoint, or null once in Italy.
+  Waypoint? get nextWaypoint => waypoint == Waypoint.values.last
+      ? null
+      : Waypoint.values[waypoint.index + 1];
+
+  /// XP still to gather for the next level.
+  int get xpToNext => kXpPerLevel - levelXp;
+
+  /// The first achievement not earned yet, in the article's order.
+  Achievement? get nextAchievement {
+    for (final a in Achievement.values) {
+      if (!earned.contains(a)) return a;
+    }
+    return null;
+  }
 }
 
 /// The Campaign for [data], with the chapters taken from [content].
@@ -159,12 +198,14 @@ CampaignProgress campaignProgress(AppData data, ContentLibrary content) {
   final attemptDays = {for (final e in data.campaignLog) e.day}.length;
   final reviewWeeks = {for (final r in data.reviews) r.weekStart}.length;
 
-  final xp =
-      reflected.length * kXpPerReflection +
+  final xpFromActions =
       questXpCount * kXpPerQuest +
-      pathDays * kXpPerPathDay +
       attemptDays * kXpPerAttemptDay +
       reviewWeeks * kXpPerReview;
+  final xp =
+      reflected.length * kXpPerReflection +
+      pathDays * kXpPerPathDay +
+      xpFromActions;
 
   // Chapter achievements: every chapter question answered in one reset.
   bool everExplored(CampaignChapter chapter) {
@@ -185,12 +226,16 @@ CampaignProgress campaignProgress(AppData data, ContentLibrary content) {
     if (data.campaignLog.isNotEmpty) Achievement.challenger,
   };
 
+  final milestones = data.project?.milestones ?? const [];
   return CampaignProgress(
     xp: xp,
+    xpFromActions: xpFromActions,
     chapters: chapters,
     earned: earned,
     questsCompleted: questsCompleted,
     pathDaysWritten: pathDays,
     attempts: data.campaignLog.length,
+    milestones: milestones.length,
+    milestonesDone: milestones.where((m) => m.done).length,
   );
 }
