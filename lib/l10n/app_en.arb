@@ -64,5 +64,325 @@
       }
     }
   },
-  "selectedLabel": "Selected"
+  "selectedLabel": "Selected",
+  "awakeningTitle": "The Awakening",
+  "awakeningSubtitle": "Seven ideas behind the reset, in plain words. Optional, and in any order.",
+  "awakeningStripTitle": "Learn the ideas first (optional)",
+  "awakeningSeeAll": "See all lessons",
+  "awakeningReadCount": "{read} of {total} read",
+  "@awakeningReadCount": {
+    "placeholders": {
+      "read": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "awakeningLessonNumber": "Lesson {n}",
+  "@awakeningLessonNumber": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "awakeningLessonOf": "Lesson {n} of {total}",
+  "@awakeningLessonOf": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "awakeningRead": "Read",
+  "awakeningNotRead": "Not read yet",
+  "awakeningExample": "Example",
+  "awakeningNuance": "A lens, not a verdict",
+  "awakeningCheckTitle": "Check your understanding",
+  "awakeningCheckHint": "Pick the answer that fits best. Nothing is scored or saved.",
+  "awakeningCheckRight": "That's it.",
+  "awakeningCheckNotQuite": "Not quite, and that's fine.",
+  "awakeningTryIt": "Try it",
+  "awakeningTryItBody": "Put this idea into practice with a reset question.",
+  "awakeningTryItPrompt": "Try it: {title}",
+  "@awakeningTryItPrompt": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "awakeningPrevious": "Previous lesson",
+  "awakeningNext": "Next lesson",
+  "awakeningDone": "Back to the lessons",
+  "awakeningSourceNote": "Paraphrased in Cartharise's own words from “{title}” by {author}. Cartharise is independent.",
+  "@awakeningSourceNote": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "author": {
+        "type": "String"
+      }
+    }
+  },
+  "awakeningSourceLink": "About the source",
+  "awakeningMissing": "This lesson isn't available.",
+  "resetTitle": "The Reset",
+  "resetSubtitle": "One guided day: look honestly at where you are, picture where you want to go, and choose a first step.",
+  "resetPaceOneDayTitle": "Your pace: one day",
+  "resetPaceOneDayBody": "Morning questions, a few check-ins during the day, then the evening. Nothing locks if it takes you longer.",
+  "resetPaceFlexibleTitle": "Your pace: your own",
+  "resetPaceFlexibleBody": "Take the parts in any order and come back whenever you like. Nothing locks and nothing expires.",
+  "resetPaceChange": "Change pace",
+  "resetProgressTitle": "Your reset",
+  "resetProgressCount": "{answered} of {total} core questions answered",
+  "@resetProgressCount": {
+    "placeholders": {
+      "answered": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "resetProgressNext": "Next: {title}",
+  "@resetProgressNext": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "resetBegin": "Begin",
+  "resetContinue": "Continue",
+  "resetAllDoneBody": "Every core question has been answered or skipped. You can still open and change any of them.",
+  "resetSeeCreated": "See what you created",
+  "resetCompletedOn": "Finished on {date}. You can still revisit and edit any answer.",
+  "@resetCompletedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "resetPhasesTitle": "Your day",
+  "resetPhaseMorning": "Morning",
+  "resetPhaseDaytime": "Daytime",
+  "resetPhaseBonus": "Optional",
+  "resetPhaseEvening": "Evening",
+  "resetSubflowMirror": "The Mirror",
+  "resetSubflowVision": "The Vision",
+  "resetSubflowInterrupt": "The Interrupt",
+  "resetSubflowBreakthrough": "The Breakthrough",
+  "resetMirrorBody": "Current reality, possible futures, identity",
+  "resetVisionBody": "A good ordinary day, who you want to become, one action this week",
+  "resetInterruptBody": "Six short check-ins at moments in your day",
+  "resetBreakthroughBody": "Insights, direction and a plan",
+  "resetGroupCurrentReality": "Current reality",
+  "resetGroupAntiVision": "A future you don't want",
+  "resetGroupIdentity": "Identity",
+  "resetGroupVision": "Vision",
+  "resetGroupInterrupt": "Check-in",
+  "resetGroupContemplation": "Contemplation",
+  "resetGroupInsight": "Insights",
+  "resetGroupDirection": "Direction",
+  "resetGroupPlan": "Plan",
+  "resetCountAnswered": "{answered} of {total} answered",
+  "@resetCountAnswered": {
+    "placeholders": {
+      "answered": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "resetCountAnsweredSkipped": "{answered} of {total} answered, {skipped} skipped",
+  "@resetCountAnsweredSkipped": {
+    "placeholders": {
+      "answered": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "skipped": {
+        "type": "int"
+      }
+    }
+  },
+  "resetCountNotStarted": "Not started yet",
+  "resetRingLabel": "{answered}/{total}",
+  "@resetRingLabel": {
+    "placeholders": {
+      "answered": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "resetOpenPhase": "Open the {phase} questions",
+  "@resetOpenPhase": {
+    "placeholders": {
+      "phase": {
+        "type": "String"
+      }
+    }
+  },
+  "resetStateAnswered": "Answered",
+  "resetStateSkipped": "Skipped",
+  "resetStateOpen": "Not answered yet",
+  "resetStateCurrent": "You are here",
+  "resetCheckinTime": "Check-in · {time}",
+  "@resetCheckinTime": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "resetOptionalTitle": "Optional contemplations",
+  "resetOptionalBody": "Three extra questions for a quiet moment. They don't count toward your progress.",
+  "resetOptionalChip": "Optional",
+  "resetPastTitle": "Past resets",
+  "resetPastStarted": "Started {date}",
+  "@resetPastStarted": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "resetPastFinished": "Finished {date}",
+  "@resetPastFinished": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "resetPastUnfinished": "Not finished",
+  "resetPastAnswerCount": "{count, plural, =0{No answers} =1{1 answer} other{{count} answers}}",
+  "@resetPastAnswerCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "resetPastScreenTitle": "Past reset",
+  "resetPastReadOnly": "Read-only: this is how you answered then. Your current reset is separate.",
+  "resetPastLeftOpen": "{count, plural, =1{1 question was left open.} other{{count} questions were left open.}}",
+  "@resetPastLeftOpen": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "resetPastEmpty": "Nothing was written in this reset.",
+  "resetPastMissing": "This reset isn't available any more.",
+  "resetNewTitle": "Start a new reset",
+  "resetNewBody": "Want to go through it again? Start fresh: this reset stays readable under Past resets.",
+  "resetNewConfirmTitle": "Start a new reset?",
+  "resetNewConfirmBody": "Your current answers are kept as a past reset you can read at any time. The new reset starts empty. Your Compass, quests and journal don't change.",
+  "resetNewConfirmAction": "Start new reset",
+  "resetNewStarted": "A new reset has started. Your earlier one is under Past resets.",
+  "resetQuestionOf": "Question {n} of {total}",
+  "@resetQuestionOf": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "resetPauseTooltip": "Pause and return to the Reset",
+  "resetJumpTooltip": "Jump to a question",
+  "resetJump": "Jump",
+  "resetJumpTitle": "{phase} questions",
+  "@resetJumpTitle": {
+    "placeholders": {
+      "phase": {
+        "type": "String"
+      }
+    }
+  },
+  "resetSofter": "Softer wording",
+  "resetSofterHint": "The same question, asked more gently.",
+  "resetHelpLink": "What does this mean?",
+  "resetExampleTitle": "Example — not a right answer",
+  "resetAnswerLabel": "Your answer",
+  "resetAnswerHint": "Write as much or as little as you like.",
+  "resetSkippedNote": "You skipped this one. Write something whenever you like, or leave it.",
+  "resetSaveContinue": "Save & continue",
+  "resetSaveFinish": "Save & finish",
+  "resetSkip": "Skip for now",
+  "resetPause": "Pause",
+  "resetHeavyLink": "Feeling heavy?",
+  "resetHeavyTitle": "This can be a lot",
+  "resetHeavyBody": "Some questions touch tender places. You decide how deep to go: soften the wording, skip, or stop here. Your words are saved.",
+  "resetHeavySofter": "Switch to softer wording",
+  "resetHeavySkip": "Skip this question",
+  "resetHeavyPause": "Take a pause",
+  "resetHeavySupport": "Support and safety",
+  "resetHeavyCrisis": "Cartharise is not therapy. If you feel unsafe, contact local emergency services or a crisis line now.",
+  "resetPromptMissing": "This question isn't available.",
+  "resetCompleteTitle": "Reset complete",
+  "resetCompleteLead": "One day can bring clarity; the rest is practice.",
+  "resetCompleteCreatedTitle": "What you created",
+  "resetCompleteAnswers": "{count, plural, =0{No answers written} =1{1 answer written} other{{count} answers written}}",
+  "@resetCompleteAnswers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "resetCompleteSkipped": "{count, plural, =1{1 question skipped} other{{count} questions skipped}}",
+  "@resetCompleteSkipped": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "resetCompletePhaseLine": "{phase}: {answered} of {total} answered",
+  "@resetCompletePhaseLine": {
+    "placeholders": {
+      "phase": {
+        "type": "String"
+      },
+      "answered": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "resetCompleteVisionTitle": "Your vision, in your words",
+  "resetCompleteOpen": "{count, plural, =1{1 core question is still open. You can return to it from the Reset tab at any time.} other{{count} core questions are still open. You can return to them from the Reset tab at any time.}}",
+  "@resetCompleteOpen": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "resetCompleteCompassBody": "Your evening answers can become the first draft of your Life Compass. You choose what to copy, and nothing you already wrote is overwritten.",
+  "resetCompleteBuildCompass": "Build your Compass",
+  "resetCompleteLater": "Later"
 }
