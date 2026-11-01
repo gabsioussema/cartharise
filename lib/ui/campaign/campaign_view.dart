@@ -1,14 +1,20 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../domain/app_data.dart';
 import '../../domain/campaign.dart';
 import '../../domain/content.dart';
+import '../../domain/persona.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
 import '../compass/formatting.dart';
 import '../journal/journal_kit.dart';
 import '../nav.dart';
+import '../persona/avatar_view.dart';
+import '../persona/persona_copy.dart';
+import '../persona/persona_ops.dart';
 import '../theme/cartha_theme.dart';
 import '../widgets/widgets.dart';
 import 'attempt_sheet.dart';
@@ -95,7 +101,9 @@ class _CampaignViewState extends State<CampaignView> {
             child: SaveIndicator(),
           ),
           const SizedBox(height: 8),
-          _StatusCard(progress: progress),
+          _StatusCard(progress: progress, avatar: state.persona?.avatar),
+          const SizedBox(height: 16),
+          _StrategistCard(progress: progress),
 
           // Act I: the five chapters of the one-day reset (F-059).
           AreaSectionLabel(l.campaignActOne),
@@ -312,9 +320,13 @@ class _CampaignViewState extends State<CampaignView> {
 
 /// Level, XP towards the next level, and the participation note (F-060).
 class _StatusCard extends StatelessWidget {
-  const _StatusCard({required this.progress});
+  const _StatusCard({required this.progress, required this.avatar});
 
   final CampaignProgress progress;
+
+  /// The user's avatar, standing at the current stop (the emblem without
+  /// one).
+  final Avatar? avatar;
 
   @override
   Widget build(BuildContext context) {
@@ -328,7 +340,7 @@ class _StatusCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _RouteMap(progress: progress),
+            _RouteMap(progress: progress, avatar: avatar),
             const SizedBox(height: 12),
             Text(
               l.campaignRouteHere(place(l, progress.waypoint)),
@@ -374,11 +386,20 @@ class _StatusCard extends StatelessWidget {
 String place(AppLocalizations l, Waypoint w) => l.campaignWaypoint(w.name);
 
 /// Hannibal's route: one stop per level, the road behind filled, the next
-/// stretch filled as far as the XP towards it. Static (no motion).
+/// stretch filled as far as the XP towards it, and the user's avatar (or the
+/// emblem) standing above the current stop. Static (no motion); the avatar
+/// is decorative here — the route's label says where the user is.
 class _RouteMap extends StatelessWidget {
-  const _RouteMap({required this.progress});
+  const _RouteMap({required this.progress, required this.avatar});
 
   final CampaignProgress progress;
+  final Avatar? avatar;
+
+  /// The avatar's diameter above the road.
+  static const avatarSize = 36.0;
+
+  /// The road strip (dots and line).
+  static const roadHeight = 28.0;
 
   @override
   Widget build(BuildContext context) {
@@ -389,21 +410,56 @@ class _RouteMap extends StatelessWidget {
     return Semantics(
       label: l.campaignRouteLabel(place(l, progress.waypoint), stop + 1, total),
       excludeSemantics: true,
-      child: SizedBox(
-        height: 28,
-        width: double.infinity,
-        child: CustomPaint(
-          painter: _RoutePainter(
-            stop: stop,
-            toward: progress.nextWaypoint == null
-                ? 0
-                : progress.levelXp / kXpPerLevel,
-            count: total,
-            road: p.heroBorder,
-            walked: p.heroAccent,
-            current: p.onHero,
-          ),
-        ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final width = constraints.maxWidth;
+          final x = _RoutePainter.stopX(stop, total, width);
+          final left = math.min(
+            math.max(0.0, x - avatarSize / 2),
+            math.max(0.0, width - avatarSize),
+          );
+          return SizedBox(
+            key: const ValueKey('campaign-route'),
+            // The avatar's foot rests just above the current stop's ring.
+            height: avatarSize - 4 + roadHeight,
+            width: double.infinity,
+            child: Stack(
+              children: [
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  height: roadHeight,
+                  child: CustomPaint(
+                    painter: _RoutePainter(
+                      stop: stop,
+                      toward: progress.nextWaypoint == null
+                          ? 0
+                          : progress.levelXp / kXpPerLevel,
+                      count: total,
+                      road: p.heroBorder,
+                      walked: p.heroAccent,
+                      current: p.onHero,
+                    ),
+                  ),
+                ),
+                // The painter draws left to right, so the avatar is placed
+                // in the same (physical) coordinates.
+                Positioned(
+                  key: const ValueKey('campaign-route-avatar'),
+                  left: left,
+                  top: 0,
+                  child: AvatarView(
+                    avatar: avatar,
+                    size: avatarSize,
+                    showSigil: false,
+                    excludeFromSemantics: true,
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
@@ -426,12 +482,19 @@ class _RoutePainter extends CustomPainter {
   final Color walked;
   final Color current;
 
+  /// Radius of a stop's dot.
+  static const r = 6.0;
+
+  /// The horizontal centre of stop [i] of [count] on a road [width] wide.
+  static double stopX(int i, int count, double width) {
+    final step = (width - 2 * r - 4) / (count - 1);
+    return r + 2 + i * step;
+  }
+
   @override
   void paint(Canvas canvas, Size size) {
-    const r = 6.0;
     final y = size.height / 2;
-    final step = (size.width - 2 * r - 4) / (count - 1);
-    Offset at(int i) => Offset(r + 2 + i * step, y);
+    Offset at(int i) => Offset(stopX(i, count, size.width), y);
     final line = Paint()
       ..strokeWidth = 3
       ..strokeCap = StrokeCap.round;
@@ -463,6 +526,144 @@ class _RoutePainter extends CustomPainter {
       old.road != road ||
       old.walked != walked ||
       old.current != current;
+}
+
+/// "Your strategist": the user's avatar (or the emblem) and motto, how many
+/// of the decorative extras are open, the next one and how to get it, and
+/// the way into the builder. Appearance itself is always free; the extras
+/// are cosmetic and never taken away.
+class _StrategistCard extends StatelessWidget {
+  const _StrategistCard({required this.progress});
+
+  final CampaignProgress progress;
+
+  /// Below this text width (scaled with the text size) the avatar sits above
+  /// the words instead of beside them.
+  static const _minTextWidth = 150.0;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final p = CarthaPalette.of(context);
+    final theme = Theme.of(context);
+    final state = context.watch<AppState>();
+    final persona = state.persona;
+    final avatar = persona?.avatar;
+    // Extras the avatar already wears stay theirs (never taken away).
+    final worn = {
+      for (final u in Unlockable.values)
+        if (avatar?.uses(u) ?? false) u,
+    };
+    final open = {...unlockedBy(progress, gameOn: state.gameEnabled), ...worn};
+    final next = state.gameEnabled ? nextUnlock(progress, owned: worn) : null;
+    final motto = persona?.motto ?? '';
+    final hasMotto = motto.trim().isNotEmpty;
+    final secondary = theme.textTheme.bodyMedium?.copyWith(
+      color: p.textSecondary,
+    );
+    final words = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (persona == null)
+          Text(l.campaignStrategistEmpty, style: secondary)
+        else if (hasMotto)
+          // The motto exactly as typed.
+          Text(
+            motto,
+            key: const ValueKey('campaign-strategist-motto'),
+            style: theme.textTheme.titleSmall?.copyWith(
+              fontStyle: FontStyle.italic,
+            ),
+          ),
+        if (persona == null || hasMotto) const SizedBox(height: 6),
+        Text(
+          l.campaignExtrasCount(open.length, Unlockable.values.length),
+          style: theme.textTheme.labelLarge,
+        ),
+      ],
+    );
+    // Without an avatar the words say it; the emblem is decoration.
+    final portrait = AvatarView(
+      avatar: avatar,
+      size: 72,
+      excludeFromSemantics: avatar == null,
+    );
+    return SectionCard(
+      key: const ValueKey('campaign-strategist'),
+      title: l.personaFeatureTitle,
+      icon: Icons.person_outline,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final scale = MediaQuery.textScalerOf(context).scale(1);
+              final beside =
+                  constraints.maxWidth - 72 - 16 >= _minTextWidth * scale;
+              if (!beside) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [portrait, const SizedBox(height: 12), words],
+                );
+              }
+              return Row(
+                children: [
+                  portrait,
+                  const SizedBox(width: 16),
+                  Expanded(child: words),
+                ],
+              );
+            },
+          ),
+          const SizedBox(height: 12),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsetsDirectional.only(top: 2),
+                child: Icon(
+                  next == null ? Icons.lock_open : Icons.lock_outline,
+                  size: 18,
+                  color: p.accent,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  next == null
+                      ? l.campaignExtrasAll
+                      : l.campaignExtraNext(
+                          unlockableName(l, next),
+                          unlockReason(l, next),
+                        ),
+                  key: const ValueKey('campaign-strategist-next'),
+                  style: secondary,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: SecondaryButton(
+              key: const ValueKey('campaign-strategist-open'),
+              label: persona == null ? l.personaCreate : l.personaEdit,
+              icon: persona == null ? Icons.add : Icons.edit_outlined,
+              onPressed: () => AppNav.openPersonaBuilder(context),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// The avatar extra [a] opens, if any.
+Unlockable? _extraOf(Achievement a) {
+  for (final u in Unlockable.values) {
+    if (unlockSource(u).achievement == a) return u;
+  }
+  return null;
 }
 
 /// The XP rules, stated plainly (F-060).
@@ -847,9 +1048,13 @@ class _AchievementTile extends StatelessWidget {
     final name = achievementName(l, achievement);
     final body = achievementBody(l, achievement);
     final status = earned ? l.campaignEarned : l.campaignNotYet;
+    final extra = _extraOf(achievement);
+    final reward = extra == null
+        ? null
+        : l.campaignAchievementExtra(unlockableName(l, extra));
     return Semantics(
       container: true,
-      label: '$name. $body. $status',
+      label: [name, body, status, ?reward].join('. '),
       excludeSemantics: true,
       child: DecoratedBox(
         decoration: BoxDecoration(
@@ -889,6 +1094,27 @@ class _AchievementTile extends StatelessWidget {
                   color: p.textSecondary,
                 ),
               ),
+              if (reward != null) ...[
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Icon(
+                      earned ? Icons.lock_open : Icons.lock_outline,
+                      size: 16,
+                      color: earned ? p.accent : p.textSecondary,
+                    ),
+                    const SizedBox(width: 6),
+                    Flexible(
+                      child: Text(
+                        reward,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: earned ? p.textPrimary : p.textSecondary,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ],
           ),
         ),

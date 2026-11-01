@@ -2,11 +2,14 @@ import 'dart:async';
 
 import 'package:cartharise/domain/app_data.dart';
 import 'package:cartharise/domain/campaign.dart';
+import 'package:cartharise/domain/persona.dart';
 import 'package:cartharise/ui/campaign/campaign_feedback.dart';
 import 'package:cartharise/ui/campaign/campaign_ops.dart';
 import 'package:cartharise/ui/campaign/campaign_view.dart';
 import 'package:cartharise/ui/compass/compass_tab.dart';
 import 'package:cartharise/ui/nav.dart';
+import 'package:cartharise/ui/persona/avatar_view.dart';
+import 'package:cartharise/ui/persona/persona_builder.dart';
 import 'package:cartharise/ui/reset/guided_prompt_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -61,6 +64,41 @@ AppData _data({bool game = true, bool withAttempt = true}) =>
             ]
           : const [],
     );
+
+/// [base] plus one quest completed on each of [days] October days (20 XP
+/// each).
+AppData _withQuestDays(AppData base, int days) => base.copyWith(
+  quests: [
+    ...base.quests,
+    for (var d = 1; d <= days; d++)
+      Quest(
+        id: 'oct$d',
+        title: 'October $d',
+        createdAt: _t,
+        completedOn: {'2026-10-${_two(d)}'},
+      ),
+  ],
+);
+
+const _avatar = Avatar(
+  skinTone: SkinTone.walnut,
+  hair: HairStyle.locs,
+  hairColor: HairColor.grey,
+  garment: Garment.cloak,
+);
+
+Persona _persona({Avatar avatar = _avatar, String motto = ''}) =>
+    Persona(avatar: avatar, motto: motto, updatedAt: _t);
+
+Finder _inRoute(Finder f) => find.descendant(
+  of: find.byKey(const ValueKey('campaign-route')),
+  matching: f,
+);
+
+Finder _inStrategist(Finder f) => find.descendant(
+  of: find.byKey(const ValueKey('campaign-strategist')),
+  matching: f,
+);
 
 ShellController _onCampaign() =>
     ShellController(initial: AppTab.compass)
@@ -163,10 +201,14 @@ void main() {
       expect(find.text('Not yet'), findsNWidgets(4));
       expect(
         find.bySemanticsLabel(
-          'The Observer. Wrote all four present-reality reflections. Earned',
+          'The Observer. Wrote all four present-reality reflections. Earned. '
+          'For your avatar: Scroll',
         ),
         findsOneWidget,
       );
+      // Each achievement names the avatar extra it opens.
+      expect(find.text('For your avatar: Scroll'), findsOneWidget);
+      expect(find.text('For your avatar: Amulet of Tanit'), findsOneWidget);
 
       // Act II stats and the honest note.
       expect(find.text('Quests completed'), findsOneWidget);
@@ -393,6 +435,128 @@ void main() {
       await tester.pump();
       expect(find.byKey(const ValueKey('campaign-toast')), findsNothing);
     });
+
+    /// 80 XP from four October quest days (the Practitioner earned), on the
+    /// game layer, no attempts.
+    AppData nearNewCarthage({Persona? persona}) =>
+        _withQuestDays(onboardedData(), 4).copyWith(persona: () => persona);
+
+    testWidgets('an achievement that opens an extra says so', (tester) async {
+      final h = await pumpCartha(
+        tester,
+        data: _data(withAttempt: false).copyWith(quests: []),
+      );
+      await completeQuest(h, 'new');
+      await tester.pump(CampaignFeedback.settle);
+      await tester.pump();
+      expect(
+        find.textContaining('New for your avatar: Bronze'),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('reaching a route stop with a quest opens its extra', (
+      tester,
+    ) async {
+      final h = await pumpCartha(tester, data: nearNewCarthage());
+      expect(h.state.campaign.level, 1);
+      await completeQuest(h, 'new');
+      await tester.pump(CampaignFeedback.settle);
+      await tester.pump();
+      expect(h.state.campaign.waypoint, Waypoint.newCarthage);
+      expect(find.text('+20 XP  ·  New for your avatar: Path'), findsOneWidget);
+      await tester.pump(CampaignFeedback.visible);
+      expect(find.byKey(const ValueKey('campaign-toast')), findsNothing);
+    });
+
+    testWidgets('an extra already worn is not announced as new', (
+      tester,
+    ) async {
+      final h = await pumpCartha(
+        tester,
+        data: nearNewCarthage(
+          persona: _persona(avatar: _avatar.copyWith(sigil: Sigil.path)),
+        ),
+      );
+      await completeQuest(h, 'new');
+      await tester.pump(CampaignFeedback.settle);
+      await tester.pump();
+      expect(find.text('+20 XP'), findsOneWidget);
+      expect(find.textContaining('New for your avatar'), findsNothing);
+    });
+
+    testWidgets('a stop reached by typing answers alone stays quiet', (
+      tester,
+    ) async {
+      ReflectionAnswer answer(String id) =>
+          ReflectionAnswer(promptId: id, body: 'Typed', updatedAt: _t);
+      // 80 quest XP + 3 answers (15 XP) = 95; one more answer reaches 100.
+      final h = await pumpCartha(
+        tester,
+        data: nearNewCarthage().copyWith(
+          journeys: [
+            Journey(
+              id: 'j1',
+              startedAt: _t,
+              answers: {
+                for (final id in ['morning.01', 'morning.02', 'morning.03'])
+                  id: answer(id),
+              },
+            ),
+          ],
+          currentJourneyId: () => 'j1',
+        ),
+      );
+      expect(h.state.campaign.level, 1);
+      unawaited(
+        h.state.mutate(
+          (d) => d.copyWith(
+            journeys: [
+              for (final j in d.journeys)
+                Journey(
+                  id: j.id,
+                  startedAt: j.startedAt,
+                  answers: {...j.answers, 'morning.05': answer('morning.05')},
+                ),
+            ],
+          ),
+        ),
+      );
+      await tester.pump(CampaignFeedback.settle);
+      await tester.pump();
+      expect(h.state.campaign.waypoint, Waypoint.newCarthage);
+      expect(find.byKey(const ValueKey('campaign-toast')), findsNothing);
+    });
+
+    testWidgets('quiet when a restore opens many extras at once', (
+      tester,
+    ) async {
+      final h = await pumpCartha(tester, data: onboardedData());
+      // 30 path notes (300 XP) and one quest today: three stops and the
+      // Practitioner at once, with only 20 XP from actions.
+      unawaited(
+        h.state.mutate(
+          (d) => d.copyWith(
+            pathAnswers: {
+              for (var day = 1; day <= 30; day++)
+                day: PathAnswer(day: day, body: 'Noted', updatedAt: _t),
+            },
+            quests: [
+              Quest(
+                id: 'r',
+                title: 'Restored',
+                createdAt: _t,
+                completedOn: const {'2026-11-03'},
+              ),
+            ],
+          ),
+        ),
+      );
+      await tester.pump(CampaignFeedback.settle);
+      await tester.pump();
+      expect(h.state.campaign.waypoint, Waypoint.pyrenees);
+      expect(find.byKey(const ValueKey('campaign-toast')), findsNothing);
+    });
   });
 
   group('turning the game layer off (F-060)', () {
@@ -447,6 +611,277 @@ void main() {
     });
   });
 
+  group('your strategist (persona plan C)', () {
+    testWidgets('no avatar yet: the emblem on the route, a nudge, the count '
+        'and the next extra; Create opens the builder', (tester) async {
+      final semantics = tester.ensureSemantics();
+      await _pumpCampaign(tester);
+      // The emblem stands at the current stop (no avatar to show).
+      final onRoute = tester.widget<AvatarView>(
+        _inRoute(find.byType(AvatarView)),
+      );
+      expect(onRoute.avatar, isNull);
+      expect(onRoute.excludeFromSemantics, isTrue);
+      // The route keeps its own label; the figure on it is decoration.
+      final route = tester
+          .getSemantics(find.byKey(const ValueKey('campaign-route')))
+          .label;
+      expect(route, contains("Hannibal's route: Carthage, stop 1 of 7."));
+      expect(route, isNot(contains('avatar')));
+
+      expect(find.text('Your strategist'), findsOneWidget);
+      expect(
+        find.text('Create an avatar to walk the route with you.'),
+        findsOneWidget,
+      );
+      // The words say there is no avatar yet; the emblem is not read out.
+      final card = tester.widget<AvatarView>(
+        _inStrategist(find.byType(AvatarView)),
+      );
+      expect(card.avatar, isNull);
+      expect(card.excludeFromSemantics, isTrue);
+      // The Observer, the Practitioner and the Challenger opened three.
+      expect(find.text('3 of 13 extras unlocked'), findsOneWidget);
+      expect(find.text('Next: Path · Reach New Carthage'), findsOneWidget);
+
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey('campaign-strategist-open')),
+      );
+      expect(find.byType(PersonaBuilderScreen), findsOneWidget);
+      semantics.dispose();
+    });
+
+    testWidgets('with an avatar: it stands on the route and in the card, the '
+        'motto exactly as typed; Edit opens the builder', (tester) async {
+      final semantics = tester.ensureSemantics();
+      await _pumpCampaign(
+        tester,
+        data: _data().copyWith(
+          persona: () => _persona(motto: '  Steady, not fast  '),
+        ),
+      );
+      expect(
+        tester.widget<AvatarView>(_inRoute(find.byType(AvatarView))).avatar,
+        _avatar,
+      );
+      final card = tester.widget<AvatarView>(
+        _inStrategist(find.byType(AvatarView)),
+      );
+      expect(card.avatar, _avatar);
+      // Only the card's portrait is read out; on the route it is decoration.
+      expect(card.excludeFromSemantics, isFalse);
+      expect(
+        tester.getSemantics(_inStrategist(find.byType(AvatarView))).label,
+        contains('Your avatar'),
+      );
+      expect(
+        tester.getSemantics(find.byKey(const ValueKey('campaign-route'))).label,
+        isNot(contains('avatar')),
+      );
+      expect(find.text('  Steady, not fast  '), findsOneWidget);
+      expect(
+        find.text('Create an avatar to walk the route with you.'),
+        findsNothing,
+      );
+      expect(find.text('Edit your avatar'), findsOneWidget);
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey('campaign-strategist-open')),
+      );
+      expect(find.byType(PersonaBuilderScreen), findsOneWidget);
+      semantics.dispose();
+    });
+
+    testWidgets('the avatar moves to the stop the user has reached', (
+      tester,
+    ) async {
+      // 40 XP + 14 quest days (280 XP) = 320 XP: level 4, the Pyrenees.
+      await _pumpCampaign(
+        tester,
+        data: _withQuestDays(
+          _data(withAttempt: false),
+          14,
+        ).copyWith(persona: () => _persona()),
+      );
+      expect(find.text("You're at the Pyrenees"), findsOneWidget);
+      final road = tester.getRect(find.byKey(const ValueKey('campaign-route')));
+      final avatar = tester.getCenter(
+        find.byKey(const ValueKey('campaign-route-avatar')),
+      );
+      // The painter's stop 3 of 0…6 (dots 6 px, 2 px margin each side).
+      final stopX = road.left + 8 + 3 * (road.width - 16) / 6;
+      expect(avatar.dx, closeTo(stopX, 0.5));
+      expect(avatar.dy, lessThan(road.center.dy));
+    });
+
+    testWidgets('a worn extra stays open and is never pointed to as next', (
+      tester,
+    ) async {
+      // Worn while the game layer was off: the Path banner and the laurel.
+      await _pumpCampaign(
+        tester,
+        data: _data().copyWith(
+          persona: () => _persona(
+            avatar: _avatar.copyWith(
+              sigil: Sigil.path,
+              headwear: Headwear.laurel,
+            ),
+          ),
+        ),
+      );
+      expect(find.text('5 of 13 extras unlocked'), findsOneWidget);
+      expect(find.text('Next: Sage · Reach the Ebro'), findsOneWidget);
+      // No motto: nothing stands in for the user's words.
+      expect(
+        find.byKey(const ValueKey('campaign-strategist-motto')),
+        findsNothing,
+      );
+    });
+
+    testWidgets('every extra open: said plainly', (tester) async {
+      String id(String phase, int i) => '$phase.${_two(i)}';
+      final every = [
+        for (var i = 1; i <= 14; i++) id('morning', i),
+        for (var i = 1; i <= 6; i++) id('daytime', i),
+        for (var i = 1; i <= 7; i++) id('evening', i),
+      ];
+      final data = _withQuestDays(
+        _data().copyWith(
+          journeys: [
+            Journey(
+              id: 'j1',
+              startedAt: _t,
+              answers: {
+                for (final p in every)
+                  p: ReflectionAnswer(promptId: p, body: 'Yes', updatedAt: _t),
+              },
+            ),
+          ],
+        ),
+        23,
+      );
+      await _pumpCampaign(tester, data: data);
+      expect(find.text("You're at Italy"), findsOneWidget);
+      expect(find.text('7 of 7 earned'), findsOneWidget);
+      expect(find.text('13 of 13 extras unlocked'), findsOneWidget);
+      expect(find.text('Every extra unlocked.'), findsOneWidget);
+    });
+  });
+
+  group('XP preview on quests', () {
+    Future<CarthaHarness> pumpQuests(
+      WidgetTester tester,
+      List<Quest> quests, {
+      bool game = true,
+      Size size = const Size(390, 1400),
+      double textScale = 1,
+      Brightness brightness = Brightness.dark,
+    }) => pumpCartha(
+      tester,
+      data: onboardedData(settings: AppSettings(game: game))
+          .copyWith(quests: quests),
+      home: const CompassTab(initial: CompassSection.missions),
+      size: size,
+      textScale: textScale,
+      brightness: brightness,
+    );
+
+    Quest open(String id) => Quest(id: id, title: 'Open $id', createdAt: _t);
+    Quest daily(String id, {Set<String> done = const {}}) => Quest(
+      id: id,
+      title: 'Daily $id',
+      createdAt: _t,
+      recurrence: QuestRecurrence.daily,
+      completedOn: done,
+    );
+    Finder chip(String id) => find.byKey(ValueKey('quest-xp-$id'));
+
+    testWidgets('open quests show "+20 XP"; done ones do not', (tester) async {
+      final semantics = tester.ensureSemantics();
+      final h = await pumpQuests(tester, [
+        open('a'),
+        daily('w', done: {'2026-11-02'}),
+        daily('d', done: {'2026-11-03'}),
+      ]);
+      expect(chip('a'), findsOneWidget);
+      // Done yesterday, open again today.
+      expect(chip('w'), findsOneWidget);
+      expect(chip('d'), findsNothing);
+      expect(find.text('+20 XP'), findsNWidgets(2));
+      // Read out in words rather than "+20 XP".
+      for (final id in ['a', 'w']) {
+        final label = tester.getSemantics(chip(id)).label;
+        expect(label, contains('Earns 20 XP when done'));
+        expect(label, isNot(contains('+20 XP')));
+      }
+
+      // Completing one takes its chip away; the rest keep theirs.
+      await _tapVisible(tester, find.byKey(const ValueKey('quest-check-w')));
+      await tester.runAsync(() => Future<void>.delayed(Duration.zero));
+      await pumpFrames(tester);
+      expect(h.state.questById('w')!.isDoneOn('2026-11-03'), isTrue);
+      expect(chip('w'), findsNothing);
+      expect(chip('a'), findsOneWidget);
+      semantics.dispose();
+    });
+
+    testWidgets("none once today's quest XP is used up", (tester) async {
+      final h = await pumpQuests(tester, [
+        open('a'),
+        daily('x', done: {'2026-11-03'}),
+        daily('y', done: {'2026-11-03'}),
+        daily('z'),
+      ]);
+      expect(chip('a'), findsOneWidget);
+      expect(chip('z'), findsOneWidget);
+      // The third completion today is the last that counts.
+      await _tapVisible(tester, find.byKey(const ValueKey('quest-check-z')));
+      await tester.runAsync(() => Future<void>.delayed(Duration.zero));
+      await pumpFrames(tester);
+      expect(h.state.questById('z')!.isDoneOn('2026-11-03'), isTrue);
+      expect(chip('a'), findsNothing);
+      expect(find.textContaining('XP'), findsNothing);
+      // The quest itself stays as it was: open, with its checkbox.
+      expect(find.text('Open a'), findsOneWidget);
+    });
+
+    testWidgets('none with the game layer off', (tester) async {
+      await pumpQuests(tester, [open('a'), daily('w')], game: false);
+      expect(find.text('Open a'), findsOneWidget);
+      expect(chip('a'), findsNothing);
+      expect(chip('w'), findsNothing);
+      expect(find.textContaining('XP'), findsNothing);
+    });
+
+    for (final size in kSizeMatrix) {
+      for (final brightness in Brightness.values) {
+        testWidgets('quest chips fit $size (${brightness.name})', (
+          tester,
+        ) async {
+          await pumpQuests(
+            tester,
+            [
+              open('a'),
+              daily('w'),
+              Quest(
+                id: 'p',
+                title: 'Book the long-planned weekend away with the family',
+                createdAt: _t,
+                dueDate: '2026-11-20',
+              ),
+            ],
+            size: size.size,
+            textScale: size.textScale,
+            brightness: brightness,
+          );
+          expect(chip('a'), findsOneWidget);
+          await expectNoOverflow(tester);
+        });
+      }
+    }
+  });
+
   group('screen sizes', () {
     for (final size in kSizeMatrix) {
       for (final brightness in Brightness.values) {
@@ -462,6 +897,32 @@ void main() {
           // Achievements and chapters stay readable as one column on the
           // smallest phone at 200 % text.
           expect(find.text('The Challenger'), findsOneWidget);
+        });
+
+        testWidgets('with an avatar and a long motto fits $size '
+            '(${brightness.name})', (tester) async {
+          await _pumpCampaign(
+            tester,
+            data: _withQuestDays(_data(), 30).copyWith(
+              persona: () => _persona(
+                motto: 'Steady steps, every single day, towards the Alps!',
+              ),
+            ),
+            size: size.size,
+            textScale: size.textScale,
+            brightness: brightness,
+          );
+          expect(find.byType(CampaignView), findsOneWidget);
+          await expectNoOverflow(tester);
+          // In Italy the avatar stands at the last stop, inside the road.
+          final road = tester.getRect(
+            find.byKey(const ValueKey('campaign-route')),
+          );
+          final avatar = tester.getRect(
+            find.byKey(const ValueKey('campaign-route-avatar')),
+          );
+          expect(avatar.right, lessThanOrEqualTo(road.right + 0.01));
+          expect(find.text('Edit your avatar'), findsOneWidget);
         });
       }
     }

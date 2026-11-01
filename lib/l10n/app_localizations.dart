@@ -1150,6 +1150,48 @@ abstract class AppLocalizations {
   /// **'Achievement earned: {name}'**
   String campaignToastAchievement(String name);
 
+  /// No description provided for @campaignStrategistEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Create an avatar to walk the route with you.'**
+  String get campaignStrategistEmpty;
+
+  /// No description provided for @campaignExtrasCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} of {total} extras unlocked'**
+  String campaignExtrasCount(int count, int total);
+
+  /// No description provided for @campaignExtraNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next: {item} · {how}'**
+  String campaignExtraNext(String item, String how);
+
+  /// No description provided for @campaignExtrasAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Every extra unlocked.'**
+  String get campaignExtrasAll;
+
+  /// No description provided for @campaignAchievementExtra.
+  ///
+  /// In en, this message translates to:
+  /// **'For your avatar: {item}'**
+  String campaignAchievementExtra(String item);
+
+  /// No description provided for @campaignQuestXp.
+  ///
+  /// In en, this message translates to:
+  /// **'+{xp} XP'**
+  String campaignQuestXp(int xp);
+
+  /// No description provided for @campaignQuestXpLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Earns {xp} XP when done'**
+  String campaignQuestXpLabel(int xp);
+
   /// Cinzel screen title of the Compass tab.
   ///
   /// In en, this message translates to:

@@ -655,6 +655,38 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get campaignStrategistEmpty =>
+      'Create an avatar to walk the route with you.';
+
+  @override
+  String campaignExtrasCount(int count, int total) {
+    return '$count of $total extras unlocked';
+  }
+
+  @override
+  String campaignExtraNext(String item, String how) {
+    return 'Next: $item · $how';
+  }
+
+  @override
+  String get campaignExtrasAll => 'Every extra unlocked.';
+
+  @override
+  String campaignAchievementExtra(String item) {
+    return 'For your avatar: $item';
+  }
+
+  @override
+  String campaignQuestXp(int xp) {
+    return '+$xp XP';
+  }
+
+  @override
+  String campaignQuestXpLabel(int xp) {
+    return 'Earns $xp XP when done';
+  }
+
+  @override
   String get compassTitle => 'Compass';
 
   @override

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../domain/app_data.dart';
+import '../../domain/campaign.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
+import '../campaign/campaign_ops.dart';
 import '../compass/formatting.dart';
 import '../theme/cartha_theme.dart';
 import '../widgets/widgets.dart';
@@ -64,10 +66,21 @@ Future<void> setQuestDoneWithFeedback(
 
 enum _QuestAction { edit, delete }
 
+/// How many quests count as done on [day] for XP: each quest once that day,
+/// as `campaignProgress` counts them.
+int questsDoneOn(Iterable<Quest> quests, String day) =>
+    quests.where((q) => q.completedOn.contains(day)).length;
+
+/// Whether completing a quest on [day] would add XP: the game layer is on and
+/// fewer than [kQuestDaysCap] quests are done that day.
+bool questXpOpenOn(AppState state, String day) =>
+    state.gameEnabled && questsDoneOn(state.data.quests, day) < kQuestDaysCap;
+
 /// One quest: an accessible checkbox ("Mark '…' done"), the title, calm
-/// labels (every day · planned for · done today) and an options menu. Tapping
-/// the row edits it. Done is shown by the tick, strike-through and a label —
-/// never by colour alone, and nothing is ever "missed" (F-031).
+/// labels (every day · planned for · done today · "+20 XP" while the
+/// Campaign is on and today's quest XP isn't used up) and an options menu.
+/// Tapping the row edits it. Done is shown by the tick, strike-through and a
+/// label — never by colour alone, and nothing is ever "missed" (F-031).
 class QuestTile extends StatelessWidget {
   const QuestTile({super.key, required this.quest, required this.day});
 
@@ -83,6 +96,8 @@ class QuestTile extends StatelessWidget {
     final theme = Theme.of(context);
     final done = quest.isDoneOn(day);
     final daily = quest.recurrence == QuestRecurrence.daily;
+    final xpOpen = context.select<AppState, bool>((s) => questXpOpenOn(s, day));
+    final showXp = xpOpen && !done;
     String? doneLabel;
     if (done) {
       final last = (quest.completedOn.toList()..sort()).last;
@@ -124,7 +139,7 @@ class QuestTile extends StatelessWidget {
                           decorationColor: p.textSecondary,
                         ),
                       ),
-                      if (daily || quest.dueDate != null || done) ...[
+                      if (daily || quest.dueDate != null || done || showXp) ...[
                         const SizedBox(height: 6),
                         Wrap(
                           spacing: 6,
@@ -147,6 +162,17 @@ class QuestTile extends StatelessWidget {
                                 label: doneLabel,
                                 icon: Icons.check,
                                 tone: ChipTone.success,
+                              ),
+                            if (showXp)
+                              Semantics(
+                                label: l.campaignQuestXpLabel(kXpPerQuest),
+                                excludeSemantics: true,
+                                child: ChipTag(
+                                  key: ValueKey('quest-xp-${quest.id}'),
+                                  label: l.campaignQuestXp(kXpPerQuest),
+                                  icon: Icons.auto_awesome,
+                                  tone: ChipTone.accent,
+                                ),
                               ),
                           ],
                         ),
