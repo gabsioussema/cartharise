@@ -222,6 +222,13 @@ domain layer is pure Dart and unit‑tested. Details: [`docs/architecture.md`](d
 - Android SDK + JDK 17–21 for Android
 - A Mac with **Xcode** for iOS
 
+### Try it on Android
+
+A test build is in [`dist/cartharise-1.0.0-arm64-v8a.apk`](dist/cartharise-1.0.0-arm64-v8a.apk)
+(arm64, for almost every phone from the last ~8 years). Copy it to the phone, open it, and allow
+"Install unknown apps" when Android asks. It is signed with the debug key, so uninstall it before
+installing a store version later. Checksum: [`dist/SHA256SUMS.txt`](dist/SHA256SUMS.txt).
+
 ### Run
 
 ```bash
