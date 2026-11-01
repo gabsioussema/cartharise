@@ -120,6 +120,7 @@ final List<_Screen> _screens = [
   _tab('Reset', AppTab.reset),
   _tab('Compass', AppTab.compass),
   _tab('Missions', AppTab.compass, pill: 'Missions'),
+  _tab('Campaign', AppTab.compass, pill: 'Campaign'),
   _tab('Journal notes', AppTab.journal),
   _tab('Journal reviews', AppTab.journal, pill: 'Reviews'),
   _tab('Journal look back', AppTab.journal, pill: 'Look back'),

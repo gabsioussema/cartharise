@@ -1,0 +1,818 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../domain/app_data.dart';
+import '../../domain/campaign.dart';
+import '../../domain/content.dart';
+import '../../l10n/app_localizations.dart';
+import '../../state/app_state.dart';
+import '../compass/formatting.dart';
+import '../journal/journal_kit.dart';
+import '../nav.dart';
+import '../theme/cartha_theme.dart';
+import '../widgets/widgets.dart';
+import 'attempt_sheet.dart';
+import 'campaign_copy.dart';
+import 'campaign_ops.dart';
+
+/// The Campaign section of the Compass tab (F-058–F-064): the article's
+/// "life as a game" framing over the user's own reset, Compass and quests.
+/// XP and achievements come only from observable participation; nothing is
+/// ever taken away, and the whole layer can be turned off in You › Settings.
+class CampaignView extends StatefulWidget {
+  const CampaignView({
+    super.key,
+    required this.onOpenCompass,
+    required this.onOpenMissions,
+  });
+
+  /// Shows the Compass section (to write or revise the strategy).
+  final VoidCallback onOpenCompass;
+
+  /// Shows the Missions section (quests and the 30-day path).
+  final VoidCallback onOpenMissions;
+
+  @override
+  State<CampaignView> createState() => _CampaignViewState();
+}
+
+class _CampaignViewState extends State<CampaignView> {
+  /// Battle-log entries shown before "Show all".
+  static const _logPreview = 5;
+
+  final _attempt = TextEditingController();
+  final _learning = TextEditingController();
+  String? _error;
+  bool _busy = false;
+  bool _showAllLog = false;
+
+  @override
+  void dispose() {
+    _attempt.dispose();
+    _learning.dispose();
+    super.dispose();
+  }
+
+  Future<void> _record() async {
+    final l = AppLocalizations.of(context);
+    if (_attempt.text.trim().isEmpty) {
+      setState(() => _error = l.campaignAttemptRequired);
+      return;
+    }
+    FocusManager.instance.primaryFocus?.unfocus();
+    setState(() => _busy = true);
+    final messenger = ScaffoldMessenger.maybeOf(context);
+    await context.read<AppState>().recordAttempt(
+      _attempt.text,
+      learning: _learning.text,
+    );
+    if (!mounted) return;
+    _attempt.clear();
+    _learning.clear();
+    setState(() => _busy = false);
+    messenger?.showSnackBar(SnackBar(content: Text(l.campaignRecorded)));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final p = CarthaPalette.of(context);
+    final theme = Theme.of(context);
+    final state = context.watch<AppState>();
+    final progress = state.campaign;
+    final log = state.data.campaignLog;
+    final shownLog = _showAllLog ? log : log.take(_logPreview).toList();
+    final secondary = theme.textTheme.bodyMedium?.copyWith(
+      color: p.textSecondary,
+    );
+    return Padding(
+      padding: const EdgeInsetsDirectional.symmetric(horizontal: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(l.campaignIntro, style: secondary),
+          const SizedBox(height: 8),
+          const Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: SaveIndicator(),
+          ),
+          const SizedBox(height: 8),
+          _StatusCard(progress: progress),
+
+          // Act I: the five chapters of the one-day reset (F-059).
+          AreaSectionLabel(l.campaignActOne),
+          Text(
+            l.campaignChaptersExplored(
+              progress.chaptersExplored,
+              progress.chapters.length,
+            ),
+            style: secondary,
+          ),
+          const SizedBox(height: 12),
+          _Grid(
+            minWidth: 260,
+            children: [
+              for (final (i, chapter) in progress.chapters.indexed)
+                _ChapterCard(number: i + 1, progress: chapter),
+            ],
+          ),
+          const SizedBox(height: 24),
+
+          // The six Section VII components (F-058, F-063).
+          SectionCard(
+            title: l.campaignMapTitle,
+            icon: Icons.map_outlined,
+            child: _StrategistMap(
+              compass: state.compass,
+              onEdit: widget.onOpenCompass,
+              onQuests: widget.onOpenMissions,
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          // The monthly boss and its battle log (F-061).
+          SectionCard(
+            title: l.campaignBossTitle,
+            icon: Icons.shield_outlined,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(l.campaignBossBody, style: secondary),
+                const SizedBox(height: 12),
+                _Callout(
+                  text: state.monthlyBoss.trim().isEmpty
+                      ? l.campaignBossNoProject
+                      : state.monthlyBoss,
+                  muted: state.monthlyBoss.trim().isEmpty,
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  key: const ValueKey('campaign-attempt'),
+                  controller: _attempt,
+                  minLines: 2,
+                  maxLines: 6,
+                  textCapitalization: TextCapitalization.sentences,
+                  decoration: InputDecoration(
+                    labelText: l.campaignAttemptLabel,
+                    hintText: l.campaignAttemptHint,
+                    hintMaxLines: 3,
+                    errorText: _error,
+                    errorMaxLines: 3,
+                  ),
+                  onChanged: (_) {
+                    if (_error != null) setState(() => _error = null);
+                  },
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  key: const ValueKey('campaign-learning'),
+                  controller: _learning,
+                  minLines: 2,
+                  maxLines: 6,
+                  textCapitalization: TextCapitalization.sentences,
+                  decoration: InputDecoration(
+                    labelText: l.campaignLearningLabel,
+                    hintText: l.campaignLearningHint,
+                    hintMaxLines: 3,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                PrimaryButton(
+                  key: const ValueKey('campaign-record'),
+                  label: l.campaignRecord,
+                  icon: Icons.add,
+                  expand: true,
+                  busy: _busy,
+                  onPressed: _record,
+                ),
+                const SizedBox(height: 20),
+                Semantics(
+                  header: true,
+                  child: Text(
+                    l.campaignLogTitle(log.length),
+                    style: theme.textTheme.titleSmall,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                if (log.isEmpty)
+                  Text(l.campaignLogEmpty, style: secondary)
+                else
+                  for (final entry in shownLog)
+                    _LogRow(key: ValueKey(entry.id), entry: entry),
+                if (log.length > _logPreview)
+                  Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: TextLinkButton(
+                      label: _showAllLog
+                          ? l.campaignLogShowFewer
+                          : l.campaignLogShowAll(log.length),
+                      onPressed: () =>
+                          setState(() => _showAllLog = !_showAllLog),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+
+          // Article-based achievements (F-062).
+          AreaSectionLabel(l.campaignAchievementsTitle),
+          Text(l.campaignAchievementsSubtitle, style: secondary),
+          const SizedBox(height: 4),
+          Text(
+            l.campaignAchievementsCount(
+              progress.earned.length,
+              Achievement.values.length,
+            ),
+            style: theme.textTheme.labelLarge,
+          ),
+          const SizedBox(height: 12),
+          _Grid(
+            minWidth: 170,
+            children: [
+              for (final a in Achievement.values)
+                _AchievementTile(
+                  achievement: a,
+                  earned: progress.earned.contains(a),
+                ),
+            ],
+          ),
+          const SizedBox(height: 24),
+
+          // Act II: the 30-day practice (F-064).
+          SectionCard(
+            title: l.campaignActTwo,
+            icon: Icons.route_outlined,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(l.campaignActTwoBody, style: secondary),
+                const SizedBox(height: 12),
+                _Grid(
+                  minWidth: 96,
+                  children: [
+                    _Stat(
+                      value: progress.questsCompleted,
+                      label: l.campaignStatQuests,
+                    ),
+                    _Stat(
+                      value: progress.pathDaysWritten,
+                      label: l.campaignStatPath,
+                    ),
+                    _Stat(
+                      value: progress.attempts,
+                      label: l.campaignStatAttempts,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    PrimaryButton(
+                      label: l.campaignContinuePath,
+                      trailingIcon: Icons.arrow_forward,
+                      onPressed: widget.onOpenMissions,
+                    ),
+                    TextLinkButton(
+                      label: l.campaignReadArticle,
+                      trailingIcon: Icons.open_in_new,
+                      onPressed: () => openExternalLink(
+                        context,
+                        Uri.parse(state.content.credit.articleUrl),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            l.campaignNote,
+            style: theme.textTheme.bodySmall?.copyWith(color: p.textSecondary),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Level, XP towards the next level, and the participation note (F-060).
+class _StatusCard extends StatelessWidget {
+  const _StatusCard({required this.progress});
+
+  final CampaignProgress progress;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final p = CarthaPalette.of(context);
+    final theme = Theme.of(context);
+    final toNext = l.campaignLevelProgress(
+      progress.levelXp,
+      kXpPerLevel,
+      progress.level + 1,
+    );
+    return HeroCard(
+      eyebrow: l.campaignStatusEyebrow,
+      title: l.campaignLevel(progress.level, progress.xp),
+      child: OnHeroTheme(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(999),
+              child: LinearProgressIndicator(
+                value: progress.levelXp / kXpPerLevel,
+                minHeight: 8,
+                color: p.heroAccent,
+                backgroundColor: p.heroBorder,
+                semanticsLabel: toNext,
+              ),
+            ),
+            const SizedBox(height: 8),
+            ExcludeSemantics(
+              child: Text(
+                toNext,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: p.onHeroMuted,
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              l.campaignXpNote,
+              style: theme.textTheme.bodyMedium?.copyWith(color: p.onHero),
+            ),
+            const SizedBox(height: 4),
+            Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: TextLinkButton(
+                key: const ValueKey('campaign-xp-how'),
+                label: l.campaignXpHow,
+                icon: Icons.info_outline,
+                onPressed: () => _showXpRules(context),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// The XP rules, stated plainly (F-060).
+Future<void> _showXpRules(BuildContext context) {
+  final l = AppLocalizations.of(context);
+  final theme = Theme.of(context);
+  final rules = [
+    l.campaignXpRuleReflection(kXpPerReflection),
+    l.campaignXpRuleQuest(kXpPerQuest, kQuestDaysCap),
+    l.campaignXpRulePath(kXpPerPathDay),
+    l.campaignXpRuleAttempt(kXpPerAttemptDay),
+    l.campaignXpRuleReview(kXpPerReview),
+  ];
+  return showDialog<void>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text(l.campaignXpHow),
+      content: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (final rule in rules)
+              Padding(
+                padding: const EdgeInsetsDirectional.only(bottom: 8),
+                child: Text(rule, style: theme.textTheme.bodyMedium),
+              ),
+            const SizedBox(height: 4),
+            Text(
+              l.campaignXpRulesNote(kXpPerLevel),
+              style: theme.textTheme.bodySmall,
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(l.close),
+        ),
+      ],
+    ),
+  );
+}
+
+/// One chapter of Act I: its exercises, progress in the current reset and a
+/// way into its first open question.
+class _ChapterCard extends StatelessWidget {
+  const _ChapterCard({required this.number, required this.progress});
+
+  final int number;
+  final ChapterProgress progress;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final p = CarthaPalette.of(context);
+    final theme = Theme.of(context);
+    final state = context.watch<AppState>();
+    final journey = state.data.currentJourney;
+    final name = chapterName(l, progress.chapter);
+    final done = l.campaignChapterDone(progress.answered, progress.total);
+    String? target;
+    for (final id in progress.promptIds) {
+      if (!(journey?.answer(id)?.answered ?? false)) {
+        target = id;
+        break;
+      }
+    }
+    target ??= progress.promptIds.firstOrNull;
+    return SectionCard(
+      padding: const EdgeInsetsDirectional.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Wrap(
+            spacing: 8,
+            runSpacing: 6,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              Text(
+                l.campaignChapterNumber(number).toUpperCase(),
+                style: theme.textTheme.labelMedium?.copyWith(
+                  color: p.accent,
+                  letterSpacing: 1.4,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              if (progress.explored)
+                ChipTag(
+                  label: l.campaignChapterExplored,
+                  icon: Icons.check,
+                  tone: ChipTone.success,
+                ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Semantics(
+            header: true,
+            child: Text(name, style: theme.textTheme.titleMedium),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            l.campaignChapterReflections(
+              chapterArea(l, progress.chapter),
+              progress.total,
+            ),
+            style: theme.textTheme.bodySmall?.copyWith(color: p.textSecondary),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            chapterBody(l, progress.chapter),
+            style: theme.textTheme.bodyMedium,
+          ),
+          const SizedBox(height: 12),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(999),
+            child: LinearProgressIndicator(
+              value: progress.total == 0
+                  ? 0
+                  : progress.answered / progress.total,
+              minHeight: 6,
+              semanticsLabel: done,
+            ),
+          ),
+          const SizedBox(height: 6),
+          ExcludeSemantics(child: Text(done, style: theme.textTheme.bodySmall)),
+          if (target != null) ...[
+            const SizedBox(height: 8),
+            Semantics(
+              button: true,
+              label: l.campaignChapterExploreLabel(number, name),
+              excludeSemantics: true,
+              onTap: () => AppNav.openPrompt(context, target!),
+              child: SecondaryButton(
+                key: ValueKey('campaign-chapter-$number'),
+                label: l.campaignChapterExplore,
+                trailingIcon: Icons.arrow_forward,
+                onPressed: () => AppNav.openPrompt(context, target!),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+/// The six Compass components with their game roles (F-058); boundaries
+/// stay visible as the rules of engagement (F-063).
+class _StrategistMap extends StatelessWidget {
+  const _StrategistMap({
+    required this.compass,
+    required this.onEdit,
+    required this.onQuests,
+  });
+
+  final LifeCompass compass;
+  final VoidCallback onEdit;
+  final VoidCallback onQuests;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final p = CarthaPalette.of(context);
+    final theme = Theme.of(context);
+    final rows = [
+      (CompassField.antiVision, l.campaignMapAntiVision),
+      (CompassField.vision, l.campaignMapVision),
+      (CompassField.yearGoal, l.campaignMapYear),
+      (CompassField.monthProject, l.campaignMapMonth),
+      (CompassField.dailyLevers, l.campaignMapLevers),
+      (CompassField.constraints, l.campaignMapBoundaries),
+    ];
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          l.campaignMapSubtitle,
+          style: theme.textTheme.bodyMedium?.copyWith(color: p.textSecondary),
+        ),
+        for (final (i, (field, label)) in rows.indexed) ...[
+          if (i > 0) Divider(color: p.border, height: 1),
+          Padding(
+            padding: const EdgeInsetsDirectional.symmetric(vertical: 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(label, style: theme.textTheme.titleSmall),
+                const SizedBox(height: 4),
+                if (compass.get(field).trim().isEmpty)
+                  Text(
+                    l.campaignMapEmpty,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: p.textSecondary,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  )
+                else
+                  Text(compass.get(field), style: theme.textTheme.bodyMedium),
+                if (field == CompassField.constraints) ...[
+                  const SizedBox(height: 6),
+                  ChipTag(
+                    label: l.campaignMapBoundariesNote,
+                    icon: Icons.shield_outlined,
+                    tone: ChipTone.accent,
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            PrimaryButton(
+              key: const ValueKey('campaign-map-edit'),
+              label: l.campaignMapEdit,
+              trailingIcon: Icons.arrow_forward,
+              onPressed: onEdit,
+            ),
+            SecondaryButton(
+              key: const ValueKey('campaign-map-quests'),
+              label: l.campaignMapQuests,
+              onPressed: onQuests,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+/// The monthly project, set off like a quotation.
+class _Callout extends StatelessWidget {
+  const _Callout({required this.text, required this.muted});
+
+  final String text;
+  final bool muted;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = CarthaPalette.of(context);
+    final theme = Theme.of(context);
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: p.selection,
+        borderRadius: BorderRadius.circular(CarthaTheme.radiusSmall),
+        border: BorderDirectional(start: BorderSide(color: p.accent, width: 3)),
+      ),
+      child: Padding(
+        padding: const EdgeInsetsDirectional.all(14),
+        child: Text(
+          text,
+          style: theme.textTheme.bodyLarge?.copyWith(
+            color: muted ? p.textSecondary : p.textPrimary,
+            fontStyle: muted ? FontStyle.italic : null,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// One battle-log attempt; tapping it opens the edit sheet.
+class _LogRow extends StatelessWidget {
+  const _LogRow({super.key, required this.entry});
+
+  final BattleLogEntry entry;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final p = CarthaPalette.of(context);
+    final theme = Theme.of(context);
+    final date = formatDayKey(context, entry.day);
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(bottom: 8),
+      child: Material(
+        color: p.raised,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(CarthaTheme.radiusSmall),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            border: BorderDirectional(
+              start: BorderSide(color: p.accent, width: 3),
+            ),
+          ),
+          child: ListTile(
+            onTap: () => showAttemptSheet(context, entry),
+            contentPadding: const EdgeInsetsDirectional.fromSTEB(14, 6, 8, 6),
+            title: Text(entry.attempt, style: theme.textTheme.bodyLarge),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (entry.learning.trim().isNotEmpty) ...[
+                  const SizedBox(height: 4),
+                  Text(l.campaignLogLearned(entry.learning)),
+                ],
+                const SizedBox(height: 4),
+                Text(date, style: theme.textTheme.bodySmall),
+              ],
+            ),
+            trailing: Icon(
+              Icons.edit_outlined,
+              color: p.textSecondary,
+              semanticLabel: l.campaignLogEditLabel(date),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// An achievement: earned or not shown by icon and words, not colour alone.
+class _AchievementTile extends StatelessWidget {
+  const _AchievementTile({required this.achievement, required this.earned});
+
+  final Achievement achievement;
+  final bool earned;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final p = CarthaPalette.of(context);
+    final theme = Theme.of(context);
+    final name = achievementName(l, achievement);
+    final body = achievementBody(l, achievement);
+    final status = earned ? l.campaignEarned : l.campaignNotYet;
+    return Semantics(
+      container: true,
+      label: '$name. $body. $status',
+      excludeSemantics: true,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: earned ? p.selection : p.card,
+          borderRadius: BorderRadius.circular(CarthaTheme.radiusSmall),
+          border: Border.all(color: earned ? p.accent : p.border),
+        ),
+        child: Padding(
+          padding: const EdgeInsetsDirectional.all(14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    earned ? Icons.military_tech : Icons.radio_button_unchecked,
+                    color: earned ? p.accent : p.textSecondary,
+                    size: 22,
+                  ),
+                  const SizedBox(width: 8),
+                  Flexible(
+                    child: Text(
+                      status,
+                      style: theme.textTheme.labelMedium?.copyWith(
+                        color: earned ? p.accent : p.textSecondary,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Text(name, style: theme.textTheme.titleSmall),
+              const SizedBox(height: 2),
+              Text(
+                body,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: p.textSecondary,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// A count and what it counts.
+class _Stat extends StatelessWidget {
+  const _Stat({required this.value, required this.label});
+
+  final int value;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = CarthaPalette.of(context);
+    final theme = Theme.of(context);
+    return Semantics(
+      container: true,
+      label: '$value $label',
+      excludeSemantics: true,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: p.raised,
+          borderRadius: BorderRadius.circular(CarthaTheme.radiusSmall),
+          border: Border.all(color: p.border),
+        ),
+        child: Padding(
+          padding: const EdgeInsetsDirectional.all(14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('$value', style: theme.textTheme.headlineSmall),
+              const SizedBox(height: 2),
+              Text(
+                label,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: p.textSecondary,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Lays [children] out in as many equal columns as fit [minWidth] each
+/// (scaled with the text size), up to three.
+class _Grid extends StatelessWidget {
+  const _Grid({required this.minWidth, required this.children});
+
+  final double minWidth;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    final scale = MediaQuery.textScalerOf(context).scale(1);
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        const gap = 12.0;
+        final columns = (constraints.maxWidth / (minWidth * scale))
+            .floor()
+            .clamp(1, 3);
+        final width = (constraints.maxWidth - gap * (columns - 1)) / columns;
+        return Wrap(
+          spacing: gap,
+          runSpacing: gap,
+          children: [
+            for (final child in children) SizedBox(width: width, child: child),
+          ],
+        );
+      },
+    );
+  }
+}

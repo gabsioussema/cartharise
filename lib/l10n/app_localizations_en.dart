@@ -245,6 +245,393 @@ class AppLocalizationsEn extends AppLocalizations {
   String get awakeningMissing => 'This lesson isn\'t available.';
 
   @override
+  String get campaignSection => 'Campaign';
+
+  @override
+  String get campaignSubtitle => 'Your direction, played as a game.';
+
+  @override
+  String get campaignIntro =>
+      'Dan Koe\'s article frames a life plan as a game. Here it is: your vision is the win condition, your anti-vision is what\'s at stake, the one-year mission is the main campaign, the one-month project is your boss fight, daily levers are quests and your boundaries are the rules.';
+
+  @override
+  String get campaignStatusEyebrow => 'Your campaign';
+
+  @override
+  String campaignLevel(int level, int xp) {
+    return 'Level $level · $xp XP';
+  }
+
+  @override
+  String campaignLevelProgress(int current, int step, int next) {
+    return '$current / $step XP to level $next';
+  }
+
+  @override
+  String get campaignXpNote =>
+      'XP counts participation and practice, never your worth. Rest days cost nothing, and nothing is ever taken away.';
+
+  @override
+  String get campaignXpHow => 'How XP is earned';
+
+  @override
+  String campaignXpRuleReflection(int xp) {
+    return '+$xp XP for each reset question you answer (once per question)';
+  }
+
+  @override
+  String campaignXpRuleQuest(int xp, int max) {
+    return '+$xp XP for each quest you complete, counting up to $max a day';
+  }
+
+  @override
+  String campaignXpRulePath(int xp) {
+    return '+$xp XP for each day of the 30-day path you write';
+  }
+
+  @override
+  String campaignXpRuleAttempt(int xp) {
+    return '+$xp XP for each day you record an attempt at your monthly project';
+  }
+
+  @override
+  String campaignXpRuleReview(int xp) {
+    return '+$xp XP for each weekly review';
+  }
+
+  @override
+  String campaignXpRulesNote(int step) {
+    return 'XP never looks at what you write, how long it is or how you feel. Skipping, resting and changing your plans never cost XP. Every $step XP is a new level.';
+  }
+
+  @override
+  String get campaignActOne => 'Act I · The one-day awakening';
+
+  @override
+  String campaignChaptersExplored(int count, int total) {
+    return '$count of $total chapters explored';
+  }
+
+  @override
+  String campaignChapterNumber(int number) {
+    return 'Chapter $number';
+  }
+
+  @override
+  String get campaignChapterTerrain => 'See the terrain';
+
+  @override
+  String get campaignChapterTerrainArea => 'Current reality';
+
+  @override
+  String get campaignChapterTerrainBody =>
+      'Notice dissatisfaction, repeated complaints and what you actually do.';
+
+  @override
+  String get campaignChapterPattern => 'Find the pattern';
+
+  @override
+  String get campaignChapterPatternArea => 'Anti-vision and identity';
+
+  @override
+  String get campaignChapterPatternBody =>
+      'Explore the future you want to avoid and the patterns that protect you.';
+
+  @override
+  String get campaignChapterBanner => 'Raise your banner';
+
+  @override
+  String get campaignChapterBannerArea => 'Future vision';
+
+  @override
+  String get campaignChapterBannerBody =>
+      'Imagine a better ordinary day and one small step that fits it.';
+
+  @override
+  String get campaignChapterAutopilot => 'Break autopilot';
+
+  @override
+  String get campaignChapterAutopilotArea => 'Daytime check-ins';
+
+  @override
+  String get campaignChapterAutopilotBody =>
+      'Notice your choices during a real day.';
+
+  @override
+  String get campaignChapterPlan => 'Plan the campaign';
+
+  @override
+  String get campaignChapterPlanArea => 'Evening synthesis';
+
+  @override
+  String get campaignChapterPlanBody =>
+      'Turn reflection into a one-year mission, a one-month project and daily levers.';
+
+  @override
+  String campaignChapterReflections(String area, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count reflections',
+      one: '1 reflection',
+    );
+    return '$area · $_temp0';
+  }
+
+  @override
+  String campaignChapterDone(int done, int total) {
+    return '$done of $total written';
+  }
+
+  @override
+  String get campaignChapterExplored => 'Explored';
+
+  @override
+  String get campaignChapterExplore => 'Explore';
+
+  @override
+  String campaignChapterExploreLabel(int number, String name) {
+    return 'Explore chapter $number, $name';
+  }
+
+  @override
+  String get campaignMapTitle => 'The strategist\'s map';
+
+  @override
+  String get campaignMapSubtitle =>
+      'The six parts of your Life Compass, as the article\'s game.';
+
+  @override
+  String get campaignMapAntiVision => 'What\'s at stake · Anti-vision';
+
+  @override
+  String get campaignMapVision => 'Win condition · Vision';
+
+  @override
+  String get campaignMapYear => 'Main campaign · One-year mission';
+
+  @override
+  String get campaignMapMonth => 'Monthly boss · One-month project';
+
+  @override
+  String get campaignMapLevers => 'Daily quests · Daily levers';
+
+  @override
+  String get campaignMapBoundaries => 'Rules of engagement · Boundaries';
+
+  @override
+  String get campaignMapBoundariesNote =>
+      'The game never rewards giving these up.';
+
+  @override
+  String get campaignMapEmpty =>
+      'Not written yet. Add it in your Compass when you\'re ready.';
+
+  @override
+  String get campaignMapEdit => 'Build your strategy';
+
+  @override
+  String get campaignMapQuests => 'Open daily quests';
+
+  @override
+  String get campaignBossTitle => 'Monthly boss fight';
+
+  @override
+  String get campaignBossBody =>
+      'The boss is the project or obstacle, never you or other people. Record what you try and what you learn. Setbacks cost nothing.';
+
+  @override
+  String get campaignBossNoProject =>
+      'Your one-month project will appear here once you set it in your Compass or Missions.';
+
+  @override
+  String get campaignAttemptLabel => 'What did you actually try?';
+
+  @override
+  String get campaignAttemptHint =>
+      'A 20-minute focus block, a message I\'d been putting off, a first draft…';
+
+  @override
+  String get campaignAttemptRequired =>
+      'Write a few words about what you tried.';
+
+  @override
+  String get campaignLearningLabel => 'What did you learn? (optional)';
+
+  @override
+  String get campaignLearningHint =>
+      'What worked, what didn\'t, what you\'ll change next time.';
+
+  @override
+  String get campaignRecord => 'Record this attempt';
+
+  @override
+  String get campaignRecorded =>
+      'Attempt recorded. What you learned counts too.';
+
+  @override
+  String campaignLogTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Battle log · $count attempts',
+      one: 'Battle log · 1 attempt',
+      zero: 'Battle log',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get campaignLogEmpty => 'No attempts yet. Your first one can be tiny.';
+
+  @override
+  String campaignLogLearned(String learning) {
+    return 'Learned: $learning';
+  }
+
+  @override
+  String campaignLogShowAll(int count) {
+    return 'Show all $count';
+  }
+
+  @override
+  String get campaignLogShowFewer => 'Show fewer';
+
+  @override
+  String campaignLogEditLabel(String date) {
+    return 'Edit the attempt from $date';
+  }
+
+  @override
+  String get campaignAttemptEditTitle => 'Edit attempt';
+
+  @override
+  String get campaignAttemptSave => 'Save attempt';
+
+  @override
+  String get campaignAttemptDelete => 'Delete attempt';
+
+  @override
+  String get campaignAttemptDeleteTitle => 'Delete this attempt?';
+
+  @override
+  String get campaignAttemptDeleteBody =>
+      'It will be removed from your battle log. This can\'t be undone.';
+
+  @override
+  String get campaignAttemptDeleted => 'Attempt deleted';
+
+  @override
+  String get campaignAchievementsTitle => 'Achievements from the article';
+
+  @override
+  String get campaignAchievementsSubtitle =>
+      'Earned by doing the exercises, never by what you write.';
+
+  @override
+  String campaignAchievementsCount(int earned, int total) {
+    return '$earned of $total earned';
+  }
+
+  @override
+  String get campaignEarned => 'Earned';
+
+  @override
+  String get campaignNotYet => 'Not yet';
+
+  @override
+  String get campaignAchievementObserver => 'The Observer';
+
+  @override
+  String get campaignAchievementObserverBody =>
+      'Wrote all four present-reality reflections';
+
+  @override
+  String get campaignAchievementPathfinder => 'The Pathfinder';
+
+  @override
+  String get campaignAchievementPathfinderBody =>
+      'Explored the anti-vision and identity questions';
+
+  @override
+  String get campaignAchievementVisionary => 'The Visionary';
+
+  @override
+  String get campaignAchievementVisionaryBody => 'Described a possible future';
+
+  @override
+  String get campaignAchievementWatchful => 'The Watchful';
+
+  @override
+  String get campaignAchievementWatchfulBody =>
+      'Answered all six daytime check-ins';
+
+  @override
+  String get campaignAchievementStrategist => 'The Strategist';
+
+  @override
+  String get campaignAchievementStrategistBody =>
+      'Completed the evening planning';
+
+  @override
+  String get campaignAchievementPractitioner => 'The Practitioner';
+
+  @override
+  String get campaignAchievementPractitionerBody =>
+      'Completed a real-world quest';
+
+  @override
+  String get campaignAchievementChallenger => 'The Challenger';
+
+  @override
+  String get campaignAchievementChallengerBody =>
+      'Recorded a first attempt at your monthly project';
+
+  @override
+  String get campaignActTwo => 'Act II · The 30-day becoming';
+
+  @override
+  String get campaignActTwoBody =>
+      'Your one-year mission is a direction, not a deadline. Work on your monthly project, do small quests, notice patterns and adjust your strategy whenever you learn something new.';
+
+  @override
+  String get campaignStatQuests => 'Quests completed';
+
+  @override
+  String get campaignStatPath => '30-day notes written';
+
+  @override
+  String get campaignStatAttempts => 'Attempts recorded';
+
+  @override
+  String get campaignContinuePath => 'Continue the 30-day path';
+
+  @override
+  String get campaignReadArticle => 'Read the article';
+
+  @override
+  String get campaignNote =>
+      'Cartharise\'s reading of the game framework in Section VII of Dan Koe\'s article. XP, levels, chapters, achievement names and the battle log are Cartharise additions, not part of the article. Everything stays on this phone, and you can turn the Campaign off in You › Settings.';
+
+  @override
+  String get campaignTodayTitle => 'The Campaign';
+
+  @override
+  String campaignTodayAchievements(int earned, int total) {
+    return '$earned of $total achievements';
+  }
+
+  @override
+  String get campaignTodayOpen => 'Open the Campaign';
+
+  @override
+  String get campaignSettingTitle => 'The Campaign';
+
+  @override
+  String get campaignSettingHint =>
+      'XP, levels and achievements for your reset and quests. Turning it off hides them; your battle log is kept.';
+
+  @override
   String get compassTitle => 'Compass';
 
   @override

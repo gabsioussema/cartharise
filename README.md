@@ -17,7 +17,7 @@ learn the ideas, take the one‑day reset, and turn your own answers into a dire
   <img src="https://img.shields.io/badge/account-none-4B5320" alt="No account">
   <img src="https://img.shields.io/badge/cloud-none-4B5320" alt="No cloud">
   <img src="https://img.shields.io/badge/analytics-none-4B5320" alt="No analytics">
-  <img src="https://img.shields.io/badge/streaks%20%26%20scores-none-B08D57" alt="No streaks or scores">
+  <img src="https://img.shields.io/badge/streaks%20%26%20guilt-none-B08D57" alt="No streaks or guilt">
 </p>
 
 <p>
@@ -93,6 +93,11 @@ and credited, and the article itself is never reproduced (see [Credits](#credits
     <td align="center"><img src="docs/screenshots/lesson-light.png" width="220" alt="Lesson, light"><br><sub>Lesson · light</sub></td>
     <td align="center"><img src="docs/screenshots/you-light.png" width="220" alt="You, light"><br><sub>You · light</sub></td>
   </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/campaign-dark.png" width="220" alt="The Campaign"><br><sub>The Campaign</sub></td>
+    <td align="center"><img src="docs/screenshots/campaign-log-dark.png" width="220" alt="Battle log and achievements"><br><sub>Battle log & achievements</sub></td>
+    <td align="center"><img src="docs/screenshots/campaign-light.png" width="220" alt="The Campaign, light"><br><sub>The Campaign · light</sub></td>
+  </tr>
 </table>
 
 <sub>Rendered from the real widgets with <code>make screenshots</code>, then cropped to one phone screen. See <a href="#testing">Testing</a>.</sub>
@@ -128,6 +133,12 @@ Five tabs: **Today · Reset · Compass · Journal · You**.
 - ✅ One‑off and daily quests with Undo. A month project with milestones
 - 🗺️ An optional **30‑day path** in four stages (Observe · Experiment · Build · Adjust). Every day is open, go at your own pace
 
+**Campaign: the article as a game (optional)**
+- ♜ Section VII of the article made playable: your vision is the **win condition**, the anti-vision is **what's at stake**, the one-year mission is the **main campaign**, the one-month project is your **boss fight**, daily levers are **quests** and your boundaries are the **rules of engagement**
+- 📜 **Act I:** five chapters built from the reset's exercises (4 · 7 · 3 · 6 · 7 questions), each opening its first open question
+- 🛡️ **Monthly boss fight:** record what you tried and what you learned in a battle log you can correct or delete
+- 🏅 **XP, levels and seven achievements**, earned only by doing: answering a question, completing a quest, writing a 30-day note, recording an attempt, a weekly review. XP never looks at what you write, rest never costs anything, and one switch in You turns the whole layer off
+
 **Journal: write and look back**
 - 📝 Free notes, **weekly reviews** (wins, friction, next experiment)
 - 🔍 **Look back:** compare two Compass moments side by side and reread earlier resets
@@ -156,6 +167,8 @@ flowchart LR
     T -->|continue| R
     C --> J["Journal<br/>notes · weekly reviews · look back"]
     M --> J
+    C -.->|optional game layer| G["Campaign<br/>chapters · boss fight · XP"]
+    M -.-> G
 ```
 
 The app is a single Flutter codebase. One `AppState` (a `ChangeNotifier`) holds an immutable
@@ -175,7 +188,7 @@ domain layer is pure Dart and unit‑tested. Details: [`docs/architecture.md`](d
 > **Your words are yours. Your pace is yours.**
 
 - **Every question can be skipped.** Most can be asked more gently, and *Feeling heavy?* always offers soften, skip, pause or support (with a link to a helpline directory)
-- **No streaks, scores, countdowns or guilt.** Progress is counted in words, and nothing locks by time
+- **No streaks, countdowns or guilt.** Progress is counted in words, and nothing locks by time. The optional Campaign's XP counts participation only: it never drops, never judges what you write, and turns off in one tap
 - **Your words are saved exactly as typed.** Nothing is rewritten, summarised or inferred
 - **No labels or diagnoses.** Lessons are lenses, not verdicts. Cartharise is not therapy, and says so
 - **Honest when something fails.** Failed saves, denied notification permission and bad backups are shown plainly, with a practical alternative
@@ -273,8 +286,10 @@ tool/merge_arb.dart  merges the ARB fragments
 | [`docs/architecture.md`](docs/architecture.md) | Layers, data flow, persistence, reminders, loading sequence |
 | [`docs/features/`](docs/features) | One page per area: onboarding, today, reset, awakening, compass, missions, journal, you |
 | [`docs/content-traceability.md`](docs/content-traceability.md) | Source segment → question → where it lives in the app |
+| [`docs/features/campaign.md`](docs/features/campaign.md) | The Campaign (game version): mapping, chapters, XP rules, battle log |
 | [`CLAUDE.md`](CLAUDE.md) | Project rules: privacy, emotional safety, UI base, strings |
 | [`Cartharise_Requirements.html`](Cartharise_Requirements.html) | Product requirements (F‑001…F‑057) |
+| [`Cartharise_Game_Requirements.html`](Cartharise_Game_Requirements.html) · [`Cartharise_Game.html`](Cartharise_Game.html) | Game version requirements (F‑058…F‑064) and its browser prototype |
 | [`CARTHARISE_Brand_Guide.html`](CARTHARISE_Brand_Guide.html) | Brand guide: colours, type, emblem, loader |
 
 ---

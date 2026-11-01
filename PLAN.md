@@ -10,6 +10,7 @@ a six-part Life Compass, gentle daily quests, a 30-day path, a journal and weekl
 | File | What it decides |
 |---|---|
 | `Cartharise_Requirements.html` | Product requirements v1.0. The JS arrays at the bottom (`modules`, `coverage`, `req` = F-001…F-057, `choices` = D-01…D-12) are the backlog. Sections 07 (interaction rules), 09 (quality bars), 11 (acceptance tests) are binding. |
+| `Cartharise_Game_Requirements.html`, `Cartharise_Game.html` | The game version, added later: requirements F-058–F-064 and §13 "The Campaign" (Section VII of the article as an optional, non-punitive game layer), and the browser prototype's `campaign()` view. Built as the Campaign section — see `docs/features/campaign.md`. |
 | `Cartharise Brand and App System Board.png` | Visual target: dark forest surfaces, bronze emblem + accents, ivory text, Cinzel headlines, card-based screens, bottom nav, onboarding carousel, loading/charging emblem sequence. |
 | `CARTHARISE_Brand_Guide.html` | Palette, type, usage rules (no weapons/camouflage, no gradients on the emblem, ivory for small text, progress never judges worth). Its embedded assets are already extracted to `assets/brand/`. |
 | `../qarta` (sibling Flutter app) | **UI base to mirror**: role-token palette (`QartaPalette` → our `CarthaPalette`), `ThemeData` built from tokens, shared components, `test/ui_base_test.dart` guard, screen-size tests, l10n via ARB, Makefile, definition of done. Read `../qarta/lib/ui/theme/qarta_theme.dart`, `../qarta/lib/ui/widgets/brand.dart`, `../qarta/lib/ui/widgets/motion.dart`, `../qarta/lib/ui/root_shell.dart`, `../qarta/test/ui_base_test.dart`, `../qarta/test/ui/screen_sizes_test.dart`. Copy patterns, not Qarta-specific features. |
@@ -42,7 +43,7 @@ The nine requirement modules map into them; Mirror/Vision/Interrupt/Breakthrough
 |---|---|---|
 | Today | Greeting, next best step, today's quests, vision + month project, reset progress, today's 30-day card, empty states | Today (F-036, F-037) |
 | Reset | Awakening lessons strip → Morning (Mirror + Vision) · Daytime (Interrupt + bonus) · Evening (Breakthrough) → hand-off to Compass; past resets; start a new reset | Awakening, Mirror, Vision, Interrupt, Breakthrough |
-| Compass | Segmented: **Compass** (6 fields, import from evening, versions) · **Missions** (quests, lever drafts, month project + milestones, 30-day path) | Life Compass, Becoming |
+| Compass | Segmented: **Compass** (6 fields, import from evening, versions) · **Missions** (quests, lever drafts, month project + milestones, 30-day path) · **Campaign** (optional game layer: level/XP, five chapters, strategist's map, monthly boss + battle log, achievements, 30-day act; hidden when You › The Campaign is off) | Life Compass, Becoming, Gamification (F-058–F-064) |
 | Journal | Segmented: **Notes** (free journal) · **Reviews** (weekly) · **Look back** (compare Compass versions / past resets) | Evolution |
 | You | Profile, Inspiration (credit), Reminders, Appearance, Your data (export/import/delete, storage transparency), Support & safety, About, replay welcome | Inspiration, Settings |
 
@@ -306,6 +307,13 @@ Also write `docs/content-traceability.md`: source segment → prompt ids → Car
   recurrence option, lever drafts → approve/edit → quests; no streaks/scores/guilt; month project
   (title linked to Compass, status, milestones, retrospective); 30-day path grid grouped by stage,
   any day open, autosaved answers.
+- **Campaign** (F-058–F-064, added with the game version): the six Section VII components mapped
+  exactly (stakes, win condition, main campaign, monthly boss, daily quests, rules of engagement)
+  from the user's own Compass; five chapters with the article's counts (4+7+3 morning, 6 daytime,
+  7 evening) each linking to its first open question; XP derived only from observable participation
+  (once per question, quests capped per day, never lowered by rest), levels every 100 XP, seven
+  achievements for activities, a user-authored battle log (record, correct, delete); a switch in You
+  turns the whole layer off and keeps the log. No leaderboards, no XP loss, no guilt copy.
 - **Journal & You** (F-032–F-035, F-038, F-040–F-043, F-016–F-018, F-044, F-055): notes CRUD with
   timestamps and confirm-delete; weekly review (3 fields) create/view/edit/delete; look back (choose
   two Compass versions or past resets to compare, no scores). You: profile name/pace, Inspiration

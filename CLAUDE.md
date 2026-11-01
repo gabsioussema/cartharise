@@ -29,6 +29,9 @@ Xcode is not installed on this machine: iOS is configured but `flutter build ios
   constraints are never auto-filled.
 - **Emotional safety.** Every prompt is skippable; soften/pause/support always reachable. No
   diagnoses, personality labels, streaks, scores, guilt copy, countdowns or "you fixed your life".
+  The one exception is the optional Campaign (`docs/features/campaign.md`): XP, levels and
+  achievements derived only from observable participation, never lowered by rest, never about what
+  was written, and switched off entirely in You › The Campaign.
 - **Never claim success that didn't happen.** Save failures, denied notification permission and bad
   imports are shown honestly with a practical alternative (retry / export / .ics).
 - **UI base.** Every colour comes from `CarthaPalette.of(context)` tokens. No `Color(0x…)`, `Colors.*`

@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../l10n/app_localizations.dart';
+import '../../state/app_state.dart';
+import '../campaign/campaign_view.dart';
 import '../missions/missions_view.dart';
 import '../nav.dart';
 import '../widgets/widgets.dart';
 import 'compass_view.dart';
 
-/// The two halves of the Compass tab (PLAN.md §2).
-enum CompassSection { compass, missions }
+/// The sections of the Compass tab (PLAN.md §2): the Compass, Missions and,
+/// while the game layer is on, the Campaign.
+enum CompassSection { compass, missions, campaign }
 
-/// The Compass tab: Cinzel header, then `PillTabs` Compass | Missions.
+/// The Compass tab: Cinzel header, then `PillTabs` Compass | Missions |
+/// Campaign (the last only while Settings › The Campaign is on).
 ///
 /// Inside the shell it follows `ShellController.compassSection`
 /// (`AppNav.openCompass` / `openMissions`) and keeps that notifier in sync
@@ -72,22 +77,28 @@ class _CompassTabState extends State<CompassTab> {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
-    final missions = _section == CompassSection.missions;
+    final game = context.select<AppState, bool>((s) => s.settings.game);
+    // With the game layer off, a request for the Campaign shows the Compass.
+    final section = _section == CompassSection.campaign && !game
+        ? CompassSection.compass
+        : _section;
     return Scaffold(
       appBar: _pushed ? AppBar() : null,
       body: SafeArea(
         top: !_pushed,
         child: SingleChildScrollView(
-          key: PageStorageKey(_section),
+          key: PageStorageKey(section),
           padding: const EdgeInsetsDirectional.only(bottom: 32),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               ScreenHeader(
                 title: l.compassTitle,
-                subtitle: missions
-                    ? l.compassMissionsSubtitle
-                    : l.compassSubtitle,
+                subtitle: switch (section) {
+                  CompassSection.compass => l.compassSubtitle,
+                  CompassSection.missions => l.compassMissionsSubtitle,
+                  CompassSection.campaign => l.campaignSubtitle,
+                },
               ),
               Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(20, 0, 20, 16),
@@ -101,22 +112,32 @@ class _CompassTabState extends State<CompassTab> {
                       value: CompassSection.missions,
                       label: l.compassSectionMissions,
                     ),
+                    if (game)
+                      PillTab(
+                        value: CompassSection.campaign,
+                        label: l.campaignSection,
+                      ),
                   ],
-                  selected: _section,
+                  selected: section,
                   onChanged: _select,
                 ),
               ),
               CarthaPageMotion(
-                page: _section,
-                child: missions
-                    ? MissionsView(
-                        leversHandledFor: _leversHandledFor,
-                        onLeversHandled: (levers) =>
-                            setState(() => _leversHandledFor = levers),
-                      )
-                    : CompassView(
-                        onOpenMissions: () => _select(CompassSection.missions),
-                      ),
+                page: section,
+                child: switch (section) {
+                  CompassSection.compass => CompassView(
+                    onOpenMissions: () => _select(CompassSection.missions),
+                  ),
+                  CompassSection.missions => MissionsView(
+                    leversHandledFor: _leversHandledFor,
+                    onLeversHandled: (levers) =>
+                        setState(() => _leversHandledFor = levers),
+                  ),
+                  CompassSection.campaign => CampaignView(
+                    onOpenCompass: () => _select(CompassSection.compass),
+                    onOpenMissions: () => _select(CompassSection.missions),
+                  ),
+                },
               ),
             ],
           ),

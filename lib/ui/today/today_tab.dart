@@ -7,6 +7,7 @@ import '../../domain/app_data.dart';
 import '../../domain/content.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
+import '../campaign/campaign_card.dart';
 import '../compass/compass_import.dart';
 import '../missions/missions_logic.dart';
 import '../nav.dart';
@@ -70,6 +71,10 @@ class TodayTab extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 _JourneyCard(summary: JourneySummary.of(state)),
+                if (state.settings.game) ...[
+                  const SizedBox(height: 16),
+                  const CampaignTodayCard(),
+                ],
                 const SizedBox(height: 16),
                 const _DirectionCard(),
               ],

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../domain/app_data.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
+import '../campaign/campaign_ops.dart';
 import '../journal/journal_kit.dart';
 import '../nav.dart';
 import '../theme/cartha_theme.dart';
@@ -169,6 +170,15 @@ class YouTab extends StatelessWidget {
                   ),
                   onTap: () => _push(context, const AppearanceScreen()),
                 ),
+                _HubSwitchTile(
+                  key: const ValueKey('you-campaign'),
+                  icon: Icons.flag_outlined,
+                  title: l.campaignSettingTitle,
+                  subtitle: l.campaignSettingHint,
+                  value: settings.game,
+                  onChanged: (on) =>
+                      context.read<AppState>().setGameEnabled(on),
+                ),
                 _HubTile(
                   key: const ValueKey('you-data'),
                   icon: Icons.storage_outlined,
@@ -260,6 +270,48 @@ class _HubGroup extends StatelessWidget {
           ],
         ],
       ),
+    );
+  }
+}
+
+/// A hub row with a switch (tinted icon tile, title, hint).
+class _HubSwitchTile extends StatelessWidget {
+  const _HubSwitchTile({
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.value,
+    required this.onChanged,
+  });
+
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final bool value;
+  final ValueChanged<bool> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = CarthaPalette.of(context);
+    final theme = Theme.of(context);
+    return SwitchListTile(
+      contentPadding: const EdgeInsetsDirectional.symmetric(
+        horizontal: 16,
+        vertical: 4,
+      ),
+      secondary: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: p.selection,
+          borderRadius: BorderRadius.circular(CarthaTheme.radiusSmall - 4),
+        ),
+        child: Icon(icon, color: p.accent, size: 22),
+      ),
+      title: Text(title, style: theme.textTheme.titleMedium),
+      subtitle: Text(subtitle),
+      value: value,
+      onChanged: onChanged,
     );
   }
 }

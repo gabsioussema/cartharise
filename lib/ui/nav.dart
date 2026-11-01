@@ -108,6 +108,10 @@ abstract final class AppNav {
   static Future<void> openMissions(BuildContext context) =>
       openCompass(context, section: CompassSection.missions);
 
+  /// The Campaign section (the Compass when the game layer is off).
+  static Future<void> openCampaign(BuildContext context) =>
+      openCompass(context, section: CompassSection.campaign);
+
   static Future<void> openPathDay(BuildContext context, int day) =>
       _push<void>(context, PathDayScreen(day: day));
 

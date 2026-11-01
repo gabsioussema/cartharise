@@ -514,6 +514,624 @@ abstract class AppLocalizations {
   /// **'This lesson isn\'t available.'**
   String get awakeningMissing;
 
+  /// No description provided for @campaignSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Campaign'**
+  String get campaignSection;
+
+  /// No description provided for @campaignSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your direction, played as a game.'**
+  String get campaignSubtitle;
+
+  /// No description provided for @campaignIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Dan Koe\'s article frames a life plan as a game. Here it is: your vision is the win condition, your anti-vision is what\'s at stake, the one-year mission is the main campaign, the one-month project is your boss fight, daily levers are quests and your boundaries are the rules.'**
+  String get campaignIntro;
+
+  /// No description provided for @campaignStatusEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'Your campaign'**
+  String get campaignStatusEyebrow;
+
+  /// No description provided for @campaignLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Level {level} · {xp} XP'**
+  String campaignLevel(int level, int xp);
+
+  /// No description provided for @campaignLevelProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'{current} / {step} XP to level {next}'**
+  String campaignLevelProgress(int current, int step, int next);
+
+  /// No description provided for @campaignXpNote.
+  ///
+  /// In en, this message translates to:
+  /// **'XP counts participation and practice, never your worth. Rest days cost nothing, and nothing is ever taken away.'**
+  String get campaignXpNote;
+
+  /// No description provided for @campaignXpHow.
+  ///
+  /// In en, this message translates to:
+  /// **'How XP is earned'**
+  String get campaignXpHow;
+
+  /// No description provided for @campaignXpRuleReflection.
+  ///
+  /// In en, this message translates to:
+  /// **'+{xp} XP for each reset question you answer (once per question)'**
+  String campaignXpRuleReflection(int xp);
+
+  /// No description provided for @campaignXpRuleQuest.
+  ///
+  /// In en, this message translates to:
+  /// **'+{xp} XP for each quest you complete, counting up to {max} a day'**
+  String campaignXpRuleQuest(int xp, int max);
+
+  /// No description provided for @campaignXpRulePath.
+  ///
+  /// In en, this message translates to:
+  /// **'+{xp} XP for each day of the 30-day path you write'**
+  String campaignXpRulePath(int xp);
+
+  /// No description provided for @campaignXpRuleAttempt.
+  ///
+  /// In en, this message translates to:
+  /// **'+{xp} XP for each day you record an attempt at your monthly project'**
+  String campaignXpRuleAttempt(int xp);
+
+  /// No description provided for @campaignXpRuleReview.
+  ///
+  /// In en, this message translates to:
+  /// **'+{xp} XP for each weekly review'**
+  String campaignXpRuleReview(int xp);
+
+  /// No description provided for @campaignXpRulesNote.
+  ///
+  /// In en, this message translates to:
+  /// **'XP never looks at what you write, how long it is or how you feel. Skipping, resting and changing your plans never cost XP. Every {step} XP is a new level.'**
+  String campaignXpRulesNote(int step);
+
+  /// No description provided for @campaignActOne.
+  ///
+  /// In en, this message translates to:
+  /// **'Act I · The one-day awakening'**
+  String get campaignActOne;
+
+  /// No description provided for @campaignChaptersExplored.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} of {total} chapters explored'**
+  String campaignChaptersExplored(int count, int total);
+
+  /// No description provided for @campaignChapterNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Chapter {number}'**
+  String campaignChapterNumber(int number);
+
+  /// No description provided for @campaignChapterTerrain.
+  ///
+  /// In en, this message translates to:
+  /// **'See the terrain'**
+  String get campaignChapterTerrain;
+
+  /// No description provided for @campaignChapterTerrainArea.
+  ///
+  /// In en, this message translates to:
+  /// **'Current reality'**
+  String get campaignChapterTerrainArea;
+
+  /// No description provided for @campaignChapterTerrainBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Notice dissatisfaction, repeated complaints and what you actually do.'**
+  String get campaignChapterTerrainBody;
+
+  /// No description provided for @campaignChapterPattern.
+  ///
+  /// In en, this message translates to:
+  /// **'Find the pattern'**
+  String get campaignChapterPattern;
+
+  /// No description provided for @campaignChapterPatternArea.
+  ///
+  /// In en, this message translates to:
+  /// **'Anti-vision and identity'**
+  String get campaignChapterPatternArea;
+
+  /// No description provided for @campaignChapterPatternBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore the future you want to avoid and the patterns that protect you.'**
+  String get campaignChapterPatternBody;
+
+  /// No description provided for @campaignChapterBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'Raise your banner'**
+  String get campaignChapterBanner;
+
+  /// No description provided for @campaignChapterBannerArea.
+  ///
+  /// In en, this message translates to:
+  /// **'Future vision'**
+  String get campaignChapterBannerArea;
+
+  /// No description provided for @campaignChapterBannerBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Imagine a better ordinary day and one small step that fits it.'**
+  String get campaignChapterBannerBody;
+
+  /// No description provided for @campaignChapterAutopilot.
+  ///
+  /// In en, this message translates to:
+  /// **'Break autopilot'**
+  String get campaignChapterAutopilot;
+
+  /// No description provided for @campaignChapterAutopilotArea.
+  ///
+  /// In en, this message translates to:
+  /// **'Daytime check-ins'**
+  String get campaignChapterAutopilotArea;
+
+  /// No description provided for @campaignChapterAutopilotBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Notice your choices during a real day.'**
+  String get campaignChapterAutopilotBody;
+
+  /// No description provided for @campaignChapterPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Plan the campaign'**
+  String get campaignChapterPlan;
+
+  /// No description provided for @campaignChapterPlanArea.
+  ///
+  /// In en, this message translates to:
+  /// **'Evening synthesis'**
+  String get campaignChapterPlanArea;
+
+  /// No description provided for @campaignChapterPlanBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn reflection into a one-year mission, a one-month project and daily levers.'**
+  String get campaignChapterPlanBody;
+
+  /// No description provided for @campaignChapterReflections.
+  ///
+  /// In en, this message translates to:
+  /// **'{area} · {count, plural, =1{1 reflection} other{{count} reflections}}'**
+  String campaignChapterReflections(String area, int count);
+
+  /// No description provided for @campaignChapterDone.
+  ///
+  /// In en, this message translates to:
+  /// **'{done} of {total} written'**
+  String campaignChapterDone(int done, int total);
+
+  /// No description provided for @campaignChapterExplored.
+  ///
+  /// In en, this message translates to:
+  /// **'Explored'**
+  String get campaignChapterExplored;
+
+  /// No description provided for @campaignChapterExplore.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore'**
+  String get campaignChapterExplore;
+
+  /// No description provided for @campaignChapterExploreLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore chapter {number}, {name}'**
+  String campaignChapterExploreLabel(int number, String name);
+
+  /// No description provided for @campaignMapTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The strategist\'s map'**
+  String get campaignMapTitle;
+
+  /// No description provided for @campaignMapSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The six parts of your Life Compass, as the article\'s game.'**
+  String get campaignMapSubtitle;
+
+  /// No description provided for @campaignMapAntiVision.
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s at stake · Anti-vision'**
+  String get campaignMapAntiVision;
+
+  /// No description provided for @campaignMapVision.
+  ///
+  /// In en, this message translates to:
+  /// **'Win condition · Vision'**
+  String get campaignMapVision;
+
+  /// No description provided for @campaignMapYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Main campaign · One-year mission'**
+  String get campaignMapYear;
+
+  /// No description provided for @campaignMapMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly boss · One-month project'**
+  String get campaignMapMonth;
+
+  /// No description provided for @campaignMapLevers.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily quests · Daily levers'**
+  String get campaignMapLevers;
+
+  /// No description provided for @campaignMapBoundaries.
+  ///
+  /// In en, this message translates to:
+  /// **'Rules of engagement · Boundaries'**
+  String get campaignMapBoundaries;
+
+  /// No description provided for @campaignMapBoundariesNote.
+  ///
+  /// In en, this message translates to:
+  /// **'The game never rewards giving these up.'**
+  String get campaignMapBoundariesNote;
+
+  /// No description provided for @campaignMapEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Not written yet. Add it in your Compass when you\'re ready.'**
+  String get campaignMapEmpty;
+
+  /// No description provided for @campaignMapEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Build your strategy'**
+  String get campaignMapEdit;
+
+  /// No description provided for @campaignMapQuests.
+  ///
+  /// In en, this message translates to:
+  /// **'Open daily quests'**
+  String get campaignMapQuests;
+
+  /// No description provided for @campaignBossTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly boss fight'**
+  String get campaignBossTitle;
+
+  /// No description provided for @campaignBossBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The boss is the project or obstacle, never you or other people. Record what you try and what you learn. Setbacks cost nothing.'**
+  String get campaignBossBody;
+
+  /// No description provided for @campaignBossNoProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Your one-month project will appear here once you set it in your Compass or Missions.'**
+  String get campaignBossNoProject;
+
+  /// No description provided for @campaignAttemptLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'What did you actually try?'**
+  String get campaignAttemptLabel;
+
+  /// No description provided for @campaignAttemptHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A 20-minute focus block, a message I\'d been putting off, a first draft…'**
+  String get campaignAttemptHint;
+
+  /// No description provided for @campaignAttemptRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a few words about what you tried.'**
+  String get campaignAttemptRequired;
+
+  /// No description provided for @campaignLearningLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'What did you learn? (optional)'**
+  String get campaignLearningLabel;
+
+  /// No description provided for @campaignLearningHint.
+  ///
+  /// In en, this message translates to:
+  /// **'What worked, what didn\'t, what you\'ll change next time.'**
+  String get campaignLearningHint;
+
+  /// No description provided for @campaignRecord.
+  ///
+  /// In en, this message translates to:
+  /// **'Record this attempt'**
+  String get campaignRecord;
+
+  /// No description provided for @campaignRecorded.
+  ///
+  /// In en, this message translates to:
+  /// **'Attempt recorded. What you learned counts too.'**
+  String get campaignRecorded;
+
+  /// No description provided for @campaignLogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Battle log} =1{Battle log · 1 attempt} other{Battle log · {count} attempts}}'**
+  String campaignLogTitle(int count);
+
+  /// No description provided for @campaignLogEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No attempts yet. Your first one can be tiny.'**
+  String get campaignLogEmpty;
+
+  /// No description provided for @campaignLogLearned.
+  ///
+  /// In en, this message translates to:
+  /// **'Learned: {learning}'**
+  String campaignLogLearned(String learning);
+
+  /// No description provided for @campaignLogShowAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Show all {count}'**
+  String campaignLogShowAll(int count);
+
+  /// No description provided for @campaignLogShowFewer.
+  ///
+  /// In en, this message translates to:
+  /// **'Show fewer'**
+  String get campaignLogShowFewer;
+
+  /// No description provided for @campaignLogEditLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit the attempt from {date}'**
+  String campaignLogEditLabel(String date);
+
+  /// No description provided for @campaignAttemptEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit attempt'**
+  String get campaignAttemptEditTitle;
+
+  /// No description provided for @campaignAttemptSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save attempt'**
+  String get campaignAttemptSave;
+
+  /// No description provided for @campaignAttemptDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete attempt'**
+  String get campaignAttemptDelete;
+
+  /// No description provided for @campaignAttemptDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this attempt?'**
+  String get campaignAttemptDeleteTitle;
+
+  /// No description provided for @campaignAttemptDeleteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'It will be removed from your battle log. This can\'t be undone.'**
+  String get campaignAttemptDeleteBody;
+
+  /// No description provided for @campaignAttemptDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Attempt deleted'**
+  String get campaignAttemptDeleted;
+
+  /// No description provided for @campaignAchievementsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Achievements from the article'**
+  String get campaignAchievementsTitle;
+
+  /// No description provided for @campaignAchievementsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Earned by doing the exercises, never by what you write.'**
+  String get campaignAchievementsSubtitle;
+
+  /// No description provided for @campaignAchievementsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{earned} of {total} earned'**
+  String campaignAchievementsCount(int earned, int total);
+
+  /// No description provided for @campaignEarned.
+  ///
+  /// In en, this message translates to:
+  /// **'Earned'**
+  String get campaignEarned;
+
+  /// No description provided for @campaignNotYet.
+  ///
+  /// In en, this message translates to:
+  /// **'Not yet'**
+  String get campaignNotYet;
+
+  /// No description provided for @campaignAchievementObserver.
+  ///
+  /// In en, this message translates to:
+  /// **'The Observer'**
+  String get campaignAchievementObserver;
+
+  /// No description provided for @campaignAchievementObserverBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrote all four present-reality reflections'**
+  String get campaignAchievementObserverBody;
+
+  /// No description provided for @campaignAchievementPathfinder.
+  ///
+  /// In en, this message translates to:
+  /// **'The Pathfinder'**
+  String get campaignAchievementPathfinder;
+
+  /// No description provided for @campaignAchievementPathfinderBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Explored the anti-vision and identity questions'**
+  String get campaignAchievementPathfinderBody;
+
+  /// No description provided for @campaignAchievementVisionary.
+  ///
+  /// In en, this message translates to:
+  /// **'The Visionary'**
+  String get campaignAchievementVisionary;
+
+  /// No description provided for @campaignAchievementVisionaryBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Described a possible future'**
+  String get campaignAchievementVisionaryBody;
+
+  /// No description provided for @campaignAchievementWatchful.
+  ///
+  /// In en, this message translates to:
+  /// **'The Watchful'**
+  String get campaignAchievementWatchful;
+
+  /// No description provided for @campaignAchievementWatchfulBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Answered all six daytime check-ins'**
+  String get campaignAchievementWatchfulBody;
+
+  /// No description provided for @campaignAchievementStrategist.
+  ///
+  /// In en, this message translates to:
+  /// **'The Strategist'**
+  String get campaignAchievementStrategist;
+
+  /// No description provided for @campaignAchievementStrategistBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed the evening planning'**
+  String get campaignAchievementStrategistBody;
+
+  /// No description provided for @campaignAchievementPractitioner.
+  ///
+  /// In en, this message translates to:
+  /// **'The Practitioner'**
+  String get campaignAchievementPractitioner;
+
+  /// No description provided for @campaignAchievementPractitionerBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed a real-world quest'**
+  String get campaignAchievementPractitionerBody;
+
+  /// No description provided for @campaignAchievementChallenger.
+  ///
+  /// In en, this message translates to:
+  /// **'The Challenger'**
+  String get campaignAchievementChallenger;
+
+  /// No description provided for @campaignAchievementChallengerBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Recorded a first attempt at your monthly project'**
+  String get campaignAchievementChallengerBody;
+
+  /// No description provided for @campaignActTwo.
+  ///
+  /// In en, this message translates to:
+  /// **'Act II · The 30-day becoming'**
+  String get campaignActTwo;
+
+  /// No description provided for @campaignActTwoBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your one-year mission is a direction, not a deadline. Work on your monthly project, do small quests, notice patterns and adjust your strategy whenever you learn something new.'**
+  String get campaignActTwoBody;
+
+  /// No description provided for @campaignStatQuests.
+  ///
+  /// In en, this message translates to:
+  /// **'Quests completed'**
+  String get campaignStatQuests;
+
+  /// No description provided for @campaignStatPath.
+  ///
+  /// In en, this message translates to:
+  /// **'30-day notes written'**
+  String get campaignStatPath;
+
+  /// No description provided for @campaignStatAttempts.
+  ///
+  /// In en, this message translates to:
+  /// **'Attempts recorded'**
+  String get campaignStatAttempts;
+
+  /// No description provided for @campaignContinuePath.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue the 30-day path'**
+  String get campaignContinuePath;
+
+  /// No description provided for @campaignReadArticle.
+  ///
+  /// In en, this message translates to:
+  /// **'Read the article'**
+  String get campaignReadArticle;
+
+  /// No description provided for @campaignNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Cartharise\'s reading of the game framework in Section VII of Dan Koe\'s article. XP, levels, chapters, achievement names and the battle log are Cartharise additions, not part of the article. Everything stays on this phone, and you can turn the Campaign off in You › Settings.'**
+  String get campaignNote;
+
+  /// No description provided for @campaignTodayTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The Campaign'**
+  String get campaignTodayTitle;
+
+  /// No description provided for @campaignTodayAchievements.
+  ///
+  /// In en, this message translates to:
+  /// **'{earned} of {total} achievements'**
+  String campaignTodayAchievements(int earned, int total);
+
+  /// No description provided for @campaignTodayOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the Campaign'**
+  String get campaignTodayOpen;
+
+  /// No description provided for @campaignSettingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The Campaign'**
+  String get campaignSettingTitle;
+
+  /// No description provided for @campaignSettingHint.
+  ///
+  /// In en, this message translates to:
+  /// **'XP, levels and achievements for your reset and quests. Turning it off hides them; your battle log is kept.'**
+  String get campaignSettingHint;
+
   /// Cinzel screen title of the Compass tab.
   ///
   /// In en, this message translates to:

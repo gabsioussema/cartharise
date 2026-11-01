@@ -165,6 +165,7 @@ class AppSettings {
     this.remindersEnabled = false,
     this.quietStart,
     this.quietEnd,
+    this.game = true,
   });
 
   final AppearanceMode appearance;
@@ -180,6 +181,10 @@ class AppSettings {
   final String? quietStart;
   final String? quietEnd;
 
+  /// The Campaign game layer (XP, levels, achievements; F-060). On by
+  /// default; off hides it everywhere, the battle log is kept.
+  final bool game;
+
   AppSettings copyWith({
     AppearanceMode? appearance,
     AppTheme? theme,
@@ -187,6 +192,7 @@ class AppSettings {
     bool? remindersEnabled,
     String? Function()? quietStart,
     String? Function()? quietEnd,
+    bool? game,
   }) => AppSettings(
     appearance: appearance ?? this.appearance,
     theme: theme ?? this.theme,
@@ -194,6 +200,7 @@ class AppSettings {
     remindersEnabled: remindersEnabled ?? this.remindersEnabled,
     quietStart: quietStart != null ? quietStart() : this.quietStart,
     quietEnd: quietEnd != null ? quietEnd() : this.quietEnd,
+    game: game ?? this.game,
   );
 
   Map<String, Object?> toJson() => {
@@ -203,6 +210,7 @@ class AppSettings {
     'remindersEnabled': remindersEnabled,
     'quietStart': quietStart,
     'quietEnd': quietEnd,
+    'game': game,
   };
 
   factory AppSettings.fromJson(Object? json) {
@@ -224,6 +232,7 @@ class AppSettings {
       remindersEnabled: _bool(j, 'remindersEnabled'),
       quietStart: quietStart,
       quietEnd: quietEnd,
+      game: _bool(j, 'game', fallback: true),
     );
   }
 }
@@ -757,6 +766,54 @@ class PathAnswer {
   }
 }
 
+// ── The Campaign ───────────────────────────────────────────────────────────
+
+/// One attempt at the one-month project — the Campaign's "boss fight"
+/// (F-061): what the user tried and, optionally, what they learned, both
+/// stored exactly as typed.
+class BattleLogEntry {
+  const BattleLogEntry({
+    required this.id,
+    required this.day,
+    required this.attempt,
+    required this.createdAt,
+    this.learning = '',
+    this.editedAt,
+  });
+
+  final String id;
+
+  /// Local day of the attempt, `yyyy-MM-dd`.
+  final String day;
+  final String attempt;
+  final String learning;
+  final DateTime createdAt;
+  final DateTime? editedAt;
+
+  Map<String, Object?> toJson() => {
+    'id': id,
+    'day': day,
+    'attempt': attempt,
+    'learning': learning,
+    'createdAt': _iso(createdAt),
+    'editedAt': editedAt == null ? null : _iso(editedAt!),
+  };
+
+  factory BattleLogEntry.fromJson(Object? json) {
+    final j = _map(json, 'battleLogEntry');
+    final day = _str(j, 'day');
+    parseDateKey(day);
+    return BattleLogEntry(
+      id: _str(j, 'id'),
+      day: day,
+      attempt: _str(j, 'attempt'),
+      learning: _str(j, 'learning'),
+      createdAt: _time(j, 'createdAt'),
+      editedAt: _optTime(j, 'editedAt'),
+    );
+  }
+}
+
 // ── Root snapshot ──────────────────────────────────────────────────────────
 
 class AppData {
@@ -774,6 +831,7 @@ class AppData {
     this.pathAnswers = const {},
     this.reminders = const [],
     this.lessonsRead = const {},
+    this.campaignLog = const [],
   });
 
   /// Null until onboarding creates it.
@@ -805,6 +863,9 @@ class AppData {
   /// Lesson ids the user has opened.
   final Set<String> lessonsRead;
 
+  /// The Campaign's battle log, newest first.
+  final List<BattleLogEntry> campaignLog;
+
   static const empty = AppData();
 
   Journey? get currentJourney {
@@ -828,6 +889,7 @@ class AppData {
     Map<int, PathAnswer>? pathAnswers,
     List<ReminderPreference>? reminders,
     Set<String>? lessonsRead,
+    List<BattleLogEntry>? campaignLog,
   }) => AppData(
     profile: profile != null ? profile() : this.profile,
     settings: settings ?? this.settings,
@@ -844,6 +906,7 @@ class AppData {
     pathAnswers: pathAnswers ?? this.pathAnswers,
     reminders: reminders ?? this.reminders,
     lessonsRead: lessonsRead ?? this.lessonsRead,
+    campaignLog: campaignLog ?? this.campaignLog,
   );
 
   Map<String, Object?> toJson() => {
@@ -861,6 +924,7 @@ class AppData {
     'pathAnswers': [for (final a in pathAnswers.values) a.toJson()],
     'reminders': [for (final r in reminders) r.toJson()],
     'lessonsRead': lessonsRead.toList()..sort(),
+    'campaignLog': [for (final e in campaignLog) e.toJson()],
   };
 
   factory AppData.fromJson(Object? json) {
@@ -915,6 +979,10 @@ class AppData {
           ReminderPreference.fromJson(r),
       ],
       lessonsRead: lessons,
+      campaignLog: [
+        for (final e in _list(j['campaignLog'], 'campaignLog'))
+          BattleLogEntry.fromJson(e),
+      ],
     );
   }
 }
