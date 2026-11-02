@@ -62,6 +62,7 @@ class AppState extends ChangeNotifier {
   int _writeGeneration = 0;
   int _dataGeneration = 0;
   Journey? _draftJourney;
+  List<Attachment> _recovered = const [];
 
   // ── Lifecycle & persistence ─────────────────────────────────────────────
 
@@ -111,8 +112,10 @@ class AppState extends ChangeNotifier {
       _dataGeneration++;
       // Files no entry refers to any more (an entry deleted while a save
       // failed, a restore replaced) are removed before anything can start
-      // a new recording. Never a file the saved data still names.
+      // a new recording. Never a file the saved data still names, nor one
+      // held for the user's decision (a recording cut off by a crash).
       await _cleanAttachments();
+      await _loadRecovered();
       _loaded = true;
     } on Object catch (e) {
       _loadError = e;
@@ -140,6 +143,7 @@ class AppState extends ChangeNotifier {
     }
     _data = AppData.empty;
     _dataGeneration++;
+    _recovered = const [];
     _loadError = null;
     _loaded = true;
     notifyListeners();
@@ -198,6 +202,73 @@ class AppState extends ChangeNotifier {
       await _attachments.deleteOrphans(_data.attachmentFileNames);
     } on Object {
       // Tried again on the next load.
+    }
+  }
+
+  /// Photos and recordings kept from before that no entry holds yet and
+  /// that wait for the user's decision (oldest first): a recording cut off
+  /// when the app was closed mid-way ([Attachment.interrupted]) and a photo
+  /// the camera handed back after Android closed the app
+  /// ([holdRecoveredPhoto]). Offered until the user keeps or discards them
+  /// ([keepRecovered], [discardRecovered]) — never cleaned up silently.
+  List<Attachment> get recoveredMedia => _recovered;
+
+  Future<void> _loadRecovered() async {
+    try {
+      _recovered = await _attachments.recoveredFiles(_data.attachmentFileNames);
+    } on Object {
+      _recovered = const [];
+    }
+  }
+
+  /// A photo the camera handed back after Android closed the app (Android
+  /// can't say what it was taken for): copied into the private folder and
+  /// held in [recoveredMedia] until the user decides, across launches.
+  /// Throws [AttachmentException] when it couldn't be kept.
+  Future<Attachment> holdRecoveredPhoto(String path) async {
+    final photo = await _attachments.holdRecovered(
+      path,
+      kind: AttachmentKind.photo,
+    );
+    _recovered = [..._recovered, photo];
+    notifyListeners();
+    return photo;
+  }
+
+  /// Keeps a recovered photo or recording in a new journal note of its own
+  /// (no words: the user adds them if they want). It is no longer held once
+  /// that is saved; if the save failed it stays held, so a restart offers
+  /// it again rather than losing it. Returns the note.
+  Future<JournalEntry> keepRecovered(Attachment recovered) async {
+    final note = await addJournalEntry(body: '', attachments: [recovered]);
+    _recovered = [
+      for (final a in _recovered)
+        if (a.id != recovered.id) a,
+    ];
+    notifyListeners();
+    if (_saveStatus == SaveStatus.saved) {
+      try {
+        await _attachments.settleRecovered(recovered.fileName);
+      } on Object {
+        // Settled at the next launch: the saved data names it.
+      }
+    }
+    return note;
+  }
+
+  /// Deletes a recovered photo or recording (the user chose Discard). If
+  /// the file couldn't be removed it stays held and is asked about again
+  /// at the next launch.
+  Future<void> discardRecovered(Attachment recovered) async {
+    _recovered = [
+      for (final a in _recovered)
+        if (a.id != recovered.id) a,
+    ];
+    notifyListeners();
+    try {
+      await _attachments.deleteFile(recovered.fileName);
+    } on Object {
+      // Offered again next time.
     }
   }
 
@@ -782,23 +853,26 @@ class AppState extends ChangeNotifier {
 
   /// Replaces the title and body of the entry with the same id; keeps its
   /// creation time and its attachments (changed only through the attachment
-  /// ops) and stamps `editedAt`.
+  /// ops) and stamps `editedAt`. Words pinned from the note that it no
+  /// longer has are unpinned ([AppData.withPinChecked]).
   Future<void> updateJournalEntry(JournalEntry entry) {
     final at = now();
     return mutate(
-      (d) => d.copyWith(
-        journal: [
-          for (final e in d.journal)
-            if (e.id == entry.id)
-              e.copyWith(
-                title: () => entry.title,
-                body: entry.body,
-                editedAt: () => at,
-              )
-            else
-              e,
-        ],
-      ),
+      (d) => d
+          .copyWith(
+            journal: [
+              for (final e in d.journal)
+                if (e.id == entry.id)
+                  e.copyWith(
+                    title: () => entry.title,
+                    body: entry.body,
+                    editedAt: () => at,
+                  )
+                else
+                  e,
+            ],
+          )
+          .withPinChecked(),
     );
   }
 
@@ -1009,8 +1083,25 @@ class AppState extends ChangeNotifier {
   /// photo and recording still on this phone. Files that couldn't be read
   /// are listed in [BackupArchive.missing] (say so); the data still names
   /// them, so a restore reports them as missing too.
-  Future<BackupArchive> exportBackupArchive() async {
+  ///
+  /// Throws [BackupTooLargeException] when the files — measured before
+  /// anything is read into memory — or the finished `.zip` are more than a
+  /// restore accepts ([maxBytes], default [kMaxBackupBytes]): such a file
+  /// could never come back, so it is never made (offer [exportBackup], the
+  /// words only, instead).
+  Future<BackupArchive> exportBackupArchive({
+    int maxBytes = kMaxBackupBytes,
+  }) async {
     final data = _data;
+    var media = 0;
+    for (final name in data.attachmentFileNames) {
+      try {
+        media += await _attachments.sizeOfFile(name);
+      } on Object {
+        // Unreadable: listed as missing below.
+      }
+    }
+    if (media > maxBytes) throw BackupTooLargeException(media);
     final files = <String, List<int>>{};
     final missing = <String>{};
     for (final name in data.attachmentFileNames) {
@@ -1020,10 +1111,9 @@ class AppState extends ChangeNotifier {
         missing.add(name);
       }
     }
-    return BackupArchive(
-      bytes: encodeBackupArchive(data, now(), files),
-      missing: missing,
-    );
+    final bytes = encodeBackupArchive(data, now(), files);
+    if (bytes.length > maxBytes) throw BackupTooLargeException(bytes.length);
+    return BackupArchive(bytes: bytes, missing: missing);
   }
 
   /// Reads a backup file (v2 `.zip` or v1 JSON) for the "Replace
@@ -1067,6 +1157,7 @@ class AppState extends ChangeNotifier {
       _replaceAll(decodeBackup(text));
 
   Future<void> _replaceAll(AppData incoming) async {
+    final named = _data.attachmentFileNames;
     final remindersOn = settings.remindersEnabled;
     _draftJourney = null;
     // A restore replaces everything: nothing in it is a new moment.
@@ -1076,7 +1167,18 @@ class AppState extends ChangeNotifier {
         settings: incoming.settings.copyWith(remindersEnabled: remindersOn),
       ),
     );
-    if (_saveStatus == SaveStatus.saved) await _cleanAttachments();
+    if (_saveStatus == SaveStatus.saved) {
+      // Files the replaced data named were on entries, not waiting for a
+      // decision: they go like any other file the restore doesn't name.
+      for (final name in named) {
+        try {
+          await _attachments.settleRecovered(name);
+        } on Object {
+          // Settled at the next launch.
+        }
+      }
+      await _cleanAttachments();
+    }
     await _replan();
   }
 
@@ -1102,6 +1204,7 @@ class AppState extends ChangeNotifier {
     _data = AppData.empty;
     _dataGeneration++;
     _draftJourney = null;
+    _recovered = const [];
     _saveStatus = SaveStatus.idle;
     _saveError = null;
     notifyListeners();

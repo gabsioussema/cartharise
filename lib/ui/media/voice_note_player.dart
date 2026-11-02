@@ -13,7 +13,8 @@ import '../widgets/widgets.dart';
 import 'media_kit.dart';
 
 /// One voice note on an entry: play / pause, the position (a slider to
-/// move through it) and the length; the user's own words for it, only ever
+/// move through it) and the length ("Partial" when it was cut short); the
+/// user's own words for it, only ever
 /// what they typed (**Type what you said**); and **Remove** (asks first).
 ///
 /// Plays only on a tap, one recording at a time (the shared [VoicePlayer]);
@@ -287,6 +288,15 @@ class _VoiceNotePlayerState extends State<VoiceNotePlayer> {
                               ),
                             ],
                           ),
+                          // A recording cut short says so wherever it
+                          // plays (a word and an icon, not colour alone).
+                          if (widget.attachment.interrupted)
+                            ChipTag(
+                              key: ValueKey('voice-partial-$id'),
+                              label: l.mediaPartial,
+                              icon: Icons.content_cut,
+                              tone: ChipTone.warning,
+                            ),
                           Text(
                             '${formatClock(Duration(milliseconds: positionMs.round()))}'
                             ' / ${formatClock(length)}',

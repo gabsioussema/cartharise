@@ -211,6 +211,14 @@ void main() {
         expect(value, isNotNull, reason: key);
         expect(value!.group(1), contains('this phone'), reason: key);
       }
+      // Photos go on notes, tries, attempts and projects alike (S2-m9).
+      expect(
+        RegExp(
+          r'<key>NSCameraUsageDescription</key>\s*<string>[^<]*something you write',
+        ).hasMatch(plist),
+        isTrue,
+      );
+      expect(plist, isNot(contains('a note or a project')));
       // No exception that would allow plain network traffic.
       expect(plist, isNot(contains('NSAllowsArbitraryLoads')));
     });

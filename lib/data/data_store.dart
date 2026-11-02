@@ -38,7 +38,8 @@ abstract class DataStore {
   /// previously saved data is then still intact (writes are atomic).
   Future<void> write(AppData data);
 
-  /// Removes everything saved by Cartharise.
+  /// Removes everything saved by Cartharise, including unreadable files set
+  /// aside by [moveAside] ("Delete all data" leaves no copy behind).
   Future<void> clear();
 
   /// Moves an unreadable saved file aside (kept, not deleted) so the app can
@@ -126,12 +127,23 @@ class FileDataStore implements DataStore {
     }
   }
 
+  /// The name [moveAside] gives an unreadable file: `cartharise.unreadable-…`.
+  static const asidePrefix = 'cartharise.unreadable-';
+
   @override
   Future<void> clear() async {
     try {
       final file = await _file();
       for (final f in [file, File('${file.path}.tmp')]) {
         if (await f.exists()) await f.delete();
+      }
+      // Unreadable files set aside earlier are the user's words too.
+      final dir = file.parent;
+      if (await dir.exists()) {
+        await for (final e in dir.list(followLinks: false)) {
+          final name = e.uri.pathSegments.lastWhere((p) => p.isNotEmpty);
+          if (e is File && name.startsWith(asidePrefix)) await e.delete();
+        }
       }
     } on Object catch (e) {
       throw StorageWriteException('Deleting the saved data failed', e);
@@ -144,7 +156,7 @@ class FileDataStore implements DataStore {
       final file = await _file();
       if (!await file.exists()) return null;
       final stamp = _clock().toUtc().toIso8601String().replaceAll(':', '-');
-      final kept = '${file.parent.path}/cartharise.unreadable-$stamp.json';
+      final kept = '${file.parent.path}/$asidePrefix$stamp.json';
       await file.rename(kept);
       return kept;
     } on Object catch (e) {
@@ -206,6 +218,7 @@ class MemoryDataStore implements DataStore {
       throw const StorageWriteException('Simulated delete failure');
     }
     raw = null;
+    asideRaw = null;
   }
 
   @override

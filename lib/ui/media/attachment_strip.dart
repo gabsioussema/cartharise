@@ -20,6 +20,10 @@ import 'voice_note_player.dart';
 /// (also when a sheet would hide a snackbar): added, not saved yet (Retry),
 /// or why nothing was added, with the alternative.
 ///
+/// A photo the camera handed back after Android closed the app is not
+/// offered here (it may have been taken for another entry): it is
+/// recovered once at app level and offered on Today ([RecoveredMediaCard]).
+///
 /// Shows nothing for an entry that doesn't exist (any more).
 class AttachmentStrip extends StatefulWidget {
   const AttachmentStrip({
@@ -51,31 +55,6 @@ class _AttachmentStripState extends State<AttachmentStrip> {
   late final MediaPicker _picker = context.read<MediaPicker>();
   MediaMessage? _message;
   bool _busy = false;
-
-  /// A photo the camera took while the app was closed (Android), not added.
-  String? _lostPhoto;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _recoverLostPhoto());
-  }
-
-  bool get _entryExists {
-    final id = widget.entryId;
-    return id == null || _state.holderOf(id) == widget.holder;
-  }
-
-  Future<void> _recoverLostPhoto() async {
-    if (!mounted || !_entryExists) return;
-    final String? path;
-    try {
-      path = await _picker.recoverLostPhoto();
-    } on Object {
-      return;
-    }
-    if (path != null && mounted) setState(() => _lostPhoto = path);
-  }
 
   void _show(MediaMessage? message) {
     if (mounted) setState(() => _message = message);
@@ -180,20 +159,6 @@ class _AttachmentStripState extends State<AttachmentStrip> {
     }
   }
 
-  Future<void> _addLostPhoto() async {
-    final path = _lostPhoto;
-    if (path == null) return;
-    setState(() => _lostPhoto = null);
-    await _import(path);
-  }
-
-  Future<void> _discardLostPhoto() async {
-    final path = _lostPhoto;
-    if (path == null) return;
-    setState(() => _lostPhoto = null);
-    await _picker.release(path);
-  }
-
   Future<void> _record() async {
     final l = AppLocalizations.of(context);
     setState(() => _message = null);
@@ -291,24 +256,6 @@ class _AttachmentStripState extends State<AttachmentStrip> {
                 ),
             ],
             onDismiss: () => _show(null),
-          ),
-          const SizedBox(height: 12),
-        ],
-        if (_lostPhoto != null) ...[
-          MediaNotice(
-            key: const ValueKey('media-lost-photo'),
-            message: l.mediaLostPhoto,
-            actions: [
-              TextLinkButton(
-                label: l.mediaLostPhotoAdd,
-                icon: Icons.add_photo_alternate_outlined,
-                onPressed: _busy ? null : _addLostPhoto,
-              ),
-              TextLinkButton(
-                label: l.mediaLostPhotoDiscard,
-                onPressed: _discardLostPhoto,
-              ),
-            ],
           ),
           const SizedBox(height: 12),
         ],

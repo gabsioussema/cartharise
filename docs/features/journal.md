@@ -69,7 +69,24 @@ attempts.
   background, stops the recording and keeps what was recorded right away;
   the sheet then says "Interrupted. The 0:12 recorded before it is saved."
   with a **Partial** tag, **Done** and **Record again** (adds a second
-  voice note).
+  voice note). The recording keeps `Attachment.interrupted`, so the
+  **Partial** chip (scissors icon and the word) stays on its player in the
+  note, the try, the attempt and the history (S2-m3).
+- **Cut off by a crash:** a recording is held on disk from its first byte
+  (a mark in `attachments/.held/`) until an entry names it. If the app is
+  ended mid-recording with no pause or hide event, the next launch never
+  cleans it up as an orphan: Today shows "A recording was cut off when the
+  app closed. It may be incomplete." with **Keep in a new note** and
+  **Discard** (asks first) — `AppState.recoveredMedia`, `keepRecovered`,
+  `discardRecovered` (S2-m2).
+- **A photo the camera handed back** (Android may close the app while the
+  camera is open): asked for once at app level (`RootShell` →
+  `recoverLostCameraPhoto`), copied into the private folder and held the
+  same way, offered on Today as "A photo you took wasn't added yet." until
+  the user keeps or discards it — across launches. It is never put on
+  whichever note, try or attempt happens to open first (Android can't say
+  what it was taken for, so a project-picture photo is offered here too)
+  (S2-m4).
 - **Playback:** play / pause, a slider and "0:03 / 0:47"; one recording at
   a time; leaving the page stops it. Moving the slider before playing only
   sets where Play starts (it never starts the sound itself).
@@ -89,6 +106,10 @@ attempts.
   the words with a bronze bar, "From a note · Nov 2, 2026" (or an
   experiment / an attempt), **Open where it's from** and **Unpin** (the
   entry is untouched). Deleting the entry or the photo removes the pin.
+  Editing the entry so the pinned words are no longer in it (the note, an
+  attempt, a try, a recording's typed words, or removing that recording)
+  unpins the passage; a pinned photo stays pinned without them
+  (`AppData.withPinChecked`, S2-m1).
 - **Note cards** say what they hold ("2 photos and 1 voice note"); a note
   with no words reads "Voice note" or "Photo note".
 
@@ -157,7 +178,8 @@ files only; the recorder writes straight into the private folder.
 | `lib/ui/journal/past_reset_screen.dart` | `PastResetScreen(journeyId)`, read-only answers |
 | `lib/ui/journal/journal_kit.dart` | `AreaListView` (readable width, insets), `AreaSectionLabel`, local date/time formatting, `Autosaver`, look-ups extension on `AppState` (no new state operations) |
 | `l10n_src/journal_en.arb` | all `journal…` strings |
-| `lib/ui/media/attachment_strip.dart` | `AttachmentStrip(holder, entryId, {createWith, onWriteInstead})`: thumbnails, voice notes, Add photo · Record, inline notices, lost-photo offer |
+| `lib/ui/media/attachment_strip.dart` | `AttachmentStrip(holder, entryId, {createWith, onWriteInstead})`: thumbnails, voice notes, Add photo · Record, inline notices |
+| `lib/ui/media/recovered_media_card.dart` | `RecoveredMediaCard` (top of Today): recordings cut off by a crash and photos the camera handed back, Keep in a new note / Discard; `recoverLostCameraPhoto` (called once by `RootShell`) |
 | `lib/ui/media/photo_tile.dart` | `AttachmentImage` (bytes from the store, decoded at display size, "Missing"), `PhotoTile` |
 | `lib/ui/media/photo_viewer.dart` | `openPhotoViewer` / `PhotoViewerScreen`: full screen, pin, remove |
 | `lib/ui/media/recorder_sheet.dart` | `showRecorderSheet(context, keep:)` → `RecorderOutcome`; `RecorderSheet` (states, interruptions, failures) |
@@ -205,9 +227,12 @@ store): photos from library and camera, cancelled picker, new note created
 by its first photo, camera / photos denied with their alternatives, full
 storage and oversize photos (nothing added, picker copy released), a
 failed save with Retry, full screen and remove (cancel / confirm, file
-deleted; a failed removal keeps the file), "Missing", the lost-photo offer;
+deleted; a failed removal keeps the file), "Missing", a photo the camera
+handed back offered on Today (kept / discarded / again at the next launch);
 recording (state, time, level meter, announcements, saved at once), a call
-and the app going to the background (kept, labelled), Record again,
+and the app going to the background (kept, labelled, Partial on the note
+afterwards), the app ended mid-recording (offered on Today, kept as
+Partial), Record again,
 microphone denied / Try again, no microphone, nothing recorded, storage
 full, Discard, Back, a failed save, reduced motion; playback (play, pause,
 resume, position, seek, the end, leaving stops it, the slider before
@@ -217,14 +242,18 @@ experiment tried and an attempt; Today's Record (a new note, Open, Write
 instead) and the note card; pinning selected words (app bar and selection
 menu, unsaved words saved first, nothing selected), the card at the top of
 the Journal (open, unpin), pinning a photo and losing the pin with it, a
-pin from an attempt; the backup copy, the too-large warning, the zip round
+pin from an attempt; the backup copy, the too-large warning and the
+words-only export (never "shared" for a zip that couldn't be restored), the zip round
 trip to another phone and playback after restore, "Delete all data";
 size matrix × dark/light and a11y guidelines.
 
 `test/screenshots/media_screenshots_test.dart` renders the note with media,
 recording, interrupted, full screen, pinned passage and photo, Today's
 capture row (regular and 320 dp @ 200 %), Your data, microphone denied,
-the try sheet and the photo source sheet to `test/screenshots/out/media_*`.
+the try sheet, the photo source sheet, what was kept from before on Today
+(regular and 320 dp @ 200 %), a Partial voice note and the too-large backup
+question to `test/screenshots/out/media_*`. The logic is unit-tested in
+`test/evolve2_fixes_test.dart` (real files in a temporary folder).
 
 ## Requirements satisfied
 

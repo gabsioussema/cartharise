@@ -28,7 +28,9 @@ const String kBackupZipMimeType = 'application/zip';
 ///   and recordings) through the share sheet (also the "Export a copy"
 ///   target after a failed save); what it includes is said (words and
 ///   settings, how many photos and voice notes, their size), and when they
-///   are more than a backup can hold; files that couldn't be read are said;
+///   are more than a restore accepts — then no `.zip` is made (it could
+///   never come back) and the words-only JSON is offered instead, never
+///   "exported"; files that couldn't be read are said;
 /// * restore a backup (v2 `.zip` or v1 JSON): the file is fully validated
 ///   first — a bad file is rejected with "your current data was not
 ///   changed" — then the user confirms replacing everything with the backup
@@ -61,7 +63,15 @@ class _DataScreenState extends State<DataScreen> {
     final l = AppLocalizations.of(context);
     setState(() => _exporting = true);
     try {
-      final archive = await state.exportBackupArchive();
+      final BackupArchive archive;
+      try {
+        archive = await state.exportBackupArchive();
+      } on BackupTooLargeException {
+        // A zip that could never be restored is never made, nor called
+        // "exported": the words only, if the user wants them.
+        if (mounted) await _exportWordsOnly(state, files, messenger, l);
+        return;
+      }
       final outcome = await files.shareBytesFile(
         'cartharise-backup-${state.today}.zip',
         archive.bytes,
@@ -83,6 +93,38 @@ class _DataScreenState extends State<DataScreen> {
     } finally {
       if (mounted) setState(() => _exporting = false);
     }
+  }
+
+  /// The photos and recordings are more than a restore accepts: says so,
+  /// and on the user's yes shares the words and settings (the v1 JSON
+  /// backup) — said plainly as "words only".
+  Future<void> _exportWordsOnly(
+    AppState state,
+    FileShare files,
+    ScaffoldMessengerState messenger,
+    AppLocalizations l,
+  ) async {
+    final ok = await confirmDialog(
+      context,
+      title: l.mediaBackupTooLargeTitle,
+      body: l.mediaBackupTooLargeBody,
+      action: l.mediaBackupWordsOnly,
+    );
+    if (!ok) return;
+    final outcome = await files.shareTextFile(
+      'cartharise-words-${state.today}.json',
+      state.exportBackup(),
+      kBackupMimeType,
+    );
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(switch (outcome) {
+          ShareOutcome.shared => l.mediaBackupWordsShared,
+          ShareOutcome.dismissed => l.youShareDismissed,
+          ShareOutcome.unavailable => l.shareFailed,
+        }),
+      ),
+    );
   }
 
   Future<void> _import() async {

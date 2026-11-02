@@ -72,7 +72,9 @@ abstract class AttachmentStore {
 
   /// A new path inside the folder for a voice recording to be written to
   /// directly. Until [adoptRecording] or [discardRecording] it is pending:
-  /// [deleteOrphans] leaves it alone.
+  /// [deleteOrphans] leaves it alone. It is also held on disk until an
+  /// entry names it, so a recording cut off by a crash is offered back by
+  /// [recoveredFiles] at the next launch instead of being cleaned up.
   Future<String> newRecordingPath();
 
   /// The recording written to [path] (from [newRecordingPath]) as an
@@ -101,8 +103,9 @@ abstract class AttachmentStore {
   /// Bytes the attachment's file takes (0 when missing).
   Future<int> sizeOf(Attachment attachment) => sizeOfFile(attachment.fileName);
 
-  /// Removes the whole folder ("Delete all data"). Throws
-  /// [AttachmentException] (`deleteFailed`) if something stays.
+  /// Removes the whole folder ("Delete all data"), and any folder set aside
+  /// by [moveAside]. Throws [AttachmentException] (`deleteFailed`) if
+  /// something stays.
   Future<void> deleteAll();
 
   /// Bytes all attachment files take together.
@@ -126,10 +129,35 @@ abstract class AttachmentStore {
 
   Future<int> sizeOfFile(String fileName);
 
-  /// Deletes every file in the folder that is not in [keep] and not a
-  /// pending recording. Returns how many were deleted. Never touches a
+  /// Deletes every file in the folder that is not in [keep], not a
+  /// pending recording and not held for the user's decision
+  /// ([recoveredFiles]). Returns how many were deleted. Never touches a
   /// file still referenced.
   Future<int> deleteOrphans(Set<String> keep);
+
+  /// Files from an earlier run that no entry holds yet and that wait for
+  /// the user's decision — never deleted as orphans:
+  ///
+  /// * a recording cut off when the app was closed mid-way (a crash, or
+  ///   the system ending it while recording): [Attachment.interrupted];
+  /// * a photo the camera handed back after the app was closed
+  ///   ([holdRecovered]).
+  ///
+  /// [keep] names the files the data refers to: those are settled (no
+  /// longer held). Empty or missing files are removed. Oldest first.
+  Future<List<Attachment>> recoveredFiles(Set<String> keep);
+
+  /// Copies [sourcePath] into the folder like [importFile] and holds it for
+  /// the user's decision: listed by [recoveredFiles], across launches,
+  /// until it is on an entry, [settleRecovered] or deleted.
+  Future<Attachment> holdRecovered(
+    String sourcePath, {
+    required AttachmentKind kind,
+  });
+
+  /// The user decided about a held file (it is on an entry now): it is no
+  /// longer held. Deleting a file ([deleteFile]) also settles it.
+  Future<void> settleRecovered(String fileName);
 
   /// Sets the folder aside (renamed, kept) when the data file was unreadable
   /// and the user starts fresh, so the files it named are not cleaned up.
@@ -154,6 +182,21 @@ String _extensionFor(String sourcePath, AttachmentKind kind) {
 
 /// The extension a new voice recording gets (AAC in an MP4 container).
 const String kRecordingExtension = 'm4a';
+
+/// What a held file is, from its name: a recording or a photo.
+AttachmentKind _kindOf(String fileName) {
+  final dot = fileName.lastIndexOf('.');
+  final ext = dot < 0 ? '' : fileName.substring(dot + 1).toLowerCase();
+  return _audioExtensions.contains(ext)
+      ? AttachmentKind.audio
+      : AttachmentKind.photo;
+}
+
+/// The attachment id in [fileName] (the name without its extension).
+String _idOf(String fileName) {
+  final dot = fileName.lastIndexOf('.');
+  return dot < 0 ? fileName : fileName.substring(0, dot);
+}
 
 /// Makes attachment ids such as `att_lz3k9a1f…` (time + counter + salt).
 class _Ids {
@@ -184,6 +227,9 @@ class FileAttachmentStore extends AttachmentStore {
        _ids = _Ids(clock ?? DateTime.now);
 
   static const folderName = 'attachments';
+
+  /// What [moveAside] adds to the folder's name: `attachments.unreadable-…`.
+  static const asideMarker = '.unreadable-';
 
   /// The data folder; null = the platform's app support directory.
   final Directory? directory;
@@ -225,6 +271,42 @@ class FileAttachmentStore extends AttachmentStore {
 
   Future<File> _file(String fileName) async =>
       File('${(await _folder()).path}/$fileName');
+
+  /// Marks of the files held for the user's decision: one empty file per
+  /// held name in `attachments/.held/` (a sub-folder, so it is never listed
+  /// as an attachment, and goes with the folder).
+  static const _heldFolder = '.held';
+
+  Future<Directory> _heldDir() async =>
+      Directory('${(await _folder()).path}/$_heldFolder');
+
+  Future<void> _hold(String fileName) async {
+    try {
+      final dir = await _heldDir();
+      if (!await dir.exists()) await dir.create(recursive: true);
+      await File('${dir.path}/$fileName').writeAsBytes(const [], flush: true);
+    } on Object {
+      // Best effort: without the mark only a crash could lose it.
+    }
+  }
+
+  Future<void> _release(String fileName) async {
+    try {
+      final mark = File('${(await _heldDir()).path}/$fileName');
+      if (await mark.exists()) await mark.delete();
+    } on Object {
+      // Settled at the next launch (the data names it, or it is gone).
+    }
+  }
+
+  Future<Set<String>> _heldNames() async {
+    final dir = await _heldDir();
+    if (!await dir.exists()) return const {};
+    return {
+      await for (final e in dir.list(followLinks: false))
+        if (e is File) e.uri.pathSegments.last,
+    };
+  }
 
   /// The file name of [path] if it is directly inside the folder.
   Future<String?> _nameInFolder(String path) async {
@@ -288,6 +370,7 @@ class FileAttachmentStore extends AttachmentStore {
     }
     final fileName = '${_ids.next()}.$kRecordingExtension';
     _pending.add(fileName);
+    await _hold(fileName);
     return '${folder.path}/$fileName';
   }
 
@@ -306,13 +389,17 @@ class FileAttachmentStore extends AttachmentStore {
     }
     if (length < 0) {
       _pending.remove(name);
+      await _release(name);
       throw const AttachmentException(AttachmentFailure.sourceMissing);
     }
     if (length == 0) {
       _pending.remove(name);
       await _deleteQuietly(file);
+      await _release(name);
       throw const AttachmentException(AttachmentFailure.empty);
     }
+    // Still held until the data names it (settled at the next launch), so
+    // a crash before the entry is saved can't lose it.
     _pending.remove(name);
     final dot = name.lastIndexOf('.');
     return Attachment(
@@ -341,6 +428,17 @@ class FileAttachmentStore extends AttachmentStore {
     try {
       final folder = await _folder();
       if (await folder.exists()) await folder.delete(recursive: true);
+      // Folders set aside after an unreadable data file hold the user's
+      // photos and recordings too.
+      final parent = await _parentDir();
+      if (await parent.exists()) {
+        await for (final e in parent.list(followLinks: false)) {
+          final name = e.uri.pathSegments.lastWhere((p) => p.isNotEmpty);
+          if (e is Directory && name.startsWith('$folderName$asideMarker')) {
+            await e.delete(recursive: true);
+          }
+        }
+      }
     } on Object catch (e) {
       throw AttachmentException(AttachmentFailure.deleteFailed, e);
     }
@@ -422,6 +520,7 @@ class FileAttachmentStore extends AttachmentStore {
     } on Object catch (e) {
       throw AttachmentException(AttachmentFailure.deleteFailed, e);
     }
+    await _release(fileName);
   }
 
   @override
@@ -437,9 +536,14 @@ class FileAttachmentStore extends AttachmentStore {
   @override
   Future<int> deleteOrphans(Set<String> keep) async {
     var deleted = 0;
+    final held = await _heldNames();
     for (final f in await _files()) {
       final name = f.uri.pathSegments.last;
-      if (keep.contains(name) || _pending.contains(name)) continue;
+      if (keep.contains(name) ||
+          _pending.contains(name) ||
+          held.contains(name)) {
+        continue;
+      }
       try {
         await f.delete();
         deleted++;
@@ -451,11 +555,58 @@ class FileAttachmentStore extends AttachmentStore {
   }
 
   @override
+  Future<List<Attachment>> recoveredFiles(Set<String> keep) async {
+    final found = <Attachment>[];
+    for (final name in await _heldNames()) {
+      if (_pending.contains(name)) continue; // being recorded right now
+      if (!isSafeAttachmentFileName(name) || keep.contains(name)) {
+        await _release(name);
+        continue;
+      }
+      final file = await _file(name);
+      try {
+        if (!await file.exists() || await file.length() == 0) {
+          await _deleteQuietly(file);
+          await _release(name);
+          continue;
+        }
+        final kind = _kindOf(name);
+        found.add(
+          Attachment(
+            id: _idOf(name),
+            kind: kind,
+            fileName: name,
+            createdAt: await file.lastModified(),
+            interrupted: kind == AttachmentKind.audio,
+          ),
+        );
+      } on Object {
+        // Unreadable now: asked about again at the next launch.
+      }
+    }
+    found.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+    return found;
+  }
+
+  @override
+  Future<Attachment> holdRecovered(
+    String sourcePath, {
+    required AttachmentKind kind,
+  }) async {
+    final kept = await importFile(sourcePath, kind: kind);
+    await _hold(kept.fileName);
+    return kept;
+  }
+
+  @override
+  Future<void> settleRecovered(String fileName) => _release(fileName);
+
+  @override
   Future<String?> moveAside() async {
     final folder = await _folder();
     if (!await folder.exists()) return null;
     final stamp = _clock().toUtc().toIso8601String().replaceAll(':', '-');
-    final kept = '${(await _parentDir()).path}/$folderName.unreadable-$stamp';
+    final kept = '${(await _parentDir()).path}/$folderName$asideMarker$stamp';
     try {
       await folder.rename(kept);
     } on Object catch (e) {
@@ -498,6 +649,19 @@ class MemoryAttachmentStore extends AttachmentStore {
 
   /// Pending recordings (name → bytes written so far by a fake recorder).
   final Map<String, Uint8List?> _pending = {};
+
+  /// Names held for the user's decision (see [recoveredFiles]).
+  final Set<String> held = {};
+
+  /// Simulates the app being ended mid-recording and started again: what
+  /// pending recordings wrote stays in the folder (as on a phone), and
+  /// nothing is pending any more.
+  void restart() {
+    for (final MapEntry(key: name, value: bytes) in _pending.entries) {
+      if (bytes != null) files[name] = bytes;
+    }
+    _pending.clear();
+  }
 
   bool failWrites = false;
   bool failReads = false;
@@ -558,6 +722,7 @@ class MemoryAttachmentStore extends AttachmentStore {
     }
     final fileName = '${_ids.next()}.$kRecordingExtension';
     _pending[fileName] = null;
+    held.add(fileName);
     return '$kMemoryRoot/$fileName';
   }
 
@@ -569,9 +734,13 @@ class MemoryAttachmentStore extends AttachmentStore {
     }
     final bytes = _pending.remove(name);
     if (bytes == null) {
+      held.remove(name);
       throw const AttachmentException(AttachmentFailure.sourceMissing);
     }
-    if (bytes.isEmpty) throw const AttachmentException(AttachmentFailure.empty);
+    if (bytes.isEmpty) {
+      held.remove(name);
+      throw const AttachmentException(AttachmentFailure.empty);
+    }
     files[name] = bytes;
     return Attachment(
       id: name.substring(0, name.lastIndexOf('.')),
@@ -585,6 +754,7 @@ class MemoryAttachmentStore extends AttachmentStore {
   @override
   Future<void> discardRecording(String path) async {
     _pending.remove(_nameOf(path));
+    held.remove(_nameOf(path));
   }
 
   /// Names of recordings started and neither kept nor discarded.
@@ -601,6 +771,8 @@ class MemoryAttachmentStore extends AttachmentStore {
     }
     files.clear();
     _pending.clear();
+    held.clear();
+    asideFiles = null;
   }
 
   @override
@@ -642,6 +814,7 @@ class MemoryAttachmentStore extends AttachmentStore {
       throw const AttachmentException(AttachmentFailure.deleteFailed);
     }
     files.remove(fileName);
+    held.remove(fileName);
   }
 
   @override
@@ -652,10 +825,53 @@ class MemoryAttachmentStore extends AttachmentStore {
     if (failDeletes) return 0;
     final orphans = [
       for (final name in files.keys)
-        if (!keep.contains(name) && !_pending.containsKey(name)) name,
+        if (!keep.contains(name) &&
+            !_pending.containsKey(name) &&
+            !held.contains(name))
+          name,
     ];
     orphans.forEach(files.remove);
     return orphans.length;
+  }
+
+  @override
+  Future<List<Attachment>> recoveredFiles(Set<String> keep) async {
+    final found = <Attachment>[];
+    for (final name in held.toList()..sort()) {
+      if (_pending.containsKey(name)) continue;
+      final bytes = files[name];
+      if (keep.contains(name) || bytes == null || bytes.isEmpty) {
+        held.remove(name);
+        if (bytes != null && bytes.isEmpty) files.remove(name);
+        continue;
+      }
+      final kind = _kindOf(name);
+      found.add(
+        Attachment(
+          id: _idOf(name),
+          kind: kind,
+          fileName: name,
+          createdAt: _clock(),
+          interrupted: kind == AttachmentKind.audio,
+        ),
+      );
+    }
+    return found;
+  }
+
+  @override
+  Future<Attachment> holdRecovered(
+    String sourcePath, {
+    required AttachmentKind kind,
+  }) async {
+    final kept = await importFile(sourcePath, kind: kind);
+    held.add(kept.fileName);
+    return kept;
+  }
+
+  @override
+  Future<void> settleRecovered(String fileName) async {
+    held.remove(fileName);
   }
 
   @override
@@ -664,6 +880,7 @@ class MemoryAttachmentStore extends AttachmentStore {
     asideFiles = Map.of(files);
     files.clear();
     _pending.clear();
+    held.clear();
     return 'memory (set aside)';
   }
 }

@@ -76,7 +76,11 @@ Future<void> undoQuestMove(AppState state, Quest before) {
   final current = state.questById(before.id);
   if (current == null) return Future.value();
   return state.updateQuest(
-    current.copyWith(stage: before.stage, completedOn: before.completedOn),
+    current.copyWith(
+      stage: before.stage,
+      completedOn: before.completedOn,
+      doneFrom: () => before.doneFrom,
+    ),
   );
 }
 

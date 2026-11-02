@@ -11,6 +11,7 @@ import 'package:cartharise/ui/widgets/save_indicator.dart';
 import 'package:cartharise/ui/you/data_screen.dart';
 import 'package:cartharise/ui/you/reminders_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show RenderParagraph;
 import 'package:flutter_test/flutter_test.dart';
 
 import '../support/test_app.dart';
@@ -134,6 +135,55 @@ void main() {
       h.reminders.tap('daytime.03');
       await pumpFrames(tester);
       expect(find.text('Daytime 3 title'), findsOneWidget);
+    });
+
+    // Step 2 audit (S2-m8): at 320 dp and 200 % text "Compass" broke into
+    // "Compas" / "s". Every tab name stays whole on one line, readable and
+    // spoken, at every size.
+    for (final size in kSizeMatrix) {
+      testWidgets('tab names stay on one line at $size', (tester) async {
+        final semantics = tester.ensureSemantics();
+        await pumpCartha(
+          tester,
+          data: onboardedData(),
+          size: size.size,
+          textScale: size.textScale,
+        );
+        final bar = find.byType(NavigationBar);
+        double height(String label) => tester
+            .getSize(find.descendant(of: bar, matching: find.text(label)))
+            .height;
+        final line = height('You');
+        for (final label in _tabLabels) {
+          expect(height(label), line, reason: '$label on one line');
+          final text = tester.renderObject<RenderParagraph>(
+            find.descendant(of: bar, matching: find.text(label)),
+          );
+          expect(text.didExceedMaxLines, isFalse, reason: label);
+          expect(
+            find.descendant(
+              of: bar,
+              matching: find.bySemanticsLabel(RegExp('^$label')),
+            ),
+            findsWidgets,
+            reason: '$label is still spoken',
+          );
+        }
+        semantics.dispose();
+      });
+    }
+
+    testWidgets('names that could never fit are hidden, keeping tooltips and '
+        'spoken names', (tester) async {
+      await pumpCartha(
+        tester,
+        data: onboardedData(),
+        size: const Size(200, 568),
+        textScale: 2,
+      );
+      final bar = tester.widget<NavigationBar>(find.byType(NavigationBar));
+      expect(bar.labelBehavior, NavigationDestinationLabelBehavior.alwaysHide);
+      expect(find.byTooltip('Compass'), findsOneWidget);
     });
 
     for (final size in kSizeMatrix) {

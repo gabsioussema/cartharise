@@ -2848,23 +2848,47 @@ abstract class AppLocalizations {
   /// **'This entry isn\'t here any more. Nothing was added.'**
   String get mediaEntryGone;
 
-  /// No description provided for @mediaLostPhoto.
+  /// No description provided for @mediaRecoveredPhoto.
   ///
   /// In en, this message translates to:
-  /// **'A photo you took earlier wasn\'t added yet.'**
-  String get mediaLostPhoto;
+  /// **'A photo you took wasn\'t added yet.'**
+  String get mediaRecoveredPhoto;
 
-  /// No description provided for @mediaLostPhotoAdd.
+  /// No description provided for @mediaRecoveredRecording.
   ///
   /// In en, this message translates to:
-  /// **'Add it here'**
-  String get mediaLostPhotoAdd;
+  /// **'A recording was cut off when the app closed. It may be incomplete.'**
+  String get mediaRecoveredRecording;
 
-  /// No description provided for @mediaLostPhotoDiscard.
+  /// No description provided for @mediaRecoveredKeep.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep in a new note'**
+  String get mediaRecoveredKeep;
+
+  /// No description provided for @mediaRecoveredDiscard.
   ///
   /// In en, this message translates to:
   /// **'Discard'**
-  String get mediaLostPhotoDiscard;
+  String get mediaRecoveredDiscard;
+
+  /// No description provided for @mediaRecoveredDiscardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard it?'**
+  String get mediaRecoveredDiscardTitle;
+
+  /// No description provided for @mediaRecoveredDiscardBody.
+  ///
+  /// In en, this message translates to:
+  /// **'It\'s deleted from this phone.'**
+  String get mediaRecoveredDiscardBody;
+
+  /// No description provided for @mediaRecoveredKept.
+  ///
+  /// In en, this message translates to:
+  /// **'Kept in a new note in your Journal.'**
+  String get mediaRecoveredKept;
 
   /// No description provided for @mediaDismiss.
   ///
@@ -3253,8 +3277,32 @@ abstract class AppLocalizations {
   /// No description provided for @mediaDataTooLarge.
   ///
   /// In en, this message translates to:
-  /// **'Your photos and recordings take more than a backup can hold (256 MB). Remove some for a complete backup.'**
+  /// **'Photos and recordings are over 256 MB, too large to restore. Export saves your words only; remove some for a full backup.'**
   String get mediaDataTooLarge;
+
+  /// No description provided for @mediaBackupTooLargeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Too large to restore'**
+  String get mediaBackupTooLargeTitle;
+
+  /// No description provided for @mediaBackupTooLargeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your photos and recordings are over 256 MB, more than a backup can bring back. Export your words and settings only?'**
+  String get mediaBackupTooLargeBody;
+
+  /// No description provided for @mediaBackupWordsOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Export words only'**
+  String get mediaBackupWordsOnly;
+
+  /// No description provided for @mediaBackupWordsShared.
+  ///
+  /// In en, this message translates to:
+  /// **'Words and settings shared. Photos and recordings aren\'t in it.'**
+  String get mediaBackupWordsShared;
 
   /// No description provided for @mediaDataImportFormats.
   ///
@@ -3859,25 +3907,25 @@ abstract class AppLocalizations {
   /// No description provided for @missionsProjectClear.
   ///
   /// In en, this message translates to:
-  /// **'Start a new project'**
+  /// **'Delete this project'**
   String get missionsProjectClear;
 
   /// No description provided for @missionsProjectClearTitle.
   ///
   /// In en, this message translates to:
-  /// **'Start a new project?'**
+  /// **'Delete this project?'**
   String get missionsProjectClearTitle;
 
   /// No description provided for @missionsProjectClearBody.
   ///
   /// In en, this message translates to:
-  /// **'Clears this project\'s title, milestones and notes. Your Compass stays.'**
+  /// **'Its title, milestones and notes go for good. Your Compass, tasks and attempts stay.'**
   String get missionsProjectClearBody;
 
   /// No description provided for @missionsProjectClearConfirm.
   ///
   /// In en, this message translates to:
-  /// **'Clear project'**
+  /// **'Delete'**
   String get missionsProjectClearConfirm;
 
   /// No description provided for @missionsPathTitle.
@@ -4681,8 +4729,20 @@ abstract class AppLocalizations {
   /// No description provided for @projectsClearBodyPhoto.
   ///
   /// In en, this message translates to:
-  /// **'Clears this project\'s title, milestones, notes and photo. Your Compass stays.'**
+  /// **'Its title, milestones, notes and photo go for good. Your Compass, tasks and attempts stay.'**
   String get projectsClearBodyPhoto;
+
+  /// No description provided for @projectsDeleteFinishInstead.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish and keep instead'**
+  String get projectsDeleteFinishInstead;
+
+  /// No description provided for @projectsDeletedCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'Project deleted'**
+  String get projectsDeletedCurrent;
 
   /// Screen-reader label of the project's picture; {name} is the scene's name or 'photo'.
   ///

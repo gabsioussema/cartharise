@@ -15,7 +15,8 @@ import 'project_art.dart';
 /// name), "Choose a photo" / "Take a photo" (the system picker or camera,
 /// asked only on that tap) and, when there is one, "Remove picture".
 /// [onChoose] saves the choice (null removes the picture); the sheet closes
-/// once it was handed over. A photo that couldn't be picked or kept is said
+/// once it was handed over. When the picture is a photo, a painted scene or
+/// "Remove picture" first asks "Remove the photo?" (it is deleted). A photo that couldn't be picked or kept is said
 /// in the sheet, with another way forward — never shown as chosen.
 Future<void> showProjectArtPicker(
   BuildContext context, {
@@ -53,7 +54,23 @@ class _ProjectArtPickerState extends State<ProjectArtPicker> {
   bool _adding = false;
   String? _error;
 
+  /// Whether the current photo may go: a camera photo may exist nowhere
+  /// else, so a painted scene or "Remove picture" asks first (as the
+  /// screen's Remove does). Nothing to ask without a photo.
+  Future<bool> _photoMayGo() async {
+    if (widget.current?.photo == null) return true;
+    final l = AppLocalizations.of(context);
+    return confirmDialog(
+      context,
+      title: l.projectsPhotoRemoveTitle,
+      body: l.projectsPhotoRemoveBody,
+      action: l.projectsPhotoRemoveConfirm,
+      destructive: true,
+    );
+  }
+
   Future<void> _choose(ProjectArt? art) async {
+    if (!await _photoMayGo() || !mounted) return;
     setState(() {
       _busy = true;
       _error = null;

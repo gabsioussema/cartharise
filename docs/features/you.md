@@ -86,8 +86,15 @@ and the share sheet / file picker when the user asks for them.
   and the space their files take on this phone (`sizeOfFile` per named
   file, so leftovers and pending recordings don't count; KB / MB / GB in the
   device's number format). When those files are more than a backup can be
-  restored from (`kMaxBackupBytes`, 256 MB), a warning says so plainly:
-  "Remove some for a complete backup."
+  restored from (`kMaxBackupBytes`, 256 MB), a warning says so plainly
+  ("…too large to restore. Export saves your words only; remove some for a
+  full backup."), and **no `.zip` is made**: `exportBackupArchive` measures
+  the files first (nothing is read into memory) and also checks the finished
+  zip, throwing `BackupTooLargeException`. Export then asks "Too large to
+  restore — Export your words and settings only?" and on **Export words
+  only** shares the v1 JSON (`cartharise-words-<date>.json`), said as
+  "Words and settings shared. Photos and recordings aren't in it." It never
+  says "Backup shared." for a file that could never come back (S2-M2).
 - **Import:** `FileShare.pickFileBytes` → `previewRestore(bytes)` fully
   decodes and validates a v2 `.zip` or a v1 `.json` → on any problem show
   "This file couldn't be used", the plain reason (not JSON, not a Cartharise
@@ -108,7 +115,10 @@ and the share sheet / file picker when the user asks for them.
   in the private temp folder, ours and share_plus's, and the file picker's
   cached imports) and `MediaPicker.clearTemporaryFiles()` (photo picker
   copies) → `deleteAllData()` (data file, then the `attachments/` folder and
-  with it the pinned memory); `BootScreen` closes the pushed pages and shows
+  with it the pinned memory, the held recordings and photos; also any
+  unreadable data file and attachments folder set aside earlier —
+  `cartharise.unreadable-*.json`, `attachments.unreadable-*` — so no copy of
+  the user's words outlives it, S2-m5); `BootScreen` closes the pushed pages and shows
   onboarding. If deleting fails, the user is told the writing is still
   there; if only photos or recordings couldn't be removed, the data is
   still deleted and the user is told so (the next launch removes them); if

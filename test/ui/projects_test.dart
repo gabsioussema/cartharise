@@ -391,6 +391,73 @@ void main() {
       expect(h.store.saved!.pastProjects.first.id, 'project_now');
     });
 
+    testWidgets('"Delete this project" says it is for good and offers '
+        '"Finish and keep instead"; Cancel changes nothing', (tester) async {
+      final h = await _pump(tester, const ProjectScreen());
+      // The old "Start a new project" dropped the project silently.
+      expect(find.text('Start a new project'), findsNothing);
+      await _tap(tester, _key('project-delete'));
+      expect(find.text('Delete this project?'), findsOneWidget);
+      expect(
+        find.text(
+          'Its title, milestones and notes go for good. Your Compass, tasks '
+          'and attempts stay.',
+        ),
+        findsOneWidget,
+      );
+      await tester.tap(
+        find.descendant(
+          of: find.byType(AlertDialog),
+          matching: find.text('Cancel'),
+        ),
+      );
+      await pumpFrames(tester);
+      expect(h.state.data.project!.id, 'project_now');
+      expect(h.state.pastProjects, hasLength(2));
+
+      await _tap(tester, _key('project-delete'));
+      await tester.tap(_key('dialog-alternative'));
+      await pumpFrames(tester);
+      expect(find.byType(FinishProjectSheet), findsOneWidget);
+      await tester.tap(_key('project-finish-confirm'));
+      await pumpFrames(tester);
+      expect(h.state.data.project, isNull);
+      final kept = h.state.pastProjects.first;
+      expect(kept.id, 'project_now');
+      expect(kept.milestones, hasLength(2));
+      expect(kept.retrospective, 'Mornings help.');
+      expect(h.store.saved!.pastProjects.first.id, 'project_now');
+      expect(find.text('Kept in your project history.'), findsOneWidget);
+    });
+
+    testWidgets('a project is deleted only by an explicit "Delete": its '
+        'photo goes, its tasks and attempts stay', (tester) async {
+      final photo = _photo('att_now');
+      final files = _folder()..files['att_now.jpg'] = kPng;
+      final h = await _pump(
+        tester,
+        const ProjectScreen(),
+        data: _data(project: _current(art: ProjectArt.photo(photo))),
+        attachments: files,
+      );
+      await _tap(tester, _key('project-delete'));
+      expect(
+        find.text(
+          'Its title, milestones, notes and photo go for good. Your Compass, '
+          'tasks and attempts stay.',
+        ),
+        findsOneWidget,
+      );
+      await tester.tap(_key('dialog-confirm'));
+      await pumpFrames(tester);
+      expect(h.state.data.project, isNull);
+      expect(h.state.pastProjects, hasLength(2), reason: 'deleted, not kept');
+      expect(h.attachments.files.containsKey('att_now.jpg'), isFalse);
+      expect(find.text('Project deleted'), findsOneWidget);
+      expect(h.state.questById('q1'), isNotNull);
+      expect(h.state.data.campaignLog.map((e) => e.id), contains('a1'));
+    });
+
     testWidgets('no saved project: nothing to finish', (tester) async {
       await _pump(
         tester,
@@ -881,6 +948,11 @@ void main() {
         findsOneWidget,
       );
       await _tap(tester, _key('project-art-route'));
+      // A camera photo may exist nowhere else: asked first.
+      expect(find.text('Remove the photo?'), findsOneWidget);
+      expect(h.attachments.files.keys, contains('att_now.jpg'));
+      await tester.tap(find.text('Remove photo'));
+      await pumpFrames(tester);
       expect(h.attachments.files.keys, ['att_sep.jpg']);
 
       // Back to a photo, then removed after a question.
@@ -898,6 +970,59 @@ void main() {
       expect(h.attachments.files.containsKey(kept.fileName), isFalse);
       expect(find.text('Picture removed'), findsOneWidget);
       expect(_key('project-art-choose'), findsOneWidget);
+    });
+
+    for (final route in ['project-art-sunrise', 'project-art-none']) {
+      testWidgets('with a photo, $route asks first: Cancel keeps the photo, '
+          'Remove photo lets it go', (tester) async {
+        final photo = _photo('att_now');
+        final files = _folder()..files['att_now.jpg'] = kPng;
+        final h = await openPicker(
+          tester,
+          data: _data(project: _current(art: ProjectArt.photo(photo))),
+          attachments: files,
+        );
+        await _tap(tester, _key(route));
+        expect(find.text('Remove the photo?'), findsOneWidget);
+        await tester.tap(
+          find.descendant(
+            of: find.byType(AlertDialog),
+            matching: find.text('Cancel'),
+          ),
+        );
+        await pumpFrames(tester);
+        expect(find.byType(ProjectArtPicker), findsOneWidget);
+        expect(h.state.data.project!.art!.photo!.id, 'att_now');
+        expect(h.attachments.files.containsKey('att_now.jpg'), isTrue);
+
+        await _tap(tester, _key(route));
+        await tester.tap(find.text('Remove photo'));
+        await pumpFrames(tester);
+        expect(find.byType(ProjectArtPicker), findsNothing);
+        expect(h.state.data.project!.art?.photo, isNull);
+        expect(
+          h.state.data.project!.art?.illustration,
+          route == 'project-art-sunrise' ? ProjectIllustration.sunrise : null,
+        );
+        expect(h.attachments.files.containsKey('att_now.jpg'), isFalse);
+      });
+    }
+
+    testWidgets('a scene over a scene asks nothing', (tester) async {
+      final h = await openPicker(
+        tester,
+        data: _data(
+          project: _current(
+            art: const ProjectArt.illustration(ProjectIllustration.path),
+          ),
+        ),
+      );
+      await _tap(tester, _key('project-art-roots'));
+      expect(find.byType(AlertDialog), findsNothing);
+      expect(
+        h.state.data.project!.art!.illustration,
+        ProjectIllustration.roots,
+      );
     });
 
     testWidgets('a photo missing from the phone says so', (tester) async {

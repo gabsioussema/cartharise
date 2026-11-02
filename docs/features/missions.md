@@ -101,6 +101,11 @@ its move button."
   moment); moving out of Done un-completes today and the XP goes with it.
 * **Daily quests**: in Done for the day they were completed, back in Ready the
   next day; `completedOn` keeps every day.
+* **One-off quests reopened** (the checkbox, Today) go back to the lane they
+  were completed from, not to Ready: `Quest.doneFrom` remembers Later or Doing
+  while the quest is done (JSON `doneFrom`, optional; older files and Ready
+  load as null = Ready). Moving a card out of Done puts it where it was
+  dropped (step 2 audit S2-m6).
 * **Remembered** while the app runs: List/Board, the Today filter and Done open
   (route `PageStorage`), not saved to the data file.
 * **Motion**: the List/Board switch uses `CarthaPageMotion`; the move menu opens
@@ -117,9 +122,15 @@ its move button."
   milestones done". The Project card carries the direction glyph and the
   Milestones card the progress glyph (`SectionCard(glyph: …)`).
 * Looking back (retrospective): autosaved text.
-* Nothing is stored until the user changes something; "Start a new project"
-  (destructive confirm) clears the project, never the Compass (the confirm says
-  "…and photo" when the project wears one, since the photo is deleted).
+* Nothing is stored until the user changes something. **Delete this project**
+  (a quiet link under **Finish this project**) is plainly destructive: "Delete
+  this project? Its title, milestones and notes go for good. Your Compass,
+  tasks and attempts stay." ("…notes and photo…" when it wears one) with
+  **Cancel**, **Finish and keep instead** (opens the finish sheet, the
+  project goes to the history) and **Delete**. Only that explicit Delete drops
+  a project ("Project deleted"); the Compass is never changed. (Step 2 audit
+  S2-M1: it used to read "Start a new project" and dropped the project
+  silently.)
 * **Picture** card, **Finish this project** and **Project history · n**: see
   Projects below.
 
@@ -172,7 +183,10 @@ its move button."
   static. The chosen tile has a thicker border and a tick, and is announced
   "selected". A photo is copied into the private `attachments/` folder
   (`AttachmentStore.importFile`; the picker's temporary copy is released either
-  way) and becomes `ProjectArt.photo`. Refused camera/photos, no camera, a
+  way) and becomes `ProjectArt.photo`. While the picture is a photo, a painted
+  scene or the sheet's **Remove picture** first asks "Remove the photo?" (the
+  photo is deleted from the app and may exist nowhere else); Cancel keeps it
+  and the sheet stays open (step 2 audit S2-M3). Refused camera/photos, no camera, a
   failed pick, a photo too large or not kept are said in the sheet with another
   way forward; nothing is shown as chosen then. With a photo on, the sheet warns
   that another choice deletes it; **Remove picture** asks first for a photo. A
@@ -314,3 +328,14 @@ duplicates, user may change them), F-029 (completion per local date, daily
 recurrence, optional date), F-030 (status, milestones, retrospective, linked to the
 Compass), F-031 (non-punitive), F-057 (30 days in four stages, autosaved, any day
 open), F-054 (gentle, informational progress only).
+
+### Older data (schema 1)
+
+A file from before step 2 had one month project and no links. On loading it
+(`AppData.fromJson`, schema 1 only), every battle-log attempt — by definition
+an attempt at the month project (F-061) — and every quest with
+`QuestSource.project` is linked to the project's stable legacy id, so
+finishing it keeps them in its history. Nothing already linked is touched;
+with no project in the file nothing is linked (step 2 audit S2-m7). A v1
+project cleared and started again before the upgrade can't be told apart:
+its attempts all go to the current one.

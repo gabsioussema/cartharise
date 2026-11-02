@@ -214,6 +214,7 @@ class Attachment {
     required this.createdAt,
     this.durationMs,
     this.transcript,
+    this.interrupted = false,
   });
 
   final String id;
@@ -230,9 +231,14 @@ class Attachment {
   /// The user's own words for a recording, exactly as typed; null = none.
   final String? transcript;
 
+  /// A recording cut short (a call, the app hidden or closed): what was
+  /// said before that, kept — shown as "Partial" wherever it plays.
+  final bool interrupted;
+
   Attachment copyWith({
     int? Function()? durationMs,
     String? Function()? transcript,
+    bool? interrupted,
   }) => Attachment(
     id: id,
     kind: kind,
@@ -240,6 +246,7 @@ class Attachment {
     createdAt: createdAt,
     durationMs: durationMs != null ? durationMs() : this.durationMs,
     transcript: transcript != null ? transcript() : this.transcript,
+    interrupted: interrupted ?? this.interrupted,
   );
 
   Map<String, Object?> toJson() => {
@@ -249,6 +256,7 @@ class Attachment {
     'createdAt': _iso(createdAt),
     'durationMs': durationMs,
     'transcript': transcript,
+    if (interrupted) 'interrupted': true,
   };
 
   factory Attachment.fromJson(Object? json) {
@@ -271,6 +279,8 @@ class Attachment {
       createdAt: _time(j, 'createdAt'),
       durationMs: duration,
       transcript: _optStr(j, 'transcript'),
+      // Older files have none: complete.
+      interrupted: _bool(j, 'interrupted'),
     );
   }
 }
@@ -775,6 +785,7 @@ class Quest {
     this.note,
     this.stage = QuestStage.ready,
     this.projectId,
+    this.doneFrom,
   });
 
   final String id;
@@ -797,6 +808,21 @@ class Quest {
   /// The [MonthProject.id] this quest belongs to, if any (current or past).
   final String? projectId;
 
+  /// For a completed one-off: the lane it was in when it was completed
+  /// (Later, Ready or Doing), so reopening it — the checkbox, Today — puts
+  /// it back there instead of in Ready. Null = Ready. Never [QuestStage.done];
+  /// null whenever the quest is open, and for daily quests.
+  final QuestStage? doneFrom;
+
+  /// The lane an open quest shows: its stored stage, or for a stored
+  /// [QuestStage.done] the lane it was completed from.
+  QuestStage get _openLane =>
+      stage == QuestStage.done ? (doneFrom ?? QuestStage.ready) : stage;
+
+  /// What [doneFrom] keeps for [lane]: Later or Doing; Ready is null.
+  static QuestStage? _keptLane(QuestStage lane) =>
+      lane == QuestStage.later || lane == QuestStage.doing ? lane : null;
+
   /// One-off quests are done once completed on any day; daily quests per day.
   bool isDoneOn(String day) => recurrence == QuestRecurrence.none
       ? completedOn.isNotEmpty
@@ -807,26 +833,31 @@ class Quest {
   /// it was completed), else the stored stage (never done).
   QuestStage laneOn(String day) {
     if (isDoneOn(day)) return QuestStage.done;
-    return stage == QuestStage.done ? QuestStage.ready : stage;
+    return _openLane;
   }
 
   /// This quest with its stage kept in step with its completion: a one-off
-  /// is [QuestStage.done] exactly when completed; a daily quest is never
-  /// stored as done.
+  /// is [QuestStage.done] exactly when completed (remembering in [doneFrom]
+  /// the lane it was completed from); a daily quest is never stored as done.
   Quest normalized() {
     final QuestStage next;
+    final QuestStage? from;
     if (recurrence == QuestRecurrence.none && completedOn.isNotEmpty) {
       next = QuestStage.done;
+      from = stage == QuestStage.done ? doneFrom : _keptLane(stage);
     } else {
-      next = stage == QuestStage.done ? QuestStage.ready : stage;
+      next = _openLane;
+      from = null;
     }
-    return next == stage ? this : copyWith(stage: next);
+    if (next == stage && from == doneFrom) return this;
+    return copyWith(stage: next, doneFrom: () => from);
   }
 
   /// Completes ([done]) or reopens this quest for local [day], as the
   /// checkbox does: a one-off completed is done on every day (reopened, on
-  /// none); a daily quest gains or loses that day only, its history kept.
-  /// A daily quest completed returns to [QuestStage.ready] for the next day.
+  /// none, back in the lane it was completed from); a daily quest gains or
+  /// loses that day only, its history kept. A daily quest completed returns
+  /// to [QuestStage.ready] for the next day.
   Quest completedFor(String day, bool done) {
     if (recurrence == QuestRecurrence.daily) {
       return copyWith(
@@ -834,13 +865,20 @@ class Quest {
             ? {...completedOn, day}
             : ({...completedOn}..remove(day)),
         stage: done || stage == QuestStage.done ? QuestStage.ready : stage,
+        doneFrom: () => null,
+      );
+    }
+    if (done) {
+      return copyWith(
+        completedOn: {day},
+        stage: QuestStage.done,
+        doneFrom: () => stage == QuestStage.done ? doneFrom : _keptLane(stage),
       );
     }
     return copyWith(
-      completedOn: done ? {day} : const {},
-      stage: done
-          ? QuestStage.done
-          : (stage == QuestStage.done ? QuestStage.ready : stage),
+      completedOn: const {},
+      stage: _openLane,
+      doneFrom: () => null,
     );
   }
 
@@ -859,6 +897,7 @@ class Quest {
             ? ({...completedOn}..remove(day))
             : const {},
         stage: target,
+        doneFrom: () => null,
       );
     }
     return copyWith(stage: target);
@@ -872,6 +911,7 @@ class Quest {
     String? Function()? note,
     QuestStage? stage,
     String? Function()? projectId,
+    QuestStage? Function()? doneFrom,
   }) => Quest(
     id: id,
     title: title ?? this.title,
@@ -883,6 +923,7 @@ class Quest {
     note: note != null ? note() : this.note,
     stage: stage ?? this.stage,
     projectId: projectId != null ? projectId() : this.projectId,
+    doneFrom: doneFrom != null ? doneFrom() : this.doneFrom,
   );
 
   Map<String, Object?> toJson() => {
@@ -896,6 +937,7 @@ class Quest {
     'note': note,
     'stage': stage.name,
     'projectId': projectId,
+    'doneFrom': doneFrom?.name,
   };
 
   factory Quest.fromJson(Object? json) {
@@ -928,6 +970,19 @@ class Quest {
       // Older files have none: ready, or done for a completed one-off.
       stage: _lenientEnum(QuestStage.values, j, 'stage', QuestStage.ready),
       projectId: _optStr(j, 'projectId'),
+      // Older files have none (reopened quests go back to Ready).
+      doneFrom: switch (j['doneFrom']) {
+        null => null,
+        _ => switch (_lenientEnum(
+          QuestStage.values,
+          j,
+          'doneFrom',
+          QuestStage.ready,
+        )) {
+          QuestStage.done || QuestStage.ready => null,
+          final lane => lane,
+        },
+      },
     ).normalized();
   }
 }
@@ -1557,6 +1612,52 @@ class AppData {
     return const [];
   }
 
+  /// The user's own words on the entry [entryId] — what a pinned passage
+  /// may be copied from: a note's title and body, an experiment's note, an
+  /// attempt and its learning, and the transcripts of its recordings.
+  /// Empty when there is no such entry.
+  List<String> entryWords(String entryId) {
+    Iterable<String> transcripts(List<Attachment> list) => [
+      for (final a in list)
+        if (a.transcript != null) a.transcript!,
+    ];
+    for (final e in journal) {
+      if (e.id == entryId) {
+        return [?e.title, e.body, ...transcripts(e.attachments)];
+      }
+    }
+    for (final e in experimentLog) {
+      if (e.id == entryId) return [e.note, ...transcripts(e.attachments)];
+    }
+    for (final e in campaignLog) {
+      if (e.id == entryId) {
+        return [e.attempt, e.learning, ...transcripts(e.attachments)];
+      }
+    }
+    return const [];
+  }
+
+  /// This data with its pinned memory still true to its entry: words that
+  /// the entry no longer has (edited away, a transcript changed or removed)
+  /// are never kept on show — a pinned passage is unpinned, a pinned photo
+  /// stays pinned without them. Otherwise unchanged.
+  AppData withPinChecked() {
+    final pin = pinnedMemory;
+    final excerpt = pin?.excerpt;
+    if (pin == null || excerpt == null) return this;
+    if (entryWords(pin.sourceId).any((w) => w.contains(excerpt))) return this;
+    return copyWith(
+      pinnedMemory: () => pin.kind == PinnedKind.photo
+          ? PinnedMemory(
+              kind: pin.kind,
+              sourceId: pin.sourceId,
+              attachmentId: pin.attachmentId,
+              pinnedAt: pin.pinnedAt,
+            )
+          : null,
+    );
+  }
+
   Journey? get currentJourney {
     for (final j in journeys) {
       if (j.id == currentJourneyId) return j;
@@ -1680,6 +1781,33 @@ class AppData {
         tryNoteDrafts[key] = value;
       }
     }
+    final project = j['project'] == null
+        ? null
+        : MonthProject.fromJson(j['project']);
+    var quests = [
+      for (final q in _list(j['quests'], 'quests')) Quest.fromJson(q),
+    ];
+    var campaignLog = [
+      for (final e in _list(j['campaignLog'], 'campaignLog'))
+        BattleLogEntry.fromJson(e),
+    ];
+    // Schema 1 had one month project and no links. Every battle-log attempt
+    // was, by definition (F-061), an attempt at it, and its "project" quests
+    // were its tasks: link them (to its stable legacy id), so finishing it
+    // keeps them in its history. Nothing already linked is touched.
+    if (version == 1 && project != null) {
+      final id = project.id;
+      campaignLog = [
+        for (final e in campaignLog)
+          e.projectId == null ? e.copyWith(projectId: () => id) : e,
+      ];
+      quests = [
+        for (final q in quests)
+          q.projectId == null && q.source == QuestSource.project
+              ? q.copyWith(projectId: () => id)
+              : q,
+      ];
+    }
     return AppData(
       profile: j['profile'] == null ? null : UserProfile.fromJson(j['profile']),
       settings: AppSettings.fromJson(j['settings']),
@@ -1690,10 +1818,8 @@ class AppData {
         for (final v in _list(j['compassHistory'], 'compassHistory'))
           CompassVersion.fromJson(v),
       ],
-      quests: [for (final q in _list(j['quests'], 'quests')) Quest.fromJson(q)],
-      project: j['project'] == null
-          ? null
-          : MonthProject.fromJson(j['project']),
+      quests: quests,
+      project: project,
       journal: [
         for (final e in _list(j['journal'], 'journal'))
           JournalEntry.fromJson(e),
@@ -1714,10 +1840,7 @@ class AppData {
           ReminderPreference.fromJson(r),
       ],
       lessonsRead: lessons,
-      campaignLog: [
-        for (final e in _list(j['campaignLog'], 'campaignLog'))
-          BattleLogEntry.fromJson(e),
-      ],
+      campaignLog: campaignLog,
       persona: j['persona'] == null ? null : Persona.fromJson(j['persona']),
       avatarUnlocked: unlocked,
       attemptDraft: j['attemptDraft'] == null

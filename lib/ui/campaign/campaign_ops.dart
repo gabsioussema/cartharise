@@ -83,7 +83,8 @@ extension CampaignOps on AppState {
   }
 
   /// Corrects an attempt (its day stays the day it was recorded; its
-  /// project and attachments are kept).
+  /// project and attachments are kept). Words pinned from it that it no
+  /// longer has are unpinned ([AppData.withPinChecked]).
   Future<void> editAttempt(
     String id, {
     required String attempt,
@@ -94,19 +95,21 @@ extension CampaignOps on AppState {
     }
     final at = now();
     return mutate(
-      (d) => d.copyWith(
-        campaignLog: [
-          for (final e in d.campaignLog)
-            if (e.id == id)
-              e.copyWith(
-                attempt: attempt,
-                learning: learning,
-                editedAt: () => at,
-              )
-            else
-              e,
-        ],
-      ),
+      (d) => d
+          .copyWith(
+            campaignLog: [
+              for (final e in d.campaignLog)
+                if (e.id == id)
+                  e.copyWith(
+                    attempt: attempt,
+                    learning: learning,
+                    editedAt: () => at,
+                  )
+                else
+                  e,
+            ],
+          )
+          .withPinChecked(),
     );
   }
 
@@ -208,16 +211,23 @@ extension CampaignOps on AppState {
   }
 
   /// Corrects the note of a tried experiment (exactly as typed; '' = none).
-  /// Its day stays the day it was tried; its attachments are kept.
+  /// Its day stays the day it was tried; its attachments are kept. Words
+  /// pinned from it that it no longer has are unpinned
+  /// ([AppData.withPinChecked]).
   Future<void> editExperimentEntry(String id, {required String note}) {
     final at = now();
     return mutate(
-      (d) => d.copyWith(
-        experimentLog: [
-          for (final e in d.experimentLog)
-            if (e.id == id) e.copyWith(note: note, editedAt: () => at) else e,
-        ],
-      ),
+      (d) => d
+          .copyWith(
+            experimentLog: [
+              for (final e in d.experimentLog)
+                if (e.id == id)
+                  e.copyWith(note: note, editedAt: () => at)
+                else
+                  e,
+            ],
+          )
+          .withPinChecked(),
     );
   }
 

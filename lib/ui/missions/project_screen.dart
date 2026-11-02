@@ -21,7 +21,9 @@ import 'project_ops.dart';
 /// picture (a painted scene or a photo), status, milestones and a
 /// retrospective — all autosaved. Nothing is stored until the user changes
 /// something. **Finish this project** keeps it in the history (with its
-/// milestones, tasks and attempts); the history is one tap away.
+/// milestones, tasks and attempts); the history is one tap away. **Delete
+/// this project** is plainly destructive and offers "Finish and keep
+/// instead" in its question.
 class ProjectScreen extends StatefulWidget {
   const ProjectScreen({super.key});
 
@@ -218,20 +220,36 @@ class _ProjectScreenState extends State<ProjectScreen> {
     );
   }
 
-  Future<void> _clearProject() async {
+  /// "Delete this project": gone for good (milestones, notes, photo), so it
+  /// says so plainly and offers the keeping way in the same question —
+  /// **Finish and keep instead** moves it to the history like **Finish
+  /// this project**. Nothing is dropped without that choice.
+  Future<void> _deleteProject() async {
     final l = AppLocalizations.of(context);
-    final ok = await confirmDialog(
+    final choice = await confirmOrAlternativeDialog(
       context,
       title: l.missionsProjectClearTitle,
       body: _state.data.project?.art?.photo != null
           ? l.projectsClearBodyPhoto
           : l.missionsProjectClearBody,
       action: l.missionsProjectClearConfirm,
+      alternative: l.projectsDeleteFinishInstead,
       destructive: true,
     );
-    if (!ok) return;
+    if (!mounted) return;
+    switch (choice) {
+      case DialogChoice.cancel:
+        return;
+      case DialogChoice.alternative:
+        await _finish();
+        return;
+      case DialogChoice.confirm:
+        break;
+    }
     _titleSave.flush();
     await _state.saveProject(null);
+    if (!mounted || _reportFailedSave()) return;
+    _snack(l.projectsDeletedCurrent);
   }
 
   @override
@@ -447,9 +465,10 @@ class _ProjectScreenState extends State<ProjectScreen> {
                       const SizedBox(height: 8),
                       Center(
                         child: TextLinkButton(
+                          key: const ValueKey('project-delete'),
                           label: l.missionsProjectClear,
-                          icon: Icons.restart_alt,
-                          onPressed: _clearProject,
+                          icon: Icons.delete_outline,
+                          onPressed: _deleteProject,
                         ),
                       ),
                     ],

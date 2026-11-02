@@ -361,6 +361,45 @@ void main() {
       await captureScreenshot(tester, 'projects_13_collection_$b');
     });
 
+    // Step 2 audit fixes: deleting offers "Finish and keep instead"; a
+    // painted scene over a photo asks first.
+    testWidgets('delete asks, offering to finish and keep ($b)', (
+      tester,
+    ) async {
+      await pump(tester, const ProjectScreen(), size: const Size(390, 1900));
+      await tap(tester, 'project-delete');
+      await captureScreenshot(tester, 'projects_15_delete_$b');
+    });
+
+    testWidgets('delete asks at 320 dp and 200 % text ($b)', (tester) async {
+      photo = (await tester.runAsync(_photoPng))!;
+      await pumpCartha(
+        tester,
+        data: _data(),
+        home: const ProjectScreen(),
+        size: const Size(320, 568),
+        textScale: 2,
+        brightness: brightness,
+        content: englishContent,
+      );
+      await tap(tester, 'project-delete');
+      await captureScreenshot(tester, 'projects_16_delete_small_$b');
+    });
+
+    testWidgets('a scene over a photo asks first ($b)', (tester) async {
+      await pump(
+        tester,
+        const ProjectScreen(),
+        data: _data(
+          project: _current(art: ProjectArt.photo(_photo('att_now'))),
+        ),
+        size: const Size(390, 1100),
+      );
+      await tap(tester, 'project-art-change');
+      await tap(tester, 'project-art-sunrise');
+      await captureScreenshot(tester, 'projects_17_photo_confirm_$b');
+    });
+
     testWidgets('a small phone at 200 % text ($b)', (tester) async {
       photo = (await tester.runAsync(_photoPng))!;
       await pumpCartha(

@@ -250,12 +250,15 @@ class _RecorderSheetState extends State<RecorderSheet> {
       return;
     }
     final length = result?.duration ?? elapsed;
+    final cutShort = interrupted || (result?.interrupted ?? false);
     final Attachment recording;
     try {
-      recording = await store.adoptRecording(
+      final adopted = await store.adoptRecording(
         file,
         durationMs: length.inMilliseconds,
       );
+      // Kept as "Partial" on its entry, not only in this sheet.
+      recording = cutShort ? adopted.copyWith(interrupted: true) : adopted;
     } on AttachmentException catch (e) {
       await _discardQuietly(file);
       _fail(switch (e.reason) {
@@ -279,7 +282,7 @@ class _RecorderSheetState extends State<RecorderSheet> {
     }
     _kept.add(recording);
     _allSaved = _allSaved && saved;
-    _lastInterrupted = interrupted || (result?.interrupted ?? false);
+    _lastInterrupted = cutShort;
     _lastLength = length;
     if (_lastInterrupted) {
       _say(_l.mediaRecorderInterrupted(spokenDuration(_l, length)));

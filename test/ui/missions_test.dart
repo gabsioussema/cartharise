@@ -637,9 +637,12 @@ void main() {
       expect(h.state.data.project!.retrospective, ' Worked: mornings. ');
 
       await tester.pump(const Duration(seconds: 5));
-      await tapVisible(tester, find.text('Start a new project'));
-      expect(find.text('Start a new project?'), findsOneWidget);
-      await tester.tap(find.text('Clear project'));
+      // Deleting is plainly destructive (finishing keeps it: see
+      // projects_test); only an explicit "Delete" drops it.
+      await tapVisible(tester, find.text('Delete this project'));
+      expect(find.text('Delete this project?'), findsOneWidget);
+      expect(find.text('Finish and keep instead'), findsOneWidget);
+      await tester.tap(find.byKey(const ValueKey('dialog-confirm')));
       await pumpFrames(tester);
       expect(h.state.data.project, isNull);
       expect(h.state.compass.monthProject, 'Ship');

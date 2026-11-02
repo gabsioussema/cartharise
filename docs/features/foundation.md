@@ -207,6 +207,13 @@ provided above `MaterialApp`; `AppNav` helpers: `switchTab`, `tabWidget`,
 `openReminders`, `openData`. The Compass tab should listen to
 `ShellController.compassSection` and reset it to null after switching.
 
+Tab names stay whole on one line (never "Compas / s" at 320 dp and 200 %
+text): `RootShell.labelScale` measures them and scales the labels as large
+as the device asks (up to the bar's own 1.3× cap) where they fit, a little
+smaller on narrow phones; if they couldn't fit even at 0.85× the labels are
+hidden (`alwaysHide`), each tab keeping its tooltip and spoken name
+(`test/ui/shell_test.dart`, step 2 audit S2-m8).
+
 ## Tests
 
 | File | Covers |

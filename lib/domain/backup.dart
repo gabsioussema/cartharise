@@ -37,8 +37,23 @@ const String kBackupDataEntry = 'data.json';
 /// The folder of attachment files inside a v2 backup.
 const String kBackupAttachmentsFolder = 'attachments/';
 
-/// Largest backup file accepted for a restore.
+/// Largest backup file accepted for a restore. Export refuses to make a
+/// larger one ([BackupTooLargeException]): a backup that could never be
+/// restored is never offered as one.
 const int kMaxBackupBytes = 256 * 1024 * 1024;
+
+/// The photos and recordings (or the whole `.zip`) are more than a restore
+/// accepts ([kMaxBackupBytes]); nothing was made. Say so and offer the
+/// words-only JSON backup instead — never "exported".
+class BackupTooLargeException implements Exception {
+  const BackupTooLargeException(this.bytes);
+
+  /// How many bytes it would have taken (at least).
+  final int bytes;
+
+  @override
+  String toString() => 'BackupTooLargeException';
+}
 
 /// Most bytes a v2 backup may unpack to (guards against zip bombs).
 const int kMaxBackupUnpackedBytes = 512 * 1024 * 1024;

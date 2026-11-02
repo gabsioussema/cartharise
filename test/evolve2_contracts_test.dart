@@ -197,16 +197,25 @@ void main() {
   });
 
   group('quest stages: lanes per day (pure)', () {
-    test('a one-off: its stage until completed, then done on every day', () {
+    test('a one-off: its stage until completed, then done on every day; '
+        'reopened, back in the lane it was completed from', () {
       final q = _quest('q', stage: QuestStage.doing);
       expect(q.laneOn(_day1), QuestStage.doing);
       final finished = q.completedFor(_day1, true);
       expect(finished.stage, QuestStage.done);
+      expect(finished.doneFrom, QuestStage.doing);
       expect(finished.laneOn(_day1), QuestStage.done);
       expect(finished.laneOn(_day2), QuestStage.done);
       final reopened = finished.completedFor(_day2, false);
       expect(reopened.completedOn, isEmpty);
-      expect(reopened.laneOn(_day2), QuestStage.ready);
+      // Step 2 audit (S2-m6): the user's placement is kept (was Ready).
+      expect(reopened.laneOn(_day2), QuestStage.doing);
+      expect(reopened.stage, QuestStage.doing);
+      expect(reopened.doneFrom, isNull);
+      // From Ready (or an older file) it goes back to Ready.
+      final plain = _quest('r').completedFor(_day1, true);
+      expect(plain.doneFrom, isNull);
+      expect(plain.completedFor(_day1, false).laneOn(_day1), QuestStage.ready);
     });
 
     test('a daily quest: done on the day it was done, ready the next day, '
@@ -378,7 +387,8 @@ void main() {
       await state.setQuestDone(q.id, true);
       expect(state.questById(q.id)!.stage, QuestStage.done);
       await state.setQuestDone(q.id, false);
-      expect(state.questById(q.id)!.stage, QuestStage.ready);
+      // Step 2 audit (S2-m6): unticked, it returns to its own lane.
+      expect(state.questById(q.id)!.stage, QuestStage.later);
       expect(
         () => state.addQuest('x', stage: QuestStage.done),
         throwsArgumentError,

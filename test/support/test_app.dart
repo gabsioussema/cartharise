@@ -120,6 +120,8 @@ Future<void> loadCarthaFonts() async {
 /// * [attachments] — photos and recordings already "on the phone" (files
 ///   the saved data names must be in it, or the load's cleanup keeps only
 ///   the named ones).
+/// * [media] — the photo picker (e.g. with a `lostPhoto` the camera hands
+///   back at launch).
 ///
 /// The boot loader animates forever, so this pumps a fixed number of frames
 /// instead of `pumpAndSettle`; do the same while a `CarthaLoader` is visible.
@@ -138,6 +140,7 @@ Future<CarthaHarness> pumpCartha(
   Duration readDelay = Duration.zero,
   int frames = 6,
   MemoryAttachmentStore? attachments,
+  FakeMediaPicker? media,
 }) async {
   await tester.runAsync(loadCarthaFonts);
   tester.view.physicalSize = size;
@@ -165,7 +168,7 @@ Future<CarthaHarness> pumpCartha(
   final clock = now ?? kTestNow;
   final attachmentStore =
       attachments ?? MemoryAttachmentStore(clock: () => clock);
-  final media = FakeMediaPicker();
+  final picker = media ?? FakeMediaPicker();
   final recorder = FakeVoiceRecorder(store: attachmentStore);
   final player = FakeVoicePlayer();
   final state = AppState(
@@ -182,7 +185,7 @@ Future<CarthaHarness> pumpCartha(
       child: CarthaApp(
         state: state,
         fileShare: files,
-        mediaPicker: media,
+        mediaPicker: picker,
         voiceRecorder: recorder,
         voicePlayer: player,
         shell: controller,
@@ -201,7 +204,7 @@ Future<CarthaHarness> pumpCartha(
     files: files,
     shell: controller,
     attachments: attachmentStore,
-    media: media,
+    media: picker,
     recorder: recorder,
     player: player,
   );

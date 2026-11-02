@@ -357,5 +357,93 @@ void main() {
       await _tap(tester, _key('media-add-photo'));
       await captureScreenshot(tester, 'media_12_photo_source_$suffix');
     });
+
+    // Step 2 audit fixes: what was kept from before waits on Today; a
+    // recording cut short stays "Partial"; a backup too large to restore
+    // offers the words only.
+    testWidgets('media kept from before on Today $suffix', (tester) async {
+      final files = await _files(tester);
+      final cut = await files.newRecordingPath();
+      files.writeRecording(cut, [7, 7, 7]);
+      files.restart();
+      files.sources['/picked/lost.png'] = files.files['p2.png']!;
+      await pumpCartha(
+        tester,
+        brightness: b,
+        data: _data(),
+        content: englishContent,
+        attachments: files,
+        media: FakeMediaPicker()..lostPhoto = '/picked/lost.png',
+      );
+      await pumpFrames(tester);
+      await captureScreenshot(tester, 'media_13_recovered_$suffix');
+    });
+
+    testWidgets('media kept from before small $suffix', (tester) async {
+      final files = await _files(tester);
+      final cut = await files.newRecordingPath();
+      files.writeRecording(cut, [7, 7, 7]);
+      files.restart();
+      await pumpCartha(
+        tester,
+        brightness: b,
+        data: _data(),
+        content: englishContent,
+        attachments: files,
+        size: const Size(320, 568),
+        textScale: 2,
+      );
+      await pumpFrames(tester);
+      await captureScreenshot(tester, 'media_14_recovered_small_$suffix');
+    });
+
+    testWidgets('media partial voice note $suffix', (tester) async {
+      final data = _data();
+      await pump(
+        tester,
+        home: const JournalEntryScreen(entryId: 'n2'),
+        data: data.copyWith(
+          journal: [
+            for (final e in data.journal)
+              e.id == 'n2'
+                  ? e.copyWith(
+                      attachments: [
+                        for (final a in e.attachments)
+                          a.copyWith(interrupted: true),
+                      ],
+                    )
+                  : e,
+          ],
+        ),
+      );
+      await captureScreenshot(tester, 'media_15_partial_$suffix');
+    });
+
+    testWidgets('media backup too large $suffix', (tester) async {
+      final files = _TooLarge();
+      for (final name in ['p1.png', 'p2.png', 'p3.png', 'v1.m4a', 'v2.m4a']) {
+        files.files[name] = Uint8List.fromList([1]);
+      }
+      await pumpCartha(
+        tester,
+        brightness: b,
+        data: _data(),
+        content: englishContent,
+        attachments: files,
+        home: const DataScreen(),
+      );
+      await pumpFrames(tester);
+      await _tap(tester, _key('data-export'));
+      await captureScreenshot(tester, 'media_16_backup_too_large_$suffix');
+    });
   }
+}
+
+/// Files that together are more than a restore accepts.
+class _TooLarge extends MemoryAttachmentStore {
+  _TooLarge() : super(clock: () => kTestNow);
+
+  @override
+  Future<int> sizeOfFile(String fileName) async =>
+      files.containsKey(fileName) ? 80 * 1024 * 1024 : 0;
 }

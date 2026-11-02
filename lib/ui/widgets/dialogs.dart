@@ -45,6 +45,58 @@ Future<bool> confirmDialog(
   return ok ?? false;
 }
 
+/// What the user chose in [confirmOrAlternativeDialog].
+enum DialogChoice { cancel, alternative, confirm }
+
+/// Like [confirmDialog], with a gentler [alternative] offered beside the
+/// [action] (e.g. "Finish and keep instead" next to "Delete"), so the
+/// keeping way is one tap away before anything is lost. Dismissing counts
+/// as [DialogChoice.cancel].
+Future<DialogChoice> confirmOrAlternativeDialog(
+  BuildContext context, {
+  required String title,
+  required String body,
+  required String action,
+  required String alternative,
+  bool destructive = false,
+}) async {
+  final l = AppLocalizations.of(context);
+  final choice = await showDialog<DialogChoice>(
+    context: context,
+    builder: (context) {
+      final p = CarthaPalette.of(context);
+      return AlertDialog(
+        scrollable: true,
+        title: Text(title),
+        content: Text(body),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, DialogChoice.cancel),
+            child: Text(l.cancel),
+          ),
+          OutlinedButton(
+            key: const ValueKey('dialog-alternative'),
+            onPressed: () => Navigator.pop(context, DialogChoice.alternative),
+            child: Text(alternative),
+          ),
+          FilledButton(
+            key: const ValueKey('dialog-confirm'),
+            style: destructive
+                ? FilledButton.styleFrom(
+                    backgroundColor: p.error,
+                    foregroundColor: p.onError,
+                  )
+                : null,
+            onPressed: () => Navigator.pop(context, DialogChoice.confirm),
+            child: Text(action),
+          ),
+        ],
+      );
+    },
+  );
+  return choice ?? DialogChoice.cancel;
+}
+
 /// Asks for one line (or a few) of text. Returns the text exactly as typed,
 /// or null if cancelled.
 ///

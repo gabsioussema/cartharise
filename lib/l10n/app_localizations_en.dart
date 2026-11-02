@@ -1708,13 +1708,26 @@ class AppLocalizationsEn extends AppLocalizations {
       'This entry isn\'t here any more. Nothing was added.';
 
   @override
-  String get mediaLostPhoto => 'A photo you took earlier wasn\'t added yet.';
+  String get mediaRecoveredPhoto => 'A photo you took wasn\'t added yet.';
 
   @override
-  String get mediaLostPhotoAdd => 'Add it here';
+  String get mediaRecoveredRecording =>
+      'A recording was cut off when the app closed. It may be incomplete.';
 
   @override
-  String get mediaLostPhotoDiscard => 'Discard';
+  String get mediaRecoveredKeep => 'Keep in a new note';
+
+  @override
+  String get mediaRecoveredDiscard => 'Discard';
+
+  @override
+  String get mediaRecoveredDiscardTitle => 'Discard it?';
+
+  @override
+  String get mediaRecoveredDiscardBody => 'It\'s deleted from this phone.';
+
+  @override
+  String get mediaRecoveredKept => 'Kept in a new note in your Journal.';
 
   @override
   String get mediaDismiss => 'Dismiss';
@@ -1969,7 +1982,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mediaDataTooLarge =>
-      'Your photos and recordings take more than a backup can hold (256 MB). Remove some for a complete backup.';
+      'Photos and recordings are over 256 MB, too large to restore. Export saves your words only; remove some for a full backup.';
+
+  @override
+  String get mediaBackupTooLargeTitle => 'Too large to restore';
+
+  @override
+  String get mediaBackupTooLargeBody =>
+      'Your photos and recordings are over 256 MB, more than a backup can bring back. Export your words and settings only?';
+
+  @override
+  String get mediaBackupWordsOnly => 'Export words only';
+
+  @override
+  String get mediaBackupWordsShared =>
+      'Words and settings shared. Photos and recordings aren\'t in it.';
 
   @override
   String get mediaDataImportFormats =>
@@ -2362,17 +2389,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get missionsRetroHint => 'Your notes';
 
   @override
-  String get missionsProjectClear => 'Start a new project';
+  String get missionsProjectClear => 'Delete this project';
 
   @override
-  String get missionsProjectClearTitle => 'Start a new project?';
+  String get missionsProjectClearTitle => 'Delete this project?';
 
   @override
   String get missionsProjectClearBody =>
-      'Clears this project\'s title, milestones and notes. Your Compass stays.';
+      'Its title, milestones and notes go for good. Your Compass, tasks and attempts stay.';
 
   @override
-  String get missionsProjectClearConfirm => 'Clear project';
+  String get missionsProjectClearConfirm => 'Delete';
 
   @override
   String get missionsPathTitle => '30-day path';
@@ -2974,7 +3001,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get projectsClearBodyPhoto =>
-      'Clears this project\'s title, milestones, notes and photo. Your Compass stays.';
+      'Its title, milestones, notes and photo go for good. Your Compass, tasks and attempts stay.';
+
+  @override
+  String get projectsDeleteFinishInstead => 'Finish and keep instead';
+
+  @override
+  String get projectsDeletedCurrent => 'Project deleted';
 
   @override
   String projectsPictureLabel(String name) {

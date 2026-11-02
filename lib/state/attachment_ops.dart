@@ -67,14 +67,16 @@ extension AttachmentOps on AppState {
         }),
         entryId,
         attachmentId: attachmentId,
-      ),
+        // Words pinned from its transcript go with it.
+      ).withPinChecked(),
     );
     await releaseAttachments(removed);
   }
 
   /// Sets the user's own transcript of a recording, exactly as typed (null
-  /// removes it). Never filled in by the app. Throws [ArgumentError] for an
-  /// attachment the entry doesn't have.
+  /// removes it). Never filled in by the app; words pinned from the old
+  /// transcript that are gone now are unpinned ([AppData.withPinChecked]).
+  /// Throws [ArgumentError] for an attachment the entry doesn't have.
   Future<void> setAttachmentTranscript(
     AttachmentHolder holder,
     String entryId,
@@ -93,7 +95,7 @@ extension AttachmentOps on AppState {
             else
               a,
         ];
-      }),
+      }).withPinChecked(),
     );
   }
 
@@ -137,29 +139,8 @@ extension AttachmentOps on AppState {
   PinnedMemory? get pinnedMemory => data.pinnedMemory;
 
   /// The user's own words on the entry [entryId] — what a pinned passage
-  /// may be copied from: a note's title and body, an experiment's note, an
-  /// attempt and its learning, and the transcripts of its recordings.
-  List<String> entryWords(String entryId) {
-    for (final e in data.journal) {
-      if (e.id == entryId) {
-        return [?e.title, e.body, ..._transcripts(e.attachments)];
-      }
-    }
-    for (final e in data.experimentLog) {
-      if (e.id == entryId) return [e.note, ..._transcripts(e.attachments)];
-    }
-    for (final e in data.campaignLog) {
-      if (e.id == entryId) {
-        return [e.attempt, e.learning, ..._transcripts(e.attachments)];
-      }
-    }
-    return const [];
-  }
-
-  static Iterable<String> _transcripts(List<Attachment> list) => [
-    for (final a in list)
-      if (a.transcript != null) a.transcript!,
-  ];
+  /// may be copied from ([AppData.entryWords]).
+  List<String> entryWords(String entryId) => data.entryWords(entryId);
 
   /// Pins one memory (replacing the one pinned before):
   ///

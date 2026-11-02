@@ -11,6 +11,7 @@ import '../../state/attachment_ops.dart';
 import '../campaign/campaign_invite.dart';
 import '../campaign/campaign_ops.dart';
 import '../media/recorder_sheet.dart';
+import '../media/recovered_media_card.dart';
 import '../missions/missions_logic.dart';
 import '../missions/quest_tile.dart' show questXpOpenOn;
 import '../nav.dart';
@@ -85,6 +86,10 @@ class TodayTab extends StatelessWidget {
                   const SaveIndicator(),
                   const SizedBox(height: 16),
                 ],
+                // A recording cut off when the app closed, or a photo the
+                // camera handed back: keep or discard (rare; nothing when
+                // there is none).
+                const RecoveredMediaCard(),
                 const NextActionCard(),
                 // The one-time Campaign invitation (new profiles start with
                 // the game off), right below the next action.

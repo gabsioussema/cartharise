@@ -405,34 +405,72 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    for (final add in [true, false]) {
-      testWidgets('a photo taken while the app was closed is offered back '
-          '(${add ? 'added' : 'discarded'})', (tester) async {
+    // Step 2 audit (S2-m4): the photo is recovered once at app level and
+    // offered on Today — never handed to whichever entry opens first (it
+    // may have been taken for another note, a try or the project picture).
+    for (final keep in [true, false]) {
+      testWidgets('a photo the camera handed back after the app closed is '
+          'offered on Today, not on a note (${keep ? 'kept' : 'discarded'})', (
+        tester,
+      ) async {
+        const lost = '/picked/lost.jpg';
+        final media = FakeMediaPicker()..lostPhoto = lost;
+        final files = _files()..sources[lost] = [4, 4];
         final h = await pumpCartha(
           tester,
           data: _data(),
-          home: _opener(
-            (c) => Navigator.of(c).push(
-              MaterialPageRoute<void>(
-                builder: (_) => const JournalEntryScreen(entryId: 'n1'),
-              ),
-            ),
-          ),
+          attachments: files,
+          media: media,
         );
-        h.media.lostPhoto = '/picked/lost.jpg';
-        h.attachments.sources['/picked/lost.jpg'] = [4, 4];
-        await _tap(tester, _key('open'));
-        expect(_key('media-lost-photo'), findsOneWidget);
-        expect(
-          find.text("A photo you took earlier wasn't added yet."),
-          findsOneWidget,
-        );
-        await _tap(tester, find.text(add ? 'Add it here' : 'Discard'));
-        expect(_key('media-lost-photo'), findsNothing);
-        expect(_noteMedia(h), hasLength(add ? 1 : 0));
-        expect(h.media.released, ['/picked/lost.jpg']);
+        await pumpFrames(tester);
+        expect(_key('recovered-media'), findsOneWidget);
+        expect(find.text("A photo you took wasn't added yet."), findsOneWidget);
+        expect(h.media.released, [lost], reason: 'the picker copy goes');
+        final held = h.state.recoveredMedia.single;
+        expect(held.kind, AttachmentKind.photo);
+        expect(files.files[held.fileName], [4, 4]);
+        expect(_noteMedia(h), isEmpty, reason: 'never put on a note by itself');
+
+        if (keep) {
+          await _tap(tester, _key('recovered-keep-${held.id}'));
+          final note = h.state.data.journal.first;
+          expect(note.id, isNot('n1'));
+          expect(note.body, '');
+          expect(note.attachments.single.fileName, held.fileName);
+          expect(h.store.saved!.journal.first.attachments, hasLength(1));
+          expect(find.text('Kept in a new note in your Journal.'), findsOne);
+          expect(files.held, isEmpty, reason: 'settled once saved');
+        } else {
+          await _tap(tester, _key('recovered-discard-${held.id}'));
+          expect(find.text('Discard it?'), findsOneWidget);
+          await _tap(tester, find.widgetWithText(FilledButton, 'Discard'));
+          expect(files.files, isEmpty);
+          expect(h.state.data.journal.map((e) => e.id), ['n1']);
+        }
+        expect(h.state.recoveredMedia, isEmpty);
+        expect(find.text("A photo you took wasn't added yet."), findsNothing);
       });
     }
+
+    testWidgets('a held photo nobody decided about is offered again at the '
+        'next launch', (tester) async {
+      const lost = '/picked/lost.jpg';
+      final files = _files()..sources[lost] = [4, 4];
+      await pumpCartha(
+        tester,
+        data: _data(),
+        attachments: files,
+        media: FakeMediaPicker()..lostPhoto = lost,
+      );
+      await pumpFrames(tester);
+      expect(files.held, hasLength(1));
+      // The app closes; the camera has nothing more to hand back.
+      await tester.pumpWidget(const SizedBox());
+      final again = await pumpCartha(tester, data: _data(), attachments: files);
+      await pumpFrames(tester);
+      expect(again.state.recoveredMedia, hasLength(1));
+      expect(find.text("A photo you took wasn't added yet."), findsOneWidget);
+    });
   });
 
   // ── Voice notes ──────────────────────────────────────────────────────────
@@ -493,6 +531,8 @@ void main() {
       expect(find.text('Voice note saved.'), findsOneWidget);
       expect(said.last, 'Voice note saved.');
       expect(_key('player-${recording.id}'), findsOneWidget);
+      expect(recording.interrupted, isFalse);
+      expect(_key('voice-partial-${recording.id}'), findsNothing);
     });
 
     testWidgets('a call interrupts: the part recorded is kept and labelled', (
@@ -508,16 +548,67 @@ void main() {
         find.text('Interrupted. The 0:03 recorded before it is saved.'),
         findsOneWidget,
       );
-      expect(find.text('Partial'), findsOneWidget);
+      expect(
+        find.descendant(
+          of: find.byType(RecorderSheet),
+          matching: find.text('Partial'),
+        ),
+        findsOneWidget,
+      );
       expect(
         said.last,
         'Interrupted. The 3 seconds recorded before it is saved.',
       );
-      expect(_noteMedia(h).single.kind, AttachmentKind.audio);
+      final kept = _noteMedia(h).single;
+      expect(kept.kind, AttachmentKind.audio);
+      expect(kept.interrupted, isTrue);
       expect(h.store.saved!.journal.single.attachments, hasLength(1));
+      expect(
+        h.store.saved!.journal.single.attachments.single.interrupted,
+        true,
+      );
       await _tap(tester, _key('recorder-done'));
       expect(find.byType(RecorderSheet), findsNothing);
       expect(find.text('Voice note saved.'), findsOneWidget);
+      // Step 2 audit (S2-m3): once the sheet is closed it still says so,
+      // wherever it plays.
+      expect(_key('voice-partial-${kept.id}'), findsOneWidget);
+      expect(find.text('Partial'), findsOneWidget);
+    });
+
+    testWidgets('the app ended mid-recording (a crash): the recording is '
+        'kept and offered on Today, labelled Partial once kept', (
+      tester,
+    ) async {
+      // A recording was being written when the process ended, with no
+      // pause or hide event and no code run after it (unmounting the
+      // sheet would keep it the normal way): only the file is left.
+      final files = _files();
+      final path = await files.newRecordingPath();
+      files.writeRecording(path, [7, 7, 7]);
+      files.restart();
+      expect(files.files, hasLength(1));
+
+      final h = await pumpCartha(tester, data: _data(), attachments: files);
+      await pumpFrames(tester);
+      expect(files.files, hasLength(1), reason: 'never cleaned as an orphan');
+      final cut = h.state.recoveredMedia.single;
+      expect(cut.kind, AttachmentKind.audio);
+      expect(cut.interrupted, isTrue);
+      expect(
+        find.text(
+          'A recording was cut off when the app closed. It may be '
+          'incomplete.',
+        ),
+        findsOneWidget,
+      );
+      await _tap(tester, _key('recovered-keep-${cut.id}'));
+      final note = h.state.data.journal.first;
+      expect(note.attachments.single.fileName, cut.fileName);
+      expect(note.attachments.single.interrupted, isTrue);
+      expect(h.store.saved!.journal.first.attachments, hasLength(1));
+      await _tap(tester, _key('recovered-open'));
+      expect(_key('voice-partial-${cut.id}'), findsOneWidget);
     });
 
     testWidgets('the app goes to the background: kept right away', (
@@ -1180,6 +1271,45 @@ void main() {
       await tester.pump();
       expect(_key('data-media-too-large'), findsOneWidget);
       expect(find.textContaining('600.0 MB'), findsOneWidget);
+      expect(find.textContaining('too large to restore'), findsOneWidget);
+    });
+
+    testWidgets('over what a restore accepts: no .zip, never "shared"; the '
+        'words only, on a yes, said as words only', (tester) async {
+      final huge = _HugeStore()
+        ..files['p1.jpg'] = Uint8List.fromList([1])
+        ..files['v1.m4a'] = Uint8List.fromList([1]);
+      final h = await pumpCartha(
+        tester,
+        data: withMedia(),
+        attachments: huge,
+        home: const DataScreen(),
+      );
+      await tester.pump();
+      await _tap(tester, _key('data-export'));
+      expect(find.text('Too large to restore'), findsOneWidget);
+      expect(h.files.shared, isEmpty);
+      await _tap(tester, find.widgetWithText(TextButton, 'Cancel'));
+      expect(h.files.shared, isEmpty);
+      expect(find.text('Backup shared.'), findsNothing);
+
+      await _tap(tester, _key('data-export'));
+      await _tap(
+        tester,
+        find.widgetWithText(FilledButton, 'Export words only'),
+      );
+      final words = h.files.shared.single;
+      expect(words.filename, 'cartharise-words-2026-11-03.json');
+      expect(words.mimeType, 'application/json');
+      final back = decodeBackup(words.content);
+      expect(back.journal.single.attachments.map((a) => a.id), ['p1', 'v1']);
+      expect(
+        find.text(
+          "Words and settings shared. Photos and recordings aren't in it.",
+        ),
+        findsOneWidget,
+      );
+      expect(find.text('Backup shared.'), findsNothing);
     });
 
     testWidgets('the .zip carries photos and recordings and restores them '
