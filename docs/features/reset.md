@@ -114,6 +114,16 @@ Top to bottom (one scrolling column; nothing has a fixed height):
 * **Reduced motion** (device or Settings › Motion): no page fade, the example
   expands without `AnimatedSize`, sheets open without animation.
 
+## Voice (step 3)
+
+* **Dictate** under the answer: speak, review, then **Insert** puts the words at the
+  cursor (autosaved like typing). On-device recognition only; otherwise one honest line
+  and **Type instead**.
+* **Listen** beside "What does this mean?" reads the context and the question as shown
+  (softer wording when chosen); **Listen to my answer**, under Dictate once the answer
+  has words, reads it exactly as typed, only on that tap.
+* Details and tests: [`voice.md`](voice.md).
+
 ## Edge cases
 
 * Very long answers (5 000+ characters) with HTML-like text, emoji, RTL

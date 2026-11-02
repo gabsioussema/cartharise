@@ -1630,40 +1630,40 @@ class AppLocalizationsAr extends AppLocalizations {
   String get journalPhaseEvening => 'المساء';
 
   @override
-  String get listenAction => 'استمع';
+  String get listenAction => 'استماع';
 
   @override
-  String get listenStop => 'أوقف القراءة';
+  String get listenStop => 'إيقاف القراءة';
 
   @override
-  String get listenMyNote => 'استمع إلى ملاحظتي';
+  String get listenMyNote => 'الاستماع إلى ملاحظتي';
 
   @override
-  String get listenMyAnswer => 'استمع إلى إجابتي';
+  String get listenMyAnswer => 'الاستماع إلى إجابتي';
 
   @override
   String get listenStarted => 'تجري القراءة بصوت عالٍ.';
 
   @override
-  String get listenStopped => 'توقفت القراءة.';
+  String get listenStopped => 'توقّفت القراءة.';
 
   @override
   String get listenHearHint =>
-      'لا تسمع شيئًا؟ تحقّق من مستوى الصوت ووضع الصامت.';
+      'لا صوت؟ يمكن التحقّق من مستوى الصوت ووضع الصامت.';
 
   @override
   String get listenNoVoice =>
-      'لا يوجد صوت لهذه اللغة على هذا الهاتف. يمكنك إضافة صوت من إعدادات تحويل النص إلى كلام.';
+      'لا يوجد صوت لهذه اللغة على هذا الهاتف. يمكن إضافة صوت من إعدادات تحويل النص إلى كلام.';
 
   @override
   String get listenUnavailable => 'الاستماع غير متاح على هذا الهاتف.';
 
   @override
   String get listenSilent =>
-      'هاتفك في وضع الصامت. شغّل الصوت أو استخدم سماعات الرأس.';
+      'الهاتف في وضع الصامت. يمكن تشغيل الصوت أو استخدام سماعات الرأس.';
 
   @override
-  String get listenFailed => 'تعذّرت القراءة بصوت عالٍ. حاول مرة أخرى.';
+  String get listenFailed => 'تعذّرت القراءة بصوت عالٍ. يمكن المحاولة مجددًا.';
 
   @override
   String get mediaAddPhoto => 'إضافة صورة';
@@ -3746,7 +3746,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get sceneryKeepsakesTitle => 'تذكارات';
 
   @override
-  String get sceneryKeepsakesLine => 'جرّب أيّ تجربة من فصل لتحتفظ بتذكاره.';
+  String get sceneryKeepsakesLine =>
+      'تكفي تجربة واحدة من فصلٍ للاحتفاظ بتذكاره.';
 
   @override
   String sceneryKeepsakeName(String chapter) {
@@ -4104,114 +4105,113 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get voiceDictate => 'Dictate';
+  String get voiceDictate => 'إملاء';
 
   @override
   String voiceDictateInto(String field) {
-    return 'Dictate: $field';
+    return 'إملاء: $field';
   }
 
   @override
-  String get voiceDictateHint =>
-      'Speak, then check the text before it goes in.';
+  String get voiceDictateHint => 'يمكنك التحدّث، ثم مراجعة النص قبل إضافته.';
 
   @override
-  String get voiceSheetTitle => 'Dictate';
+  String get voiceSheetTitle => 'إملاء';
 
   @override
-  String get voiceStarting => 'Getting dictation ready…';
+  String get voiceStarting => 'يجري تجهيز الإملاء…';
 
   @override
-  String get voiceListening => 'Listening';
+  String get voiceListening => 'يجري الاستماع';
 
   @override
-  String get voiceListeningStarted => 'Listening. Tap Stop when you\'re done.';
+  String get voiceListeningStarted =>
+      'يجري الاستماع. عند الانتهاء: زرّ «إيقاف».';
 
   @override
-  String get voiceOnPhone => 'Recognised on this phone. Nothing is sent.';
+  String get voiceOnPhone =>
+      'يجري التعرّف على الكلام في هذا الهاتف. لا يُرسَل شيء.';
 
   @override
-  String get voiceHeardLabel => 'Heard so far';
+  String get voiceHeardLabel => 'ما سُمع حتى الآن';
 
   @override
-  String get voiceSpeakNow => 'Speak. Your words appear here.';
+  String get voiceSpeakNow => 'يمكنك التحدّث الآن. تظهر كلماتك هنا.';
 
   @override
-  String get voiceStop => 'Stop';
+  String get voiceStop => 'إيقاف';
 
   @override
-  String get voiceCancel => 'Cancel';
+  String get voiceCancel => 'إلغاء';
 
   @override
-  String get voiceFinishing => 'Finishing…';
+  String get voiceFinishing => 'يجري الإنهاء…';
 
   @override
-  String get voiceReviewLabel => 'Dictated text';
+  String get voiceReviewLabel => 'النص المُملى';
 
   @override
-  String get voiceReviewHint =>
-      'Edit it if you like. It goes in only when you tap Insert.';
+  String get voiceReviewHint => 'يمكنك تعديله. لا يُضاف إلا بزرّ «إدراج».';
 
   @override
-  String get voiceReviewReady => 'Done listening. Check the text, then Insert.';
+  String get voiceReviewReady =>
+      'انتهى الاستماع. يمكنك مراجعة النص، ثم «إدراج».';
 
   @override
-  String get voiceStoppedEarly =>
-      'Dictation stopped early. Here\'s what was heard.';
+  String get voiceStoppedEarly => 'توقّف الإملاء مبكرًا. هذا ما سُمع.';
 
   @override
-  String get voiceInsert => 'Insert';
+  String get voiceInsert => 'إدراج';
 
   @override
-  String get voiceDiscard => 'Discard';
+  String get voiceDiscard => 'حذف';
 
   @override
-  String get voiceDiscardTitle => 'Discard this text?';
+  String get voiceDiscardTitle => 'حذف هذا النص؟';
 
   @override
-  String get voiceDiscardBody => 'It won\'t be added.';
+  String get voiceDiscardBody => 'لن يُضاف.';
 
   @override
-  String get voiceKeep => 'Keep';
+  String get voiceKeep => 'إبقاء';
 
   @override
-  String get voiceInserted => 'Text inserted.';
+  String get voiceInserted => 'أُدرج النص.';
 
   @override
-  String get voiceUnsupported =>
-      'Dictation in this language isn\'t available on this phone.';
+  String get voiceUnsupported => 'الإملاء بهذه اللغة غير متاح على هذا الهاتف.';
 
   @override
   String get voiceNeedsModel =>
-      'To dictate, add this language for offline speech in your phone\'s settings.';
+      'للإملاء، يمكن إضافة هذه اللغة للتعرّف على الكلام دون اتصال من إعدادات الهاتف.';
 
   @override
   String get voiceNoPermission =>
-      'Microphone or speech access is off. Allow it in Settings to dictate.';
+      'الوصول إلى الميكروفون أو التعرّف على الكلام متوقف. يمكن السماح به من الإعدادات.';
 
   @override
-  String get voiceTooOld =>
-      'Dictation needs a newer system version on this phone.';
+  String get voiceTooOld => 'يحتاج الإملاء إلى إصدار أحدث من نظام الهاتف.';
 
   @override
   String get voiceNothingHeard =>
-      'Nothing was heard. Try again, or type instead.';
+      'لم يُسمع شيء. يمكن المحاولة مجددًا، أو الكتابة بدلًا من ذلك.';
 
   @override
   String get voiceInterrupted =>
-      'Dictation stopped: a call or another app took the microphone.';
+      'توقّف الإملاء: مكالمة أو تطبيق آخر أخذ الميكروفون.';
 
   @override
-  String get voiceBusy => 'Dictation is busy. Try again in a moment.';
+  String get voiceBusy => 'الإملاء مشغول. يمكن المحاولة بعد لحظة.';
 
   @override
-  String get voiceFailed => 'Dictation stopped. Try again, or type instead.';
+  String get voiceFailed =>
+      'توقّف الإملاء. يمكن المحاولة مجددًا، أو الكتابة بدلًا من ذلك.';
 
   @override
-  String get voiceRecordInstead => 'Record instead';
+  String get voiceRecordInstead => 'التسجيل بدلًا من ذلك';
 
   @override
-  String get voiceTypeInstead => 'Type instead';
+  String get voiceTypeInstead => 'الكتابة بدلًا من ذلك';
 
   @override
   String get youTitle => 'أنت';
@@ -4537,22 +4537,23 @@ class AppLocalizationsAr extends AppLocalizations {
   String get youAppearanceTitle => 'المظهر';
 
   @override
-  String get youAppearanceSubtitle => 'الألوان، والفاتح أو الداكن، والحركة.';
+  String get youAppearanceSubtitle =>
+      'اللغة، والألوان، والفاتح أو الداكن، والحركة.';
 
   @override
-  String get youLanguageTitle => 'Language';
+  String get youLanguageTitle => 'اللغة';
 
   @override
-  String get youLanguageSystem => 'Same as phone';
+  String get youLanguageSystem => 'مثل لغة الهاتف';
 
   @override
   String youLanguageSystemNow(String language) {
-    return 'Now: $language';
+    return 'الآن: $language';
   }
 
   @override
   String get youLanguageNote =>
-      'Lessons and questions change too. Your own words stay as you wrote them.';
+      'تتغيّر الدروس والأسئلة أيضًا. تبقى كلماتك كما كتبتها.';
 
   @override
   String get youThemeTitle => 'السمة';

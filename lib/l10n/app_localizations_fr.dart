@@ -1641,15 +1641,15 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get listenHearHint =>
-      'Pas de son ? Vérifiez le volume et le mode silencieux.';
+      'Pas de son ? Vérifiez le volume et le mode silencieux.';
 
   @override
   String get listenNoVoice =>
-      'Aucune voix pour cette langue sur ce téléphone. Vous pouvez en ajouter une dans ses réglages de synthèse vocale.';
+      'Aucune voix pour cette langue sur ce téléphone. Ajoutez-en une dans les réglages de synthèse vocale.';
 
   @override
   String get listenUnavailable =>
-      'L\'écoute n\'est pas disponible sur ce téléphone.';
+      'L’écoute n’est pas disponible sur ce téléphone.';
 
   @override
   String get listenSilent =>
@@ -3715,14 +3715,14 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String sceneryRouteScene(String place) {
     String _temp0 = intl.Intl.selectLogic(place, {
-      'carthage': 'Carthage : des navires dans le port circulaire à l’aube',
+      'carthage': 'Carthage : des navires dans le port circulaire à l’aube',
       'newCarthage':
-          'Carthagène : des maisons blanches au-dessus d’une baie calme',
-      'ebro': 'L’Èbre : un large fleuve qui serpente dans la plaine',
-      'pyrenees': 'Les Pyrénées : un col élevé entre des sommets enneigés',
-      'rhone': 'Le Rhône : un éléphant traverse le fleuve sur un radeau',
-      'alps': 'Les Alpes : un sentier monte vers la neige au clair de lune',
-      'italy': 'L’Italie : des cyprès et des champs au soleil du matin',
+          'Carthagène : des maisons blanches au-dessus d’une baie calme',
+      'ebro': 'L’Èbre : un large fleuve qui serpente dans la plaine',
+      'pyrenees': 'Les Pyrénées : un col élevé entre des sommets enneigés',
+      'rhone': 'Le Rhône : un éléphant traverse le fleuve sur un radeau',
+      'alps': 'Les Alpes : un sentier monte vers la neige au clair de lune',
+      'italy': 'L’Italie : des cyprès et des champs au soleil du matin',
       'other': 'Un paysage sur la route',
     });
     return '$_temp0';
@@ -3764,7 +3764,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String sceneryKeepsakeLabel(String name, String chapter, String status) {
-    return '$name, $chapter : $status';
+    return '$name, $chapter : $status';
   }
 
   @override
@@ -4087,114 +4087,115 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get voiceDictate => 'Dictate';
+  String get voiceDictate => 'Dicter';
 
   @override
   String voiceDictateInto(String field) {
-    return 'Dictate: $field';
+    return 'Dicter : $field';
   }
 
   @override
   String get voiceDictateHint =>
-      'Speak, then check the text before it goes in.';
+      'Parlez, puis vérifiez le texte avant qu’il soit ajouté.';
 
   @override
-  String get voiceSheetTitle => 'Dictate';
+  String get voiceSheetTitle => 'Dictée';
 
   @override
-  String get voiceStarting => 'Getting dictation ready…';
+  String get voiceStarting => 'Préparation de la dictée…';
 
   @override
-  String get voiceListening => 'Listening';
+  String get voiceListening => 'À l’écoute';
 
   @override
-  String get voiceListeningStarted => 'Listening. Tap Stop when you\'re done.';
+  String get voiceListeningStarted => 'À l’écoute. Touchez Arrêter à la fin.';
 
   @override
-  String get voiceOnPhone => 'Recognised on this phone. Nothing is sent.';
+  String get voiceOnPhone => 'Reconnu sur ce téléphone. Rien n’est envoyé.';
 
   @override
-  String get voiceHeardLabel => 'Heard so far';
+  String get voiceHeardLabel => 'Entendu jusqu’ici';
 
   @override
-  String get voiceSpeakNow => 'Speak. Your words appear here.';
+  String get voiceSpeakNow => 'Parlez. Vos mots s’affichent ici.';
 
   @override
-  String get voiceStop => 'Stop';
+  String get voiceStop => 'Arrêter';
 
   @override
-  String get voiceCancel => 'Cancel';
+  String get voiceCancel => 'Annuler';
 
   @override
-  String get voiceFinishing => 'Finishing…';
+  String get voiceFinishing => 'Finalisation…';
 
   @override
-  String get voiceReviewLabel => 'Dictated text';
+  String get voiceReviewLabel => 'Texte dicté';
 
   @override
   String get voiceReviewHint =>
-      'Edit it if you like. It goes in only when you tap Insert.';
+      'Modifiez-le si besoin. Il n’est ajouté qu’avec Insérer.';
 
   @override
-  String get voiceReviewReady => 'Done listening. Check the text, then Insert.';
+  String get voiceReviewReady =>
+      'Écoute terminée. Vérifiez le texte, puis Insérer.';
 
   @override
   String get voiceStoppedEarly =>
-      'Dictation stopped early. Here\'s what was heard.';
+      'La dictée s’est arrêtée tôt. Voici ce qui a été entendu.';
 
   @override
-  String get voiceInsert => 'Insert';
+  String get voiceInsert => 'Insérer';
 
   @override
-  String get voiceDiscard => 'Discard';
+  String get voiceDiscard => 'Abandonner';
 
   @override
-  String get voiceDiscardTitle => 'Discard this text?';
+  String get voiceDiscardTitle => 'Abandonner ce texte ?';
 
   @override
-  String get voiceDiscardBody => 'It won\'t be added.';
+  String get voiceDiscardBody => 'Il ne sera pas ajouté.';
 
   @override
-  String get voiceKeep => 'Keep';
+  String get voiceKeep => 'Garder';
 
   @override
-  String get voiceInserted => 'Text inserted.';
+  String get voiceInserted => 'Texte inséré.';
 
   @override
   String get voiceUnsupported =>
-      'Dictation in this language isn\'t available on this phone.';
+      'La dictée dans cette langue n’est pas disponible sur ce téléphone.';
 
   @override
   String get voiceNeedsModel =>
-      'To dictate, add this language for offline speech in your phone\'s settings.';
+      'Pour dicter, ajoutez cette langue à la reconnaissance vocale hors ligne dans les réglages.';
 
   @override
   String get voiceNoPermission =>
-      'Microphone or speech access is off. Allow it in Settings to dictate.';
+      'L’accès au micro ou à la reconnaissance vocale est coupé. Autorisez-le dans les Réglages.';
 
   @override
   String get voiceTooOld =>
-      'Dictation needs a newer system version on this phone.';
+      'La dictée demande une version plus récente du système.';
 
   @override
   String get voiceNothingHeard =>
-      'Nothing was heard. Try again, or type instead.';
+      'Rien n’a été entendu. Réessayez, ou écrivez plutôt.';
 
   @override
   String get voiceInterrupted =>
-      'Dictation stopped: a call or another app took the microphone.';
+      'Dictée arrêtée : un appel ou une autre app a pris le micro.';
 
   @override
-  String get voiceBusy => 'Dictation is busy. Try again in a moment.';
+  String get voiceBusy => 'La dictée est occupée. Réessayez dans un instant.';
 
   @override
-  String get voiceFailed => 'Dictation stopped. Try again, or type instead.';
+  String get voiceFailed => 'Dictée arrêtée. Réessayez, ou écrivez plutôt.';
 
   @override
-  String get voiceRecordInstead => 'Record instead';
+  String get voiceRecordInstead => 'Enregistrer plutôt';
 
   @override
-  String get voiceTypeInstead => 'Type instead';
+  String get voiceTypeInstead => 'Écrire plutôt';
 
   @override
   String get youTitle => 'Vous';
@@ -4293,7 +4294,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get youLicencesHint =>
-      'Dont les polices Inter et Cinzel (SIL Open Font License)';
+      'Dont les polices Inter, Cinzel et Noto Sans Arabic (SIL Open Font License)';
 
   @override
   String youLegalese(String title, String author) {

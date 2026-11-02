@@ -185,9 +185,11 @@ void main() {
       await tester.enterText(find.byType(TextField), 'Typed with keys');
       await tester.pump(const Duration(seconds: 1));
 
-      // Dictate (step 3) follows the field it fills.
+      // Dictate (step 3) follows the field it fills, then Listen to my
+      // answer (step 3 › H: shown once the answer has words).
       final order = [
         'Dictate',
+        'Listen to my answer',
         'Save & continue',
         'Back',
         'Skip for now',

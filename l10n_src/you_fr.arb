@@ -32,7 +32,7 @@
   "youVersion": "Version {version} (build {build})",
   "youAboutBody": "Indépendante. Tout reste sur ce téléphone.",
   "youLicences": "Licences open source",
-  "youLicencesHint": "Dont les polices Inter et Cinzel (SIL Open Font License)",
+  "youLicencesHint": "Dont les polices Inter, Cinzel et Noto Sans Arabic (SIL Open Font License)",
   "youLegalese": "App indépendante inspirée de « {title} » de {author}. Ni affiliée à l’auteur, ni approuvée par lui.",
   "youReplayWelcome": "Revoir l’accueil",
   "youReplayWelcomeHint": "Revoir l’introduction. Rien de ce que vous avez écrit ne change.",

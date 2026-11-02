@@ -54,6 +54,14 @@ and dark. Decorative: the title next to it says what it is.
 The subject stays centred at any width (narrow strip card to tablet column);
 see the Visual system in [foundation.md](foundation.md).
 
+## Listen (step 3)
+
+**Listen** under a lesson's read tag reads the lesson aloud (title, summary,
+explanation, example, the "lens, not a verdict" note) with the phone's own voice, in
+the app's language (English for an item not translated yet). **Stop reading** ends it;
+leaving the lesson stops it. Hidden where the phone has no voice for the language.
+Details and tests: [`voice.md`](voice.md#listen).
+
 ## Behaviour rules
 
 * Opening a lesson calls `markLessonRead` (post-frame); unknown ids show

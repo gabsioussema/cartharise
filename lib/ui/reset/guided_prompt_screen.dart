@@ -3,12 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../content/content.dart' show ContentKind;
 import '../../domain/content.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
 import '../nav.dart';
 import '../theme/cartha_theme.dart';
 import '../voice/dictate_button.dart';
+import '../voice/listen_button.dart';
 import '../widgets/widgets.dart';
 import 'reset_complete_screen.dart';
 import 'reset_flow.dart';
@@ -394,13 +396,28 @@ class _GuidedPromptScreenState extends State<GuidedPromptScreen>
                     contentPadding: EdgeInsets.zero,
                   ),
                 ],
-                Align(
-                  alignment: AlignmentDirectional.centerStart,
-                  child: TextLinkButton(
-                    label: l.resetHelpLink,
-                    icon: Icons.help_outline,
-                    onPressed: () => _showHelp(prompt),
-                  ),
+                Wrap(
+                  spacing: 4,
+                  children: [
+                    TextLinkButton(
+                      label: l.resetHelpLink,
+                      icon: Icons.help_outline,
+                      onPressed: () => _showHelp(prompt),
+                    ),
+                    // Listen: the question as shown (softer if chosen).
+                    ListenButton(
+                      key: ValueKey('reset-question-listen-${prompt.id}'),
+                      text: () => [
+                        prompt.context,
+                        _softer && softer != null ? softer : prompt.question,
+                      ].join('\n\n'),
+                      languageTag: contentListenTag(
+                        context,
+                        ContentKind.prompt,
+                        prompt.id,
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 4),
                 _ExamplePanel(
@@ -427,6 +444,13 @@ class _GuidedPromptScreenState extends State<GuidedPromptScreen>
                   key: const ValueKey('reset-answer-dictate'),
                   controller: _controller,
                   onInserted: _onChanged,
+                ),
+                // The user's own answer, read aloud only on this tap.
+                ListenButton(
+                  key: const ValueKey('reset-answer-listen'),
+                  text: () => _controller.text,
+                  label: l.listenMyAnswer,
+                  watch: _controller,
                 ),
                 if (status == PromptStatus.skipped) ...[
                   const SizedBox(height: 8),

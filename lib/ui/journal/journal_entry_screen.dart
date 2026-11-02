@@ -8,6 +8,7 @@ import '../../state/attachment_ops.dart';
 import '../media/attachment_strip.dart';
 import '../theme/cartha_theme.dart';
 import '../voice/dictate_button.dart';
+import '../voice/listen_button.dart';
 import '../widgets/widgets.dart';
 import 'journal_kit.dart';
 
@@ -307,6 +308,16 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
                     focusNode: _bodyFocus,
                     onInserted: (_) => _changed(),
                     recordInstead: _addToNote,
+                  ),
+                  // The user's own note, read aloud only on this tap.
+                  ListenButton(
+                    key: const ValueKey('journal-entry-listen'),
+                    text: () => [
+                      _title.text.trim(),
+                      _body.text.trim(),
+                    ].where((x) => x.isNotEmpty).join('\n\n'),
+                    label: l.listenMyNote,
+                    watch: _body,
                   ),
                   const SizedBox(height: 8),
                   AttachmentStrip(

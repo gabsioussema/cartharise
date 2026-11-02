@@ -154,9 +154,11 @@ const ContentTranslation frenchTranslation = ContentTranslation(
 > native speaker's review. A native French speaker must read all of it, in
 > the app, before any release in French.
 
-Coverage: 1193/1193 strings and every content item (7 lessons, 30 prompts
+Coverage: 1244/1244 strings and every content item (7 lessons, 30 prompts
 with their softer wording and examples, 30 path days, 15 experiments, 7
-notices, the credit). `test/french_test.dart` keeps it at 100 %.
+notices, the credit). `test/french_test.dart` keeps it at 100 %. The Dictate
+(`voice_fr`), Listen (`listen_fr`) and scenery strings, and the picker's
+language note, were translated at integration (same rules, also draft).
 
 **Voice.** *Vouvoiement* throughout: calm and respectful, never *tu*. Plain,
 warm, short; action first. Wording avoids gendering the reader ("quand vous
@@ -226,8 +228,8 @@ The language picker shows each language by its own name (English, Français,
 | Language | Strings | Content | Native review |
 |---|---|---|---|
 | English | source | source | n/a |
-| French | **draft**, 100 % (1193/1193) | **draft**, every item (100 %) | **not yet: required before release** |
-| Arabic | **draft**, 1189/1189 (100 %) | **draft**, every item (100 %) | **not yet: required before release** |
+| French | **draft**, 100 % (1244/1244) | **draft**, every item (100 %) | **not yet: required before release** |
+| Arabic | **draft**, 100 % (1244/1244) | **draft**, every item (100 %) | **not yet: required before release** |
 
 ## Arabic (draft: native review required)
 
@@ -238,7 +240,9 @@ The language picker shows each language by its own name (English, Français,
 > evening 01–03), the support and crisis texts (`you_ar.arb`, `reset_ar.arb`) and the
 > lessons' "A lens, not a verdict" notes.
 
-Coverage: `l10n_src/*_ar.arb` translate all 1189 keys (`make l10n-report`), and
+Coverage: `l10n_src/*_ar.arb` translate all 1244 keys (`make l10n-report`; the
+language picker, Dictate, Listen and scenery strings were translated at integration
+with the same rules, also draft), and
 `lib/content/ar.dart` translates every lesson, prompt (with its softer wording), path day,
 experiment, notice and the credit notices (`coverageFor(AppLanguage.ar).complete`).
 `test/ui/rtl_test.dart` fails if either drops below 100 %.
@@ -321,6 +325,5 @@ experiment, notice and the credit notices (`coverageFor(AppLanguage.ar).complete
   the start until the line has an Arabic letter.
 * The progress ring is not mirrored (a deliberate clock-wise choice; review with
   native readers).
-* Strings added by other step-3 areas after this translation (language picker,
-  dictation, Listen) show in English until `_ar.arb` gets them; `make l10n-report`
-  lists them.
+* New strings show in English until their `_ar.arb` entries are written;
+  `make l10n-report` lists them and `test/ui/rtl_test.dart` fails until then.

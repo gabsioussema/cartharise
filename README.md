@@ -27,7 +27,7 @@ learn the ideas, take the one‑day reset, and turn your own answers into a dire
   <img src="https://cdn.simpleicons.org/apple/737B8C" alt="iOS" height="36" title="iOS">&nbsp;&nbsp;
   <img src="https://cdn.simpleicons.org/kotlin/7F52FF" alt="Kotlin" height="36" title="Kotlin (Android host)">&nbsp;&nbsp;
   <img src="https://cdn.simpleicons.org/swift/F05138" alt="Swift" height="36" title="Swift (iOS host)">&nbsp;&nbsp;
-  <img src="https://cdn.simpleicons.org/googlefonts/4285F4" alt="Cinzel & Inter" height="36" title="Cinzel & Inter (bundled, OFL)">&nbsp;&nbsp;
+  <img src="https://cdn.simpleicons.org/googlefonts/4285F4" alt="Cinzel, Inter & Noto Sans Arabic" height="36" title="Cinzel, Inter & Noto Sans Arabic UI (bundled, OFL)">&nbsp;&nbsp;
   <img src="https://cdn.simpleicons.org/gradle/02303A" alt="Gradle" height="36" title="Gradle">
 </p>
 
@@ -114,6 +114,11 @@ and credited, and the article itself is never reproduced (see [Credits](#credits
     <td align="center"><img src="docs/screenshots/journal-pinned-dark.png" width="220" alt="Journal with a pinned memory and a note with photos and a voice note"><br><sub>Pinned memory, photos & voice notes</sub></td>
   </tr>
   <tr>
+    <td align="center"><img src="docs/screenshots/today-ar-light.png" width="220" alt="Today in Arabic, right to left"><br><sub>Today in Arabic (right to left)</sub></td>
+    <td align="center"><img src="docs/screenshots/lesson-fr-light.png" width="220" alt="A lesson in French, read aloud with Listen"><br><sub>A lesson in French · Listen</sub></td>
+    <td align="center"><img src="docs/screenshots/dictate-dark.png" width="220" alt="Dictate: the text is reviewed before Insert"><br><sub>Dictate: review, then Insert</sub></td>
+  </tr>
+  <tr>
     <td colspan="3" align="center"><img src="docs/screenshots/themes.png" width="680" alt="Today in the six themes, dark and light"><br><sub>Six themes, dark and light: Forest · Olive · Oasis · Tyrian Rose · Alpine · Obsidian</sub></td>
   </tr>
 </table>
@@ -170,7 +175,7 @@ Five tabs: **Today · Reset · Compass · Journal · You**.
 - 🎁 **Reward picks:** each route stop after Carthage and each achievement gives one pick. **Choose your reward** shows your own avatar wearing each extra, the suggested one first; nothing is spent until you confirm
 - ♜ Section VII of the article made playable: your vision is the **win condition**, the anti-vision is **what's at stake**, the one-year mission is the **main campaign**, the one-month project is your **boss fight**, daily levers are **quests** and your boundaries are the **rules of engagement**
 - 📜 **Act I:** five chapters built from the reset's exercises (4 · 7 · 3 · 6 · 7 questions), each opening its first open question
-- 🗺️ **Hannibal's route:** each level is the next stop from Carthage to Italy, with the XP to the next one
+- 🗺️ **Hannibal's route:** each level is the next stop from Carthage to Italy, with the XP to the next one. Each stop is its own painted landscape (the round harbour at dawn, New Carthage, the Ebro, the Pyrenees, the Rhône crossing, the Alps by moonlight, Italy), on the hub and the Route page, and each chapter leaves a **keepsake** on the Collection's shelf
 - 🛡️ **Monthly boss fight:** the boss weakens as your project's milestones are reached; record what you tried and learned in a battle log you can correct or delete. The form keeps a draft as you type, and a failed save never says "recorded"
 - ✨ **Calm moments:** a short "+20 XP", "+10 XP" for a first try, "Achievement earned" or "A new pick for your avatar" when you complete a quest, an attempt or a try, never while you type and never for a restored backup
 - 🏷️ **XP previews:** open quests show a small "+20 XP" tag until today's quest XP is reached
@@ -192,8 +197,14 @@ Five tabs: **Today · Reset · Compass · Journal · You**.
 - 💾 **Your data:** export a **.zip backup** with your words, settings, photos and voice notes (it says what it includes and how big it is), restore a .zip or an older .json, or delete everything
 - 💚 **Support & safety:** what to do when a question feels heavy, and where to find help
 
+**Languages and voice**
+- 🌍 **English, French and Arabic** for every screen and all content (lessons, questions with their softer wording and examples, the 30-day path, experiments, reminders, help). French and Arabic are **drafts that still need a native speaker's review**. Pick one in You › Appearance › **Language** (or **Same as phone**); the app switches at once and your own words are never translated or changed
+- ↔️ **Arabic reads right to left**, in a bundled Arabic font (Noto Sans Arabic UI, OFL) with Western digits; arrows and Hannibal's route mirror, and your own notes and quests keep their own direction
+- 🎙️ **Dictate** under the reset answer, notes, tries, attempts, path days and the weekly review: speak, check the text, and it goes in at the cursor only when you tap **Insert**. Recognition runs **on the phone only**; where it can't, the app says so in one line and offers **Record** or typing
+- 🔊 **Listen** reads a lesson or a question aloud with the phone's own voices. **Listen to my answer** and **Listen to my note** read your words only when you tap them. **Stop reading** anytime; it stops when you leave and respects silent mode
+
 **Made for real life**
-- Works fully **offline**, on 320 dp phones up to tablets, at up to 200 % text size
+- Works fully **offline**, on 320 dp phones up to tablets, at up to 200 % text size, left to right and right to left
 - Dark & light, reduced motion honoured, screen‑reader labels, 48 dp tap targets, keyboard navigation
 
 ---
@@ -249,10 +260,12 @@ domain layer is pure Dart and unit‑tested. Details: [`docs/architecture.md`](d
 | 🔔 | Reminders | `flutter_local_notifications` (inexact daily), `timezone` + `flutter_timezone`; pure `.ics` export |
 | 💾 | Files | `path_provider` (atomic JSON store, private `attachments/`), `share_plus` (export), `file_picker` (restore), `archive` (.zip backups) |
 | 📷 | Media | `image_picker` (system photo picker / camera), `record` (voice notes, on tap only), `audioplayers` (playback); all on the phone |
+| 🎙️ | Voice | Small platform channels, no package: Android `SpeechRecognizer.createOnDeviceSpeechRecognizer` + `TextToSpeech` (offline voices), iOS `SFSpeechRecognizer` (`requiresOnDeviceRecognition`) + `AVSpeechSynthesizer` |
+| 🌍 | Languages | English, French, Arabic: per-language ARB fragments and content translations with English fallback per item; right to left from the locale |
 | 🔗 | Links | `url_launcher`, used only for the credited article links and the helpline directory |
-| <img src="https://cdn.simpleicons.org/googlefonts/4285F4" width="22"> | Typography | **Cinzel** for headlines, **Inter** for everything else (both bundled, OFL) |
-| <img src="https://cdn.simpleicons.org/swift/F05138" width="22"> | iOS native | **Swift**: excludes the data folder from iCloud/computer backups |
-| <img src="https://cdn.simpleicons.org/kotlin/7F52FF" width="22"> | Android native | **Kotlin** host; manifest rules keep data out of cloud backup and device transfer |
+| <img src="https://cdn.simpleicons.org/googlefonts/4285F4" width="22"> | Typography | **Cinzel** for headlines, **Inter** for everything else, **Noto Sans Arabic UI** for Arabic (all bundled, OFL) |
+| <img src="https://cdn.simpleicons.org/swift/F05138" width="22"> | iOS native | **Swift**: excludes the data folder from iCloud/computer backups; on-device dictation and read aloud |
+| <img src="https://cdn.simpleicons.org/kotlin/7F52FF" width="22"> | Android native | **Kotlin** host; manifest rules keep data out of cloud backup and device transfer; on-device dictation and read aloud |
 | <img src="https://cdn.simpleicons.org/gradle/02303A" width="22"> | Build | Gradle (Kotlin DSL), `flutter_launcher_icons`, `flutter_native_splash` |
 | <img src="https://cdn.simpleicons.org/dart/0175C2" width="22"> | Testing | `flutter_test`: size matrix, accessibility guidelines, end‑to‑end journeys, rendered screenshots |
 
@@ -311,21 +324,21 @@ is generated).
 ```text
 lib/
 ├── domain/          content model, AppData (+ JSON), Campaign + persona rules, local dates, backup format (pure Dart)
-├── content/         ContentLibrary per language: lessons, questions, 30-day path, experiments, notices, credit
+├── content/         ContentLibrary per language (en source, fr and ar drafts): lessons, questions, 30-day path, experiments, notices, credit
 ├── data/            DataStore: atomic JSON file · in-memory store for tests · backup exclusion
 ├── state/           AppState, the single ChangeNotifier
 ├── reminders/       reminder planning (pure) + notification scheduler
-├── services/        .ics export (pure) · share sheet / file picker · attachments store · photo picker · recorder · player
+├── services/        .ics export (pure) · share sheet / file picker · attachments store · photo picker · recorder · player · dictation · read aloud
 ├── l10n/            generated AppLocalizations (from l10n_src/)
 └── ui/
     ├── theme/       Carthage Dusk palette, six themes, avatar colours, Cinzel/Inter type
     ├── widgets/     shared kit: buttons, cards, headers, loader, scenes, glyphs, lesson art, badges, pill tabs, save indicator…
     ├── boot_screen.dart · root_shell.dart · nav.dart
-    └── onboarding/ today/ reset/ awakening/ compass/ missions/ campaign/ persona/ journal/ media/ you/
+    └── onboarding/ today/ reset/ awakening/ compass/ missions/ campaign/ persona/ journal/ media/ voice/ you/
 l10n_src/            per-area string fragments → make l10n
 assets/
 ├── brand/           emblem, wordmarks, loader reference, app icons, splash (from the brand guide)
-└── fonts/           Cinzel + Inter with OFL licences
+└── fonts/           Cinzel, Inter and Noto Sans Arabic UI with OFL licences
 test/                unit, widget, journeys, a11y and screenshot tests
 docs/                architecture, one page per feature area, content traceability
 tool/merge_arb.dart  merges the ARB fragments
@@ -338,6 +351,8 @@ tool/merge_arb.dart  merges the ARB fragments
 | [`docs/features/`](docs/features) | One page per area: onboarding, today, reset, awakening, compass, missions, campaign, persona, journal, you |
 | [`docs/content-traceability.md`](docs/content-traceability.md) | Source segment → question → where it lives in the app |
 | [`docs/features/campaign.md`](docs/features/campaign.md) | The Campaign (game version): the invitation, the Playground hub, mapping, chapters, XP rules, battle log, Collection, reward picks |
+| [`docs/translations.md`](docs/translations.md) | Languages: how strings and content are translated, French and Arabic writing rules, right to left, review status |
+| [`docs/features/voice.md`](docs/features/voice.md) | Dictate and Listen: where they are, the on-device rules, platforms, tests |
 | [`docs/plans/evolve.md`](docs/plans/evolve.md) | The evolve plan: lighter Today, the Playground, the board, voice and languages (three steps) |
 | [`docs/features/persona.md`](docs/features/persona.md) · [`docs/plans/persona.md`](docs/plans/persona.md) | Your avatar: portrait, builder, reward picks, and the plan with its audit fixes |
 | [`CLAUDE.md`](CLAUDE.md) | Project rules: privacy, emotional safety, UI base, strings |
@@ -354,7 +369,9 @@ tool/merge_arb.dart  merges the ARB fragments
 - No account, no Cartharise server, no analytics, ads or crash‑reporting SDKs. The release build doesn't even ask for internet access
 - Everything lives in **one file in the app's private folder**. It isn't encrypted by Cartharise and isn't synced, and it's **kept out of phone and cloud backups** (Android backup rules, iOS backup exclusion)
 - **Photos and voice notes stay on the phone**, copied into the app's private `attachments/` folder and kept out of phone and cloud backups like the data file. The **microphone** is asked for only when you tap Record, and the camera or photos only when you add a photo; a refusal is said plainly, with another way (typing, or choosing a photo instead)
-- Notifications show only the check‑in's title, **never your words**. Nothing you write goes into logs
+- **Speech stays on the phone.** **Dictate** works only with an on-device recognizer (Android 12+ with `createOnDeviceSpeechRecognizer`, iOS with on-device recognition for the language): never a cloud recognizer, never a silent fallback to one. Otherwise the app says why and offers **Record** (a voice note, never transcribed) or typing. The dictated text is shown for review and goes in only when you tap Insert
+- **Listen** uses the phone's own offline voices; your own words are read aloud only when you tap **Listen to my answer** or **Listen to my note**. Dictate asks for the microphone (and, on iOS, speech recognition) only when you first tap it; Listen needs no permission
+- Notifications show only the check‑in's title, **never your words**. Nothing you write or say goes into logs
 - **You › Your data:** export a `.zip` backup (`data.json` plus your photos and voice notes) through the share sheet, restore a `.zip` or an older `.json` (fully validated and previewed before anything changes), or **delete all data**. Deleting removes the file, the photos and recordings, the temporary export/import copies, and cancels every reminder
 
 ---
@@ -372,11 +389,13 @@ failures, reminder planning (quiet hours across midnight, DST), the `.ics` forma
 
 - One widget test file per area, each run across a **size matrix**: 320×568 at 200 % text, 390×844, and 1024×1366 at 130 %, in dark and light
 - **Accessibility** checks (tap size, labels, text contrast) on 23 screens, plus a keyboard‑only pass
-- **End‑to‑end journeys** through the real app and content: onboarding → full reset → previewed Compass import → quests → journal → `.ics` → export, delete everything, restore; create an avatar → You, the Campaign and Today show it → backup, delete, restore; the five-page welcome → the Campaign invitation (Play / Not now); a remembered Today pin → "Done. That can be enough for today."; Try → Add to my tasks → Collection → Choose your reward; an honest failed attempt save with its draft kept; quests → the board → Move to… → Done, a daily quest back in Ready the next day; a project finished with its look back → the history with its tasks, attempts and their photos; a photo and a voice note on a note → a pinned passage → `.zip` backup → delete everything (files too) → restore; an older `.json` backup still restoring
-- Guard tests: no hard‑coded colours outside the theme, no streak or guilt copy, privacy settings pinned in the manifest
+- **End‑to‑end journeys** through the real app and content: onboarding → full reset → previewed Compass import → quests → journal → `.ics` → export, delete everything, restore; create an avatar → You, the Campaign and Today show it → backup, delete, restore; the five-page welcome → the Campaign invitation (Play / Not now); a remembered Today pin → "Done. That can be enough for today."; Try → Add to my tasks → Collection → Choose your reward; an honest failed attempt save with its draft kept; quests → the board → Move to… → Done, a daily quest back in Ready the next day; a project finished with its look back → the history with its tasks, attempts and their photos; a photo and a voice note on a note → a pinned passage → `.zip` backup → delete everything (files too) → restore; an older `.json` backup still restoring; a French phone's welcome; switching to Français → a lesson read aloud → a dictated answer reviewed and inserted exactly → العربية right to left at 320 dp and 200 % → Same as phone, with your words unchanged; dictation unavailable → Record or type
+- **Languages:** 100 % French and Arabic strings and content, placeholders and plurals, French typography, no streak or guilt wording in any language, the Arabic font everywhere, right to left on every main screen at every size
+- Guard tests: no hard‑coded colours outside the theme, no streak or guilt copy, privacy settings pinned in the manifest, on-device-only speech and no logging in the native voice code
 
-Notifications, the share sheet, the file picker, the photo picker, the recorder and the player are
-tested with fakes. The real ones still need a check on a device.
+Notifications, the share sheet, the file picker, the photo picker, the recorder, the player,
+dictation and read aloud are tested with fakes (and mocked platform channels). The real ones
+still need a check on a device.
 
 ---
 
@@ -385,11 +404,12 @@ tested with fakes. The real ones still need a check on a device.
 | | |
 |---|---|
 | ✅ | Android app: all five tabs, reminders, `.ics`, the board, project history, photos and voice notes, `.zip` backup and restore; analyze clean, tests green |
-| 🧪 | iOS: configured (notifications, icons, splash, backup exclusion) but not yet compiled; needs a Mac with Xcode |
-| 🧪 | On‑device checks: notification permission, share sheet, file picker, photo picker and camera, microphone and playback, Android 12+ splash, backup exclusion |
+| ✅ | Evolve plan step 3: French and Arabic (right to left), on-device Dictate, Listen, painted route scenery and keepsakes |
+| 🧪 | iOS: configured (notifications, icons, splash, backup exclusion, dictation and read aloud) but not yet compiled; needs a Mac with Xcode |
+| 🧪 | On‑device checks: notification permission, share sheet, file picker, photo picker and camera, microphone and playback, on-device dictation and read aloud, Android 12+ splash, backup exclusion |
+| 🔜 | Native review of the French and Arabic drafts (required before releasing in either language) |
 | 🔜 | Content & legal review of the paraphrased lessons and questions; trademark check on the name |
 | 🔜 | Store release: privacy policy, store privacy forms, signing, release builds |
-| 🔜 | Evolve plan step 3: on‑device dictation, read aloud, French and Arabic (strings and content are already split per language) |
 | 🔜 | Remember set‑aside lever drafts across restarts; per‑field "last updated" on the Compass |
 
 ---

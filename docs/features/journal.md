@@ -134,6 +134,14 @@ the practical alternative:
 Privacy: no file name, path or user text is logged; playback reads local
 files only; the recorder writes straight into the private folder.
 
+## Voice (step 3)
+
+* **Dictate** under a note's body (review, then Insert at the cursor; **Record instead**
+  keeps a voice note on the note) and under each weekly-review field ("Dictate: Wins").
+* **Listen to my note**, once the note has words, reads its title and body aloud with
+  the phone's voice, only on that tap; Stop reading anytime, and it stops when the note
+  closes. Details and tests: [`voice.md`](voice.md).
+
 ## Behaviour rules
 
 - **Words are saved exactly as typed** (no trimming of the body). A note's

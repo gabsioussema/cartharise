@@ -6709,7 +6709,7 @@ abstract class AppLocalizations {
   /// No description provided for @youLicencesHint.
   ///
   /// In en, this message translates to:
-  /// **'Including the Inter and Cinzel fonts (SIL Open Font License)'**
+  /// **'Including the Inter, Cinzel and Noto Sans Arabic fonts (SIL Open Font License)'**
   String get youLicencesHint;
 
   /// No description provided for @youLegalese.

@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../domain/app_data.dart';
 import '../../l10n/app_localizations.dart';
+import '../../services/read_aloud.dart';
 import '../../state/app_state.dart';
 import '../../state/attachment_ops.dart';
 import '../media/media_kit.dart';
@@ -106,6 +110,9 @@ class _DictateButtonState extends State<DictateButton> {
     if (_open) return;
     final l = AppLocalizations.of(context);
     final tag = Localizations.localeOf(context).toLanguageTag();
+    // The microphone shouldn't hear Listen reading aloud.
+    final voice = context.read<ReadAloud>();
+    if (voice.isSpeaking) unawaited(voice.stop());
     setState(() => _open = true);
     DictationOutcome? outcome;
     try {

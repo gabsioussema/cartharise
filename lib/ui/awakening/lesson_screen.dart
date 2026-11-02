@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../content/content.dart' show ContentKind;
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
 import '../nav.dart';
 import '../reset/reset_flow.dart';
 import '../theme/cartha_theme.dart';
+import '../voice/listen_button.dart';
 import '../widgets/widgets.dart';
 import 'awakening_screen.dart';
 import 'knowledge_check.dart';
@@ -112,7 +114,23 @@ class _LessonScreenState extends State<LessonScreen> {
             ),
             const SizedBox(height: 8),
             LessonReadTagFor(lessonId: lesson.id),
-            const SizedBox(height: 20),
+            // Listen: the lesson read aloud, only on a tap.
+            ListenButton(
+              key: const ValueKey('lesson-listen'),
+              text: () => [
+                lesson.title,
+                lesson.summary,
+                ...paragraphs,
+                lesson.example,
+                lesson.nuance,
+              ].join('\n\n'),
+              languageTag: contentListenTag(
+                context,
+                ContentKind.lesson,
+                lesson.id,
+              ),
+            ),
+            const SizedBox(height: 12),
             for (final paragraph in paragraphs) ...[
               Text(paragraph, style: theme.textTheme.bodyLarge),
               const SizedBox(height: 14),

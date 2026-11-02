@@ -34,7 +34,7 @@
   "@youVersion": {"placeholders": {"version": {"type": "String"}, "build": {"type": "String"}}},
   "youAboutBody": "Independent. Everything stays on this phone.",
   "youLicences": "Open-source licences",
-  "youLicencesHint": "Including the Inter and Cinzel fonts (SIL Open Font License)",
+  "youLicencesHint": "Including the Inter, Cinzel and Noto Sans Arabic fonts (SIL Open Font License)",
   "youLegalese": "Independent app inspired by “{title}” by {author}. Not affiliated with or endorsed by the author.",
   "@youLegalese": {"placeholders": {"title": {"type": "String"}, "author": {"type": "String"}}},
   "youReplayWelcome": "Replay the welcome",

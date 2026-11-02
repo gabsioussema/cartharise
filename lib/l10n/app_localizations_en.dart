@@ -4245,7 +4245,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get youLicencesHint =>
-      'Including the Inter and Cinzel fonts (SIL Open Font License)';
+      'Including the Inter, Cinzel and Noto Sans Arabic fonts (SIL Open Font License)';
 
   @override
   String youLegalese(String title, String author) {

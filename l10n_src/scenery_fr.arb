@@ -1,10 +1,10 @@
 {
   "@@locale": "fr",
-  "sceneryRouteScene": "{place, select, carthage{Carthage : des navires dans le port circulaire à l’aube} newCarthage{Carthagène : des maisons blanches au-dessus d’une baie calme} ebro{L’Èbre : un large fleuve qui serpente dans la plaine} pyrenees{Les Pyrénées : un col élevé entre des sommets enneigés} rhone{Le Rhône : un éléphant traverse le fleuve sur un radeau} alps{Les Alpes : un sentier monte vers la neige au clair de lune} italy{L’Italie : des cyprès et des champs au soleil du matin} other{Un paysage sur la route}}",
+  "sceneryRouteScene": "{place, select, carthage{Carthage : des navires dans le port circulaire à l’aube} newCarthage{Carthagène : des maisons blanches au-dessus d’une baie calme} ebro{L’Èbre : un large fleuve qui serpente dans la plaine} pyrenees{Les Pyrénées : un col élevé entre des sommets enneigés} rhone{Le Rhône : un éléphant traverse le fleuve sur un radeau} alps{Les Alpes : un sentier monte vers la neige au clair de lune} italy{L’Italie : des cyprès et des champs au soleil du matin} other{Un paysage sur la route}}",
   "sceneryKeepsakesTitle": "Souvenirs",
   "sceneryKeepsakesLine": "Essayez une expérience d’un chapitre pour garder son souvenir.",
   "sceneryKeepsakeName": "{chapter, select, terrain{Longue-vue} pattern{Carreau de mosaïque} banner{Bannière} autopilot{Sablier} plan{Rouleau} other{Souvenir}}",
   "sceneryKeepsakeKept": "{count, plural, =1{Gardé · 1 expérience} other{Gardé · {count} expériences}}",
   "sceneryKeepsakeNotYet": "Pas encore",
-  "sceneryKeepsakeLabel": "{name}, {chapter} : {status}"
+  "sceneryKeepsakeLabel": "{name}, {chapter} : {status}"
 }

@@ -214,7 +214,9 @@ add a language: [translations.md](translations.md).
   `PlatformDictation` (`dictation_platform.dart`: a method + event channel to
   Android's `createOnDeviceSpeechRecognizer` and iOS's
   `requiresOnDeviceRecognition`; **Dictate** in `lib/ui/voice/`, see
-  `docs/features/voice.md`) and, until Listen lands, `UnavailableReadAloud`.
+  `docs/features/voice.md`) and `PlatformReadAloud` (`read_aloud_platform.dart`:
+  a method channel to Android's `TextToSpeech` with offline voices only and iOS's
+  `AVSpeechSynthesizer`; **Listen** in `lib/ui/voice/listen_button.dart`).
 * Contract tests: `test/evolve3_contracts_test.dart`.
 
 ## Tests
