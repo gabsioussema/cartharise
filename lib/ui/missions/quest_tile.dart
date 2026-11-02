@@ -77,9 +77,8 @@ bool questXpOpenOn(AppState state, String day) =>
     state.gameEnabled && questsDoneOn(state.data.quests, day) < kQuestDaysCap;
 
 /// One quest: an accessible checkbox ("Mark '…' done"), the title, calm
-/// labels (from an experiment · every day · planned for · done today ·
-/// "+20 XP" while the Campaign is on and today's quest XP isn't used up) and
-/// an options menu.
+/// labels ([QuestLabels]: from an experiment · its project · every day ·
+/// planned for · done today · "+20 XP") and an options menu.
 /// Tapping the row edits it. Done is shown by the tick, strike-through and a
 /// label — never by colour alone, and nothing is ever "missed" (F-031).
 class QuestTile extends StatelessWidget {
@@ -96,17 +95,6 @@ class QuestTile extends StatelessWidget {
     final p = CarthaPalette.of(context);
     final theme = Theme.of(context);
     final done = quest.isDoneOn(day);
-    final daily = quest.recurrence == QuestRecurrence.daily;
-    final xpOpen = context.select<AppState, bool>((s) => questXpOpenOn(s, day));
-    final showXp = xpOpen && !done;
-    final fromTry = quest.source == QuestSource.experiment;
-    String? doneLabel;
-    if (done) {
-      final last = (quest.completedOn.toList()..sort()).last;
-      doneLabel = daily || last == day
-          ? l.missionsQuestDoneToday
-          : l.missionsQuestDoneOn(formatDayKey(context, last));
-    }
     return Material(
       color: p.card,
       shape: RoundedRectangleBorder(
@@ -141,55 +129,7 @@ class QuestTile extends StatelessWidget {
                           decorationColor: p.textSecondary,
                         ),
                       ),
-                      if (daily ||
-                          quest.dueDate != null ||
-                          done ||
-                          showXp ||
-                          fromTry) ...[
-                        const SizedBox(height: 6),
-                        Wrap(
-                          spacing: 6,
-                          runSpacing: 4,
-                          children: [
-                            // Added from the Playground's "Try".
-                            if (fromTry)
-                              ChipTag(
-                                key: ValueKey('quest-source-${quest.id}'),
-                                label: l.campaignQuestFromTry,
-                                glyph: CarthaGlyph.experiment,
-                              ),
-                            if (daily)
-                              ChipTag(
-                                label: l.missionsQuestDaily,
-                                icon: Icons.repeat,
-                              ),
-                            if (!daily && quest.dueDate != null && !done)
-                              ChipTag(
-                                label: l.missionsQuestDue(
-                                  formatDayKey(context, quest.dueDate!),
-                                ),
-                                icon: Icons.event_outlined,
-                              ),
-                            if (doneLabel != null)
-                              ChipTag(
-                                label: doneLabel,
-                                icon: Icons.check,
-                                tone: ChipTone.success,
-                              ),
-                            if (showXp)
-                              Semantics(
-                                label: l.campaignQuestXpLabel(kXpPerQuest),
-                                excludeSemantics: true,
-                                child: ChipTag(
-                                  key: ValueKey('quest-xp-${quest.id}'),
-                                  label: l.campaignQuestXp(kXpPerQuest),
-                                  icon: Icons.auto_awesome,
-                                  tone: ChipTone.accent,
-                                ),
-                              ),
-                          ],
-                        ),
-                      ],
+                      QuestLabels(quest: quest, day: day),
                     ],
                   ),
                 ),
@@ -223,6 +163,93 @@ class QuestTile extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// A quest's calm labels, the same in the list and on the board (one task
+/// list, many views): from an experiment · its project · every day ·
+/// planned for · done today / done on · "+20 XP" while the Campaign is on,
+/// the quest is open and today's quest XP isn't used up. Nothing when there
+/// is nothing to say.
+class QuestLabels extends StatelessWidget {
+  const QuestLabels({super.key, required this.quest, required this.day});
+
+  final Quest quest;
+
+  /// The local day "done" and the XP rule refer to (`yyyy-MM-dd`).
+  final String day;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final done = quest.isDoneOn(day);
+    final daily = quest.recurrence == QuestRecurrence.daily;
+    final xpOpen = context.select<AppState, bool>((s) => questXpOpenOn(s, day));
+    final showXp = xpOpen && !done;
+    final fromTry = quest.source == QuestSource.experiment;
+    final projectId = quest.projectId;
+    final project = context.select<AppState, MonthProject?>(
+      (s) => projectId == null ? null : s.projectById(projectId),
+    );
+    String? doneLabel;
+    if (done) {
+      final last = (quest.completedOn.toList()..sort()).last;
+      doneLabel = daily || last == day
+          ? l.missionsQuestDoneToday
+          : l.missionsQuestDoneOn(formatDayKey(context, last));
+    }
+    final due = !daily && quest.dueDate != null && !done;
+    if (!fromTry && project == null && !daily && !due && !done && !showXp) {
+      return const SizedBox.shrink();
+    }
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(top: 6),
+      child: Wrap(
+        spacing: 6,
+        runSpacing: 4,
+        children: [
+          // Added from the Playground's "Try".
+          if (fromTry)
+            ChipTag(
+              key: ValueKey('quest-source-${quest.id}'),
+              label: l.campaignQuestFromTry,
+              glyph: CarthaGlyph.experiment,
+            ),
+          // The month project it belongs to (current or past).
+          if (project != null)
+            ChipTag(
+              key: ValueKey('quest-project-${quest.id}'),
+              label: project.title.trim().isEmpty
+                  ? l.missionsProjectUntitled
+                  : project.title.trim(),
+              glyph: CarthaGlyph.direction,
+            ),
+          if (daily) ChipTag(label: l.missionsQuestDaily, icon: Icons.repeat),
+          if (due)
+            ChipTag(
+              label: l.missionsQuestDue(formatDayKey(context, quest.dueDate!)),
+              icon: Icons.event_outlined,
+            ),
+          if (doneLabel != null)
+            ChipTag(
+              label: doneLabel,
+              icon: Icons.check,
+              tone: ChipTone.success,
+            ),
+          if (showXp)
+            Semantics(
+              label: l.campaignQuestXpLabel(kXpPerQuest),
+              excludeSemantics: true,
+              child: ChipTag(
+                key: ValueKey('quest-xp-${quest.id}'),
+                label: l.campaignQuestXp(kXpPerQuest),
+                icon: Icons.auto_awesome,
+                tone: ChipTone.accent,
+              ),
+            ),
+        ],
       ),
     );
   }
