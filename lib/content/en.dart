@@ -26,6 +26,8 @@ const ContentLibrary englishContent = ContentLibrary(
   prompts: _prompts,
   thirtyDays: _thirtyDays,
   credit: _credit,
+  experiments: _experiments,
+  notices: _notices,
 );
 
 // ---------------------------------------------------------------------------
@@ -1370,5 +1372,34 @@ const List<PathDay> _thirtyDays = [
         "Write a short note to yourself for the next thirty days: what to "
         "keep, what to change and what to try.",
     hint: "You can start a new reset or save a Compass version at any time.",
+  ),
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// The Playground: "Try" experiments and "Notice" cards
+// ─────────────────────────────────────────────────────────────────────────────
+// Experiment ids are `try.<chapter>.<nn>`, notice ids `notice.<nn>`: permanent
+// (the experiment log is keyed by them). Tiny, real-world, safe, never about
+// sharing personal details; one to three short steps, action first.
+
+const List<Experiment> _experiments = [
+  Experiment(
+    id: 'try.terrain.01',
+    chapter: CampaignChapter.terrain,
+    title: 'Walk one room as a guest would',
+    steps: [
+      'Walk slowly through one room you use every day.',
+      'Notice one thing you have stopped seeing.',
+    ],
+    minutes: 5,
+  ),
+];
+
+const List<Notice> _notices = [
+  Notice(
+    id: 'notice.01',
+    glyph: CarthaGlyph.notice,
+    title: 'What you have learned to put up with',
+    promptId: 'morning.01',
   ),
 ];

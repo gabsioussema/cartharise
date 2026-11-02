@@ -35,9 +35,12 @@ Nothing is copied or inferred: the map shows the user's own Compass words, or
    and **How XP is earned**.
 2. **Your strategist** (persona plan, section C): the avatar (72 dp) and the
    motto exactly as typed — or "Create an avatar to walk the route with
-   you." — then "n of 13 extras unlocked", the next extra and how to get it
-   ("Next: Compass · Reach the Rhône"; "Every extra unlocked." at the end),
-   and **Create your avatar** / **Edit your avatar** →
+   you." — then "n of 13 extras unlocked" (extras the user chose with a
+   pick, keeps or wears; all 13 with the game layer off), the suggested
+   extra of the next milestone and how to reach it ("Next: Compass · Reach
+   the Rhône"; "Every extra unlocked." only once every extra really is the
+   user's — with every milestone reached but picks unspent the line is left
+   out), and **Create your avatar** / **Edit your avatar** →
    `AppNav.openPersonaBuilder`. Extras the avatar already wears count as
    open and are never pointed to as "next" (worn items are never taken
    away). On narrow screens at large text the avatar sits above the words.
@@ -62,12 +65,13 @@ Nothing is copied or inferred: the map shows the user's own Compass words, or
    attempt** (confirmation first).
 6. **Achievements from the article** (F-062): seven tiles — The Observer,
    The Pathfinder, The Visionary, The Watchful, The Strategist (one per
-   completed chapter, in any reset), The Practitioner (a completed quest), The
-   Challenger (a first attempt). Status is an icon **and** the word "Earned" /
-   "Not yet", never colour alone. Each tile also names the avatar extra it
-   opens ("For your avatar: Scroll", with an open or closed lock), read out
-   with the tile. Above them, "Next: <achievement> · <how>" points to the
-   closest one not earned yet.
+   chapter: every chapter question answered in one reset, **or** one of the
+   chapter's Playground experiments tried), The Practitioner (a completed
+   quest), The Challenger (a first attempt). Status is an icon **and** the
+   word "Earned" / "Not yet", never colour alone. Each tile also names the
+   avatar extra it suggests ("For your avatar: Scroll", with an open lock
+   once the user has it), read out with the tile. Above them, "Next:
+   <achievement> · <how>" points to the closest one not earned yet.
 7. **Act II · The 30-day becoming** (F-064): quests completed, 30-day notes
    written, attempts recorded; **Continue the 30-day path** (→ Missions) and
    **Read the article**. Revising the strategy happens in the Compass, which
@@ -85,48 +89,88 @@ quests are done today (`kQuestDaysCap`, the same count as the XP rules:
 each quest once per day). Done quests, a used-up day and the game layer off
 show no chip; the quest itself never changes.
 
-## Avatar extras (persona plan, section C)
+## Avatar extras: reward picks (evolve step 1)
 
 Appearance is always free; 13 decorative extras (banners, four garment
-colours, circlet, laurel wreath, scroll, compass, amulet) open along the
-Campaign — one per route stop from New Carthage to Italy, one per achievement
-(the table is `unlockSource` in `lib/domain/persona.dart`). With the game
-layer off everything is open. `kUnlockOrder` lists them as the Campaign
-points to them: the route stops along the road first (XP always moves the
-user along it), then the achievements in the article's order;
-`nextUnlock(progress, owned:)` is the first one not open yet, skipping
-extras the user keeps or the avatar wears.
+colours, circlet, laurel wreath, scroll, compass, amulet) are earned with
+**reward picks** while the game layer is on. With the game layer off every
+extra is open (unchanged).
 
-**Kept for good.** Progress is derived from the records, so it can go down
-(a quest unticked, an attempt deleted, XP below a stop). Extras never do:
-`AppData.avatarUnlocked` is a set that only grows. `AppState.mutate` (and
-`load`, for data from before it existed) adds every extra the progress opens
-while the game layer is on (`withProgressUnlocks`); `savePersona` and
-`clearPersona` add every extra the old and the new avatar wear.
-`PersonaOps.avatarUnlocks` is what the progress opens now plus the kept set
-(everything with the game layer off). It is in the backup and cleared by
-"Delete all data". The Strategist card and the achievement tiles' "For your
-avatar" lock use it too, so an extra stays open after its record is gone.
+* **Picks earned** — `rewardPicksEarned(progress)` (`lib/domain/campaign.dart`)
+  = route stops reached after Carthage + achievements earned (0 … 13). It is
+  derived from the records, so it can go down.
+* **Picks left** — `rewardPicksLeft(progress, kept)`
+  (`lib/domain/persona.dart`) = max(0, earned − |`AppData.avatarUnlocked`|)
+  (also never more than the extras not kept yet); `PersonaOps.picksLeft` is 0
+  with the game layer off.
+* **Choosing** — `PersonaOps.chooseReward(extra)` adds the extra to
+  `AppData.avatarUnlocked` (game on, a pick left, not owned yet; otherwise it
+  throws and writes nothing). `unlockSource` is now the **suggested** extra of
+  each milestone: `suggestedReward(progress, owned)` /
+  `PersonaOps.suggestedPick` preselects the first reached milestone's extra
+  the user doesn't own, and `rewardOptions` / `PersonaOps.rewardChoices` lists
+  every extra not owned, suggested first. `suggestedExtras(progress)` is the
+  set the reached milestones suggest; `nextUnlock(progress, owned:)` is the
+  suggested extra of the next milestone still ahead (`kUnlockOrder`: route
+  stops first, then achievements).
+* **Kept for good** — `AppData.avatarUnlocked` is the set the user chose,
+  plus extras kept from wearing (`savePersona` / `clearPersona` add what the
+  old and new avatar wear) and extras an earlier version opened by itself. It
+  only grows: nothing kept is taken away when progress goes down (picks left
+  simply stay at 0 until it rises again). `AppState.mutate` and `load` no
+  longer fold anything derived into it.
+* **Locked** = not chosen, not kept and not worn: `PersonaOps.avatarUnlocks`
+  is the kept set (everything with the game layer off), `ownsExtra` /
+  `canUse` add what the saved avatar wears, and `savePersona` refuses an
+  avatar wearing an extra the user doesn't own yet.
+
+It is in the backup and cleared by "Delete all data".
+
+## The invitation (evolve step 1)
+
+A brand-new profile starts with the Campaign off and a one-time invitation
+pending: `completeOnboarding(askAboutGame: true)` sets `game: false,
+gameInvited: false` only when no profile existed (a replayed welcome keeps
+the user's settings). `AppSettings.gameInvited` defaults to true and loads
+as true from older files, so existing users never see it.
+`CampaignInviteCard` (`lib/ui/campaign/campaign_invite.dart`, a placeholder
+that renders nothing until its body lands) is shown by Today and the
+Campaign hub while `CampaignInviteOps.campaignInvitePending`;
+`answerCampaignInvite(play:)` answers it for good (Play also turns the game
+on; Not now leaves it off, switchable in You › The Campaign).
+
+## The Playground's experiments (evolve step 1)
+
+`ContentLibrary.experiments` — `Experiment {id 'try.<chapter>.<nn>'
+(permanent), chapter, title, steps (1–3), minutes}` — and
+`ContentLibrary.notices` — `Notice {id 'notice.<nn>', glyph, title, promptId
+| lessonId}` (a notice opens an existing prompt or lesson). Trying one is
+`CampaignOps.tryExperiment(id, note:)` → an `ExperimentEntry {id,
+experimentId, day, note (exactly as typed, optional), createdAt, editedAt}` in
+`AppData.experimentLog` (newest first; `editExperimentEntry`,
+`deleteExperimentEntry`, `hasTried`). **Add to my tasks**
+(`addExperimentToTasks`) creates a one-off quest with
+`QuestSource.experiment` (the open one is returned instead of a duplicate)
+and earns nothing by itself.
 
 ## Moments (`CampaignFeedback`, F-060)
 
 A calm pill at the top for about two seconds, announced to screen readers:
-"+20 XP" when a quest, an attempt or a weekly review adds XP,
-"Achievement earned: …", and "New for your avatar: …" when the progress
-opens an extra the user didn't keep already (name from
-`persona_copy.unlockableName`). Changes within 0.7 s become one moment.
+"+20 XP" when a quest, an attempt, a weekly review or a first try of an
+experiment adds XP, and "Achievement earned: …". Changes within 0.7 s become
+one moment. Extras no longer open by themselves (progress gives picks, the
+user chooses), so no extra is announced as new.
 
-Only an action is a moment: XP from a quest, an attempt or a review, or the
-two action achievements (The Practitioner, The Challenger) and their
-extras. Never while typing an answer: reflection and path XP stay quiet, and
-so does what typing opens — a route stop, a chapter's achievement (The
-Observer … The Strategist) and its extra. These are not saved up for later
-either; the Campaign's achievement tiles and the Strategist card show them.
-Never twice: an extra opened again (after its record went and came back) is
-already kept, and an achievement seen this session isn't announced again.
-Never for a bulk change such as a restored backup (more than 60 XP, or 3+
-achievements or extras at once), never with the game layer off, never for an
-extra the avatar already wears; no fade with reduced motion.
+Only an action is a moment: action XP, or the two action achievements (The
+Practitioner, The Challenger). Never while typing an answer: reflection and
+path XP stay quiet, and so does what typing reaches — a route stop or a
+chapter's achievement (The Observer … The Strategist). These are not saved up
+for later either; the Campaign's achievement tiles and the Strategist card
+show them. Never twice: an achievement seen this session isn't announced
+again. Never for a bulk change such as a restored backup (more than 60 XP,
+or 3+ achievements or reward picks at once — picks counted above the most
+seen this session), never with the game layer off, never for spending a pick;
+no fade with reduced motion.
 
 ## XP rules (`lib/domain/campaign.dart`, F-060)
 
@@ -140,11 +184,24 @@ an action cannot farm it and resting cannot lower it.
 | 30-day path day written | +10 | per day with a non-blank note |
 | Attempt recorded | +15 | per local day with at least one attempt |
 | Weekly review | +15 | per week |
+| Playground experiment tried | +10 (`kXpPerExperiment`) | once per distinct experiment, ever; the note never counts |
 
 Level = 1 + XP ÷ 100. XP never looks at what was written, how long it is or
 how the user feels; skipped and blank answers earn nothing; starting a new reset
 keeps earlier XP and achievements. Deleting a record removes what it counted
-for (the user's choice, not a penalty).
+for (the user's choice, not a penalty). Action XP (`xpFromActions`) is quests,
+attempts, reviews and experiments.
+
+**Achievements and their route.** `CampaignProgress.earnedBy` maps each
+earned achievement to an `EarnedRoute`: a chapter's achievement is
+`reflecting` (every chapter question *answered* — not skipped — in one reset)
+or `trying` (any of that chapter's experiments tried; reflecting is named
+when both are true); The Practitioner and The Challenger are `doing`.
+`earned` is its key set; `Achievement.chapter` / `Achievement.ofChapter` map
+between chapters and their achievements, and `ChapterProgress.tried` counts
+the chapter's distinct experiments tried. An experiment id the content
+doesn't know (a newer backup) still counts its XP once, but earns no
+achievement.
 
 ## Turning it off (F-060)
 
@@ -154,14 +211,32 @@ the battle log stays saved, exported and deleted with everything else.
 
 ## Data
 
-* `AppSettings.game` (bool, default true).
+* `AppSettings.game` (bool, default true; a brand-new profile starts false
+  until the invitation's "Play") and `AppSettings.gameInvited` (bool, default
+  and JSON fallback true).
+* `AppSettings.todayPin` (`TodayPin { auto, project, reflection, notes }`,
+  default and fallback for unknown names `auto`) — used by Today.
+* `AppData.attemptDraft`: `AttemptDraft {attempt, learning, updatedAt}` or
+  null — the attempt form's words, autosaved with
+  `saveAttemptDraft(attempt, learning)` (exactly as typed; both blank →
+  null; nothing written when unchanged) and removed by `recordAttempt` in the
+  same change.
+* `AppData.experimentLog` (above) and `QuestSource.experiment` (appended).
 * `AppData.campaignLog`: `BattleLogEntry {id, day (yyyy-MM-dd), attempt,
   learning, createdAt, editedAt?}`, newest first. Attempt and learning are
   stored exactly as typed; a blank attempt is refused. Older data and backups
   without these keys load with the game on and an empty log (no schema bump).
 * State: `CampaignOps` (`lib/ui/campaign/campaign_ops.dart`) — `campaign`,
-  `gameEnabled`, `setGameEnabled`, `monthlyBoss`, `recordAttempt`,
-  `editAttempt`, `deleteAttempt`, all on `AppState.mutate`.
+  `gameEnabled`, `setGameEnabled`, `monthlyBoss`, `attemptDraft`,
+  `saveAttemptDraft`, `recordAttempt`, `editAttempt`, `deleteAttempt`,
+  `experimentLog`, `hasTried`, `tryExperiment`, `editExperimentEntry`,
+  `deleteExperimentEntry`, `addExperimentToTasks`; `PersonaOps` —
+  `picksEarned`, `picksLeft`, `rewardChoices`, `suggestedPick`,
+  `chooseReward`; `CampaignInviteOps` — `campaignInvitePending`,
+  `answerCampaignInvite`; all on `AppState.mutate`.
+* Every new field is in the JSON backup and cleared by "Delete all data";
+  older data and backups without them load with the defaults above (no
+  schema bump).
 
 ## Files
 
@@ -172,9 +247,12 @@ the battle log stays saved, exported and deleted with everything else.
 | `lib/ui/campaign/attempt_sheet.dart` | correct / delete an attempt |
 | `lib/ui/campaign/campaign_card.dart` | the Today card |
 | `lib/ui/campaign/campaign_copy.dart` | chapter and achievement names |
-| `lib/ui/campaign/campaign_feedback.dart` | the "+XP" / achievement / new-extra moments |
+| `lib/ui/campaign/campaign_feedback.dart` | the "+XP" / achievement moments |
+| `lib/ui/campaign/campaign_invite.dart` | `CampaignInviteCard` (placeholder) + `CampaignInviteOps` |
+| `lib/ui/widgets/glyphs.dart` | `CarthaGlyph`, `GlyphIcon`, `LessonIllustration`, `AchievementBadge` (placeholders) |
 | `lib/ui/missions/quest_tile.dart` | the "+20 XP" chip (`questsDoneOn`, `questXpOpenOn`) |
-| `lib/domain/persona.dart` | `kUnlockOrder`, `nextUnlock` (with the unlock table) |
+| `lib/domain/persona.dart` | the suggestion table (`unlockSource`), `kUnlockOrder`, `nextUnlock`, `suggestedExtras`, `rewardPicksLeft`, `suggestedReward`, `rewardOptions` |
+| `lib/domain/content.dart` | `CampaignChapter`, `CarthaGlyph`, `Experiment`, `Notice` |
 | `l10n_src/campaign_en.arb` | strings (`campaign…`) |
 
 ## Tests
@@ -185,8 +263,19 @@ the battle log stays saved, exported and deleted with everything else.
   record/edit/delete (words as typed, blank refused), the off switch keeping
   the log, the monthly boss, the ARB copy never judging, the extras' order,
   `nextUnlock` (in order, skipping earned and worn extras, none at the end),
-  unlocks only ever growing with XP, and the quest XP preview (counted once
-  per quest per day, closed at the cap and with the game layer off).
+  suggestions only ever growing with XP, and the quest XP preview (counted
+  once per quest per day, closed at the cap and with the game layer off).
+* `test/evolve_contracts_test.dart` — `gameInvited` / `todayPin` JSON and
+  fallbacks, onboarding's invitation for new profiles only, Play / Not now,
+  attempt drafts (exactly as typed, blank removes, no needless write, cleared
+  by `recordAttempt` in the same change), experiments and notices (content
+  shape, log round trip, try / edit / delete, unknown ids refused, Add to my
+  tasks without duplicates or XP), distinct-experiment XP, achievements by
+  trying vs reflecting vs doing, reward picks (earned, left, suggested first,
+  choose and its refusals, nothing kept ever taken away, game off opens
+  everything, `mutate` / `load` no longer opening extras, a locked extra
+  cannot be worn), backup / "Delete all data" with every new field, and the
+  glyph / art / invitation stubs in dark and light.
 * `test/ui/campaign_test.dart` — the whole section with real numbers, recording
   (and the blank-attempt message), editing and deleting, chapter → first open
   question, map → Compass, the XP rules dialog, no judgement copy, the Today
@@ -194,11 +283,12 @@ the battle log stays saved, exported and deleted with everything else.
   light (also with an avatar and a long motto, the avatar staying on the road
   in Italy). Persona: the emblem / avatar on the route (excluded from
   semantics, placed at the current stop), the Strategist card (nudge, count,
-  next extra, worn extras, "Every extra unlocked.", motto as typed, Create /
-  Edit → builder), achievement tiles naming their extra, the "New for your
-  avatar" moment (from an achievement, from a route stop; not for a worn
-  extra, not from typing alone, not for a restore that opens many), and the
-  quest chips (open vs done, cap reached, game off, size matrix).
+  next extra, worn extras, "Every extra unlocked." only when every extra is
+  the user's, motto as typed, Create / Edit → builder), achievement tiles
+  naming their extra, moments with picks (an achievement or a stop gives a
+  pick and no extra is claimed as new; not from typing alone; nothing twice;
+  not for a restore that earns many), and the quest chips (open vs done, cap
+  reached, game off, size matrix).
 * `test/ui/a11y_test.dart` — the Campaign in dark and light against the tap
   size, label and contrast guidelines.
 * `test/screenshots/campaign_screenshots_test.dart` — full section and a phone

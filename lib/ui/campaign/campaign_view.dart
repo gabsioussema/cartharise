@@ -553,10 +553,11 @@ class _StrategistCard extends StatelessWidget {
     final state = context.watch<AppState>();
     final persona = state.persona;
     final avatar = persona?.avatar;
-    // Extras kept for good or worn stay theirs (never taken away).
-    final owned = {...state.data.avatarUnlocked, ...wornBy(avatar)};
-    final open = {...unlockedBy(progress, gameOn: state.gameEnabled), ...owned};
-    final next = state.gameEnabled ? nextUnlock(progress, owned: owned) : null;
+    // Extras chosen, kept or worn stay theirs (never taken away); with the
+    // game layer off every extra is open.
+    final open = {...state.avatarUnlocks, ...wornBy(avatar)};
+    final allOpen = open.length == Unlockable.values.length;
+    final next = state.gameEnabled ? nextUnlock(progress, owned: open) : null;
     final motto = persona?.motto ?? '';
     final hasMotto = motto.trim().isNotEmpty;
     final secondary = theme.textTheme.bodyMedium?.copyWith(
@@ -616,33 +617,37 @@ class _StrategistCard extends StatelessWidget {
               );
             },
           ),
-          const SizedBox(height: 12),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsetsDirectional.only(top: 2),
-                child: Icon(
-                  next == null ? Icons.lock_open : Icons.lock_outline,
-                  size: 18,
-                  color: p.accent,
+          // Nothing is claimed that isn't so: "Every extra unlocked." only
+          // when every extra is the user's.
+          if (allOpen || next != null) ...[
+            const SizedBox(height: 12),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(top: 2),
+                  child: Icon(
+                    next == null ? Icons.lock_open : Icons.lock_outline,
+                    size: 18,
+                    color: p.accent,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  next == null
-                      ? l.campaignExtrasAll
-                      : l.campaignExtraNext(
-                          unlockableName(l, next),
-                          unlockReason(l, next),
-                        ),
-                  key: const ValueKey('campaign-strategist-next'),
-                  style: secondary,
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    next == null
+                        ? l.campaignExtrasAll
+                        : l.campaignExtraNext(
+                            unlockableName(l, next),
+                            unlockReason(l, next),
+                          ),
+                    key: const ValueKey('campaign-strategist-next'),
+                    style: secondary,
+                  ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
+          ],
           const SizedBox(height: 16),
           Align(
             alignment: AlignmentDirectional.centerStart,

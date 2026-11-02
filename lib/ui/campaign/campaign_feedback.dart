@@ -5,25 +5,23 @@ import 'package:flutter/semantics.dart';
 import 'package:provider/provider.dart';
 
 import '../../domain/campaign.dart';
-import '../../domain/persona.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
-import '../persona/persona_copy.dart';
-import '../persona/persona_ops.dart';
 import '../theme/cartha_theme.dart';
 import '../widgets/motion.dart';
 import 'campaign_copy.dart';
 import 'campaign_ops.dart';
 
-/// Calm Campaign moments (F-060): a short "+20 XP" when a quest, an attempt
-/// or a weekly review adds XP, "Achievement earned: …" when one is earned,
-/// and "New for your avatar: …" when an extra opens. Only for an action
-/// (a quest, an attempt, a review): never while typing an answer (reflection
-/// XP, a chapter it completes, its achievement and extra, and a route stop
-/// it reaches all stay quiet; the Campaign shows them), never twice for the
-/// same extra (extras are kept for good), never for a restore (large jumps
-/// are ignored), never with the game layer off. Shown at the top for about
-/// two seconds and announced to screen readers.
+/// Calm Campaign moments (F-060): a short "+20 XP" when a quest, an attempt,
+/// a weekly review or a first try of an experiment adds XP, and
+/// "Achievement earned: …" when one is earned. Only for an action: never
+/// while typing an answer (reflection XP, a chapter it completes, its
+/// achievement, and a route stop it reaches all stay quiet; the Campaign
+/// shows them), never for a restore (large jumps, or more reward picks at
+/// once than one action can earn, are ignored), never with the game layer
+/// off. Avatar extras no longer open by themselves (progress gives reward
+/// picks, spent by the user), so no extra is announced as new. Shown at the
+/// top for about two seconds and announced to screen readers.
 class CampaignFeedback extends StatefulWidget {
   const CampaignFeedback({super.key, required this.child});
 
@@ -32,7 +30,7 @@ class CampaignFeedback extends StatefulWidget {
   /// Larger jumps at once (a restored backup) are not celebrated.
   static const maxCelebratedXp = 60;
 
-  /// More avatar extras (or achievements) at once than one action can open
+  /// More reward picks (or achievements) at once than one action can earn
   /// (a route stop and an achievement) is a bulk change, not a moment.
   static const maxCelebratedUnlocks = 2;
 
@@ -58,12 +56,11 @@ class _CampaignFeedbackState extends State<CampaignFeedback> {
   /// then ticked) is not a new moment.
   Set<Achievement> _earned = const {};
 
-  /// Extras open before the last change (kept for good, so it only grows
-  /// while the game layer is on).
-  Set<Unlockable> _unlocks = const {};
+  /// The most reward picks seen this session ([rewardPicksEarned]): picks
+  /// earned again after progress went down and up are not new.
+  int _picks = 0;
   int _pendingXp = 0;
   final _pendingAchievements = <Achievement>[];
-  final _pendingUnlocks = <Unlockable>{};
   Timer? _settle;
   Timer? _hide;
   OverlayEntry? _entry;
@@ -82,7 +79,7 @@ class _CampaignFeedbackState extends State<CampaignFeedback> {
     final c = state.campaign;
     _actionXp = c.xpFromActions;
     _earned = c.earned;
-    _unlocks = state.avatarUnlocks;
+    _picks = rewardPicksEarned(c);
   }
 
   void _onChange() {
@@ -93,45 +90,28 @@ class _CampaignFeedbackState extends State<CampaignFeedback> {
     final c = state.campaign;
     final gained = c.xpFromActions - _actionXp;
     final newly = c.earned.difference(_earned);
-    // Opened by progress just now, and not kept from before (the change has
-    // already been folded into the kept set, so compare with the last one).
-    final opened = unlockedBy(
-      c,
-      gameOn: state.gameEnabled,
-    ).difference(_unlocks);
+    final picks = rewardPicksEarned(c);
+    final newPicks = picks - _picks;
     _actionXp = c.xpFromActions;
     _earned = {..._earned, ...c.earned};
-    _unlocks = state.avatarUnlocks;
+    if (picks > _picks) _picks = picks;
     // A bulk change (a restored backup) is not a moment to celebrate.
     const most = CampaignFeedback.maxCelebratedUnlocks;
     final bulk =
         gained > CampaignFeedback.maxCelebratedXp ||
         newly.length > most ||
-        opened.length > most;
+        newPicks > most;
     if (!state.gameEnabled || bulk) return;
-    // Only an action is a moment: what typing answers opens (a chapter's
-    // achievement and its extra, a route stop) stays quiet.
-    bool byAction(Achievement? a) =>
-        gained > 0 || (a != null && _actionAchievements.contains(a));
+    // Only an action is a moment: what typing answers reaches (a chapter's
+    // achievement, a route stop) stays quiet.
+    bool byAction(Achievement a) =>
+        gained > 0 || _actionAchievements.contains(a);
     if (gained > 0) _pendingXp += gained;
     _pendingAchievements.addAll([
       for (final a in Achievement.values)
         if (newly.contains(a) && byAction(a)) a,
     ]);
-    final worn = state.persona?.avatar;
-    _pendingUnlocks.addAll([
-      for (final u in kUnlockOrder)
-        if (opened.contains(u) &&
-            // Already worn (from before the game layer was on): not new.
-            !(worn?.uses(u) ?? false) &&
-            byAction(unlockSource(u).achievement))
-          u,
-    ]);
-    if (_pendingXp == 0 &&
-        _pendingAchievements.isEmpty &&
-        _pendingUnlocks.isEmpty) {
-      return;
-    }
+    if (_pendingXp == 0 && _pendingAchievements.isEmpty) return;
     _settle?.cancel();
     _settle = Timer(CampaignFeedback.settle, _show);
   }
@@ -143,11 +123,9 @@ class _CampaignFeedbackState extends State<CampaignFeedback> {
       if (_pendingXp > 0) l.campaignToastXp(_pendingXp),
       for (final a in _pendingAchievements)
         l.campaignToastAchievement(achievementName(l, a)),
-      for (final u in _pendingUnlocks) l.personaUnlocked(unlockableName(l, u)),
     ];
     _pendingXp = 0;
     _pendingAchievements.clear();
-    _pendingUnlocks.clear();
     final overlay = Navigator.maybeOf(context, rootNavigator: true)?.overlay;
     if (overlay == null) return;
     _remove();

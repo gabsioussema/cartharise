@@ -78,6 +78,15 @@ Map<String, String> userFacingText() {
     out['day${d.day}.prompt'] = d.prompt;
     if (d.hint != null) out['day${d.day}.hint'] = d.hint!;
   }
+  for (final e in c.experiments) {
+    out['${e.id}.title'] = e.title;
+    for (var i = 0; i < e.steps.length; i++) {
+      out['${e.id}.step$i'] = e.steps[i];
+    }
+  }
+  for (final n in c.notices) {
+    out['${n.id}.title'] = n.title;
+  }
   final cr = c.credit;
   out['credit.title'] = cr.title;
   out['credit.author'] = cr.author;

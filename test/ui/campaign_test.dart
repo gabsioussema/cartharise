@@ -442,30 +442,45 @@ void main() {
     AppData nearNewCarthage({Persona? persona}) =>
         _withQuestDays(onboardedData(), 4).copyWith(persona: () => persona);
 
-    testWidgets('an achievement that opens an extra says so', (tester) async {
+    // Changed by design (reward picks): an achievement gives a pick, so no
+    // extra is announced as open; the user chooses it.
+    testWidgets('an achievement gives a pick; no extra is claimed as new', (
+      tester,
+    ) async {
       final h = await pumpCartha(
         tester,
         data: _data(withAttempt: false).copyWith(quests: []),
       );
+      final before = h.state.picksLeft;
       await completeQuest(h, 'new');
       await tester.pump(CampaignFeedback.settle);
       await tester.pump();
       expect(
-        find.textContaining('New for your avatar: Bronze'),
+        find.textContaining('Achievement earned: The Practitioner'),
         findsOneWidget,
       );
+      expect(find.textContaining('New for your avatar'), findsNothing);
+      expect(h.state.picksLeft, before + 1);
+      expect(h.state.canUse(GarmentColor.bronze), isFalse, reason: 'unchosen');
+      await tester.pump(CampaignFeedback.visible);
     });
 
-    testWidgets('reaching a route stop with a quest opens its extra', (
+    // Changed by design (reward picks): the stop gives a pick; its extra is
+    // only suggested, never claimed open.
+    testWidgets('reaching a route stop with a quest: XP and a pick', (
       tester,
     ) async {
       final h = await pumpCartha(tester, data: nearNewCarthage());
       expect(h.state.campaign.level, 1);
+      final before = h.state.picksLeft;
       await completeQuest(h, 'new');
       await tester.pump(CampaignFeedback.settle);
       await tester.pump();
       expect(h.state.campaign.waypoint, Waypoint.newCarthage);
-      expect(find.text('+20 XP  ·  New for your avatar: Path'), findsOneWidget);
+      expect(find.text('+20 XP'), findsOneWidget);
+      expect(h.state.picksLeft, before + 1);
+      expect(h.state.suggestedPick, Unlockable.sigilPath);
+      expect(h.state.canUse(Sigil.path), isFalse, reason: 'unchosen');
       await tester.pump(CampaignFeedback.visible);
       expect(find.byKey(const ValueKey('campaign-toast')), findsNothing);
     });
@@ -556,7 +571,10 @@ void main() {
       await tester.pump(CampaignFeedback.settle);
       await tester.pump();
       expect(h.state.campaign.earned, contains(Achievement.observer));
-      expect(h.state.canUse(Accessory.scroll), isTrue);
+      // Changed by design (reward picks): The Observer gives a pick; the
+      // Scroll is only suggested until chosen.
+      expect(h.state.picksLeft, 1);
+      expect(h.state.canUse(Accessory.scroll), isFalse);
       expect(find.byKey(const ValueKey('campaign-toast')), findsNothing);
       expect(find.textContaining('The Observer'), findsNothing);
       expect(find.textContaining('New for your avatar'), findsNothing);
@@ -571,7 +589,11 @@ void main() {
       await tester.pump(CampaignFeedback.visible);
     });
 
-    testWidgets('an extra earned again is not announced again', (tester) async {
+    // Changed by design (reward picks): the extra is chosen, not opened by
+    // the achievement; the intent stays — nothing is announced twice and a
+    // chosen extra stays when its record goes.
+    testWidgets('an achievement earned again is not announced again; a chosen '
+        'extra stays', (tester) async {
       final h = await pumpCartha(
         tester,
         data: _data(withAttempt: false).copyWith(quests: []),
@@ -592,10 +614,15 @@ void main() {
       await tester.pump(CampaignFeedback.settle);
       await tester.pump();
       expect(
-        find.textContaining('New for your avatar: Bronze'),
+        find.textContaining('Achievement earned: The Practitioner'),
         findsOneWidget,
       );
       await tester.pump(CampaignFeedback.visible);
+      // Spending a pick is the user's choice, not a moment.
+      unawaited(h.state.chooseReward(Unlockable.garmentBronze));
+      await tester.pump(CampaignFeedback.settle);
+      await tester.pump();
+      expect(find.byKey(const ValueKey('campaign-toast')), findsNothing);
 
       // Untick: Bronze stays open, nothing to say.
       unawaited(setDone(false));
@@ -701,7 +728,7 @@ void main() {
     testWidgets('no avatar yet: the emblem on the route, a nudge, the count '
         'and the next extra; Create opens the builder', (tester) async {
       final semantics = tester.ensureSemantics();
-      await _pumpCampaign(tester);
+      final h = await _pumpCampaign(tester);
       // The emblem stands at the current stop (no avatar to show).
       final onRoute = tester.widget<AvatarView>(
         _inRoute(find.byType(AvatarView)),
@@ -726,8 +753,10 @@ void main() {
       );
       expect(card.avatar, isNull);
       expect(card.excludeFromSemantics, isTrue);
-      // The Observer, the Practitioner and the Challenger opened three.
-      expect(find.text('3 of 13 extras unlocked'), findsOneWidget);
+      // Changed by design (reward picks): the Observer, the Practitioner and
+      // the Challenger gave three picks; nothing is open until chosen.
+      expect(h.state.picksLeft, 3);
+      expect(find.text('0 of 13 extras unlocked'), findsOneWidget);
       expect(find.text('Next: Path · Reach New Carthage'), findsOneWidget);
 
       await _tapVisible(
@@ -816,7 +845,9 @@ void main() {
           ),
         ),
       );
-      expect(find.text('5 of 13 extras unlocked'), findsOneWidget);
+      // Changed by design (reward picks): the two worn extras are the
+      // user's; the three earned picks are not spent yet.
+      expect(find.text('2 of 13 extras unlocked'), findsOneWidget);
       expect(find.text('Next: Sage · Reach the Ebro'), findsOneWidget);
       // No motto: nothing stands in for the user's words.
       expect(
@@ -825,14 +856,15 @@ void main() {
       );
     });
 
-    testWidgets('every extra open: said plainly', (tester) async {
+    /// Every milestone reached: Italy and all seven achievements (13 picks).
+    AppData everyMilestone() {
       String id(String phase, int i) => '$phase.${_two(i)}';
       final every = [
         for (var i = 1; i <= 14; i++) id('morning', i),
         for (var i = 1; i <= 6; i++) id('daytime', i),
         for (var i = 1; i <= 7; i++) id('evening', i),
       ];
-      final data = _withQuestDays(
+      return _withQuestDays(
         _data().copyWith(
           journeys: [
             Journey(
@@ -847,11 +879,30 @@ void main() {
         ),
         23,
       );
-      await _pumpCampaign(tester, data: data);
+    }
+
+    // Changed by design (reward picks): every extra is open once every pick
+    // is spent on one.
+    testWidgets('every extra open: said plainly', (tester) async {
+      await _pumpCampaign(
+        tester,
+        data: everyMilestone().copyWith(
+          avatarUnlocked: Unlockable.values.toSet(),
+        ),
+      );
       expect(find.text("You're at Italy"), findsOneWidget);
       expect(find.text('7 of 7 earned'), findsOneWidget);
       expect(find.text('13 of 13 extras unlocked'), findsOneWidget);
       expect(find.text('Every extra unlocked.'), findsOneWidget);
+    });
+
+    testWidgets('every milestone reached, nothing chosen: no false claim', (
+      tester,
+    ) async {
+      final h = await _pumpCampaign(tester, data: everyMilestone());
+      expect(h.state.picksLeft, 13);
+      expect(find.text('0 of 13 extras unlocked'), findsOneWidget);
+      expect(find.text('Every extra unlocked.'), findsNothing);
     });
   });
 

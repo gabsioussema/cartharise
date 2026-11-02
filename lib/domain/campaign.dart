@@ -10,6 +10,8 @@ library;
 import 'app_data.dart';
 import 'content.dart';
 
+export 'content.dart' show CampaignChapter;
+
 /// XP for each core reset question answered (once per question, ever).
 const int kXpPerReflection = 5;
 
@@ -28,30 +30,11 @@ const int kXpPerAttemptDay = 15;
 /// XP for each weekly review (one per week).
 const int kXpPerReview = 15;
 
+/// XP for each distinct Playground experiment tried (once each, ever).
+const int kXpPerExperiment = 10;
+
 /// XP per level.
 const int kXpPerLevel = 100;
-
-/// The five chapters of the one-day prologue (F-059): the article's own
-/// exercises, in order — 4 + 7 + 3 morning questions, the six daytime
-/// check-ins and the seven evening questions.
-enum CampaignChapter {
-  terrain([PromptGroup.currentReality]),
-  pattern([PromptGroup.antiVision, PromptGroup.identity]),
-  banner([PromptGroup.vision]),
-  autopilot([PromptGroup.interrupt]),
-  plan([PromptGroup.insight, PromptGroup.direction, PromptGroup.plan]);
-
-  const CampaignChapter(this.groups);
-
-  /// The prompt groups this chapter covers (core prompts only).
-  final List<PromptGroup> groups;
-
-  /// The chapter's prompt ids, in reset order.
-  List<String> promptIds(ContentLibrary content) => [
-    for (final p in content.prompts)
-      if (p.core && groups.contains(p.group)) p.id,
-  ];
-}
 
 /// The level route: Hannibal's march from Carthage into Italy (218 BC). Each
 /// level is the next waypoint; places, never labels for the person. From
@@ -63,16 +46,33 @@ Waypoint waypointFor(int level) =>
     Waypoint.values[(level - 1).clamp(0, Waypoint.values.length - 1)];
 
 /// Article-based achievements (F-062), earned only for observable
-/// activities — never for what was written or how it felt.
+/// activities — never for what was written or how it felt. The five chapter
+/// achievements name their [chapter]; the last two are earned by doing.
 enum Achievement {
-  observer,
-  pathfinder,
-  visionary,
-  watchful,
-  strategist,
-  practitioner,
-  challenger,
+  observer(CampaignChapter.terrain),
+  pathfinder(CampaignChapter.pattern),
+  visionary(CampaignChapter.banner),
+  watchful(CampaignChapter.autopilot),
+  strategist(CampaignChapter.plan),
+  practitioner(null),
+  challenger(null);
+
+  const Achievement(this.chapter);
+
+  /// The chapter this achievement belongs to; null for the two earned by
+  /// doing (a completed quest, a first attempt).
+  final CampaignChapter? chapter;
+
+  /// The chapter achievement of [chapter].
+  static Achievement ofChapter(CampaignChapter chapter) =>
+      values.firstWhere((a) => a.chapter == chapter);
 }
+
+/// How an achievement was earned, so the app can say which route it was.
+/// A chapter's achievement: [reflecting] (every chapter question answered
+/// in one reset) or [trying] (one of its experiments tried); The
+/// Practitioner and The Challenger: [doing].
+enum EarnedRoute { reflecting, trying, doing }
 
 /// A chapter's progress in the current reset.
 class ChapterProgress {
@@ -80,6 +80,7 @@ class ChapterProgress {
     required this.chapter,
     required this.promptIds,
     required this.answered,
+    this.tried = 0,
   });
 
   final CampaignChapter chapter;
@@ -87,6 +88,9 @@ class ChapterProgress {
 
   /// How many of [promptIds] have an answer in the current reset.
   final int answered;
+
+  /// How many of the chapter's experiments were tried, ever (each once).
+  final int tried;
 
   int get total => promptIds.length;
   bool get explored => total > 0 && answered == total;
@@ -97,19 +101,21 @@ class CampaignProgress {
   const CampaignProgress({
     required this.xp,
     required this.chapters,
-    required this.earned,
     required this.questsCompleted,
     required this.pathDaysWritten,
     required this.attempts,
+    this.earnedBy = const {},
     this.xpFromActions = 0,
+    this.experimentsTried = 0,
     this.milestones = 0,
     this.milestonesDone = 0,
   });
 
   final int xp;
 
-  /// The part of [xp] from discrete actions (quests, attempts, reviews) —
-  /// what a "+XP" moment celebrates; typing answers is never interrupted.
+  /// The part of [xp] from discrete actions (quests, attempts, reviews,
+  /// experiments tried) — what a "+XP" moment celebrates; typing answers is
+  /// never interrupted.
   final int xpFromActions;
 
   /// The monthly boss's milestones (the Missions project) and how many are
@@ -117,14 +123,23 @@ class CampaignProgress {
   final int milestones;
   final int milestonesDone;
   final List<ChapterProgress> chapters;
-  final Set<Achievement> earned;
 
-  /// Every quest completion (a daily quest counts once per day).
+  /// Every achievement earned, with the route that earned it, in the
+  /// article's order.
+  final Map<Achievement, EarnedRoute> earnedBy;
+
+  /// Every completed quest (a daily quest counts once per day).
   final int questsCompleted;
   final int pathDaysWritten;
 
   /// Battle-log entries.
   final int attempts;
+
+  /// Distinct Playground experiments tried (each counts once, ever).
+  final int experimentsTried;
+
+  /// The achievements earned, in the article's order.
+  Set<Achievement> get earned => earnedBy.keys.toSet();
 
   int get level => 1 + xp ~/ kXpPerLevel;
 
@@ -146,15 +161,35 @@ class CampaignProgress {
   /// The first achievement not earned yet, in the article's order.
   Achievement? get nextAchievement {
     for (final a in Achievement.values) {
-      if (!earned.contains(a)) return a;
+      if (!earnedBy.containsKey(a)) return a;
     }
     return null;
   }
 }
 
-/// The Campaign for [data], with the chapters taken from [content].
+/// Reward picks the Campaign has given (spent or not): one for each route
+/// stop reached after Carthage and one for each achievement earned. The user
+/// spends a pick on an avatar extra of their choice (`chooseReward`); this
+/// count is derived, so it can go down, but a chosen extra is never taken
+/// away.
+int rewardPicksEarned(CampaignProgress progress) =>
+    progress.waypoint.index + progress.earnedBy.length;
+
+/// The Campaign for [data], with the chapters and experiments taken from
+/// [content].
 CampaignProgress campaignProgress(AppData data, ContentLibrary content) {
   final current = data.currentJourney;
+
+  // Experiments: each distinct one once, ever (repeating one adds nothing).
+  final tried = <String>{for (final e in data.experimentLog) e.experimentId};
+  final triedPerChapter = <CampaignChapter, int>{};
+  for (final id in tried) {
+    final chapter = content.experiment(id)?.chapter;
+    if (chapter != null) {
+      triedPerChapter[chapter] = (triedPerChapter[chapter] ?? 0) + 1;
+    }
+  }
+
   ChapterProgress progressOf(CampaignChapter chapter) {
     final ids = chapter.promptIds(content);
     final answered = current == null
@@ -164,6 +199,7 @@ CampaignProgress campaignProgress(AppData data, ContentLibrary content) {
       chapter: chapter,
       promptIds: ids,
       answered: answered,
+      tried: triedPerChapter[chapter] ?? 0,
     );
   }
 
@@ -201,13 +237,16 @@ CampaignProgress campaignProgress(AppData data, ContentLibrary content) {
   final xpFromActions =
       questXpCount * kXpPerQuest +
       attemptDays * kXpPerAttemptDay +
-      reviewWeeks * kXpPerReview;
+      reviewWeeks * kXpPerReview +
+      tried.length * kXpPerExperiment;
   final xp =
       reflected.length * kXpPerReflection +
       pathDays * kXpPerPathDay +
       xpFromActions;
 
-  // Chapter achievements: every chapter question answered in one reset.
+  // A chapter's achievement: every chapter question answered in one reset,
+  // or any of the chapter's experiments tried. Reflecting is named when
+  // both are true.
   bool everExplored(CampaignChapter chapter) {
     final ids = chapter.promptIds(content);
     if (ids.isEmpty) return false;
@@ -216,25 +255,35 @@ CampaignProgress campaignProgress(AppData data, ContentLibrary content) {
     );
   }
 
-  final earned = <Achievement>{
-    if (everExplored(CampaignChapter.terrain)) Achievement.observer,
-    if (everExplored(CampaignChapter.pattern)) Achievement.pathfinder,
-    if (everExplored(CampaignChapter.banner)) Achievement.visionary,
-    if (everExplored(CampaignChapter.autopilot)) Achievement.watchful,
-    if (everExplored(CampaignChapter.plan)) Achievement.strategist,
-    if (questsCompleted > 0) Achievement.practitioner,
-    if (data.campaignLog.isNotEmpty) Achievement.challenger,
+  EarnedRoute? routeOf(Achievement a) => switch (a) {
+    Achievement.practitioner => questsCompleted > 0 ? EarnedRoute.doing : null,
+    Achievement.challenger =>
+      data.campaignLog.isNotEmpty ? EarnedRoute.doing : null,
+    Achievement(chapter: final chapter?) =>
+      everExplored(chapter)
+          ? EarnedRoute.reflecting
+          : (triedPerChapter[chapter] ?? 0) > 0
+          ? EarnedRoute.trying
+          : null,
+    _ => null,
   };
+
+  final earnedBy = <Achievement, EarnedRoute>{};
+  for (final a in Achievement.values) {
+    final route = routeOf(a);
+    if (route != null) earnedBy[a] = route;
+  }
 
   final milestones = data.project?.milestones ?? const [];
   return CampaignProgress(
     xp: xp,
     xpFromActions: xpFromActions,
     chapters: chapters,
-    earned: earned,
+    earnedBy: earnedBy,
     questsCompleted: questsCompleted,
     pathDaysWritten: pathDays,
     attempts: data.campaignLog.length,
+    experimentsTried: tried.length,
     milestones: milestones.length,
     milestonesDone: milestones.where((m) => m.done).length,
   );

@@ -1,5 +1,6 @@
-/// Versioned, read-only content: lessons, reflection prompts, the 30-day path
-/// and the source credit. Pure Dart (no Flutter imports).
+/// Versioned, read-only content: lessons, reflection prompts, the 30-day path,
+/// the Playground's experiments and notices, and the source credit. Pure Dart
+/// (no Flutter imports).
 ///
 /// Content is paraphrased and independently written (F-039). A prompt's [Prompt.id]
 /// is permanent: saved answers are keyed by it, so a content update may reword a
@@ -195,6 +196,108 @@ class SourceCredit {
   final String paraphraseNotice;
 }
 
+/// The five chapters of the one-day prologue (F-059): the article's own
+/// exercises, in order — 4 + 7 + 3 morning questions, the six daytime
+/// check-ins and the seven evening questions. Also the home of each
+/// Playground [Experiment]. (Exported by `campaign.dart` too.)
+enum CampaignChapter {
+  terrain([PromptGroup.currentReality]),
+  pattern([PromptGroup.antiVision, PromptGroup.identity]),
+  banner([PromptGroup.vision]),
+  autopilot([PromptGroup.interrupt]),
+  plan([PromptGroup.insight, PromptGroup.direction, PromptGroup.plan]);
+
+  const CampaignChapter(this.groups);
+
+  /// The prompt groups this chapter covers (core prompts only).
+  final List<PromptGroup> groups;
+
+  /// The chapter's prompt ids, in reset order.
+  List<String> promptIds(ContentLibrary content) => [
+    for (final p in content.prompts)
+      if (p.core && groups.contains(p.group)) p.id,
+  ];
+}
+
+/// One stable visual cue per idea, always shown with a word (recognition
+/// over recall). Drawn by `GlyphIcon` in `lib/ui/widgets/glyphs.dart`, which
+/// re-exports this enum. Names are stored in content only: append, never
+/// rename.
+enum CarthaGlyph {
+  /// A mirror: lessons, reflections, the Playground's "Notice".
+  notice,
+
+  /// A compass and the north star: the Compass, project context.
+  direction,
+
+  /// A seedling: the Playground's "Try", experiment cards, attempts.
+  experiment,
+
+  /// A shelter: constraints, planning.
+  boundaries,
+
+  /// A lantern and a notebook: the Journal, the weekly review.
+  reflection,
+
+  /// A path and a landmark: the Campaign, milestones.
+  progress,
+}
+
+/// A tiny real-world experiment for the Playground's "Try": safe, short,
+/// never about sharing personal details. Trying one is recorded as an
+/// `ExperimentEntry`; it becomes a task only when the user taps "Add to my
+/// tasks".
+class Experiment {
+  const Experiment({
+    required this.id,
+    required this.chapter,
+    required this.title,
+    required this.steps,
+    required this.minutes,
+  });
+
+  /// Permanent key, `try.<chapter>.<n>` (e.g. `try.terrain.01`): the
+  /// experiment log is keyed by it, so an id is never reused for a
+  /// different experiment.
+  final String id;
+
+  /// The chapter whose achievement trying it can earn.
+  final CampaignChapter chapter;
+
+  /// One short line, action first.
+  final String title;
+
+  /// One to three short lines.
+  final List<String> steps;
+
+  /// About how long it takes.
+  final int minutes;
+}
+
+/// A Playground "Notice" card: opens an existing prompt or lesson (no new
+/// text store). Exactly one of [promptId] and [lessonId] is set.
+class Notice {
+  const Notice({
+    required this.id,
+    required this.glyph,
+    required this.title,
+    this.promptId,
+    this.lessonId,
+  }) : assert(
+         (promptId == null) != (lessonId == null),
+         'A notice opens exactly one prompt or one lesson',
+       );
+
+  /// Permanent key, `notice.<n>` (e.g. `notice.01`).
+  final String id;
+  final CarthaGlyph glyph;
+
+  /// One short line.
+  final String title;
+  final String? promptId;
+  final String? lessonId;
+}
+
 /// Everything the app teaches and asks, for one language.
 class ContentLibrary {
   const ContentLibrary({
@@ -204,6 +307,8 @@ class ContentLibrary {
     required this.prompts,
     required this.thirtyDays,
     required this.credit,
+    this.experiments = const [],
+    this.notices = const [],
   });
 
   final String languageCode;
@@ -214,6 +319,32 @@ class ContentLibrary {
   final List<Prompt> prompts;
   final List<PathDay> thirtyDays;
   final SourceCredit credit;
+
+  /// The Playground's "Try" experiments, in the order they are offered.
+  final List<Experiment> experiments;
+
+  /// The Playground's "Notice" cards.
+  final List<Notice> notices;
+
+  Experiment? experiment(String id) {
+    for (final e in experiments) {
+      if (e.id == id) return e;
+    }
+    return null;
+  }
+
+  /// The experiments of [chapter], in order.
+  List<Experiment> experimentsFor(CampaignChapter chapter) => [
+    for (final e in experiments)
+      if (e.chapter == chapter) e,
+  ];
+
+  Notice? notice(String id) {
+    for (final n in notices) {
+      if (n.id == id) return n;
+    }
+    return null;
+  }
 
   List<Prompt> byPhase(PromptPhase phase) =>
       prompts.where((p) => p.phase == phase).toList()

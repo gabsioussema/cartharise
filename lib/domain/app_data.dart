@@ -2,7 +2,8 @@
 /// Pure Dart (no Flutter imports). Mirrors the requirement's data model:
 /// UserProfile, Journey, ReflectionAnswer (incl. daytime check-ins), LifeCompass
 /// (+ versions), Quest, MonthProject, JournalEntry, WeeklyReview,
-/// ReminderPreference and the thirty-day path answers.
+/// ReminderPreference, the thirty-day path answers, the Campaign's battle log
+/// (and its unsent attempt draft) and the Playground's experiment log.
 ///
 /// `fromJson` throws [FormatException] on any malformed input so an import can
 /// be rejected without touching current data (F-041).
@@ -24,11 +25,18 @@ enum AppTheme { forest, olive, oasis, tyrian, alpine, obsidian }
 
 enum QuestRecurrence { none, daily }
 
-enum QuestSource { manual, dailyLever, pathDay, project }
+/// Where a quest came from. Stored by name: append new ones, never rename.
+/// [experiment]: a Playground experiment the user added to their tasks.
+enum QuestSource { manual, dailyLever, pathDay, project, experiment }
 
 enum ProjectStatus { planned, active, paused, done }
 
 enum CompassVersionReason { manual, beforeImport, beforeRestore }
+
+/// What Today's next action leans towards (asked in "Choose something
+/// else"). [auto] lets the app decide. Stored by name: append, never rename;
+/// an unknown name loads as [auto].
+enum TodayPin { auto, project, reflection, notes }
 
 // ── JSON helpers ────────────────────────────────────────────────────────────
 
@@ -94,6 +102,23 @@ T _enum<T extends Enum>(
   }
   if (v == null && fallback != null) return fallback;
   throw FormatException('Unknown value for "$key": $v');
+}
+
+/// Like [_enum], but a missing or unknown name (from a newer version) falls
+/// back instead of failing; only a non-string value is malformed.
+T _lenientEnum<T extends Enum>(
+  List<T> values,
+  Map<String, Object?> j,
+  String key,
+  T fallback,
+) {
+  final v = j[key];
+  if (v == null) return fallback;
+  if (v is! String) throw FormatException('Expected string for "$key"');
+  for (final e in values) {
+    if (e.name == v) return e;
+  }
+  return fallback;
 }
 
 String? _optDateKey(Map<String, Object?> j, String key) {
@@ -168,6 +193,8 @@ class AppSettings {
     this.quietStart,
     this.quietEnd,
     this.game = true,
+    this.gameInvited = true,
+    this.todayPin = TodayPin.auto,
   });
 
   final AppearanceMode appearance;
@@ -184,8 +211,18 @@ class AppSettings {
   final String? quietEnd;
 
   /// The Campaign game layer (XP, levels, achievements; F-060). On by
-  /// default; off hides it everywhere, the battle log is kept.
+  /// default (old files and tests keep their meaning); a brand-new profile
+  /// starts with it off until the user says "Play" on the invitation. Off
+  /// hides it everywhere, the battle log is kept.
   final bool game;
+
+  /// Whether the one-time Campaign invitation was answered (or never
+  /// needed). True by default and for older files, so existing users never
+  /// see it; a brand-new profile starts with it false.
+  final bool gameInvited;
+
+  /// What Today's next action leans towards.
+  final TodayPin todayPin;
 
   AppSettings copyWith({
     AppearanceMode? appearance,
@@ -195,6 +232,8 @@ class AppSettings {
     String? Function()? quietStart,
     String? Function()? quietEnd,
     bool? game,
+    bool? gameInvited,
+    TodayPin? todayPin,
   }) => AppSettings(
     appearance: appearance ?? this.appearance,
     theme: theme ?? this.theme,
@@ -203,6 +242,8 @@ class AppSettings {
     quietStart: quietStart != null ? quietStart() : this.quietStart,
     quietEnd: quietEnd != null ? quietEnd() : this.quietEnd,
     game: game ?? this.game,
+    gameInvited: gameInvited ?? this.gameInvited,
+    todayPin: todayPin ?? this.todayPin,
   );
 
   Map<String, Object?> toJson() => {
@@ -213,6 +254,8 @@ class AppSettings {
     'quietStart': quietStart,
     'quietEnd': quietEnd,
     'game': game,
+    'gameInvited': gameInvited,
+    'todayPin': todayPin.name,
   };
 
   factory AppSettings.fromJson(Object? json) {
@@ -235,6 +278,8 @@ class AppSettings {
       quietStart: quietStart,
       quietEnd: quietEnd,
       game: _bool(j, 'game', fallback: true),
+      gameInvited: _bool(j, 'gameInvited', fallback: true),
+      todayPin: _lenientEnum(TodayPin.values, j, 'todayPin', TodayPin.auto),
     );
   }
 }
@@ -816,6 +861,95 @@ class BattleLogEntry {
   }
 }
 
+/// The attempt form's words while they are being written, autosaved so
+/// nothing typed is lost before "Record this attempt". Both fields exactly
+/// as typed; recording the attempt removes the draft.
+class AttemptDraft {
+  const AttemptDraft({
+    required this.updatedAt,
+    this.attempt = '',
+    this.learning = '',
+  });
+
+  final String attempt;
+  final String learning;
+  final DateTime updatedAt;
+
+  /// Nothing worth keeping (both blank).
+  bool get isEmpty => attempt.trim().isEmpty && learning.trim().isEmpty;
+
+  Map<String, Object?> toJson() => {
+    'attempt': attempt,
+    'learning': learning,
+    'updatedAt': _iso(updatedAt),
+  };
+
+  factory AttemptDraft.fromJson(Object? json) {
+    final j = _map(json, 'attemptDraft');
+    return AttemptDraft(
+      attempt: _str(j, 'attempt'),
+      learning: _str(j, 'learning'),
+      updatedAt: _time(j, 'updatedAt'),
+    );
+  }
+}
+
+// ── The Playground ─────────────────────────────────────────────────────────
+
+/// One time the user tried a Playground experiment (content id
+/// `try.<chapter>.<n>`), with an optional note exactly as typed. Trying the
+/// same experiment again adds another entry; XP counts each experiment once.
+class ExperimentEntry {
+  const ExperimentEntry({
+    required this.id,
+    required this.experimentId,
+    required this.day,
+    required this.createdAt,
+    this.note = '',
+    this.editedAt,
+  });
+
+  final String id;
+
+  /// The [Experiment] tried (permanent content id).
+  final String experimentId;
+
+  /// Local day it was tried, `yyyy-MM-dd`.
+  final String day;
+
+  /// Optional, kept exactly as typed ('' = none).
+  final String note;
+  final DateTime createdAt;
+  final DateTime? editedAt;
+
+  Map<String, Object?> toJson() => {
+    'id': id,
+    'experimentId': experimentId,
+    'day': day,
+    'note': note,
+    'createdAt': _iso(createdAt),
+    'editedAt': editedAt == null ? null : _iso(editedAt!),
+  };
+
+  factory ExperimentEntry.fromJson(Object? json) {
+    final j = _map(json, 'experimentEntry');
+    final day = _str(j, 'day');
+    parseDateKey(day);
+    final experimentId = _str(j, 'experimentId');
+    if (experimentId.isEmpty) {
+      throw const FormatException('Missing experimentId');
+    }
+    return ExperimentEntry(
+      id: _str(j, 'id'),
+      experimentId: experimentId,
+      day: day,
+      note: _str(j, 'note'),
+      createdAt: _time(j, 'createdAt'),
+      editedAt: _optTime(j, 'editedAt'),
+    );
+  }
+}
+
 // ── Root snapshot ──────────────────────────────────────────────────────────
 
 class AppData {
@@ -836,6 +970,8 @@ class AppData {
     this.campaignLog = const [],
     this.persona,
     this.avatarUnlocked = const {},
+    this.attemptDraft,
+    this.experimentLog = const [],
   });
 
   /// Null until onboarding creates it.
@@ -873,11 +1009,18 @@ class AppData {
   /// The user's avatar and motto; null until they create one.
   final Persona? persona;
 
-  /// Avatar extras the user keeps for good: each one the Campaign opened
-  /// while the game layer was on, and each one a saved avatar wore. It only
-  /// ever grows (nothing unlocked or worn is taken away when progress goes
-  /// down); "Delete all data" clears it with everything else.
+  /// Avatar extras the user keeps for good: each one they chose with a
+  /// Campaign reward pick, each one a saved avatar wore, and each one an
+  /// earlier version opened by itself. It only ever grows (nothing chosen
+  /// or worn is taken away when progress goes down); "Delete all data"
+  /// clears it with everything else.
   final Set<Unlockable> avatarUnlocked;
+
+  /// The Campaign attempt form's unsent words; null when there are none.
+  final AttemptDraft? attemptDraft;
+
+  /// Playground experiments tried, newest first.
+  final List<ExperimentEntry> experimentLog;
 
   static const empty = AppData();
 
@@ -905,6 +1048,8 @@ class AppData {
     List<BattleLogEntry>? campaignLog,
     Persona? Function()? persona,
     Set<Unlockable>? avatarUnlocked,
+    AttemptDraft? Function()? attemptDraft,
+    List<ExperimentEntry>? experimentLog,
   }) => AppData(
     profile: profile != null ? profile() : this.profile,
     settings: settings ?? this.settings,
@@ -924,6 +1069,8 @@ class AppData {
     campaignLog: campaignLog ?? this.campaignLog,
     persona: persona != null ? persona() : this.persona,
     avatarUnlocked: avatarUnlocked ?? this.avatarUnlocked,
+    attemptDraft: attemptDraft != null ? attemptDraft() : this.attemptDraft,
+    experimentLog: experimentLog ?? this.experimentLog,
   );
 
   Map<String, Object?> toJson() => {
@@ -947,6 +1094,8 @@ class AppData {
       for (final u in Unlockable.values)
         if (avatarUnlocked.contains(u)) u.name,
     ],
+    'attemptDraft': attemptDraft?.toJson(),
+    'experimentLog': [for (final e in experimentLog) e.toJson()],
   };
 
   factory AppData.fromJson(Object? json) {
@@ -1015,6 +1164,13 @@ class AppData {
       ],
       persona: j['persona'] == null ? null : Persona.fromJson(j['persona']),
       avatarUnlocked: unlocked,
+      attemptDraft: j['attemptDraft'] == null
+          ? null
+          : AttemptDraft.fromJson(j['attemptDraft']),
+      experimentLog: [
+        for (final e in _list(j['experimentLog'], 'experimentLog'))
+          ExperimentEntry.fromJson(e),
+      ],
     );
   }
 }

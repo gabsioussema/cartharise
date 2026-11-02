@@ -3,8 +3,10 @@ import 'package:cartharise/domain/content.dart';
 /// A complete, dummy-text [ContentLibrary] with the real structure
 /// (PLAN.md §7): 14 morning, 6 daytime (source default times), 3 optional
 /// bonus, 7 evening (evening.03–07 map to Compass fields), 7 lessons with
-/// checks, and 30 path days in four stages. Tests never depend on the real
-/// English wording.
+/// checks, 30 path days in four stages, two Playground experiments per
+/// chapter (`try.<chapter>.01`/`.02`) and two notices (`notice.01` opens
+/// `morning.01`, `notice.02` opens `lesson.01`). Tests never depend on the
+/// real English wording.
 final ContentLibrary fakeContent = ContentLibrary(
   languageCode: 'en',
   version: 1,
@@ -85,6 +87,31 @@ final ContentLibrary fakeContent = ContentLibrary(
         prompt: 'Day $d prompt?',
         hint: d.isEven ? 'Hint for day $d.' : null,
       ),
+  ],
+  experiments: [
+    for (final chapter in CampaignChapter.values)
+      for (var n = 1; n <= 2; n++)
+        Experiment(
+          id: 'try.${chapter.name}.${_two(n)}',
+          chapter: chapter,
+          title: 'Try ${chapter.name} $n',
+          steps: ['Step one for ${chapter.name} $n.', 'Step two.'],
+          minutes: 5 * n,
+        ),
+  ],
+  notices: const [
+    Notice(
+      id: 'notice.01',
+      glyph: CarthaGlyph.notice,
+      title: 'Notice 1 title',
+      promptId: 'morning.01',
+    ),
+    Notice(
+      id: 'notice.02',
+      glyph: CarthaGlyph.reflection,
+      title: 'Notice 2 title',
+      lessonId: 'lesson.01',
+    ),
   ],
   credit: const SourceCredit(
     title: 'How to fix your entire life in 1 day',

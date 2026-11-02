@@ -2,8 +2,10 @@
 /// Campaign and Today. Cosmetic and user-chosen only — never inferred, never a
 /// label for the person. Appearance (skin, face, hair, glasses, marks,
 /// headwear for faith or style) is always free; only decorative extras
-/// (banners, some colours and ornaments) unlock along the Campaign, and only
-/// while the game layer is on. Nothing once unlocked or worn is taken away.
+/// (banners, some colours and ornaments) are earned along the Campaign: each
+/// route stop and achievement gives a reward pick, spent on the extra the
+/// user chooses (the milestone's own extra is only suggested). With the game
+/// layer off every extra is open. Nothing once chosen or worn is taken away.
 ///
 /// Inclusive by design: no gender choice (every option is open to everyone),
 /// no default skin tone (null = a neutral silhouette until the user picks
@@ -12,9 +14,9 @@
 /// visible differences (glasses, freckles, vitiligo).
 library;
 
-import 'app_data.dart';
+import 'dart:math' as math;
+
 import 'campaign.dart';
-import 'content.dart';
 
 /// Skin tones (named after earth and wood, never ranked).
 enum SkinTone { sand, honey, clay, copper, chestnut, walnut, umber, ebony }
@@ -75,8 +77,9 @@ enum Accessory { none, satchel, scroll, compass, amulet }
 /// The banner behind the portrait: two free, four Campaign unlocks.
 enum Sigil { none, elephant, sun, path, compass, star, laurel }
 
-/// Decorative extras earned along the Campaign. Each comes from one route
-/// stop or one achievement (see [unlockSource]).
+/// Decorative extras earned along the Campaign with reward picks. Each is
+/// the suggested reward of one route stop or one achievement (see
+/// [unlockSource]).
 enum Unlockable {
   sigilPath,
   garmentSage,
@@ -93,8 +96,8 @@ enum Unlockable {
   sigilLaurel,
 }
 
-/// Where an [Unlockable] comes from: reaching a route stop, or an
-/// achievement. Exactly one of the two is set.
+/// The milestone an [Unlockable] is suggested for: reaching a route stop, or
+/// an achievement. Exactly one of the two is set.
 class UnlockSource {
   const UnlockSource.stop(Waypoint this.waypoint) : achievement = null;
   const UnlockSource.achievement(Achievement this.achievement)
@@ -104,7 +107,8 @@ class UnlockSource {
   final Achievement? achievement;
 }
 
-/// The single table of what unlocks what.
+/// The single table of which extra each milestone suggests (preselected
+/// when the user chooses the reward that milestone's pick buys).
 UnlockSource unlockSource(Unlockable u) => switch (u) {
   Unlockable.sigilPath => const UnlockSource.stop(Waypoint.newCarthage),
   Unlockable.garmentSage => const UnlockSource.stop(Waypoint.ebro),
@@ -135,20 +139,19 @@ UnlockSource unlockSource(Unlockable u) => switch (u) {
   ),
 };
 
-/// What [progress] has unlocked. With the game layer off, everything is
-/// open: opting out of the game never costs a choice.
-Set<Unlockable> unlockedBy(CampaignProgress progress, {required bool gameOn}) {
-  if (!gameOn) return Unlockable.values.toSet();
-  return {
-    for (final u in Unlockable.values)
-      if (switch (unlockSource(u)) {
-        UnlockSource(waypoint: final w?) => progress.waypoint.index >= w.index,
-        UnlockSource(achievement: final a?) => progress.earned.contains(a),
-        _ => false,
-      })
-        u,
-  };
-}
+/// The extras suggested by the milestones [progress] has reached (each
+/// route stop after Carthage and each achievement earned suggests its
+/// [unlockSource] extra). Suggestions only: an extra is the user's once
+/// chosen with a pick, worn, or with the game layer off.
+Set<Unlockable> suggestedExtras(CampaignProgress progress) => {
+  for (final u in Unlockable.values)
+    if (switch (unlockSource(u)) {
+      UnlockSource(waypoint: final w?) => progress.waypoint.index >= w.index,
+      UnlockSource(achievement: final a?) => progress.earnedBy.containsKey(a),
+      _ => false,
+    })
+      u,
+};
 
 /// The extras [avatar] wears or carries (none for no avatar).
 Set<Unlockable> wornBy(Avatar? avatar) => {
@@ -157,16 +160,44 @@ Set<Unlockable> wornBy(Avatar? avatar) => {
       if (avatar.uses(u)) u,
 };
 
-/// [data] with every extra its Campaign progress opens now added to
-/// [AppData.avatarUnlocked], while the game layer is on. The kept set only
-/// grows: an extra stays open when progress goes down later (a quest
-/// unticked, an attempt deleted). With the game layer off nothing is added
-/// (everything is open anyway). Returns [data] itself when nothing is new.
-AppData withProgressUnlocks(AppData data, ContentLibrary content) {
-  if (!data.settings.game) return data;
-  final open = unlockedBy(campaignProgress(data, content), gameOn: true);
-  if (data.avatarUnlocked.containsAll(open)) return data;
-  return data.copyWith(avatarUnlocked: {...data.avatarUnlocked, ...open});
+/// Reward picks still to spend: the picks [progress] earned
+/// ([rewardPicksEarned]) minus the extras the user keeps ([kept], i.e.
+/// `AppData.avatarUnlocked`: chosen, or kept from wearing), never below
+/// zero and never more than the extras not kept yet. When progress goes
+/// down nothing kept is taken away; there is simply nothing to spend until
+/// it rises again.
+int rewardPicksLeft(CampaignProgress progress, Set<Unlockable> kept) {
+  final left = rewardPicksEarned(progress) - kept.length;
+  final notKept = Unlockable.values.where((u) => !kept.contains(u)).length;
+  return math.max(0, math.min(left, notKept));
+}
+
+/// The extra to preselect when choosing a reward: the first, in
+/// [kUnlockOrder], whose milestone [progress] has reached and that is not
+/// in [owned]; else the first not owned. Null when every extra is owned.
+Unlockable? suggestedReward(CampaignProgress progress, Set<Unlockable> owned) {
+  final reached = suggestedExtras(progress);
+  Unlockable? firstFree;
+  for (final u in kUnlockOrder) {
+    if (owned.contains(u)) continue;
+    if (reached.contains(u)) return u;
+    firstFree ??= u;
+  }
+  return firstFree;
+}
+
+/// Every extra a pick can buy (not in [owned]): the [suggestedReward]
+/// first, then the rest in [kUnlockOrder].
+List<Unlockable> rewardOptions(
+  CampaignProgress progress,
+  Set<Unlockable> owned,
+) {
+  final first = suggestedReward(progress, owned);
+  return [
+    ?first,
+    for (final u in kUnlockOrder)
+      if (u != first && !owned.contains(u)) u,
+  ];
 }
 
 /// Every extra in the order the Campaign points to them: the route stops
@@ -184,17 +215,17 @@ final List<Unlockable> kUnlockOrder = List.unmodifiable(
   }),
 );
 
-/// The next extra the Campaign can still open (game layer on), in
-/// [kUnlockOrder], skipping those already open or in [owned] (kept for good
-/// in [AppData.avatarUnlocked], or worn: never taken away). Null once every
-/// extra is open.
+/// The suggested extra of the next milestone still ahead, in
+/// [kUnlockOrder], skipping milestones already reached and extras in
+/// [owned] (kept in `AppData.avatarUnlocked`, or worn: never taken away).
+/// Null once every milestone is reached or every extra owned.
 Unlockable? nextUnlock(
   CampaignProgress progress, {
   Set<Unlockable> owned = const {},
 }) {
-  final open = unlockedBy(progress, gameOn: true);
+  final reached = suggestedExtras(progress);
   for (final u in kUnlockOrder) {
-    if (!open.contains(u) && !owned.contains(u)) return u;
+    if (!reached.contains(u) && !owned.contains(u)) return u;
   }
   return null;
 }

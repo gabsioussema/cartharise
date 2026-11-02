@@ -24,7 +24,8 @@ Future<AppState> _loaded([AppData? data, MemoryDataStore? store]) async {
   return state;
 }
 
-/// One quest done today (20 XP: the Practitioner, so Bronze opens).
+/// One quest done today (20 XP: the Practitioner, so one reward pick;
+/// Bronze is its suggested extra).
 Quest _questDoneToday() => Quest(
   id: 'q1',
   title: 'Walk 20 minutes',
@@ -32,7 +33,8 @@ Quest _questDoneToday() => Quest(
   completedOn: const {'2026-11-03'},
 );
 
-/// One attempt today (the Challenger, so the Laurel banner opens).
+/// One attempt today (the Challenger, so one reward pick; the Laurel banner
+/// is its suggested extra).
 BattleLogEntry _attemptToday() => BattleLogEntry(
   id: 'a1',
   day: '2026-11-03',
@@ -44,7 +46,7 @@ CampaignProgress _progress({int xp = 0, Set<Achievement> earned = const {}}) =>
     CampaignProgress(
       xp: xp,
       chapters: const [],
-      earned: earned,
+      earnedBy: {for (final a in earned) a: EarnedRoute.doing},
       questsCompleted: 0,
       pathDaysWritten: 0,
       attempts: 0,
@@ -159,19 +161,28 @@ void main() {
       }
     });
 
-    test('route stops and achievements open their items', () {
-      expect(unlockedBy(_progress(), gameOn: true), isEmpty);
-      final alps = unlockedBy(_progress(xp: 550), gameOn: true);
+    // Changed by design (reward picks): a milestone no longer opens its
+    // item, it suggests it for the pick it gives.
+    test('route stops and achievements suggest their items', () {
+      expect(suggestedExtras(_progress()), isEmpty);
+      final alps = suggestedExtras(_progress(xp: 550));
       expect(alps, containsAll([Unlockable.sigilPath, Unlockable.sigilStar]));
       expect(alps, isNot(contains(Unlockable.headwearLaurel)));
-      expect(
-        unlockedBy(_progress(earned: {Achievement.strategist}), gameOn: true),
-        {Unlockable.accessoryAmulet},
-      );
+      expect(suggestedExtras(_progress(earned: {Achievement.strategist})), {
+        Unlockable.accessoryAmulet,
+      });
     });
 
-    test('with the game layer off, everything is open', () {
-      expect(unlockedBy(_progress(), gameOn: false), Unlockable.values.toSet());
+    // Moved to the state (the game layer is a setting, not progress).
+    test('with the game layer off, everything is open', () async {
+      final state = await _loaded(
+        const AppData(settings: AppSettings(game: false)),
+      );
+      expect(state.avatarUnlocks, Unlockable.values.toSet());
+      for (final u in Unlockable.values) {
+        expect(state.ownsExtra(u), isTrue, reason: '$u');
+      }
+      expect(state.picksLeft, 0, reason: 'nothing to choose');
     });
   });
 
@@ -217,54 +228,53 @@ void main() {
     });
   });
 
-  group('extras are kept for good (nothing unlocked is taken away)', () {
-    test('withProgressUnlocks: only grows, only with the game layer on', () {
-      final done = AppData(quests: [_questDoneToday()]);
-      final kept = withProgressUnlocks(done, fakeContent);
-      expect(kept.avatarUnlocked, {Unlockable.garmentBronze});
-      // Progress down: nothing is removed.
-      final undone = withProgressUnlocks(
-        kept.copyWith(quests: const []),
-        fakeContent,
-      );
-      expect(undone.avatarUnlocked, {Unlockable.garmentBronze});
-      // Nothing new: the same data back.
-      expect(
-        identical(withProgressUnlocks(undone, fakeContent), undone),
-        isTrue,
-      );
-      // Game off: nothing is added (everything is open anyway).
-      final off = done.copyWith(settings: const AppSettings(game: false));
-      expect(withProgressUnlocks(off, fakeContent).avatarUnlocked, isEmpty);
-    });
-
-    test('unticking the quest keeps Bronze open, on disk too', () async {
+  // Changed by design (reward picks): progress gives picks and the user
+  // chooses the extra, instead of the progress folding extras into the kept
+  // set by itself. The intent stays: nothing kept is ever taken away, game
+  // off opens everything.
+  group('extras are kept for good (nothing chosen is taken away)', () {
+    test('progress gives a pick; it opens nothing by itself', () async {
       final store = MemoryDataStore(AppData.empty);
       final state = await _loaded(null, store);
       final quest = await state.addQuest('Walk 20 minutes');
       await state.setQuestDone(quest.id, true);
       expect(state.campaign.earned, contains(Achievement.practitioner));
+      expect(state.picksLeft, 1);
+      expect(state.data.avatarUnlocked, isEmpty);
+      expect(store.saved!.avatarUnlocked, isEmpty);
+      expect(state.canUse(GarmentColor.bronze), isFalse);
+    });
+
+    test('unticking the quest keeps the chosen Bronze, on disk too', () async {
+      final store = MemoryDataStore(AppData.empty);
+      final state = await _loaded(null, store);
+      final quest = await state.addQuest('Walk 20 minutes');
+      await state.setQuestDone(quest.id, true);
+      await state.chooseReward(Unlockable.garmentBronze);
       expect(state.canUse(GarmentColor.bronze), isTrue);
+      expect(state.picksLeft, 0);
 
       await state.setQuestDone(quest.id, false);
       expect(state.campaign.earned, isEmpty, reason: 'records are records');
       expect(state.avatarUnlocks, contains(Unlockable.garmentBronze));
       expect(state.canUse(GarmentColor.bronze), isTrue);
+      expect(state.picksLeft, 0, reason: 'never below zero');
       await state.deleteQuest(quest.id);
       expect(state.canUse(GarmentColor.bronze), isTrue);
       expect(store.saved!.avatarUnlocked, contains(Unlockable.garmentBronze));
     });
 
-    test('deleting the last attempt keeps the Laurel banner open', () async {
+    test('deleting the last attempt keeps the chosen Laurel banner', () async {
       final state = await _loaded();
       final entry = await state.recordAttempt('Wrote for 25 minutes');
+      await state.chooseReward(Unlockable.sigilLaurel);
       expect(state.canUse(Sigil.laurel), isTrue);
       await state.deleteAttempt(entry.id);
       expect(state.campaign.earned, isNot(contains(Achievement.challenger)));
       expect(state.canUse(Sigil.laurel), isTrue);
     });
 
-    test('dropping below a route stop keeps its extra open', () async {
+    test('dropping below a route stop keeps its chosen extra', () async {
       final state = await _loaded(
         AppData(
           quests: [
@@ -279,24 +289,49 @@ void main() {
         ),
       );
       expect(state.campaign.waypoint, Waypoint.newCarthage);
+      // Two picks (New Carthage, the Practitioner); the stop's own extra is
+      // suggested first.
+      expect(state.picksLeft, 2);
+      expect(state.suggestedPick, Unlockable.sigilPath);
+      await state.chooseReward(Unlockable.sigilPath);
       await state.deleteQuest('oct5');
       expect(state.campaign.waypoint, Waypoint.carthage);
       expect(state.canUse(Sigil.path), isTrue);
     });
 
     test(
-      'progress from before this version is kept from the first load',
+      'progress saved before picks gives picks from the first load',
       () async {
-        // Saved without a kept set: what the records open is kept on load.
+        // Saved without a kept set: the records give picks, nothing is lost.
         final state = await _loaded(
           AppData(quests: [_questDoneToday()], campaignLog: [_attemptToday()]),
         );
+        expect(state.picksLeft, 2);
+        expect(state.data.avatarUnlocked, isEmpty);
+        await state.chooseReward(Unlockable.garmentBronze);
+        await state.chooseReward(Unlockable.sigilLaurel);
         await state.setQuestDone('q1', false);
         await state.deleteAttempt('a1');
         expect(state.canUse(GarmentColor.bronze), isTrue);
         expect(state.canUse(Sigil.laurel), isTrue);
       },
     );
+
+    test('extras kept by an earlier version stay kept', () async {
+      // An earlier version folded what the progress opened into the kept
+      // set; loading never removes any of it, and those count as spent.
+      final state = await _loaded(
+        AppData(
+          quests: [_questDoneToday()],
+          avatarUnlocked: const {Unlockable.garmentBronze},
+        ),
+      );
+      expect(state.canUse(GarmentColor.bronze), isTrue);
+      expect(state.picksLeft, 0);
+      await state.setQuestDone('q1', false);
+      expect(state.canUse(GarmentColor.bronze), isTrue);
+      expect(state.data.avatarUnlocked, {Unlockable.garmentBronze});
+    });
 
     test('with the game layer off nothing is kept by progress', () async {
       final state = await _loaded(
@@ -305,6 +340,7 @@ void main() {
       final quest = await state.addQuest('Walk 20 minutes');
       await state.setQuestDone(quest.id, true);
       expect(state.data.avatarUnlocked, isEmpty);
+      expect(state.picksLeft, 0);
       await state.setQuestDone(quest.id, false);
       await state.updateSettings(state.settings.copyWith(game: true));
       expect(state.canUse(GarmentColor.bronze), isFalse);
@@ -344,6 +380,7 @@ void main() {
 
     test('in the backup; cleared by "Delete all data"', () async {
       final state = await _loaded(AppData(quests: [_questDoneToday()]));
+      await state.chooseReward(Unlockable.garmentBronze);
       await state.setQuestDone('q1', false);
       final backup = state.exportBackup();
       expect(

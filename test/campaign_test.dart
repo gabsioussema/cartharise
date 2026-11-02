@@ -479,7 +479,7 @@ void main() {
         CampaignProgress(
           xp: xp,
           chapters: const [],
-          earned: earned,
+          earnedBy: {for (final a in earned) a: EarnedRoute.doing},
           questsCompleted: 0,
           pathDaysWritten: 0,
           attempts: 0,
@@ -532,17 +532,17 @@ void main() {
       );
     });
 
-    test('none once everything is open', () {
+    test('none once every milestone is reached', () {
       final all = at(xp: 600, earned: Achievement.values.toSet());
-      expect(unlockedBy(all, gameOn: true), Unlockable.values.toSet());
+      expect(suggestedExtras(all), Unlockable.values.toSet());
       expect(nextUnlock(all), isNull);
       expect(nextUnlock(at(xp: 600), owned: Unlockable.values.toSet()), isNull);
     });
 
     test('reaching a stop or earning an achievement only ever adds', () {
-      var before = unlockedBy(at(), gameOn: true);
+      var before = suggestedExtras(at());
       for (var xp = 0; xp <= 700; xp += 20) {
-        final now = unlockedBy(at(xp: xp), gameOn: true);
+        final now = suggestedExtras(at(xp: xp));
         expect(now.containsAll(before), isTrue, reason: '$xp XP');
         before = now;
       }
