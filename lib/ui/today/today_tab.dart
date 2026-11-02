@@ -7,8 +7,10 @@ import '../../domain/app_data.dart';
 import '../../domain/campaign.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
+import '../../state/attachment_ops.dart';
 import '../campaign/campaign_invite.dart';
 import '../campaign/campaign_ops.dart';
+import '../media/recorder_sheet.dart';
 import '../missions/missions_logic.dart';
 import '../missions/quest_tile.dart' show questXpOpenOn;
 import '../nav.dart';
@@ -21,8 +23,9 @@ import 'today_model.dart';
 
 /// The default return view (F-036; evolve plan Step 1 › A, "balanced"):
 /// greeting (+ avatar) → one next action with "Choose something else"
-/// (F-037) → the Campaign invitation while unanswered → Write → the three
-/// glance tiles (F-054) → today's quests → the user's direction, collapsed.
+/// (F-037) → the Campaign invitation while unanswered → Write · Record
+/// (step 2) → the three glance tiles (F-054) → today's quests → the user's
+/// direction, collapsed.
 /// Everything is derived from stored state; no streaks, scores, missed-day
 /// counts or guilt copy (F-031).
 class TodayTab extends StatelessWidget {
@@ -112,10 +115,60 @@ class TodayTab extends StatelessWidget {
   }
 }
 
-/// "Write": a quick capture that opens a new journal note (nothing is saved
-/// until something is typed there).
+/// "Write · Record": quick capture. **Write** opens a new journal note
+/// (nothing is saved until something is typed there); **Record** starts a
+/// voice note at once and keeps it in a new journal note, saved as soon as
+/// it is stopped (step 2). Side by side, stacked when narrow or with large
+/// text.
 class _WriteCapture extends StatelessWidget {
   const _WriteCapture();
+
+  Future<void> _record(BuildContext context) async {
+    final l = AppLocalizations.of(context);
+    final state = context.read<AppState>();
+    final messenger = ScaffoldMessenger.of(context);
+    String? noteId;
+    final outcome = await showRecorderSheet(
+      context,
+      keep: (recording) async {
+        // "Record again" in the same sheet adds to the same note.
+        final id = noteId;
+        if (id != null && state.holderOf(id) == AttachmentHolder.journal) {
+          await state.addAttachment(AttachmentHolder.journal, id, recording);
+        } else {
+          final note = await state.addJournalEntry(
+            body: '',
+            attachments: [recording],
+          );
+          noteId = note.id;
+        }
+        return state.saveStatus != SaveStatus.failed;
+      },
+    );
+    if (!context.mounted || outcome == null) return;
+    void open() {
+      if (context.mounted) AppNav.openJournalEntry(context, entryId: noteId);
+    }
+
+    switch (outcome.end) {
+      case RecorderEnd.writeInstead:
+        open();
+      case RecorderEnd.saved:
+        messenger.hideCurrentSnackBar();
+        messenger.showSnackBar(
+          SnackBar(
+            content: Text(l.mediaTodayRecordSaved),
+            action: SnackBarAction(label: l.mediaTodayOpen, onPressed: open),
+            persist: false,
+          ),
+        );
+      case RecorderEnd.notSaved:
+        messenger.hideCurrentSnackBar();
+        messenger.showSnackBar(
+          SnackBar(content: Text(l.mediaTodayRecordNotSaved)),
+        );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -123,32 +176,98 @@ class _WriteCapture extends StatelessWidget {
     final p = CarthaPalette.of(context);
     final theme = Theme.of(context);
     void write() => AppNav.openJournalEntry(context);
-    return Semantics(
+    void record() => _record(context);
+    final writePart = Semantics(
       container: true,
       button: true,
       label: l.todayWriteLabel,
       onTap: write,
       excludeSemantics: true,
-      child: SectionCard(
+      child: InkWell(
         key: const ValueKey('today-write'),
         onTap: write,
-        padding: const EdgeInsetsDirectional.fromSTEB(16, 14, 16, 14),
-        child: Row(
-          children: [
-            const GlyphIcon(CarthaGlyph.reflection, size: 22),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                l.todayWriteHint,
-                style: theme.textTheme.bodyLarge?.copyWith(
-                  color: p.textSecondary,
+        child: Padding(
+          padding: const EdgeInsetsDirectional.fromSTEB(16, 14, 12, 14),
+          child: Row(
+            children: [
+              const GlyphIcon(CarthaGlyph.reflection, size: 22),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  l.todayWriteHint,
+                  style: theme.textTheme.bodyLarge?.copyWith(
+                    color: p.textSecondary,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(width: 8),
-            Icon(Icons.edit_outlined, size: 20, color: p.accent),
-          ],
+              const SizedBox(width: 8),
+              Icon(Icons.edit_outlined, size: 20, color: p.accent),
+            ],
+          ),
         ),
+      ),
+    );
+    final recordPart = Semantics(
+      container: true,
+      button: true,
+      label: l.mediaRecordLabel,
+      onTap: record,
+      excludeSemantics: true,
+      child: InkWell(
+        key: const ValueKey('today-record'),
+        onTap: record,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: 48, minWidth: 88),
+          child: Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(16, 12, 16, 12),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.mic_none, size: 20, color: p.accent),
+                const SizedBox(width: 8),
+                Flexible(
+                  child: Text(
+                    l.mediaRecord,
+                    style: theme.textTheme.labelLarge?.copyWith(
+                      color: p.textPrimary,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+    return SectionCard(
+      key: const ValueKey('today-capture'),
+      padding: EdgeInsets.zero,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final scale = MediaQuery.textScalerOf(context).scale(1);
+          final stacked = constraints.maxWidth < 300 * scale;
+          if (stacked) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                writePart,
+                Divider(height: 1, thickness: 1, color: p.border),
+                recordPart,
+              ],
+            );
+          }
+          return IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(child: writePart),
+                VerticalDivider(width: 1, thickness: 1, color: p.border),
+                recordPart,
+              ],
+            ),
+          );
+        },
       ),
     );
   }
@@ -175,9 +294,7 @@ class _Hint extends StatelessWidget {
         Expanded(
           child: Text(
             text,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: p.textSecondary,
-            ),
+            style: theme.textTheme.bodyMedium?.copyWith(color: p.textSecondary),
           ),
         ),
       ],
@@ -590,7 +707,10 @@ class _DirectionCardState extends State<_DirectionCard> {
                       ),
                       const SizedBox(height: 2),
                       if (hint)
-                        _Hint(summary, key: const ValueKey('today-hint-compass'))
+                        _Hint(
+                          summary,
+                          key: const ValueKey('today-hint-compass'),
+                        )
                       else
                         Text(
                           summary,

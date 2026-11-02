@@ -51,8 +51,11 @@ and the share sheet / file picker when the user asks for them.
 - **Your data (F-040–F-043, F-055).** Where the data lives
   (`StorageTransparencyText`: only on this phone, private app folder, not
   encrypted by Cartharise, not synced, not in phone or cloud backups);
-  **Export backup**; **Choose a backup file**; **Delete all data**. The save indicator sits on top (this is also
-  the "Export a copy" target after a failed save).
+  **Export backup** with what it includes ("Includes your words and
+  settings, plus 3 photos and 2 voice notes (4.2 MB)." or "…No photos or
+  recordings yet."); **Choose a backup file** ("Takes a .zip backup, or an
+  older .json one."); **Delete all data**. The save indicator sits on top
+  (this is also the "Export a copy" target after a failed save).
 - **Support & safety (F-047, D-06).** "Not therapy" hero; what to do when a
   question feels heavy (skip, softer wording, pause, talk to someone); "If
   you're in crisis": local emergency services or a crisis line, **Find a
@@ -78,7 +81,13 @@ and the share sheet / file picker when the user asks for them.
   `attachments/<file>` for every photo and recording, from
   `exportBackupArchive()` through `FileShare.shareBytesFile`. Files that
   couldn't be read are said ("…couldn't be read and aren't in it"); the data
-  still names them.
+  still names them. Before exporting, the card says what a backup includes:
+  the words and settings, how many photos and voice notes the data names
+  and the space their files take on this phone (`sizeOfFile` per named
+  file, so leftovers and pending recordings don't count; KB / MB / GB in the
+  device's number format). When those files are more than a backup can be
+  restored from (`kMaxBackupBytes`, 256 MB), a warning says so plainly:
+  "Remove some for a complete backup."
 - **Import:** `FileShare.pickFileBytes` → `previewRestore(bytes)` fully
   decodes and validates a v2 `.zip` or a v1 `.json` → on any problem show
   "This file couldn't be used", the plain reason (not JSON, not a Cartharise
@@ -173,9 +182,19 @@ section label, local time formatting). Other areas reach these pages through
 - size matrix (320×568 @ 2.0, 390×844, 1024×1366 @ 1.3) × dark/light,
   visiting every page including the denied warning and the import error.
 
+Backup v2 (step 2): `test/evolve2_contracts_test.dart` › "Your data screen
+(v2)" (the zip carries the photo, an unreadable one is said, missing files
+counted on restore, files that can't be written change nothing, delete all
+removes the files and the picker copies, files left are said) and
+`test/ui/media_test.dart` › "Your data (backup v2)" (what a backup includes,
+no photos yet, the too-large warning, the zip round trip to another phone
+with the recording playing after the restore, delete all removes photos and
+recordings).
+
 `test/screenshots/journal_you_screenshots_test.dart` renders the hub,
 Inspiration, Reminders, Appearance, Your data and Support in dark and light
-to `test/screenshots/out/you_*`.
+to `test/screenshots/out/you_*`; `media_screenshots_test.dart` renders Your
+data with photos and voice notes (`media_09_data_*`).
 
 ## Requirements satisfied
 

@@ -2674,6 +2674,612 @@ abstract class AppLocalizations {
   /// **'Evening'**
   String get journalPhaseEvening;
 
+  /// Button: add a photo to a note, an experiment tried or an attempt.
+  ///
+  /// In en, this message translates to:
+  /// **'Add photo'**
+  String get mediaAddPhoto;
+
+  /// Button: record a voice note (opens the recorder and starts recording).
+  ///
+  /// In en, this message translates to:
+  /// **'Record'**
+  String get mediaRecord;
+
+  /// No description provided for @mediaRecordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Record a voice note'**
+  String get mediaRecordLabel;
+
+  /// No description provided for @mediaPhotoSourceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a photo'**
+  String get mediaPhotoSourceTitle;
+
+  /// No description provided for @mediaTakePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo'**
+  String get mediaTakePhoto;
+
+  /// No description provided for @mediaChoosePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from your photos'**
+  String get mediaChoosePhoto;
+
+  /// No description provided for @mediaPhotoAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo added.'**
+  String get mediaPhotoAdded;
+
+  /// No description provided for @mediaNotSavedYet.
+  ///
+  /// In en, this message translates to:
+  /// **'Added, but not saved on this phone yet.'**
+  String get mediaNotSavedYet;
+
+  /// No description provided for @mediaPhotoLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo, added {date}'**
+  String mediaPhotoLabel(String date);
+
+  /// No description provided for @mediaPhotoOpenHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Opens full screen'**
+  String get mediaPhotoOpenHint;
+
+  /// Short word on a photo tile whose file is no longer on the phone.
+  ///
+  /// In en, this message translates to:
+  /// **'Missing'**
+  String get mediaPhotoMissing;
+
+  /// No description provided for @mediaPhotoMissingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'This photo isn\'t on this phone any more.'**
+  String get mediaPhotoMissingLabel;
+
+  /// No description provided for @mediaPhotoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo'**
+  String get mediaPhotoTitle;
+
+  /// No description provided for @mediaPhotoAddedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Added {date}'**
+  String mediaPhotoAddedOn(String date);
+
+  /// No description provided for @mediaPhotoRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove photo'**
+  String get mediaPhotoRemove;
+
+  /// No description provided for @mediaPhotoRemoveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove this photo?'**
+  String get mediaPhotoRemoveTitle;
+
+  /// No description provided for @mediaPhotoRemoveBody.
+  ///
+  /// In en, this message translates to:
+  /// **'It\'s deleted from this phone. This can\'t be undone.'**
+  String get mediaPhotoRemoveBody;
+
+  /// No description provided for @mediaRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get mediaRemove;
+
+  /// No description provided for @mediaPhotoRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo removed.'**
+  String get mediaPhotoRemoved;
+
+  /// No description provided for @mediaRemovedNotSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Removed, but not saved on this phone yet.'**
+  String get mediaRemovedNotSaved;
+
+  /// No description provided for @mediaCameraDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera access is off. Choose from your photos, or allow the camera in Settings.'**
+  String get mediaCameraDenied;
+
+  /// No description provided for @mediaPhotosDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo access is off. Allow it in Settings, or write instead.'**
+  String get mediaPhotosDenied;
+
+  /// No description provided for @mediaCameraUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No camera here. Choose from your photos instead.'**
+  String get mediaCameraUnavailable;
+
+  /// No description provided for @mediaPhotosUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos can\'t be opened here. You can write instead.'**
+  String get mediaPhotosUnavailable;
+
+  /// No description provided for @mediaPickFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t open photos. Try again.'**
+  String get mediaPickFailed;
+
+  /// No description provided for @mediaPhotoUnreadable.
+  ///
+  /// In en, this message translates to:
+  /// **'That photo couldn\'t be read. Nothing was added.'**
+  String get mediaPhotoUnreadable;
+
+  /// No description provided for @mediaPhotoTooLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'That photo is over 50 MB. Choose a smaller one.'**
+  String get mediaPhotoTooLarge;
+
+  /// No description provided for @mediaWriteFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save it on this phone. Storage may be full. Nothing was added.'**
+  String get mediaWriteFailed;
+
+  /// No description provided for @mediaEntryGone.
+  ///
+  /// In en, this message translates to:
+  /// **'This entry isn\'t here any more. Nothing was added.'**
+  String get mediaEntryGone;
+
+  /// No description provided for @mediaLostPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'A photo you took earlier wasn\'t added yet.'**
+  String get mediaLostPhoto;
+
+  /// No description provided for @mediaLostPhotoAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add it here'**
+  String get mediaLostPhotoAdd;
+
+  /// No description provided for @mediaLostPhotoDiscard.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard'**
+  String get mediaLostPhotoDiscard;
+
+  /// No description provided for @mediaDismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss'**
+  String get mediaDismiss;
+
+  /// No description provided for @mediaRecorderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice note'**
+  String get mediaRecorderTitle;
+
+  /// No description provided for @mediaRecorderStarting.
+  ///
+  /// In en, this message translates to:
+  /// **'Getting the microphone ready…'**
+  String get mediaRecorderStarting;
+
+  /// Shown with a red dot while the microphone records (the word carries the state, not the colour).
+  ///
+  /// In en, this message translates to:
+  /// **'Recording'**
+  String get mediaRecorderRecording;
+
+  /// No description provided for @mediaRecorderStop.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop and save'**
+  String get mediaRecorderStop;
+
+  /// No description provided for @mediaRecorderDiscard.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard'**
+  String get mediaRecorderDiscard;
+
+  /// No description provided for @mediaRecorderDiscardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard this recording?'**
+  String get mediaRecorderDiscardTitle;
+
+  /// No description provided for @mediaRecorderDiscardBody.
+  ///
+  /// In en, this message translates to:
+  /// **'What you recorded is deleted.'**
+  String get mediaRecorderDiscardBody;
+
+  /// No description provided for @mediaRecorderSaving.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving…'**
+  String get mediaRecorderSaving;
+
+  /// Screen-reader announcement when recording starts.
+  ///
+  /// In en, this message translates to:
+  /// **'Recording. Tap Stop and save when you\'re done.'**
+  String get mediaRecorderStarted;
+
+  /// No description provided for @mediaRecorderSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice note saved.'**
+  String get mediaRecorderSaved;
+
+  /// No description provided for @mediaRecorderInterrupted.
+  ///
+  /// In en, this message translates to:
+  /// **'Interrupted. The {time} recorded before it is saved.'**
+  String mediaRecorderInterrupted(String time);
+
+  /// No description provided for @mediaRecorderAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Record again'**
+  String get mediaRecorderAgain;
+
+  /// No description provided for @mediaMicDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Microphone access is off. Allow it in Settings, or write instead.'**
+  String get mediaMicDenied;
+
+  /// No description provided for @mediaMicUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Recording isn\'t available on this phone. You can write instead.'**
+  String get mediaMicUnavailable;
+
+  /// No description provided for @mediaRecordFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The recording couldn\'t start. Try again, or write instead.'**
+  String get mediaRecordFailed;
+
+  /// No description provided for @mediaNothingRecorded.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing was recorded. Try again, or write instead.'**
+  String get mediaNothingRecorded;
+
+  /// No description provided for @mediaRecordStorageFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save the recording. Storage may be full.'**
+  String get mediaRecordStorageFailed;
+
+  /// No description provided for @mediaWriteInstead.
+  ///
+  /// In en, this message translates to:
+  /// **'Write instead'**
+  String get mediaWriteInstead;
+
+  /// No description provided for @mediaVoiceNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice note'**
+  String get mediaVoiceNote;
+
+  /// Tag on a voice note kept after an interruption (only shown in the recorder).
+  ///
+  /// In en, this message translates to:
+  /// **'Partial'**
+  String get mediaPartial;
+
+  /// No description provided for @mediaPlay.
+  ///
+  /// In en, this message translates to:
+  /// **'Play voice note'**
+  String get mediaPlay;
+
+  /// No description provided for @mediaPause.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause voice note'**
+  String get mediaPause;
+
+  /// No description provided for @mediaPositionOf.
+  ///
+  /// In en, this message translates to:
+  /// **'{position} of {length}'**
+  String mediaPositionOf(String position, String length);
+
+  /// No description provided for @mediaVoiceMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'This recording isn\'t on this phone any more.'**
+  String get mediaVoiceMissing;
+
+  /// No description provided for @mediaPlayFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'This recording can\'t be played.'**
+  String get mediaPlayFailed;
+
+  /// No description provided for @mediaVoiceRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove voice note'**
+  String get mediaVoiceRemove;
+
+  /// No description provided for @mediaVoiceRemoveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove this voice note?'**
+  String get mediaVoiceRemoveTitle;
+
+  /// No description provided for @mediaVoiceRemoveBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The recording is deleted from this phone. This can\'t be undone.'**
+  String get mediaVoiceRemoveBody;
+
+  /// No description provided for @mediaVoiceRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice note removed.'**
+  String get mediaVoiceRemoved;
+
+  /// No description provided for @mediaTranscriptAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Type what you said'**
+  String get mediaTranscriptAdd;
+
+  /// No description provided for @mediaTranscriptEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit your words'**
+  String get mediaTranscriptEdit;
+
+  /// No description provided for @mediaTranscriptTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your words for this recording'**
+  String get mediaTranscriptTitle;
+
+  /// No description provided for @mediaTranscriptLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'What you said (optional)'**
+  String get mediaTranscriptLabel;
+
+  /// No description provided for @mediaTranscriptSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Your words are saved with the recording.'**
+  String get mediaTranscriptSaved;
+
+  /// No description provided for @mediaMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 minute} other{{count} minutes}}'**
+  String mediaMinutes(int count);
+
+  /// No description provided for @mediaSeconds.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 second} other{{count} seconds}}'**
+  String mediaSeconds(int count);
+
+  /// No description provided for @mediaPinnedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pinned memory'**
+  String get mediaPinnedTitle;
+
+  /// No description provided for @mediaPinnedFromNote.
+  ///
+  /// In en, this message translates to:
+  /// **'From a note · {date}'**
+  String mediaPinnedFromNote(String date);
+
+  /// No description provided for @mediaPinnedFromTry.
+  ///
+  /// In en, this message translates to:
+  /// **'From an experiment · {date}'**
+  String mediaPinnedFromTry(String date);
+
+  /// No description provided for @mediaPinnedFromAttempt.
+  ///
+  /// In en, this message translates to:
+  /// **'From an attempt · {date}'**
+  String mediaPinnedFromAttempt(String date);
+
+  /// No description provided for @mediaPinnedOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open where it\'s from'**
+  String get mediaPinnedOpen;
+
+  /// No description provided for @mediaPinnedPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Pinned photo'**
+  String get mediaPinnedPhoto;
+
+  /// No description provided for @mediaPinPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Pin as memory'**
+  String get mediaPinPhoto;
+
+  /// No description provided for @mediaUnpin.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpin'**
+  String get mediaUnpin;
+
+  /// No description provided for @mediaPinned.
+  ///
+  /// In en, this message translates to:
+  /// **'Pinned to the top of your Journal.'**
+  String get mediaPinned;
+
+  /// No description provided for @mediaPinnedNotSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Pinned, but not saved on this phone yet.'**
+  String get mediaPinnedNotSaved;
+
+  /// No description provided for @mediaUnpinned.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpinned. Nothing else changed.'**
+  String get mediaUnpinned;
+
+  /// No description provided for @mediaUnpinnedNotSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpinned, but not saved on this phone yet.'**
+  String get mediaUnpinnedNotSaved;
+
+  /// Text selection menu item: pin the selected words as the pinned memory.
+  ///
+  /// In en, this message translates to:
+  /// **'Pin'**
+  String get mediaPinWords;
+
+  /// No description provided for @mediaPinWordsTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Pin selected words'**
+  String get mediaPinWordsTooltip;
+
+  /// No description provided for @mediaPinSelectFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Select some words first, then tap Pin.'**
+  String get mediaPinSelectFirst;
+
+  /// No description provided for @mediaPinNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Those words couldn\'t be pinned. Select them again.'**
+  String get mediaPinNotFound;
+
+  /// No description provided for @mediaCountPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 photo} other{{count} photos}}'**
+  String mediaCountPhotos(int count);
+
+  /// No description provided for @mediaCountVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 voice note} other{{count} voice notes}}'**
+  String mediaCountVoice(int count);
+
+  /// No description provided for @mediaAnd.
+  ///
+  /// In en, this message translates to:
+  /// **'{first} and {second}'**
+  String mediaAnd(String first, String second);
+
+  /// No description provided for @mediaNoteVoiceOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice note'**
+  String get mediaNoteVoiceOnly;
+
+  /// No description provided for @mediaNotePhotoOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo note'**
+  String get mediaNotePhotoOnly;
+
+  /// No description provided for @mediaNoteDeleteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The note, its photos and its recordings are removed from this phone. This can\'t be undone.'**
+  String get mediaNoteDeleteBody;
+
+  /// No description provided for @mediaTodayRecordSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice note saved in your Journal.'**
+  String get mediaTodayRecordSaved;
+
+  /// No description provided for @mediaTodayRecordNotSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Recorded, but not saved yet. Retry at the top.'**
+  String get mediaTodayRecordNotSaved;
+
+  /// No description provided for @mediaTodayOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get mediaTodayOpen;
+
+  /// No description provided for @mediaDataNoFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Includes your words and settings. No photos or recordings yet.'**
+  String get mediaDataNoFiles;
+
+  /// No description provided for @mediaDataWithFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Includes your words and settings, plus {files} ({size}).'**
+  String mediaDataWithFiles(String files, String size);
+
+  /// No description provided for @mediaDataTooLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'Your photos and recordings take more than a backup can hold (256 MB). Remove some for a complete backup.'**
+  String get mediaDataTooLarge;
+
+  /// No description provided for @mediaDataImportFormats.
+  ///
+  /// In en, this message translates to:
+  /// **'Takes a .zip backup, or an older .json one.'**
+  String get mediaDataImportFormats;
+
+  /// No description provided for @mediaSizeKb.
+  ///
+  /// In en, this message translates to:
+  /// **'{size} KB'**
+  String mediaSizeKb(String size);
+
+  /// No description provided for @mediaSizeMb.
+  ///
+  /// In en, this message translates to:
+  /// **'{size} MB'**
+  String mediaSizeMb(String size);
+
+  /// No description provided for @mediaSizeGb.
+  ///
+  /// In en, this message translates to:
+  /// **'{size} GB'**
+  String mediaSizeGb(String size);
+
   /// No description provided for @missionsIntro.
   ///
   /// In en, this message translates to:

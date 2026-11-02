@@ -4,12 +4,14 @@ import 'package:provider/provider.dart';
 import '../../domain/app_data.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
+import '../media/attachment_strip.dart';
 import '../widgets/widgets.dart';
 import 'campaign_ops.dart';
 
 enum _EntrySheetResult { saved, remove }
 
-/// Corrects the note of a tried experiment, or removes the try from the
+/// Corrects the note of a tried experiment, adds photos and voice notes to
+/// it (saved as soon as they are added), or removes the try from the
 /// Collection (asks first). The note is saved exactly as typed. A changed
 /// note is never dropped silently: when the sheet is closed without
 /// **Save note** (swiped away, back, a tap outside), it asks whether to
@@ -109,11 +111,13 @@ class ExperimentEntrySheet extends StatefulWidget {
 
 class _ExperimentEntrySheetState extends State<ExperimentEntrySheet> {
   late final _note = TextEditingController(text: widget.entry.note);
+  final _noteFocus = FocusNode();
   bool _busy = false;
 
   @override
   void dispose() {
     _note.dispose();
+    _noteFocus.dispose();
     super.dispose();
   }
 
@@ -154,11 +158,18 @@ class _ExperimentEntrySheetState extends State<ExperimentEntrySheet> {
           TextField(
             key: const ValueKey('tried-edit-note'),
             controller: _note,
+            focusNode: _noteFocus,
             minLines: 1,
             maxLines: 4,
             textCapitalization: TextCapitalization.sentences,
             decoration: InputDecoration(labelText: l.campaignTryNoteLabel),
             onChanged: (text) => widget.edited?.value = text,
+          ),
+          const SizedBox(height: 16),
+          AttachmentStrip(
+            holder: AttachmentHolder.experiment,
+            entryId: widget.entry.id,
+            onWriteInstead: _noteFocus.requestFocus,
           ),
           const SizedBox(height: 24),
           PrimaryButton(

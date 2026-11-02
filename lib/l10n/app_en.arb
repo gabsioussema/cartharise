@@ -1037,6 +1037,249 @@
   "journalPhaseDaytime": "Daytime",
   "journalPhaseBonus": "Bonus",
   "journalPhaseEvening": "Evening",
+  "mediaAddPhoto": "Add photo",
+  "@mediaAddPhoto": {
+    "description": "Button: add a photo to a note, an experiment tried or an attempt."
+  },
+  "mediaRecord": "Record",
+  "@mediaRecord": {
+    "description": "Button: record a voice note (opens the recorder and starts recording)."
+  },
+  "mediaRecordLabel": "Record a voice note",
+  "mediaPhotoSourceTitle": "Add a photo",
+  "mediaTakePhoto": "Take a photo",
+  "mediaChoosePhoto": "Choose from your photos",
+  "mediaPhotoAdded": "Photo added.",
+  "mediaNotSavedYet": "Added, but not saved on this phone yet.",
+  "mediaPhotoLabel": "Photo, added {date}",
+  "@mediaPhotoLabel": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "mediaPhotoOpenHint": "Opens full screen",
+  "mediaPhotoMissing": "Missing",
+  "@mediaPhotoMissing": {
+    "description": "Short word on a photo tile whose file is no longer on the phone."
+  },
+  "mediaPhotoMissingLabel": "This photo isn't on this phone any more.",
+  "mediaPhotoTitle": "Photo",
+  "mediaPhotoAddedOn": "Added {date}",
+  "@mediaPhotoAddedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "mediaPhotoRemove": "Remove photo",
+  "mediaPhotoRemoveTitle": "Remove this photo?",
+  "mediaPhotoRemoveBody": "It's deleted from this phone. This can't be undone.",
+  "mediaRemove": "Remove",
+  "mediaPhotoRemoved": "Photo removed.",
+  "mediaRemovedNotSaved": "Removed, but not saved on this phone yet.",
+  "mediaCameraDenied": "Camera access is off. Choose from your photos, or allow the camera in Settings.",
+  "mediaPhotosDenied": "Photo access is off. Allow it in Settings, or write instead.",
+  "mediaCameraUnavailable": "No camera here. Choose from your photos instead.",
+  "mediaPhotosUnavailable": "Photos can't be opened here. You can write instead.",
+  "mediaPickFailed": "Couldn't open photos. Try again.",
+  "mediaPhotoUnreadable": "That photo couldn't be read. Nothing was added.",
+  "mediaPhotoTooLarge": "That photo is over 50 MB. Choose a smaller one.",
+  "mediaWriteFailed": "Couldn't save it on this phone. Storage may be full. Nothing was added.",
+  "mediaEntryGone": "This entry isn't here any more. Nothing was added.",
+  "mediaLostPhoto": "A photo you took earlier wasn't added yet.",
+  "mediaLostPhotoAdd": "Add it here",
+  "mediaLostPhotoDiscard": "Discard",
+  "mediaDismiss": "Dismiss",
+  "mediaRecorderTitle": "Voice note",
+  "mediaRecorderStarting": "Getting the microphone ready…",
+  "mediaRecorderRecording": "Recording",
+  "@mediaRecorderRecording": {
+    "description": "Shown with a red dot while the microphone records (the word carries the state, not the colour)."
+  },
+  "mediaRecorderStop": "Stop and save",
+  "mediaRecorderDiscard": "Discard",
+  "mediaRecorderDiscardTitle": "Discard this recording?",
+  "mediaRecorderDiscardBody": "What you recorded is deleted.",
+  "mediaRecorderSaving": "Saving…",
+  "mediaRecorderStarted": "Recording. Tap Stop and save when you're done.",
+  "@mediaRecorderStarted": {
+    "description": "Screen-reader announcement when recording starts."
+  },
+  "mediaRecorderSaved": "Voice note saved.",
+  "mediaRecorderInterrupted": "Interrupted. The {time} recorded before it is saved.",
+  "@mediaRecorderInterrupted": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "mediaRecorderAgain": "Record again",
+  "mediaMicDenied": "Microphone access is off. Allow it in Settings, or write instead.",
+  "mediaMicUnavailable": "Recording isn't available on this phone. You can write instead.",
+  "mediaRecordFailed": "The recording couldn't start. Try again, or write instead.",
+  "mediaNothingRecorded": "Nothing was recorded. Try again, or write instead.",
+  "mediaRecordStorageFailed": "Couldn't save the recording. Storage may be full.",
+  "mediaWriteInstead": "Write instead",
+  "mediaVoiceNote": "Voice note",
+  "mediaPartial": "Partial",
+  "@mediaPartial": {
+    "description": "Tag on a voice note kept after an interruption (only shown in the recorder)."
+  },
+  "mediaPlay": "Play voice note",
+  "mediaPause": "Pause voice note",
+  "mediaPositionOf": "{position} of {length}",
+  "@mediaPositionOf": {
+    "placeholders": {
+      "position": {
+        "type": "String"
+      },
+      "length": {
+        "type": "String"
+      }
+    }
+  },
+  "mediaVoiceMissing": "This recording isn't on this phone any more.",
+  "mediaPlayFailed": "This recording can't be played.",
+  "mediaVoiceRemove": "Remove voice note",
+  "mediaVoiceRemoveTitle": "Remove this voice note?",
+  "mediaVoiceRemoveBody": "The recording is deleted from this phone. This can't be undone.",
+  "mediaVoiceRemoved": "Voice note removed.",
+  "mediaTranscriptAdd": "Type what you said",
+  "mediaTranscriptEdit": "Edit your words",
+  "mediaTranscriptTitle": "Your words for this recording",
+  "mediaTranscriptLabel": "What you said (optional)",
+  "mediaTranscriptSaved": "Your words are saved with the recording.",
+  "mediaMinutes": "{count, plural, =1{1 minute} other{{count} minutes}}",
+  "@mediaMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mediaSeconds": "{count, plural, =1{1 second} other{{count} seconds}}",
+  "@mediaSeconds": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mediaPinnedTitle": "Pinned memory",
+  "mediaPinnedFromNote": "From a note · {date}",
+  "@mediaPinnedFromNote": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "mediaPinnedFromTry": "From an experiment · {date}",
+  "@mediaPinnedFromTry": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "mediaPinnedFromAttempt": "From an attempt · {date}",
+  "@mediaPinnedFromAttempt": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "mediaPinnedOpen": "Open where it's from",
+  "mediaPinnedPhoto": "Pinned photo",
+  "mediaPinPhoto": "Pin as memory",
+  "mediaUnpin": "Unpin",
+  "mediaPinned": "Pinned to the top of your Journal.",
+  "mediaPinnedNotSaved": "Pinned, but not saved on this phone yet.",
+  "mediaUnpinned": "Unpinned. Nothing else changed.",
+  "mediaUnpinnedNotSaved": "Unpinned, but not saved on this phone yet.",
+  "mediaPinWords": "Pin",
+  "@mediaPinWords": {
+    "description": "Text selection menu item: pin the selected words as the pinned memory."
+  },
+  "mediaPinWordsTooltip": "Pin selected words",
+  "mediaPinSelectFirst": "Select some words first, then tap Pin.",
+  "mediaPinNotFound": "Those words couldn't be pinned. Select them again.",
+  "mediaCountPhotos": "{count, plural, =1{1 photo} other{{count} photos}}",
+  "@mediaCountPhotos": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mediaCountVoice": "{count, plural, =1{1 voice note} other{{count} voice notes}}",
+  "@mediaCountVoice": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mediaAnd": "{first} and {second}",
+  "@mediaAnd": {
+    "placeholders": {
+      "first": {
+        "type": "String"
+      },
+      "second": {
+        "type": "String"
+      }
+    }
+  },
+  "mediaNoteVoiceOnly": "Voice note",
+  "mediaNotePhotoOnly": "Photo note",
+  "mediaNoteDeleteBody": "The note, its photos and its recordings are removed from this phone. This can't be undone.",
+  "mediaTodayRecordSaved": "Voice note saved in your Journal.",
+  "mediaTodayRecordNotSaved": "Recorded, but not saved yet. Retry at the top.",
+  "mediaTodayOpen": "Open",
+  "mediaDataNoFiles": "Includes your words and settings. No photos or recordings yet.",
+  "mediaDataWithFiles": "Includes your words and settings, plus {files} ({size}).",
+  "@mediaDataWithFiles": {
+    "placeholders": {
+      "files": {
+        "type": "String"
+      },
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "mediaDataTooLarge": "Your photos and recordings take more than a backup can hold (256 MB). Remove some for a complete backup.",
+  "mediaDataImportFormats": "Takes a .zip backup, or an older .json one.",
+  "mediaSizeKb": "{size} KB",
+  "@mediaSizeKb": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "mediaSizeMb": "{size} MB",
+  "@mediaSizeMb": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "mediaSizeGb": "{size} GB",
+  "@mediaSizeGb": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
   "missionsIntro": "Small steps toward your Compass. Rest counts too.",
   "missionsToday": "Today",
   "missionsTodayEmpty": "Nothing planned. Add a quest, or rest.",
