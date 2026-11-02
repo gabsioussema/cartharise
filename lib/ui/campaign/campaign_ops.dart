@@ -249,25 +249,41 @@ extension CampaignOps on AppState {
     await releaseAttachments(removed);
   }
 
-  /// "Add to my tasks": a one-off quest titled like the experiment, with
-  /// [QuestSource.experiment]. While that quest is still open, adding it
-  /// again returns it instead of a duplicate. Adding earns nothing; the
-  /// quest earns quest XP when done, like any other. Playground experiments
-  /// stay apart from the month project (not linked to it). Throws
-  /// [ArgumentError] for an id the content does not have.
+  /// "Add to my tasks": a one-off quest titled like the experiment (in the
+  /// language shown), with [QuestSource.experiment] and the experiment's id.
+  /// While that quest is still open, adding it again returns it instead of
+  /// a duplicate — matched by the experiment's id, so switching language
+  /// in between finds it too (a quest saved before ids were kept is matched
+  /// by the experiment's title in any shipped language). Adding earns
+  /// nothing; the quest earns quest XP when done, like any other.
+  /// Playground experiments stay apart from the month project (not linked
+  /// to it). Throws [ArgumentError] for an id the content does not have.
   Future<Quest> addExperimentToTasks(String experimentId) {
     final experiment = content.experiment(experimentId);
     if (experiment == null) {
       throw ArgumentError.value(experimentId, 'experimentId', 'is unknown');
     }
     final title = experiment.title.trim();
+    Set<String>? titles;
     for (final q in data.quests) {
-      if (q.source == QuestSource.experiment &&
-          q.title == title &&
-          !q.isDoneOn(today)) {
-        return Future.value(q);
+      if (q.source != QuestSource.experiment || q.isDoneOn(today)) continue;
+      final id = q.experimentId;
+      if (id != null) {
+        if (id == experimentId) return Future.value(q);
+        continue;
       }
+      titles ??= {
+        title,
+        for (final language in kAppLanguages)
+          ?contentIn(language).experiment(experimentId)?.title.trim(),
+      };
+      if (titles.contains(q.title)) return Future.value(q);
     }
-    return addQuest(title, source: QuestSource.experiment, linkProject: false);
+    return addQuest(
+      title,
+      source: QuestSource.experiment,
+      linkProject: false,
+      experimentId: experimentId,
+    );
   }
 }

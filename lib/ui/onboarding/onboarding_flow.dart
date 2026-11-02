@@ -9,6 +9,7 @@ import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
 import '../nav.dart';
 import '../theme/cartha_theme.dart';
+import '../widgets/bidi.dart';
 import '../widgets/widgets.dart';
 import 'onboarding_steps.dart';
 
@@ -186,19 +187,23 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
         onBack: _back,
         action: _nextButton(l),
         children: [
-          TextField(
-            key: const ValueKey('onboarding-name'),
+          TypedDirection(
             controller: _name,
-            textCapitalization: TextCapitalization.words,
-            textInputAction: TextInputAction.done,
-            autocorrect: false,
-            enableSuggestions: false,
-            inputFormatters: [LengthLimitingTextInputFormatter(40)],
-            onSubmitted: (_) => _next(),
-            decoration: InputDecoration(
-              labelText: l.onboardingNameLabel,
-              helperText: l.onboardingNameHelp,
-              helperMaxLines: 4,
+            builder: (context, direction) => TextField(
+              key: const ValueKey('onboarding-name'),
+              controller: _name,
+              textDirection: direction,
+              textCapitalization: TextCapitalization.words,
+              textInputAction: TextInputAction.done,
+              autocorrect: false,
+              enableSuggestions: false,
+              inputFormatters: [LengthLimitingTextInputFormatter(40)],
+              onSubmitted: (_) => _next(),
+              decoration: InputDecoration(
+                labelText: l.onboardingNameLabel,
+                helperText: l.onboardingNameHelp,
+                helperMaxLines: 4,
+              ),
             ),
           ),
         ],

@@ -11,6 +11,7 @@ import '../nav.dart';
 import '../persona/persona_ops.dart';
 import '../theme/cartha_theme.dart';
 import '../widgets/route_scenes.dart';
+import '../widgets/bidi.dart';
 import '../widgets/widgets.dart';
 import 'campaign_kit.dart';
 import 'campaign_ops.dart';
@@ -316,7 +317,11 @@ class _StrategistMap extends StatelessWidget {
                     ),
                   )
                 else
-                  Text(compass.get(field), style: theme.textTheme.bodyMedium),
+                  Text(
+                    compass.get(field),
+                    textDirection: textDirectionOf(compass.get(field)),
+                    style: theme.textTheme.bodyMedium,
+                  ),
                 if (field == CompassField.constraints) ...[
                   const SizedBox(height: 6),
                   ChipTag(

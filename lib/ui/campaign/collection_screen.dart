@@ -15,6 +15,7 @@ import '../persona/persona_copy.dart';
 import '../persona/persona_ops.dart';
 import '../theme/cartha_theme.dart';
 import '../widgets/route_scenes.dart';
+import '../widgets/bidi.dart';
 import '../widgets/widgets.dart';
 import 'campaign_copy.dart';
 import 'campaign_kit.dart';
@@ -428,7 +429,11 @@ class _TryRow extends StatelessWidget {
                   children: [
                     if (entry.note.trim().isNotEmpty) ...[
                       // The note exactly as typed.
-                      Text(entry.note, style: theme.textTheme.bodyMedium),
+                      Text(
+                        entry.note,
+                        textDirection: textDirectionOf(entry.note),
+                        style: theme.textTheme.bodyMedium,
+                      ),
                       const SizedBox(height: 2),
                     ],
                     Text(

@@ -16,6 +16,7 @@ import '../../services/media_picker.dart';
 import '../../state/app_state.dart';
 import '../theme/cartha_theme.dart';
 import '../widgets/art/lesson_art.dart' show LessonArtPainter;
+import '../widgets/bidi.dart';
 import '../widgets/widgets.dart';
 import 'missions_logic.dart';
 
@@ -391,6 +392,11 @@ class ProjectTag extends StatelessWidget {
             Flexible(
               child: Text(
                 title,
+                // The name in its own direction; the app's "Untitled" in
+                // the app's.
+                textDirection: project.title.trim().isEmpty
+                    ? null
+                    : textDirectionOf(title),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.labelMedium?.copyWith(

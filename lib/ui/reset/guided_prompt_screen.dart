@@ -11,6 +11,7 @@ import '../nav.dart';
 import '../theme/cartha_theme.dart';
 import '../voice/dictate_button.dart';
 import '../voice/listen_button.dart';
+import '../widgets/bidi.dart';
 import '../widgets/widgets.dart';
 import 'reset_complete_screen.dart';
 import 'reset_flow.dart';
@@ -45,6 +46,9 @@ class _GuidedPromptScreenState extends State<GuidedPromptScreen>
   late String _promptId = widget.promptId;
   final _controller = TextEditingController();
   final _scroll = ScrollController();
+
+  /// The answer field: Dictate's "Type instead" puts the cursor there.
+  final _answerFocus = FocusNode();
   Timer? _debounce;
 
   /// Typed text that hasn't been handed to [AppState.saveAnswer] yet.
@@ -108,6 +112,7 @@ class _GuidedPromptScreenState extends State<GuidedPromptScreen>
     }
     _controller.dispose();
     _scroll.dispose();
+    _answerFocus.dispose();
     super.dispose();
   }
 
@@ -425,24 +430,33 @@ class _GuidedPromptScreenState extends State<GuidedPromptScreen>
                   example: prompt.example,
                 ),
                 const SizedBox(height: 20),
-                TextField(
+                // The answer runs in its own direction (English in the
+                // Arabic app reads left to right).
+                TypedDirection(
                   controller: _controller,
-                  onChanged: _onChanged,
-                  minLines: 5,
-                  maxLines: null,
-                  keyboardType: TextInputType.multiline,
-                  textInputAction: TextInputAction.newline,
-                  textCapitalization: TextCapitalization.sentences,
-                  decoration: InputDecoration(
-                    labelText: l.resetAnswerLabel,
-                    hintText: l.resetAnswerHint,
-                    alignLabelWithHint: true,
+                  builder: (context, direction) => TextField(
+                    key: const ValueKey('reset-answer'),
+                    controller: _controller,
+                    focusNode: _answerFocus,
+                    textDirection: direction,
+                    onChanged: _onChanged,
+                    minLines: 5,
+                    maxLines: null,
+                    keyboardType: TextInputType.multiline,
+                    textInputAction: TextInputAction.newline,
+                    textCapitalization: TextCapitalization.sentences,
+                    decoration: InputDecoration(
+                      labelText: l.resetAnswerLabel,
+                      hintText: l.resetAnswerHint,
+                      alignLabelWithHint: true,
+                    ),
                   ),
                 ),
                 // Speak, review, then it goes in at the cursor (autosaved).
                 DictateButton(
                   key: const ValueKey('reset-answer-dictate'),
                   controller: _controller,
+                  focusNode: _answerFocus,
                   onInserted: _onChanged,
                 ),
                 // The user's own answer, read aloud only on this tap.

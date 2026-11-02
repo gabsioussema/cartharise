@@ -93,6 +93,10 @@ AppData _data({bool crowded = false}) {
 }
 
 Future<void> _board(WidgetTester tester) async {
+  // Below the section pills, which stack at 320 dp / 200 % (never a broken
+  // word): scrolled into view first.
+  await tester.ensureVisible(find.text('Board'));
+  await pumpFrames(tester, count: 2);
   await tester.tap(find.text('Board'));
   await pumpFrames(tester);
 }

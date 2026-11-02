@@ -365,10 +365,19 @@ class CampaignStat extends StatelessWidget {
 
 /// Words set off like a quotation (the monthly project).
 class CampaignCallout extends StatelessWidget {
-  const CampaignCallout({super.key, required this.text, this.muted = false});
+  const CampaignCallout({
+    super.key,
+    required this.text,
+    this.muted = false,
+    this.textDirection,
+  });
 
   final String text;
   final bool muted;
+
+  /// For the user's words: their own direction (`textDirectionOf`); null
+  /// for the app's.
+  final TextDirection? textDirection;
 
   @override
   Widget build(BuildContext context) {
@@ -384,6 +393,7 @@ class CampaignCallout extends StatelessWidget {
         padding: const EdgeInsetsDirectional.all(14),
         child: Text(
           text,
+          textDirection: textDirection,
           style: theme.textTheme.bodyLarge?.copyWith(
             color: muted ? p.textSecondary : p.textPrimary,
             fontStyle: muted ? CarthaFonts.of(context).italic : null,

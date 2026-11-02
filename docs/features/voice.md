@@ -22,12 +22,14 @@ under each field where people write at length:
 | The note body | Journal › a note (`JournalEntryScreen`) | yes, onto the note (a new note is created the same way as a photo creates it) |
 | The note | Playground › Try (`TryScreen`) | no |
 | A try's note | Collection › a try (`ExperimentEntrySheet`) | yes, onto the try |
+| What did you actually try, what you learned | Battle log › the new attempt form (`BattleLogScreen`) | no (the attempt doesn't exist until **Record**; add voice notes from the attempt afterwards) |
 | What you tried, what you learned | Battle log › an attempt (`AttemptSheet`) | yes, onto the attempt |
 | A day's note | 30-day path › a day (`PathDayScreen`, `AutosaveTextField(dictation: true)`) | no |
 | Wins, Friction, Next experiment | Journal › weekly review (`ReviewScreen`) | no |
 
 Where a screen has several fields, each link is named for screen readers
-("Dictate: Wins").
+("Dictate: Wins"). Every host passes its field's `FocusNode`, so **Type instead** (and
+Write instead after a recording) lands the cursor in that field (audit S3-m3).
 
 ### User flow
 
@@ -51,8 +53,9 @@ Where a screen has several fields, each link is named for screen readers
    * one space only where the text would otherwise run into a word;
    * the cursor lands after the inserted text; "Text inserted." is announced.
    The host autosaves it like typing (`onInserted`): the reset answer, the note, the
-   Try draft, the path day and the weekly review save on their own; a try's note and an
-   attempt save with their **Save** button, as typed text does.
+   Try draft, the path day, the weekly review and the new attempt's draft
+   (`saveAttemptDraft`) save on their own; a try's note and an existing attempt save
+   with their **Save** button, as typed text does.
 5. **Discard** (and **Cancel** once words were heard) asks first: "Discard this text?
    It won't be added." · **Keep** / **Discard**. Nothing is inserted.
 
@@ -156,6 +159,11 @@ phone).
   reader labels, announcements and tap targets; Arabic right to left; the size matrix
   in dark and light, and right to left at 320 dp / 200 %; every hook saves exactly the
   inserted words.
+* `test/ui/evolve3_fixes_test.dart` (audit S3-m3, S3-m4): on every host — the reset
+  answer, the Try note, the weekly review's three fields, an attempt's two fields and
+  the new attempt form's two — **Type instead** leaves the cursor in that field; the new
+  attempt form has a named Dictate per field, inserts at the cursor, autosaves the
+  draft and records the words exactly; no Record instead there.
 * `test/dictation_platform_test.dart`: channel decoding; `PlatformDictation`
   availability, start / stop / cancel, busy, a missing or failing channel; the
   on-device-only guards in the Kotlin, Swift, manifest, Info.plist and Xcode project.

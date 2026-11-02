@@ -11,6 +11,7 @@ import '../nav.dart';
 import '../persona/avatar_view.dart';
 import '../persona/persona_ops.dart';
 import '../theme/cartha_theme.dart';
+import '../widgets/bidi.dart';
 import '../widgets/widgets.dart';
 import 'app_version.dart';
 import 'appearance_screen.dart';
@@ -325,7 +326,9 @@ class _ProfileCard extends StatelessWidget {
                 if (motto.trim().isNotEmpty) ...[
                   const SizedBox(height: 10),
                   Text(
-                    l.personaBuilderMottoQuoted(motto),
+                    l.personaBuilderMottoQuoted(
+                      isolateUserWords(motto, Directionality.of(context)),
+                    ),
                     key: const ValueKey('you-motto'),
                     style: theme.textTheme.bodyLarge?.copyWith(color: p.onHero),
                   ),

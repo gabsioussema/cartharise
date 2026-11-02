@@ -7,6 +7,7 @@ import '../../l10n/app_localizations.dart';
 import '../../services/dictation.dart';
 import '../media/media_kit.dart';
 import '../theme/cartha_theme.dart';
+import '../widgets/bidi.dart';
 import '../widgets/widgets.dart';
 
 /// What the user chose in the dictation sheet.
@@ -513,18 +514,22 @@ class _DictationSheetState extends State<DictationSheet> {
       ),
       const SizedBox(height: 16),
     ],
-    TextField(
-      key: const ValueKey('dictation-review'),
+    TypedDirection(
       controller: _review,
-      minLines: 3,
-      maxLines: null,
-      keyboardType: TextInputType.multiline,
-      textCapitalization: TextCapitalization.sentences,
-      decoration: InputDecoration(
-        labelText: _l.voiceReviewLabel,
-        helperText: _l.voiceReviewHint,
-        helperMaxLines: 3,
-        alignLabelWithHint: true,
+      builder: (context, direction) => TextField(
+        key: const ValueKey('dictation-review'),
+        controller: _review,
+        textDirection: direction,
+        minLines: 3,
+        maxLines: null,
+        keyboardType: TextInputType.multiline,
+        textCapitalization: TextCapitalization.sentences,
+        decoration: InputDecoration(
+          labelText: _l.voiceReviewLabel,
+          helperText: _l.voiceReviewHint,
+          helperMaxLines: 3,
+          alignLabelWithHint: true,
+        ),
       ),
     ),
     const SizedBox(height: 20),

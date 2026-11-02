@@ -9,6 +9,7 @@ import '../media/attachment_strip.dart';
 import '../theme/cartha_theme.dart';
 import '../voice/dictate_button.dart';
 import '../voice/listen_button.dart';
+import '../widgets/bidi.dart';
 import '../widgets/widgets.dart';
 import 'journal_kit.dart';
 
@@ -272,35 +273,43 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
                     subtitle: l.journalEntryPrivacy,
                     padding: const EdgeInsetsDirectional.fromSTEB(0, 8, 0, 16),
                   ),
-                  TextField(
-                    key: const ValueKey('journal-entry-title'),
+                  TypedDirection(
                     controller: _title,
-                    textCapitalization: TextCapitalization.sentences,
-                    textInputAction: TextInputAction.next,
-                    style: theme.textTheme.titleMedium,
-                    decoration: InputDecoration(
-                      labelText: l.journalEntryTitleField,
+                    builder: (context, direction) => TextField(
+                      key: const ValueKey('journal-entry-title'),
+                      controller: _title,
+                      textDirection: direction,
+                      textCapitalization: TextCapitalization.sentences,
+                      textInputAction: TextInputAction.next,
+                      style: theme.textTheme.titleMedium,
+                      decoration: InputDecoration(
+                        labelText: l.journalEntryTitleField,
+                      ),
+                      contextMenuBuilder: _selectionMenu,
+                      onChanged: (_) => _changed(),
                     ),
-                    contextMenuBuilder: _selectionMenu,
-                    onChanged: (_) => _changed(),
                   ),
                   const SizedBox(height: 16),
-                  TextField(
-                    key: const ValueKey('journal-entry-body'),
+                  TypedDirection(
                     controller: _body,
-                    focusNode: _bodyFocus,
-                    autofocus: widget.entryId == null,
-                    minLines: 8,
-                    maxLines: null,
-                    keyboardType: TextInputType.multiline,
-                    textCapitalization: TextCapitalization.sentences,
-                    decoration: InputDecoration(
-                      labelText: l.journalEntryBodyField,
-                      hintText: l.journalEntryBodyHint,
-                      alignLabelWithHint: true,
+                    builder: (context, direction) => TextField(
+                      key: const ValueKey('journal-entry-body'),
+                      controller: _body,
+                      textDirection: direction,
+                      focusNode: _bodyFocus,
+                      autofocus: widget.entryId == null,
+                      minLines: 8,
+                      maxLines: null,
+                      keyboardType: TextInputType.multiline,
+                      textCapitalization: TextCapitalization.sentences,
+                      decoration: InputDecoration(
+                        labelText: l.journalEntryBodyField,
+                        hintText: l.journalEntryBodyHint,
+                        alignLabelWithHint: true,
+                      ),
+                      contextMenuBuilder: _selectionMenu,
+                      onChanged: (_) => _changed(),
                     ),
-                    contextMenuBuilder: _selectionMenu,
-                    onChanged: (_) => _changed(),
                   ),
                   DictateButton(
                     key: const ValueKey('journal-entry-dictate'),

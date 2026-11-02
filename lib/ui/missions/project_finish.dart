@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../domain/app_data.dart';
 import '../../l10n/app_localizations.dart';
 import '../theme/cartha_theme.dart';
+import '../widgets/bidi.dart';
 import '../widgets/widgets.dart';
 import 'project_art.dart';
 
@@ -117,18 +118,22 @@ class _FinishProjectSheetState extends State<FinishProjectSheet> {
             ),
           ),
           const SizedBox(height: 16),
-          TextField(
-            key: const ValueKey('project-finish-retro'),
+          TypedDirection(
             controller: _retro,
-            minLines: 3,
-            maxLines: 8,
-            keyboardType: TextInputType.multiline,
-            textCapitalization: TextCapitalization.sentences,
-            decoration: InputDecoration(
-              labelText: l.missionsRetro,
-              hintText: l.missionsRetroHelp,
-              hintMaxLines: 3,
-              alignLabelWithHint: true,
+            builder: (context, direction) => TextField(
+              key: const ValueKey('project-finish-retro'),
+              controller: _retro,
+              textDirection: direction,
+              minLines: 3,
+              maxLines: 8,
+              keyboardType: TextInputType.multiline,
+              textCapitalization: TextCapitalization.sentences,
+              decoration: InputDecoration(
+                labelText: l.missionsRetro,
+                hintText: l.missionsRetroHelp,
+                hintMaxLines: 3,
+                alignLabelWithHint: true,
+              ),
             ),
           ),
           const SizedBox(height: 20),

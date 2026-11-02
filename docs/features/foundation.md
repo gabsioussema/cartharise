@@ -49,13 +49,14 @@ dialogs), 16 (inputs), pill buttons. Flat, thin borders.
 | `SectionCard` | card section with optional title/icon (or `glyph`, a painted `CarthaGlyph`)/trailing; tappable (announced as button). |
 | `HeroCard` | forest hero surface in both modes; `eyebrow`, Cinzel `title`, `trailing`; text defaults to `onHero`. |
 | `ProgressRing(value, label, onHero)` | calm progress, labelled "n percent"; never a judgement. |
-| `PillTabs<T>` | segmented pills; selected = filled + bold + `selected` semantics; every segment ≥ 48 dp tall (Android tap-target guideline). |
+| `PillTabs<T>` | segmented pills; selected = filled + bold + `selected` semantics; every segment ≥ 48 dp tall (Android tap-target guideline). Never breaks a word: while each label's longest word fits its segment (measured bold, at the text scale) the pills share a row; otherwise they stack, one full-width pill per line (audit S3-m1: Arabic at 320 dp / 200 % had split, unjoined letters). |
 | `EmptyState` | emblem/icon, title, body, optional action. |
 | `SaveIndicator` | from `AppState.saveStatus`: "Saving…", "Saved on this device", or the failure with **Retry** and **Export a copy** (→ `AppNav.openData`). Live region; static (tests can settle). |
 | `confirmDialog(destructive:)`, `askText` | dialogs (askText returns text as typed). |
 | `CarthaPageMotion`, `motionEnabled(context)` | short fade/rise on page change; off with reduce-motion or Settings › Motion. |
 | `ScreenHeader(title, subtitle)` | Cinzel title + Inter subtitle, header semantics. |
 | `ChipTag(label, icon \| glyph, tone)` | small non-interactive label; `glyph` (a `CarthaGlyph`) paints the visual system's cue instead of a Material icon (e.g. the seedling on an "Experiment" quest). |
+| `textDirectionOf`, `isolateUserWords`, `TypedDirection` (`bidi.dart`, not in the barrel) | the user's words in their own direction (first strong letter): on a `Text` / `SelectableText` that shows them; isolated (U+2068 … U+2069) inside one of the app's sentences only when they run the other way; a text field's `textDirection` from what is typed, rebuilt only when it changes. Never for the app's own strings. See `docs/translations.md`. |
 | `openExternalLink(context, uri)` | url_launcher (external app); honest snackbar with the address on failure. |
 | `DestructiveButton` | outlined pill in the error colour for irreversible actions (Delete all data); always paired with a confirm. |
 | `StorageTransparencyText` | where the data lives, from ARB (`storageTransparency`): only on this phone, private app folder, not encrypted by Cartharise, not synced, not in phone or cloud backups. Onboarding privacy page and You › Your data. |

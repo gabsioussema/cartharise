@@ -1,8 +1,9 @@
 /// Dictation (step 3): speech to text, **on the phone only**. Pure Dart
-/// contract; the platform implementation (Android
-/// `SpeechRecognizer.createOnDeviceSpeechRecognizer`, API 31+; iOS
-/// `SFSpeechRecognizer` with `requiresOnDeviceRecognition`) lands with the
-/// dictation feature. Until then the app uses [UnsupportedDictation].
+/// contract. The app uses `PlatformDictation` (`dictation_platform.dart`:
+/// Android `SpeechRecognizer.createOnDeviceSpeechRecognizer`, API 31+; iOS
+/// `SFSpeechRecognizer` with `requiresOnDeviceRecognition`).
+/// [UnsupportedDictation] is only the fallback where there is no platform
+/// recognizer (tests, previews, desktop).
 ///
 /// Rules every implementation keeps:
 /// * **On-device or nothing.** Never a network recognizer, never a silent

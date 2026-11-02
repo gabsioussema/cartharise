@@ -21,7 +21,10 @@ lib/
   services/            ics_export.dart (pure .ics) · file_share.dart (share sheet / file picker)
                        attachment_store.dart (photos + recordings folder) · media_picker.dart
                        (image_picker) · voice_recorder.dart (record) · voice_player.dart (audioplayers)
-                       dictation.dart · read_aloud.dart (step 3 interfaces, pure Dart; stubs)
+                       dictation.dart · read_aloud.dart (step 3 contracts, pure Dart; Unsupported /
+                       Unavailable fallbacks for tests and desktop) · dictation_platform.dart
+                       (PlatformDictation: on-device recognizer, platform channel) ·
+                       read_aloud_platform.dart (PlatformReadAloud: system text-to-speech)
   l10n/                generated AppLocalizations en · fr · ar (from l10n_src/ fragments)
   ui/                  theme/, widgets/, boot_screen, root_shell, nav + one folder per area
 ```

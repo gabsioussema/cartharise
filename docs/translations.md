@@ -312,17 +312,42 @@ experiment, notice and the credit notices (`coverageFor(AppLanguage.ar).complete
   Arabic). The board moves cards by drop target or the Move menu, not by direction.
 * **Eyebrows** (`toUpperCase` + letter spacing) get no spacing in Arabic, and
   italic placeholders («لم يُكتب بعد») stay upright.
-* **The user's words keep their own direction** (`textDirectionOf`,
-  `lib/ui/widgets/bidi.dart`, first strong letter): quest titles (list, board, Today) and
-  journal rows. An English quest in the Arabic app reads "Read 10 pages of «Dune»"; an
-  Arabic note in the English app reads right to left. Text fields and the other places
-  that show the user's words still use the app's direction (see "Known gaps").
+* **The user's words keep their own direction** (`lib/ui/widgets/bidi.dart`, first
+  strong letter; audit S3-m6). An English quest in the Arabic app reads "Read 10 pages of
+  «Dune»"; an Arabic note in the English app reads right to left.
+  * **Shown** (`textDirectionOf` on the `Text` / `SelectableText`): quest titles (list,
+    board, Today), journal rows, past reset answers, the weekly review, Compass
+    versions, the Compass hero and Today's direction, the strategist's map, tries in
+    the Collection, battle-log attempts (both lists), project names (card, tag, history,
+    the monthly boss), milestones and linked tasks, the retrospective, the motto.
+  * **Inside one of the app's sentences** ("Learned: {learning}", the quoted motto):
+    `isolateUserWords` wraps the words in Unicode's first-strong isolate (U+2068 …
+    U+2069) only when they run the other way from the app, so their full stop stays at
+    their end; words running the app's way are shown with nothing added. Display only:
+    what is saved is never touched.
+  * **Typed** (`TypedDirection`): every text field takes the direction of what is in it
+    — answers, notes, the Compass (`AutosaveTextField`), the path day, attempts, tries,
+    reviews, quests, project, milestone and lever drafts, the motto, the name, the
+    dictation review and the text dialog. Empty or letterless (digits only): the app's
+    direction; the label, hint and helper always keep the app's.
+  * The app's own strings (an Arabic sentence starting with "Cartharise") keep the
+    app's direction.
+  * Tested in `test/ui/evolve3_fixes_test.dart`: an English answer in the Arabic app (the
+    field runs left to right with its "." at its end, then follows Arabic or digits
+    typed; a past answer), an English attempt and learning in the Arabic app (the "."
+    laid out after "better"), an Arabic try note, attempt and learning in the English
+    app.
+* **Section pills** (`PillTabs`) never break a word, which in Arabic would also sever
+  the joined letters: at 320 dp / 200 % they stack (`test/ui/rtl_test.dart` checks every
+  word of every pill lies on one line, Arabic and English).
 
 ### Known gaps (for review)
 
-* Text fields (answers, notes, the Compass) take the app's direction, not the typed
-  text's: English typed in the Arabic app is right-aligned and a final "." may show at
-  the start until the line has an Arabic letter.
+* A field's direction follows its **first** letter: a note that starts in English and
+  continues in Arabic runs left to right as a whole (each run still reads its own way).
+* Other sentences of the app's that carry the user's words (the greeting with the
+  name, screen-reader labels such as "Project: {title}") are not isolated yet; a name
+  in the other script may put a comma or full stop at the wrong end.
 * The progress ring is not mirrored (a deliberate clock-wise choice; review with
   native readers).
 * New strings show in English until their `_ar.arb` entries are written;

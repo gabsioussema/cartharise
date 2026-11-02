@@ -7,6 +7,7 @@ import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
 import '../theme/cartha_theme.dart';
 import '../voice/dictate_button.dart';
+import '../widgets/bidi.dart';
 import '../widgets/widgets.dart';
 import 'journal_kit.dart';
 
@@ -33,6 +34,11 @@ class _ReviewScreenState extends State<ReviewScreen> {
   late final TextEditingController _friction;
   late final TextEditingController _next;
   late final Autosaver _autosave;
+
+  /// Each field's focus: Dictate's "Type instead" puts the cursor there.
+  final _winsFocus = FocusNode();
+  final _frictionFocus = FocusNode();
+  final _nextFocus = FocusNode();
 
   String? _id;
   late String _week;
@@ -62,6 +68,9 @@ class _ReviewScreenState extends State<ReviewScreen> {
     _wins.dispose();
     _friction.dispose();
     _next.dispose();
+    _winsFocus.dispose();
+    _frictionFocus.dispose();
+    _nextFocus.dispose();
     super.dispose();
   }
 
@@ -227,6 +236,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
     Widget field(
       Key key,
       TextEditingController controller,
+      FocusNode focus,
       String label,
       String hint,
     ) => Padding(
@@ -234,23 +244,29 @@ class _ReviewScreenState extends State<ReviewScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          TextField(
-            key: key,
+          TypedDirection(
             controller: controller,
-            minLines: 3,
-            maxLines: null,
-            keyboardType: TextInputType.multiline,
-            textCapitalization: TextCapitalization.sentences,
-            decoration: InputDecoration(
-              labelText: label,
-              helperText: hint,
-              helperMaxLines: 3,
-              alignLabelWithHint: true,
+            builder: (context, direction) => TextField(
+              key: key,
+              controller: controller,
+              focusNode: focus,
+              textDirection: direction,
+              minLines: 3,
+              maxLines: null,
+              keyboardType: TextInputType.multiline,
+              textCapitalization: TextCapitalization.sentences,
+              decoration: InputDecoration(
+                labelText: label,
+                helperText: hint,
+                helperMaxLines: 3,
+                alignLabelWithHint: true,
+              ),
+              onChanged: (_) => _changed(),
             ),
-            onChanged: (_) => _changed(),
           ),
           DictateButton(
             controller: controller,
+            focusNode: focus,
             fieldLabel: label,
             onInserted: (_) => _changed(),
           ),
@@ -282,18 +298,21 @@ class _ReviewScreenState extends State<ReviewScreen> {
         field(
           const ValueKey('review-wins'),
           _wins,
+          _winsFocus,
           l.journalReviewWins,
           l.journalReviewWinsHint,
         ),
         field(
           const ValueKey('review-friction'),
           _friction,
+          _frictionFocus,
           l.journalReviewFriction,
           l.journalReviewFrictionHint,
         ),
         field(
           const ValueKey('review-next'),
           _next,
+          _nextFocus,
           l.journalReviewNext,
           l.journalReviewNextHint,
         ),
@@ -328,7 +347,11 @@ class _ReviewScreenState extends State<ReviewScreen> {
                 fontStyle: CarthaFonts.of(context).italic,
               ),
             )
-          : SelectableText(text, style: theme.textTheme.bodyLarge);
+          : SelectableText(
+              text,
+              textDirection: textDirectionOf(text),
+              style: theme.textTheme.bodyLarge,
+            );
       return Padding(
         padding: const EdgeInsetsDirectional.only(bottom: 16),
         child: glyph == null

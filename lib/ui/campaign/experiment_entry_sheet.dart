@@ -6,6 +6,7 @@ import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
 import '../media/attachment_strip.dart';
 import '../voice/dictate_button.dart';
+import '../widgets/bidi.dart';
 import '../widgets/widgets.dart';
 import 'campaign_ops.dart';
 
@@ -156,15 +157,19 @@ class _ExperimentEntrySheetState extends State<ExperimentEntrySheet> {
             child: Text(widget.title, style: theme.textTheme.titleLarge),
           ),
           const SizedBox(height: 16),
-          TextField(
-            key: const ValueKey('tried-edit-note'),
+          TypedDirection(
             controller: _note,
-            focusNode: _noteFocus,
-            minLines: 1,
-            maxLines: 4,
-            textCapitalization: TextCapitalization.sentences,
-            decoration: InputDecoration(labelText: l.campaignTryNoteLabel),
-            onChanged: (text) => widget.edited?.value = text,
+            builder: (context, direction) => TextField(
+              key: const ValueKey('tried-edit-note'),
+              controller: _note,
+              textDirection: direction,
+              focusNode: _noteFocus,
+              minLines: 1,
+              maxLines: 4,
+              textCapitalization: TextCapitalization.sentences,
+              decoration: InputDecoration(labelText: l.campaignTryNoteLabel),
+              onChanged: (text) => widget.edited?.value = text,
+            ),
           ),
           DictateButton(
             key: const ValueKey('tried-edit-dictate'),

@@ -104,7 +104,14 @@ class AppState extends ChangeNotifier {
   /// What the app teaches and asks, in [language] (English per item where
   /// not translated). Switching language never touches the user's data:
   /// answers, logs and links are keyed by permanent ids.
-  ContentLibrary get content => _contentFor?.call(language) ?? _content;
+  ContentLibrary get content => contentIn(language);
+
+  /// The content in [language] (a shipped one; English per item where not
+  /// translated); without per-language content (tests), the one library.
+  /// For matching what was saved in another language, e.g. an experiment
+  /// quest added before the language changed.
+  ContentLibrary contentIn(AppLanguage language) =>
+      _contentFor?.call(language) ?? _content;
 
   /// The language the app speaks now (never [AppLanguage.system]): the
   /// setting, or for system the phone's first preferred language that
@@ -725,7 +732,8 @@ class AppState extends ChangeNotifier {
 
   /// Adds a quest on the board lane [stage] (not done: complete it to get
   /// there). While a project is active ([activeProjectId]) the quest is
-  /// linked to it, unless [linkProject] is false.
+  /// linked to it, unless [linkProject] is false. [experimentId]: the
+  /// experiment a [QuestSource.experiment] quest comes from.
   Future<Quest> addQuest(
     String title, {
     QuestRecurrence recurrence = QuestRecurrence.none,
@@ -733,6 +741,7 @@ class AppState extends ChangeNotifier {
     QuestSource source = QuestSource.manual,
     QuestStage stage = QuestStage.ready,
     bool linkProject = true,
+    String? experimentId,
   }) async {
     final text = title.trim();
     if (text.isEmpty) throw ArgumentError.value(title, 'title', 'is empty');
@@ -749,6 +758,7 @@ class AppState extends ChangeNotifier {
       source: source,
       stage: stage,
       projectId: linkProject ? activeProjectId : null,
+      experimentId: experimentId,
     );
     await mutate(
       (d) => _questsIntroduced(d).copyWith(quests: [...d.quests, quest]),

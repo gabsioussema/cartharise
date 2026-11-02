@@ -676,6 +676,7 @@ class _DirectionCardState extends State<_DirectionCard> {
           const SizedBox(height: 4),
           Text(
             has ? text.trim() : placeholder,
+            textDirection: has ? textDirectionOf(text.trim()) : null,
             maxLines: 4,
             overflow: TextOverflow.ellipsis,
             style: has

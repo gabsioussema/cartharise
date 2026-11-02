@@ -6,6 +6,7 @@ import '../../domain/content.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
 import '../theme/cartha_theme.dart';
+import '../widgets/bidi.dart';
 import '../widgets/widgets.dart';
 import 'journal_kit.dart';
 
@@ -194,7 +195,12 @@ class _AnswerCard extends StatelessWidget {
     );
     Widget words(ReflectionAnswer? a, String emptyText) {
       if (a != null && a.answered) {
-        return SelectableText(a.body, style: theme.textTheme.bodyLarge);
+        // Exactly as typed, in its own direction.
+        return SelectableText(
+          a.body,
+          textDirection: textDirectionOf(a.body),
+          style: theme.textTheme.bodyLarge,
+        );
       }
       if (a != null && a.skipped) {
         return Align(

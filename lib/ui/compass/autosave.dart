@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../voice/dictate_button.dart';
+import '../widgets/bidi.dart';
 
 /// Debounced autosave for the Compass + Missions text fields (PLAN.md §5):
 /// saves the text exactly as typed ~600 ms after the last keystroke, on
@@ -177,19 +178,23 @@ class _AutosaveTextFieldState extends State<AutosaveTextField> {
 
   @override
   Widget build(BuildContext context) {
-    final field = TextField(
+    final field = TypedDirection(
       controller: _text.controller,
-      focusNode: _focus,
-      minLines: widget.minLines,
-      maxLines: widget.maxLines,
-      keyboardType: TextInputType.multiline,
-      textCapitalization: widget.textCapitalization,
-      style: widget.style,
-      decoration: widget.decoration,
-      onChanged: (text) {
-        _autosave.changed(text);
-        widget.onChanged?.call(text);
-      },
+      builder: (context, direction) => TextField(
+        controller: _text.controller,
+        textDirection: direction,
+        focusNode: _focus,
+        minLines: widget.minLines,
+        maxLines: widget.maxLines,
+        keyboardType: TextInputType.multiline,
+        textCapitalization: widget.textCapitalization,
+        style: widget.style,
+        decoration: widget.decoration,
+        onChanged: (text) {
+          _autosave.changed(text);
+          widget.onChanged?.call(text);
+        },
+      ),
     );
     final label = widget.semanticLabel;
     final labelled = label == null

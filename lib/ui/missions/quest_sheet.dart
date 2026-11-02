@@ -6,6 +6,7 @@ import '../../domain/local_date.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
 import '../compass/formatting.dart';
+import '../widgets/bidi.dart';
 import '../widgets/widgets.dart';
 import 'missions_logic.dart';
 import 'project_link.dart';
@@ -161,22 +162,26 @@ class _QuestSheetState extends State<QuestSheet> {
             ),
           ),
           const SizedBox(height: 16),
-          TextField(
-            key: const ValueKey('quest-title'),
+          TypedDirection(
             controller: _title,
-            autofocus: !editing,
-            minLines: 1,
-            maxLines: 3,
-            textCapitalization: TextCapitalization.sentences,
-            decoration: InputDecoration(
-              labelText: l.missionsQuestTitleLabel,
-              hintText: l.missionsQuestTitleHint,
-              errorText: _error,
-              errorMaxLines: 3,
+            builder: (context, direction) => TextField(
+              key: const ValueKey('quest-title'),
+              controller: _title,
+              textDirection: direction,
+              autofocus: !editing,
+              minLines: 1,
+              maxLines: 3,
+              textCapitalization: TextCapitalization.sentences,
+              decoration: InputDecoration(
+                labelText: l.missionsQuestTitleLabel,
+                hintText: l.missionsQuestTitleHint,
+                errorText: _error,
+                errorMaxLines: 3,
+              ),
+              onChanged: (_) {
+                if (_error != null) setState(() => _error = null);
+              },
             ),
-            onChanged: (_) {
-              if (_error != null) setState(() => _error = null);
-            },
           ),
           const SizedBox(height: 8),
           SwitchListTile(

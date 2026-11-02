@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../theme/cartha_theme.dart';
+import 'bidi.dart';
 
 /// Asks to confirm an action. [destructive] paints the action in the error
 /// colour (delete, replace, start over). Returns true only when the action
@@ -178,18 +179,22 @@ class _TextInputDialogState extends State<_TextInputDialog> {
     return AlertDialog(
       scrollable: true,
       title: Text(widget.title),
-      content: TextField(
+      content: TypedDirection(
         controller: _controller,
-        autofocus: true,
-        minLines: 1,
-        maxLines: widget.maxLines,
-        maxLength: widget.maxLength,
-        textCapitalization: widget.textCapitalization,
-        decoration: InputDecoration(
-          hintText: widget.hint,
-          labelText: widget.label,
+        builder: (context, direction) => TextField(
+          controller: _controller,
+          textDirection: direction,
+          autofocus: true,
+          minLines: 1,
+          maxLines: widget.maxLines,
+          maxLength: widget.maxLength,
+          textCapitalization: widget.textCapitalization,
+          decoration: InputDecoration(
+            hintText: widget.hint,
+            labelText: widget.label,
+          ),
+          onSubmitted: widget.maxLines == 1 ? (_) => _submit() : null,
         ),
-        onSubmitted: widget.maxLines == 1 ? (_) => _submit() : null,
       ),
       actions: [
         TextButton(

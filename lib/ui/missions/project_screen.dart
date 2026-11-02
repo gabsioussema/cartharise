@@ -7,6 +7,7 @@ import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
 import '../compass/autosave.dart';
 import '../theme/cartha_theme.dart';
+import '../widgets/bidi.dart';
 import '../widgets/widgets.dart';
 import 'missions_copy.dart';
 import 'missions_logic.dart';
@@ -319,21 +320,26 @@ class _ProjectScreenState extends State<ProjectScreen> {
                         children: [
                           Semantics(
                             label: l.missionsProjectTitleLabel,
-                            child: TextField(
-                              key: const ValueKey('project-title'),
+                            child: TypedDirection(
                               controller: _title.controller,
-                              focusNode: _titleFocus,
-                              minLines: 1,
-                              maxLines: 3,
-                              textCapitalization: TextCapitalization.sentences,
-                              decoration: InputDecoration(
-                                hintText: l.missionsProjectTitleHint,
-                                hintMaxLines: 2,
+                              builder: (context, direction) => TextField(
+                                key: const ValueKey('project-title'),
+                                controller: _title.controller,
+                                textDirection: direction,
+                                focusNode: _titleFocus,
+                                minLines: 1,
+                                maxLines: 3,
+                                textCapitalization:
+                                    TextCapitalization.sentences,
+                                decoration: InputDecoration(
+                                  hintText: l.missionsProjectTitleHint,
+                                  hintMaxLines: 2,
+                                ),
+                                onChanged: (text) {
+                                  _titleSave.changed(text);
+                                  setState(() {});
+                                },
                               ),
-                              onChanged: (text) {
-                                _titleSave.changed(text);
-                                setState(() {});
-                              },
                             ),
                           ),
                           if (linked) ...[
@@ -721,6 +727,7 @@ class _MilestoneRow extends StatelessWidget {
             padding: const EdgeInsetsDirectional.symmetric(vertical: 8),
             child: Text(
               m.title,
+              textDirection: textDirectionOf(m.title),
               style: theme.textTheme.bodyLarge?.copyWith(
                 color: m.done ? p.textSecondary : p.textPrimary,
                 decoration: m.done ? TextDecoration.lineThrough : null,

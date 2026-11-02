@@ -95,8 +95,9 @@ removes the draft in the same change.
 * **Add to my tasks** → `addExperimentToTasks(id)`: explicit only; one
   one-off quest (`QuestSource.experiment`, labelled "Experiment" in Missions)
   → "Added to your tasks." with **Open tasks**; while it is open, tapping
-  again reuses it → "Already in your tasks." Adding earns nothing and records
-  no try.
+  again reuses it → "Already in your tasks." — found by the experiment's id
+  (`Quest.experimentId`), so it is found after a language switch too (audit
+  S3-m2). Adding earns nothing and records no try.
 * A write that failed says "Not saved on this phone yet. Retry at the top."
   and scrolls to the `SaveIndicator` (never "saved").
 
@@ -168,6 +169,11 @@ history). Collection › tries also say what each one holds.
   "draft kept". "Kept on this phone as you type." is shown only while no save
   has failed. Clearing both fields removes the draft; recording removes it in
   the same change.
+* **Dictate** under each field (audit S3-m4; `docs/features/voice.md`): what was
+  heard is reviewed, then goes in at the cursor and into the draft like typing.
+  No Record instead here: voice notes go on the attempt once it is recorded (its
+  sheet). Both fields, like the log's attempts and learnings, run in the words'
+  own direction (`docs/translations.md`).
 * **Honest recording.** "Attempt recorded." only once the write worked. A
   failed write says "Not saved on this phone yet. Your words are still here.
   Retry at the top.", keeps the words in the form and scrolls to the
@@ -376,8 +382,12 @@ experimentId, day, note (exactly as typed, optional), createdAt, editedAt}` in
 `AppData.experimentLog` (newest first; `editExperimentEntry`,
 `deleteExperimentEntry`, `hasTried`). **Add to my tasks**
 (`addExperimentToTasks`) creates a one-off quest with
-`QuestSource.experiment` (the open one is returned instead of a duplicate)
-and earns nothing by itself.
+`QuestSource.experiment` and `experimentId` (JSON `experimentId`, optional;
+older files and junk → none), titled in the language shown. The open one is
+returned instead of a duplicate: matched by `experimentId`, or for a quest
+saved before ids were kept, by the experiment's title in any shipped language
+(`AppState.contentIn`). The quest keeps the words it was added with. It earns
+nothing by itself.
 
 ## Moments (`CampaignFeedback`, F-060)
 

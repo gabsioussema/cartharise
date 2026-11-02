@@ -6,6 +6,7 @@ import '../../domain/content.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
 import '../theme/cartha_theme.dart';
+import '../widgets/bidi.dart';
 import '../widgets/widgets.dart';
 import 'compass_copy.dart';
 import 'formatting.dart';
@@ -238,7 +239,11 @@ class _VersionField extends StatelessWidget {
             ),
           )
         else
-          SelectableText(text, style: theme.textTheme.bodyLarge),
+          SelectableText(
+            text,
+            textDirection: textDirectionOf(text),
+            style: theme.textTheme.bodyLarge,
+          ),
         const SizedBox(height: 10),
         ChipTag(
           label: same ? l.compassVersionSameAsNow : l.compassVersionDiffers,

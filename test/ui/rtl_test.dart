@@ -19,6 +19,7 @@ import 'package:cartharise/ui/nav.dart';
 import 'package:cartharise/ui/reset/guided_prompt_screen.dart';
 import 'package:cartharise/ui/theme/cartha_theme.dart';
 import 'package:cartharise/ui/widgets/bidi.dart';
+import 'package:cartharise/ui/widgets/pill_tabs.dart';
 import 'package:cartharise/ui/you/font_licenses.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -191,6 +192,28 @@ void expectArabicFonts(WidgetTester tester) {
     }
   }
   expect(arabicParagraphs, greaterThan(0), reason: 'no Arabic text shown');
+}
+
+/// Every word of each paragraph [labels] finds is laid out on one line:
+/// nothing breaks a word in two (which in Arabic also severs the joined
+/// letters).
+void expectWholeWords(WidgetTester tester, Finder labels) {
+  for (final paragraph in tester.renderObjectList<RenderParagraph>(labels)) {
+    final text = paragraph.text.toPlainText();
+    for (final word in RegExp(r'\S+').allMatches(text)) {
+      final lines = {
+        for (final box in paragraph.getBoxesForSelection(
+          TextSelection(baseOffset: word.start, extentOffset: word.end),
+        ))
+          box.top.round(),
+      };
+      expect(
+        lines,
+        hasLength(1),
+        reason: '"${word[0]}" is broken across lines in "$text"',
+      );
+    }
+  }
 }
 
 /// Scroll-safe tap.
@@ -658,6 +681,69 @@ void main() {
         expect(textDirectionOf(''), isNull);
       },
     );
+
+    // Audit S3-m1: at 320 dp and 200 % text the section pills never break a
+    // word (in Arabic that would also sever the joined letters): they stack
+    // instead. English too; at a regular size they stay on one row.
+    for (final (name, language) in [
+      ('Arabic', AppLanguage.ar),
+      ('English', AppLanguage.en),
+    ]) {
+      testWidgets('$name section pills keep whole words at 320 dp, 200 %', (
+        tester,
+      ) async {
+        final pills = find.byType(PillTabs<CompassSection>);
+        for (final game in [true, false]) {
+          final data = arabicData(game: game);
+          await pumpArabic(
+            tester,
+            data: data.copyWith(
+              settings: data.settings.copyWith(language: language),
+            ),
+            home: const CompassTab(initial: CompassSection.campaign),
+            size: const Size(320, 568),
+            textScale: 2,
+          );
+          final labels = find.descendant(
+            of: pills,
+            matching: find.byType(RichText),
+          );
+          expect(labels, findsNWidgets(3));
+          expectWholeWords(tester, labels);
+          // Stacked: one pill per line, each as wide as the control.
+          final rects = [
+            for (final e in labels.evaluate())
+              tester.getRect(find.byElementPredicate((x) => x == e)),
+          ];
+          expect(rects[1].top, greaterThan(rects[0].bottom), reason: name);
+          expect(rects[2].top, greaterThan(rects[1].bottom), reason: name);
+          expect(tester.takeException(), isNull);
+        }
+
+        // A regular phone: one row, still whole words.
+        await pumpArabic(
+          tester,
+          data: arabicData().copyWith(
+            settings: arabicData().settings.copyWith(language: language),
+          ),
+          home: const CompassTab(initial: CompassSection.compass),
+        );
+        final labels = find.descendant(
+          of: pills,
+          matching: find.byType(RichText),
+        );
+        expectWholeWords(tester, labels);
+        final tops = {
+          for (final e in labels.evaluate())
+            tester
+                .getRect(find.byElementPredicate((x) => x == e))
+                .center
+                .dy
+                .round(),
+        };
+        expect(tops, hasLength(1), reason: 'one row');
+      });
+    }
 
     testWidgets('Arabic dates use Western digits', (tester) async {
       await pumpArabic(

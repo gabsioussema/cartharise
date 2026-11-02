@@ -199,8 +199,8 @@ Five tabs: **Today · Reset · Compass · Journal · You**.
 
 **Languages and voice**
 - 🌍 **English, French and Arabic** for every screen and all content (lessons, questions with their softer wording and examples, the 30-day path, experiments, reminders, help). French and Arabic are **drafts that still need a native speaker's review**. Pick one in You › Appearance › **Language** (or **Same as phone**); the app switches at once and your own words are never translated or changed
-- ↔️ **Arabic reads right to left**, in a bundled Arabic font (Noto Sans Arabic UI, OFL) with Western digits; arrows and Hannibal's route mirror, and your own notes and quests keep their own direction
-- 🎙️ **Dictate** under the reset answer, notes, tries, attempts, path days and the weekly review: speak, check the text, and it goes in at the cursor only when you tap **Insert**. Recognition runs **on the phone only**; where it can't, the app says so in one line and offers **Record** or typing
+- ↔️ **Arabic reads right to left**, in a bundled Arabic font (Noto Sans Arabic UI, OFL) with Western digits; arrows and Hannibal's route mirror, and your own words keep their own direction, as you type them and wherever they are shown
+- 🎙️ **Dictate** under the reset answer, notes, tries, attempts (new and saved), path days and the weekly review: speak, check the text, and it goes in at the cursor only when you tap **Insert**. Recognition runs **on the phone only**; where it can't, the app says so in one line and offers **Record** or typing
 - 🔊 **Listen** reads a lesson or a question aloud with the phone's own voices. **Listen to my answer** and **Listen to my note** read your words only when you tap them. **Stop reading** anytime; it stops when you leave and respects silent mode
 
 **Made for real life**

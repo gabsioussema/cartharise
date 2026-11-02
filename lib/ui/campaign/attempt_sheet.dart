@@ -8,6 +8,7 @@ import '../media/attachment_strip.dart';
 import '../missions/project_link.dart';
 import '../missions/project_ops.dart';
 import '../voice/dictate_button.dart';
+import '../widgets/bidi.dart';
 import '../widgets/widgets.dart';
 import 'campaign_ops.dart';
 
@@ -56,6 +57,7 @@ class AttemptSheet extends StatefulWidget {
 class _AttemptSheetState extends State<AttemptSheet> {
   late final _attempt = TextEditingController(text: widget.entry.attempt);
   late final _learning = TextEditingController(text: widget.entry.learning);
+  final _attemptFocus = FocusNode();
   final _learningFocus = FocusNode();
 
   /// The project this attempt can be linked to (its own, else the active
@@ -78,6 +80,7 @@ class _AttemptSheetState extends State<AttemptSheet> {
   void dispose() {
     _attempt.dispose();
     _learning.dispose();
+    _attemptFocus.dispose();
     _learningFocus.dispose();
     super.dispose();
   }
@@ -125,24 +128,30 @@ class _AttemptSheetState extends State<AttemptSheet> {
             ),
           ),
           const SizedBox(height: 16),
-          TextField(
-            key: const ValueKey('attempt-edit-attempt'),
+          TypedDirection(
             controller: _attempt,
-            minLines: 2,
-            maxLines: 6,
-            textCapitalization: TextCapitalization.sentences,
-            decoration: InputDecoration(
-              labelText: l.campaignAttemptLabel,
-              errorText: _error,
-              errorMaxLines: 3,
+            builder: (context, direction) => TextField(
+              key: const ValueKey('attempt-edit-attempt'),
+              controller: _attempt,
+              focusNode: _attemptFocus,
+              textDirection: direction,
+              minLines: 2,
+              maxLines: 6,
+              textCapitalization: TextCapitalization.sentences,
+              decoration: InputDecoration(
+                labelText: l.campaignAttemptLabel,
+                errorText: _error,
+                errorMaxLines: 3,
+              ),
+              onChanged: (_) {
+                if (_error != null) setState(() => _error = null);
+              },
             ),
-            onChanged: (_) {
-              if (_error != null) setState(() => _error = null);
-            },
           ),
           DictateButton(
             key: const ValueKey('attempt-edit-attempt-dictate'),
             controller: _attempt,
+            focusNode: _attemptFocus,
             fieldLabel: l.campaignAttemptLabel,
             onInserted: (_) {
               if (_error != null) setState(() => _error = null);
@@ -150,14 +159,18 @@ class _AttemptSheetState extends State<AttemptSheet> {
             recordInstead: _keepRecording,
           ),
           const SizedBox(height: 4),
-          TextField(
-            key: const ValueKey('attempt-edit-learning'),
+          TypedDirection(
             controller: _learning,
-            focusNode: _learningFocus,
-            minLines: 2,
-            maxLines: 6,
-            textCapitalization: TextCapitalization.sentences,
-            decoration: InputDecoration(labelText: l.campaignLearningLabel),
+            builder: (context, direction) => TextField(
+              key: const ValueKey('attempt-edit-learning'),
+              controller: _learning,
+              focusNode: _learningFocus,
+              textDirection: direction,
+              minLines: 2,
+              maxLines: 6,
+              textCapitalization: TextCapitalization.sentences,
+              decoration: InputDecoration(labelText: l.campaignLearningLabel),
+            ),
           ),
           DictateButton(
             key: const ValueKey('attempt-edit-learning-dictate'),

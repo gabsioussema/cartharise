@@ -1,8 +1,9 @@
 /// Read aloud (step 3): **Listen** to a lesson, a prompt or — after an
 /// explicit tap — the user's own note, through the phone's own
-/// text-to-speech. Pure Dart contract; the platform implementation lands
-/// with the read-aloud feature. Until then the app uses
-/// [UnavailableReadAloud].
+/// text-to-speech. Pure Dart contract. The app uses `PlatformReadAloud`
+/// (`read_aloud_platform.dart`: Android `TextToSpeech`, iOS
+/// `AVSpeechSynthesizer`). [UnavailableReadAloud] is only the fallback
+/// where there is no platform voice (tests, previews, desktop).
 ///
 /// Rules every implementation keeps:
 /// * **Only on a tap.** Nothing is spoken on its own; personal text only

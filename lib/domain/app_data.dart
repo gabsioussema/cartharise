@@ -805,6 +805,7 @@ class Quest {
     this.stage = QuestStage.ready,
     this.projectId,
     this.doneFrom,
+    this.experimentId,
   });
 
   final String id;
@@ -832,6 +833,12 @@ class Quest {
   /// it back there instead of in Ready. Null = Ready. Never [QuestStage.done];
   /// null whenever the quest is open, and for daily quests.
   final QuestStage? doneFrom;
+
+  /// For [QuestSource.experiment]: the [Experiment] id (permanent) it was
+  /// added from with "Add to my tasks", so adding it again finds it in any
+  /// language. Null for every other quest, and for experiment quests saved
+  /// before step 3 (matched by title then).
+  final String? experimentId;
 
   /// The lane an open quest shows: its stored stage, or for a stored
   /// [QuestStage.done] the lane it was completed from.
@@ -943,6 +950,7 @@ class Quest {
     stage: stage ?? this.stage,
     projectId: projectId != null ? projectId() : this.projectId,
     doneFrom: doneFrom != null ? doneFrom() : this.doneFrom,
+    experimentId: experimentId,
   );
 
   Map<String, Object?> toJson() => {
@@ -957,6 +965,7 @@ class Quest {
     'stage': stage.name,
     'projectId': projectId,
     'doneFrom': doneFrom?.name,
+    'experimentId': experimentId,
   };
 
   factory Quest.fromJson(Object? json) {
@@ -1001,6 +1010,12 @@ class Quest {
           QuestStage.done || QuestStage.ready => null,
           final lane => lane,
         },
+      },
+      // Older files have none (matched by title); a junk value is only a
+      // lost hint, never a reason to refuse the file.
+      experimentId: switch (j['experimentId']) {
+        final String id when id.isNotEmpty => id,
+        _ => null,
       },
     ).normalized();
   }

@@ -8,6 +8,7 @@ import 'package:cartharise/content/content.dart';
 import 'package:cartharise/content/en.dart';
 import 'package:cartharise/domain/app_data.dart';
 import 'package:cartharise/ui/awakening/lesson_screen.dart';
+import 'package:cartharise/ui/campaign/battle_log_screen.dart';
 import 'package:cartharise/ui/campaign/campaign_pages.dart';
 import 'package:cartharise/ui/compass/compass_tab.dart';
 import 'package:cartharise/ui/missions/path_day_screen.dart';
@@ -18,7 +19,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../support/screenshot.dart';
 import '../support/test_app.dart';
-import '../ui/rtl_test.dart' show pumpArabic;
+import '../ui/rtl_test.dart' show arabicData, pumpArabic;
 
 void main() {
   for (final b in Brightness.values) {
@@ -110,6 +111,58 @@ void main() {
       h.shell.select(AppTab.today);
       await pumpFrames(tester);
       await captureScreenshot(tester, 'rtl_13_today_320_$suffix');
+    });
+    // Audit S3-m1 / S3-m6: the section pills stacked at 320 dp / 200 %
+    // (never a broken word), an English answer and English attempts in the
+    // Arabic app, each in its own direction.
+    testWidgets('pills at 320 dp, 200 % $suffix', (tester) async {
+      await screen(
+        tester,
+        '16_pills_320',
+        const CompassTab(initial: CompassSection.campaign),
+        size: const Size(320, 568),
+        textScale: 2,
+      );
+    });
+    testWidgets('English answer $suffix', (tester) async {
+      await screen(
+        tester,
+        '17_english_answer',
+        const GuidedPromptScreen(promptId: 'morning.02'),
+      );
+    });
+    testWidgets('mixed battle log $suffix', (tester) async {
+      final data = arabicData();
+      await pumpArabic(
+        tester,
+        brightness: b,
+        size: const Size(390, 1300),
+        data: data.copyWith(
+          campaignLog: [
+            BattleLogEntry(
+              id: 'a1',
+              day: '2026-11-02',
+              attempt: 'Wrote the first page (draft).',
+              learning: 'Mornings work better.',
+              createdAt: DateTime(2026, 11, 2, 20),
+            ),
+            BattleLogEntry(
+              id: 'a2',
+              day: '2026-11-01',
+              attempt: 'كتبت لمدة 20 دقيقة قبل العمل.',
+              learning: 'الصباح أهدأ.',
+              createdAt: DateTime(2026, 11, 1, 20),
+            ),
+          ],
+        ),
+        home: const BattleLogScreen(),
+      );
+      await tester.enterText(
+        find.byKey(const ValueKey('campaign-attempt')),
+        'Called Sam (10 min).',
+      );
+      await pumpFrames(tester, count: 2);
+      await captureScreenshot(tester, 'rtl_18_battle_log_mixed_$suffix');
     });
     testWidgets('onboarding $suffix', (tester) async {
       await pumpCartha(

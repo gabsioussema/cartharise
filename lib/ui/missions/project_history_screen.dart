@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' show DateFormat;
 import 'package:provider/provider.dart';
 
 import '../../domain/app_data.dart';
@@ -12,6 +12,7 @@ import '../media/media_kit.dart' show AttachmentCountLine;
 import '../media/photo_tile.dart';
 import '../media/photo_viewer.dart';
 import '../theme/cartha_theme.dart';
+import '../widgets/bidi.dart';
 import '../widgets/widgets.dart';
 import 'missions_logic.dart';
 import 'project_art.dart';
@@ -46,6 +47,11 @@ String projectMonths(BuildContext context, MonthProject project) {
 
 String _titleOf(AppLocalizations l, MonthProject project) =>
     project.title.trim().isEmpty ? l.missionsProjectUntitled : project.title;
+
+/// The direction of the project's name (the user's words); null for the
+/// app's "Untitled project".
+TextDirection? _titleDirection(MonthProject project) =>
+    project.title.trim().isEmpty ? null : textDirectionOf(project.title);
 
 /// Finished projects, newest first: each with its picture, title, months,
 /// milestones done, linked tasks and attempts, and the start of its look
@@ -161,6 +167,7 @@ class _PastProjectCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   _titleOf(l, project),
+                  textDirection: _titleDirection(project),
                   style: theme.textTheme.titleMedium,
                 ),
               ),
@@ -179,6 +186,7 @@ class _PastProjectCard extends StatelessWidget {
             const SizedBox(height: 10),
             Text(
               project.retrospective,
+              textDirection: textDirectionOf(project.retrospective),
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
               style: theme.textTheme.bodyMedium,
@@ -284,6 +292,7 @@ class PastProjectScreen extends StatelessWidget {
               child: Text(
                 _titleOf(l, project),
                 key: const ValueKey('past-project-title'),
+                textDirection: _titleDirection(project),
                 style: theme.textTheme.titleLarge,
               ),
             ),
@@ -329,6 +338,7 @@ class PastProjectScreen extends StatelessWidget {
                   : Text(
                       project.retrospective,
                       key: const ValueKey('past-project-retro'),
+                      textDirection: textDirectionOf(project.retrospective),
                       style: theme.textTheme.bodyLarge,
                     ),
             ),
@@ -423,7 +433,13 @@ class _DoneRow extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 10),
-          Expanded(child: Text(title, style: theme.textTheme.bodyLarge)),
+          Expanded(
+            child: Text(
+              title,
+              textDirection: textDirectionOf(title),
+              style: theme.textTheme.bodyLarge,
+            ),
+          ),
           if (word != null) ...[
             const SizedBox(width: 8),
             ChipTag(
@@ -482,11 +498,20 @@ class _AttemptRow extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(entry.attempt, style: theme.textTheme.bodyLarge),
+                        Text(
+                          entry.attempt,
+                          textDirection: textDirectionOf(entry.attempt),
+                          style: theme.textTheme.bodyLarge,
+                        ),
                         if (entry.learning.trim().isNotEmpty) ...[
                           const SizedBox(height: 4),
                           Text(
-                            l.campaignLogLearned(entry.learning),
+                            l.campaignLogLearned(
+                              isolateUserWords(
+                                entry.learning,
+                                Directionality.of(context),
+                              ),
+                            ),
                             style: theme.textTheme.bodyMedium,
                           ),
                         ],

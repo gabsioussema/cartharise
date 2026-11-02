@@ -7,6 +7,7 @@ import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
 import '../nav.dart';
 import '../theme/cartha_theme.dart';
+import '../widgets/bidi.dart';
 import '../widgets/widgets.dart';
 import 'compass_field_card.dart';
 import 'compass_import.dart';
@@ -193,6 +194,7 @@ class _DirectionHero extends StatelessWidget {
         children: [
           Text(
             vision.isEmpty ? l.compassHeroEmpty : vision,
+            textDirection: vision.isEmpty ? null : textDirectionOf(vision),
             maxLines: vision.isEmpty ? null : 6,
             overflow: vision.isEmpty ? null : TextOverflow.ellipsis,
             style: theme.textTheme.bodyLarge?.copyWith(color: p.onHero),

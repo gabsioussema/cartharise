@@ -5,6 +5,7 @@ import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
 import '../nav.dart';
 import '../theme/cartha_theme.dart';
+import '../widgets/bidi.dart';
 import '../widgets/widgets.dart';
 import 'missions_copy.dart';
 import 'project_art.dart';
@@ -63,6 +64,9 @@ class ProjectCard extends StatelessWidget {
                         project.title.trim().isEmpty
                             ? l.missionsProjectUntitled
                             : project.title,
+                        textDirection: project.title.trim().isEmpty
+                            ? null
+                            : textDirectionOf(project.title),
                         style: theme.textTheme.bodyLarge,
                       ),
                       const SizedBox(height: 8),

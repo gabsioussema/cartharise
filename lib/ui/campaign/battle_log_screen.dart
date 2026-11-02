@@ -11,6 +11,8 @@ import '../media/media_kit.dart' show AttachmentCountLine;
 import '../missions/project_art.dart';
 import '../nav.dart';
 import '../theme/cartha_theme.dart';
+import '../voice/dictate_button.dart';
+import '../widgets/bidi.dart';
 import '../widgets/widgets.dart';
 import 'attempt_sheet.dart';
 import 'campaign_kit.dart';
@@ -48,6 +50,10 @@ class _BattleLogScreenState extends State<BattleLogScreen> {
   late final TextEditingController _learning;
   late final Autosaver _draft;
   final _scroll = ScrollController();
+
+  /// Each field's focus: Dictate's "Type instead" puts the cursor there.
+  final _attemptFocus = FocusNode();
+  final _learningFocus = FocusNode();
   String? _error;
   bool _busy = false;
 
@@ -89,6 +95,8 @@ class _BattleLogScreenState extends State<BattleLogScreen> {
     _attempt.dispose();
     _learning.dispose();
     _scroll.dispose();
+    _attemptFocus.dispose();
+    _learningFocus.dispose();
     super.dispose();
   }
 
@@ -197,38 +205,67 @@ class _BattleLogScreenState extends State<BattleLogScreen> {
               CampaignCallout(
                 text: boss.isEmpty ? l.campaignBossNoProject : boss,
                 muted: boss.isEmpty,
+                // The project's name, in its own direction.
+                textDirection: boss.isEmpty ? null : textDirectionOf(boss),
               ),
               const SizedBox(height: 12),
               _BossStrength(progress: progress),
               const SizedBox(height: 16),
-              TextField(
-                key: const ValueKey('campaign-attempt'),
+              TypedDirection(
                 controller: _attempt,
-                minLines: 2,
-                maxLines: 6,
-                textCapitalization: TextCapitalization.sentences,
-                decoration: InputDecoration(
-                  labelText: l.campaignAttemptLabel,
-                  hintText: l.campaignAttemptHint,
-                  hintMaxLines: 3,
-                  errorText: _error,
-                  errorMaxLines: 3,
+                builder: (context, direction) => TextField(
+                  key: const ValueKey('campaign-attempt'),
+                  controller: _attempt,
+                  focusNode: _attemptFocus,
+                  textDirection: direction,
+                  minLines: 2,
+                  maxLines: 6,
+                  textCapitalization: TextCapitalization.sentences,
+                  decoration: InputDecoration(
+                    labelText: l.campaignAttemptLabel,
+                    hintText: l.campaignAttemptHint,
+                    hintMaxLines: 3,
+                    errorText: _error,
+                    errorMaxLines: 3,
+                  ),
+                  onChanged: (_) => _changed(),
                 ),
-                onChanged: (_) => _changed(),
               ),
-              const SizedBox(height: 12),
-              TextField(
-                key: const ValueKey('campaign-learning'),
+              // Speak, review, then it goes in at the cursor; the draft
+              // autosaves as if typed. (A new attempt holds no voice notes
+              // yet, so no Record instead here.)
+              DictateButton(
+                key: const ValueKey('campaign-attempt-dictate'),
+                controller: _attempt,
+                focusNode: _attemptFocus,
+                fieldLabel: l.campaignAttemptLabel,
+                onInserted: (_) => _changed(),
+              ),
+              const SizedBox(height: 4),
+              TypedDirection(
                 controller: _learning,
-                minLines: 2,
-                maxLines: 6,
-                textCapitalization: TextCapitalization.sentences,
-                decoration: InputDecoration(
-                  labelText: l.campaignLearningLabel,
-                  hintText: l.campaignLearningHint,
-                  hintMaxLines: 3,
+                builder: (context, direction) => TextField(
+                  key: const ValueKey('campaign-learning'),
+                  controller: _learning,
+                  focusNode: _learningFocus,
+                  textDirection: direction,
+                  minLines: 2,
+                  maxLines: 6,
+                  textCapitalization: TextCapitalization.sentences,
+                  decoration: InputDecoration(
+                    labelText: l.campaignLearningLabel,
+                    hintText: l.campaignLearningHint,
+                    hintMaxLines: 3,
+                  ),
+                  onChanged: (_) => _changed(),
                 ),
-                onChanged: (_) => _changed(),
+              ),
+              DictateButton(
+                key: const ValueKey('campaign-learning-dictate'),
+                controller: _learning,
+                focusNode: _learningFocus,
+                fieldLabel: l.campaignLearningLabel,
+                onInserted: (_) => _changed(),
               ),
               // Only said while it is true (a failed save shows Retry on top).
               if (state.saveStatus != SaveStatus.failed) ...[
@@ -361,13 +398,25 @@ class _LogRow extends StatelessWidget {
           child: ListTile(
             onTap: () => showAttemptSheet(context, entry),
             contentPadding: const EdgeInsetsDirectional.fromSTEB(14, 6, 8, 6),
-            title: Text(entry.attempt, style: theme.textTheme.bodyLarge),
+            // The words exactly as typed, in their own direction.
+            title: Text(
+              entry.attempt,
+              textDirection: textDirectionOf(entry.attempt),
+              style: theme.textTheme.bodyLarge,
+            ),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (entry.learning.trim().isNotEmpty) ...[
                   const SizedBox(height: 4),
-                  Text(l.campaignLogLearned(entry.learning)),
+                  Text(
+                    l.campaignLogLearned(
+                      isolateUserWords(
+                        entry.learning,
+                        Directionality.of(context),
+                      ),
+                    ),
+                  ),
                 ],
                 const SizedBox(height: 4),
                 Text(date, style: theme.textTheme.bodySmall),

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
 import '../theme/cartha_theme.dart';
+import '../widgets/bidi.dart';
 import '../widgets/widgets.dart';
 
 /// "Turn your daily levers into quests" (F-028): the Compass levers as
@@ -116,17 +117,21 @@ class _LeverDraftsCardState extends State<LeverDraftsCard> {
                         : (v) => setState(() => _checked[i] = v ?? false),
                   ),
                   Expanded(
-                    child: TextField(
-                      key: ValueKey('lever-draft-$i'),
+                    child: TypedDirection(
                       controller: _controllers[i],
-                      enabled: !_busy,
-                      minLines: 1,
-                      maxLines: 3,
-                      textCapitalization: TextCapitalization.sentences,
-                      decoration: InputDecoration(
-                        labelText: l.missionsLeversDraftLabel(i + 1),
+                      builder: (context, direction) => TextField(
+                        key: ValueKey('lever-draft-$i'),
+                        controller: _controllers[i],
+                        textDirection: direction,
+                        enabled: !_busy,
+                        minLines: 1,
+                        maxLines: 3,
+                        textCapitalization: TextCapitalization.sentences,
+                        decoration: InputDecoration(
+                          labelText: l.missionsLeversDraftLabel(i + 1),
+                        ),
+                        onChanged: (_) => setState(() {}),
                       ),
-                      onChanged: (_) => setState(() {}),
                     ),
                   ),
                 ],

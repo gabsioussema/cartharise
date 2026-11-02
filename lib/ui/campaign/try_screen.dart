@@ -11,6 +11,7 @@ import '../compass/formatting.dart';
 import '../nav.dart';
 import '../theme/cartha_theme.dart';
 import '../voice/dictate_button.dart';
+import '../widgets/bidi.dart';
 import '../widgets/widgets.dart';
 import 'campaign_copy.dart';
 import 'campaign_kit.dart';
@@ -46,6 +47,9 @@ class _TryScreenState extends State<TryScreen> {
   late final Autosaver _draft;
   final _scroll = ScrollController();
 
+  /// The note field: Dictate's "Type instead" puts the cursor there.
+  final _noteFocus = FocusNode();
+
   /// The experiment whose note is waiting to be autosaved.
   String? _draftFor;
   bool _busy = false;
@@ -72,6 +76,7 @@ class _TryScreenState extends State<TryScreen> {
     _draft.dispose();
     _note.dispose();
     _scroll.dispose();
+    _noteFocus.dispose();
     super.dispose();
   }
 
@@ -209,22 +214,28 @@ class _TryScreenState extends State<TryScreen> {
           showXp: state.gameEnabled && last == null,
         ),
         const SizedBox(height: 16),
-        TextField(
-          key: const ValueKey('try-note'),
+        TypedDirection(
           controller: _note,
-          minLines: 1,
-          maxLines: 3,
-          textCapitalization: TextCapitalization.sentences,
-          decoration: InputDecoration(
-            labelText: l.campaignTryNoteLabel,
-            hintText: l.campaignTryNoteHint,
-            hintMaxLines: 2,
+          builder: (context, direction) => TextField(
+            key: const ValueKey('try-note'),
+            controller: _note,
+            focusNode: _noteFocus,
+            textDirection: direction,
+            minLines: 1,
+            maxLines: 3,
+            textCapitalization: TextCapitalization.sentences,
+            decoration: InputDecoration(
+              labelText: l.campaignTryNoteLabel,
+              hintText: l.campaignTryNoteHint,
+              hintMaxLines: 2,
+            ),
+            onChanged: _noteChanged,
           ),
-          onChanged: _noteChanged,
         ),
         DictateButton(
           key: const ValueKey('try-note-dictate'),
           controller: _note,
+          focusNode: _noteFocus,
           onInserted: _noteChanged,
         ),
         const SizedBox(height: 8),

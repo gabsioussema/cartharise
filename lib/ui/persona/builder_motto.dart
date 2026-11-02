@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 
 import '../../domain/persona.dart';
 import '../../l10n/app_localizations.dart';
+import '../widgets/bidi.dart';
 
 /// Whether [motto] is longer than a persona allows. The limit counts what
 /// `String.length` counts, as `savePersona` does (an emoji can take two or
@@ -23,36 +24,40 @@ class BuilderMottoField extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     final tooLong = mottoTooLong(controller.text);
-    return TextField(
-      key: const ValueKey('persona-motto'),
+    return TypedDirection(
       controller: controller,
-      minLines: 1,
-      maxLines: 3,
-      keyboardType: TextInputType.text,
-      textInputAction: TextInputAction.done,
-      textCapitalization: TextCapitalization.sentences,
-      inputFormatters: const [_LengthLimit(kPersonaMottoMax)],
-      buildCounter:
-          (context, {required currentLength, required isFocused, maxLength}) {
-            final count = controller.text.length;
-            return Semantics(
-              liveRegion: isFocused,
-              label: MaterialLocalizations.of(context)
-                  .remainingTextFieldCharacterCount(
-                    math.max(0, kPersonaMottoMax - count),
+      builder: (context, direction) => TextField(
+        key: const ValueKey('persona-motto'),
+        controller: controller,
+        textDirection: direction,
+        minLines: 1,
+        maxLines: 3,
+        keyboardType: TextInputType.text,
+        textInputAction: TextInputAction.done,
+        textCapitalization: TextCapitalization.sentences,
+        inputFormatters: const [_LengthLimit(kPersonaMottoMax)],
+        buildCounter:
+            (context, {required currentLength, required isFocused, maxLength}) {
+              final count = controller.text.length;
+              return Semantics(
+                liveRegion: isFocused,
+                label: MaterialLocalizations.of(context)
+                    .remainingTextFieldCharacterCount(
+                      math.max(0, kPersonaMottoMax - count),
+                    ),
+                child: ExcludeSemantics(
+                  child: Text(
+                    l.personaBuilderMottoCount(count, kPersonaMottoMax),
                   ),
-              child: ExcludeSemantics(
-                child: Text(
-                  l.personaBuilderMottoCount(count, kPersonaMottoMax),
                 ),
-              ),
-            );
-          },
-      decoration: InputDecoration(
-        labelText: l.personaBuilderMottoLabel,
-        hintText: l.personaBuilderMottoHint,
-        errorText: tooLong ? l.personaBuilderMottoTooLong : null,
-        errorMaxLines: 3,
+              );
+            },
+        decoration: InputDecoration(
+          labelText: l.personaBuilderMottoLabel,
+          hintText: l.personaBuilderMottoHint,
+          errorText: tooLong ? l.personaBuilderMottoTooLong : null,
+          errorMaxLines: 3,
+        ),
       ),
     );
   }

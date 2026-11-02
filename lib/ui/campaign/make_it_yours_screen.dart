@@ -9,6 +9,7 @@ import '../persona/avatar_view.dart';
 import '../persona/persona_copy.dart';
 import '../persona/persona_ops.dart';
 import '../theme/cartha_theme.dart';
+import '../widgets/bidi.dart';
 import '../widgets/widgets.dart';
 import 'campaign_kit.dart';
 import 'campaign_ops.dart';
@@ -69,6 +70,7 @@ class StrategistCard extends StatelessWidget {
           Text(
             motto,
             key: const ValueKey('campaign-strategist-motto'),
+            textDirection: textDirectionOf(motto),
             style: theme.textTheme.titleSmall?.copyWith(
               fontStyle: CarthaFonts.of(context).italic,
             ),
