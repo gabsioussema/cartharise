@@ -4018,6 +4018,468 @@ abstract class AppLocalizations {
   /// **'Name and avatar are optional and stay on this phone.'**
   String get personaBuilderProfileHint;
 
+  /// No description provided for @projectsPictureTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Picture'**
+  String get projectsPictureTitle;
+
+  /// No description provided for @projectsPictureEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'A painted scene or a photo. It shows on this project\'s tasks.'**
+  String get projectsPictureEmpty;
+
+  /// No description provided for @projectsPictureChoose.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a picture'**
+  String get projectsPictureChoose;
+
+  /// No description provided for @projectsPictureChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Change picture'**
+  String get projectsPictureChange;
+
+  /// No description provided for @projectsPictureRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove picture'**
+  String get projectsPictureRemove;
+
+  /// No description provided for @projectsPictureRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Picture removed'**
+  String get projectsPictureRemoved;
+
+  /// No description provided for @projectsPhotoRemoveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove the photo?'**
+  String get projectsPhotoRemoveTitle;
+
+  /// No description provided for @projectsPhotoRemoveBody.
+  ///
+  /// In en, this message translates to:
+  /// **'It\'s deleted from the app. Photos in your gallery aren\'t touched.'**
+  String get projectsPhotoRemoveBody;
+
+  /// No description provided for @projectsPhotoRemoveConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove photo'**
+  String get projectsPhotoRemoveConfirm;
+
+  /// No description provided for @projectsClearBodyPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Clears this project\'s title, milestones, notes and photo. Your Compass stays.'**
+  String get projectsClearBodyPhoto;
+
+  /// Screen-reader label of the project's picture; {name} is the scene's name or 'photo'.
+  ///
+  /// In en, this message translates to:
+  /// **'Project picture: {name}'**
+  String projectsPictureLabel(String name);
+
+  /// No description provided for @projectsPhotoName.
+  ///
+  /// In en, this message translates to:
+  /// **'your photo'**
+  String get projectsPhotoName;
+
+  /// No description provided for @projectsPhotoMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo not found on this phone'**
+  String get projectsPhotoMissing;
+
+  /// No description provided for @projectsArtSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Project picture'**
+  String get projectsArtSheetTitle;
+
+  /// No description provided for @projectsArtScenes.
+  ///
+  /// In en, this message translates to:
+  /// **'Painted scenes'**
+  String get projectsArtScenes;
+
+  /// No description provided for @projectsArtPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Your photo'**
+  String get projectsArtPhoto;
+
+  /// No description provided for @projectsArtPhotoNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos stay on this phone.'**
+  String get projectsArtPhotoNote;
+
+  /// No description provided for @projectsArtChoosePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a photo'**
+  String get projectsArtChoosePhoto;
+
+  /// No description provided for @projectsArtTakePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo'**
+  String get projectsArtTakePhoto;
+
+  /// No description provided for @projectsArtAdding.
+  ///
+  /// In en, this message translates to:
+  /// **'Adding the photo…'**
+  String get projectsArtAdding;
+
+  /// No description provided for @projectsArtSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected'**
+  String get projectsArtSelected;
+
+  /// No description provided for @projectsArtReplacesPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Choosing another picture deletes your photo from the app.'**
+  String get projectsArtReplacesPhoto;
+
+  /// No description provided for @projectsArtSunrise.
+  ///
+  /// In en, this message translates to:
+  /// **'Sunrise'**
+  String get projectsArtSunrise;
+
+  /// No description provided for @projectsArtPath.
+  ///
+  /// In en, this message translates to:
+  /// **'Winding road'**
+  String get projectsArtPath;
+
+  /// No description provided for @projectsArtCompass.
+  ///
+  /// In en, this message translates to:
+  /// **'Compass hill'**
+  String get projectsArtCompass;
+
+  /// No description provided for @projectsArtSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'Stone steps'**
+  String get projectsArtSteps;
+
+  /// No description provided for @projectsArtDawnRuins.
+  ///
+  /// In en, this message translates to:
+  /// **'Ruins at dawn'**
+  String get projectsArtDawnRuins;
+
+  /// No description provided for @projectsArtRoots.
+  ///
+  /// In en, this message translates to:
+  /// **'Deep roots'**
+  String get projectsArtRoots;
+
+  /// No description provided for @projectsArtCitadel.
+  ///
+  /// In en, this message translates to:
+  /// **'Hill town'**
+  String get projectsArtCitadel;
+
+  /// No description provided for @projectsArtSailing.
+  ///
+  /// In en, this message translates to:
+  /// **'Sailing'**
+  String get projectsArtSailing;
+
+  /// No description provided for @projectsArtRoute.
+  ///
+  /// In en, this message translates to:
+  /// **'Summit route'**
+  String get projectsArtRoute;
+
+  /// No description provided for @projectsPhotoDeniedCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera access is off. Allow it in Settings, or choose a photo or a painted scene.'**
+  String get projectsPhotoDeniedCamera;
+
+  /// No description provided for @projectsPhotoDeniedLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo access is off. Allow it in Settings, or pick a painted scene.'**
+  String get projectsPhotoDeniedLibrary;
+
+  /// No description provided for @projectsPhotoNoCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'No camera here. Choose a photo or a painted scene.'**
+  String get projectsPhotoNoCamera;
+
+  /// No description provided for @projectsPhotoNoLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos aren\'t available here. Pick a painted scene.'**
+  String get projectsPhotoNoLibrary;
+
+  /// No description provided for @projectsPhotoFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t get the photo. Try again, or pick a painted scene.'**
+  String get projectsPhotoFailed;
+
+  /// No description provided for @projectsPhotoTooLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'That photo is too large to keep. Try another one.'**
+  String get projectsPhotoTooLarge;
+
+  /// No description provided for @projectsPhotoNotKept.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t keep the photo on this phone. Check free space and try again.'**
+  String get projectsPhotoNotKept;
+
+  /// No description provided for @projectsNotSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Not saved yet. Use Retry on this page.'**
+  String get projectsNotSaved;
+
+  /// No description provided for @projectsFinish.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish this project'**
+  String get projectsFinish;
+
+  /// No description provided for @projectsFinishSheetBody.
+  ///
+  /// In en, this message translates to:
+  /// **'It moves to your history with its milestones, tasks and attempts.'**
+  String get projectsFinishSheetBody;
+
+  /// No description provided for @projectsFinishConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish and keep'**
+  String get projectsFinishConfirm;
+
+  /// No description provided for @projectsFinishedSnack.
+  ///
+  /// In en, this message translates to:
+  /// **'Kept in your project history.'**
+  String get projectsFinishedSnack;
+
+  /// No description provided for @projectsFinishedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Finished and kept'**
+  String get projectsFinishedTitle;
+
+  /// No description provided for @projectsFinishedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'“{title}” is in your project history.'**
+  String projectsFinishedBody(String title);
+
+  /// No description provided for @projectsPlanNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Plan the next one'**
+  String get projectsPlanNext;
+
+  /// No description provided for @projectsViewHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'View history'**
+  String get projectsViewHistory;
+
+  /// No description provided for @projectsHistoryLink.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Project history · 1} other{Project history · {count}}}'**
+  String projectsHistoryLink(int count);
+
+  /// No description provided for @projectsCardNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Plan your next project.'**
+  String get projectsCardNext;
+
+  /// Project history screen title (Cinzel, keep short).
+  ///
+  /// In en, this message translates to:
+  /// **'Past projects'**
+  String get projectsHistoryTitle;
+
+  /// No description provided for @projectsHistorySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What you built, month by month.'**
+  String get projectsHistorySubtitle;
+
+  /// No description provided for @projectsHistoryEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing here yet'**
+  String get projectsHistoryEmptyTitle;
+
+  /// No description provided for @projectsHistoryEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish a month project to keep it here.'**
+  String get projectsHistoryEmptyBody;
+
+  /// No description provided for @projectsMonths.
+  ///
+  /// In en, this message translates to:
+  /// **'{start} – {end}'**
+  String projectsMonths(String start, String end);
+
+  /// No description provided for @projectsTasksCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No tasks} =1{1 task} other{{count} tasks}}'**
+  String projectsTasksCount(int count);
+
+  /// No description provided for @projectsAttemptsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No attempts} =1{1 attempt} other{{count} attempts}}'**
+  String projectsAttemptsCount(int count);
+
+  /// No description provided for @projectsNoMilestones.
+  ///
+  /// In en, this message translates to:
+  /// **'No milestones'**
+  String get projectsNoMilestones;
+
+  /// No description provided for @projectsRetroEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No notes written.'**
+  String get projectsRetroEmpty;
+
+  /// Past project screen title (Cinzel, keep short).
+  ///
+  /// In en, this message translates to:
+  /// **'Past project'**
+  String get projectsPastTitle;
+
+  /// No description provided for @projectsFinishedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Finished {date}'**
+  String projectsFinishedOn(String date);
+
+  /// No description provided for @projectsMilestoneDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get projectsMilestoneDone;
+
+  /// No description provided for @projectsMilestoneOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get projectsMilestoneOpen;
+
+  /// No description provided for @projectsTasks.
+  ///
+  /// In en, this message translates to:
+  /// **'Tasks'**
+  String get projectsTasks;
+
+  /// No description provided for @projectsTasksEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No tasks linked to it.'**
+  String get projectsTasksEmpty;
+
+  /// No description provided for @projectsAttempts.
+  ///
+  /// In en, this message translates to:
+  /// **'Attempts'**
+  String get projectsAttempts;
+
+  /// No description provided for @projectsAttemptsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No attempts linked to it.'**
+  String get projectsAttemptsEmpty;
+
+  /// No description provided for @projectsTaskDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get projectsTaskDone;
+
+  /// No description provided for @projectsDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from history'**
+  String get projectsDelete;
+
+  /// No description provided for @projectsDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove this project?'**
+  String get projectsDeleteTitle;
+
+  /// No description provided for @projectsDeleteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Its title, milestones, notes and picture go. Its tasks and attempts stay.'**
+  String get projectsDeleteBody;
+
+  /// No description provided for @projectsDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get projectsDeleteConfirm;
+
+  /// No description provided for @projectsDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Project removed'**
+  String get projectsDeleted;
+
+  /// No description provided for @projectsTagLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Project: {title}'**
+  String projectsTagLabel(String title);
+
+  /// No description provided for @projectsQuestLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Part of the month project'**
+  String get projectsQuestLink;
+
+  /// No description provided for @projectsQuestLinkPast.
+  ///
+  /// In en, this message translates to:
+  /// **'Part of a finished project'**
+  String get projectsQuestLinkPast;
+
+  /// No description provided for @projectsKeepsakes.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Project finished} other{Projects finished}}'**
+  String projectsKeepsakes(int count);
+
+  /// No description provided for @projectsKeepsakesCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 project kept} other{{count} projects kept}}'**
+  String projectsKeepsakesCount(int count);
+
   /// No description provided for @resetTitle.
   ///
   /// In en, this message translates to:

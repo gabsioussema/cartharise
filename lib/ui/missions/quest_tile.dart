@@ -10,6 +10,7 @@ import '../compass/formatting.dart';
 import '../theme/cartha_theme.dart';
 import '../widgets/widgets.dart';
 import 'missions_logic.dart';
+import 'project_art.dart';
 import 'quest_sheet.dart';
 
 /// Deletes [quest] at once and offers "Undo" (puts it back where it was).
@@ -77,8 +78,9 @@ bool questXpOpenOn(AppState state, String day) =>
     state.gameEnabled && questsDoneOn(state.data.quests, day) < kQuestDaysCap;
 
 /// One quest: an accessible checkbox ("Mark '…' done"), the title, calm
-/// labels ([QuestLabels]: from an experiment · its project · every day ·
-/// planned for · done today · "+20 XP") and an options menu.
+/// labels ([QuestLabels]: from an experiment · its project, with its
+/// picture · every day · planned for · done today · "+20 XP") and an
+/// options menu.
 /// Tapping the row edits it. Done is shown by the tick, strike-through and a
 /// label — never by colour alone, and nothing is ever "missed" (F-031).
 class QuestTile extends StatelessWidget {
@@ -189,10 +191,7 @@ class QuestLabels extends StatelessWidget {
     final xpOpen = context.select<AppState, bool>((s) => questXpOpenOn(s, day));
     final showXp = xpOpen && !done;
     final fromTry = quest.source == QuestSource.experiment;
-    final projectId = quest.projectId;
-    final project = context.select<AppState, MonthProject?>(
-      (s) => projectId == null ? null : s.projectById(projectId),
-    );
+    final project = watchProject(context, quest.projectId);
     String? doneLabel;
     if (done) {
       final last = (quest.completedOn.toList()..sort()).last;
@@ -217,15 +216,10 @@ class QuestLabels extends StatelessWidget {
               label: l.campaignQuestFromTry,
               glyph: CarthaGlyph.experiment,
             ),
-          // The month project it belongs to (current or past).
+          // The month project it belongs to (current or past), with its
+          // picture: read as "Project: <title>".
           if (project != null)
-            ChipTag(
-              key: ValueKey('quest-project-${quest.id}'),
-              label: project.title.trim().isEmpty
-                  ? l.missionsProjectUntitled
-                  : project.title.trim(),
-              glyph: CarthaGlyph.direction,
-            ),
+            ProjectTag(project, key: ValueKey('quest-project-${quest.id}')),
           if (daily) ChipTag(label: l.missionsQuestDaily, icon: Icons.repeat),
           if (due)
             ChipTag(

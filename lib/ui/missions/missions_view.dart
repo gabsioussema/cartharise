@@ -6,14 +6,13 @@ import '../../domain/local_date.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
 import '../compass/formatting.dart';
-import '../nav.dart';
 import '../theme/cartha_theme.dart';
 import '../widgets/widgets.dart';
 import 'board_view.dart';
 import 'lever_drafts_card.dart';
-import 'missions_copy.dart';
 import 'missions_logic.dart';
 import 'path_grid.dart';
+import 'project_card.dart';
 import 'quest_sheet.dart';
 import 'quest_tile.dart';
 
@@ -288,64 +287,11 @@ class _ListHeader extends StatelessWidget {
   }
 }
 
-/// The month project at a glance → [ProjectScreen] (F-030).
+/// The month project at a glance → [ProjectScreen] (F-030): see
+/// [ProjectCard] (its picture, title, status and milestones).
 class _ProjectCard extends StatelessWidget {
   const _ProjectCard();
 
   @override
-  Widget build(BuildContext context) {
-    final l = AppLocalizations.of(context);
-    final p = CarthaPalette.of(context);
-    final theme = Theme.of(context);
-    final state = context.watch<AppState>();
-    final project = state.data.project;
-    final fromCompass = state.compass.monthProject.trim();
-    return SectionCard(
-      key: const ValueKey('missions-project'),
-      glyph: CarthaGlyph.direction,
-      title: l.missionsProjectTitle,
-      trailing: Icon(Icons.chevron_right, color: p.textSecondary),
-      onTap: () => AppNav.openProject(context),
-      child: project == null
-          ? Text(
-              fromCompass.isEmpty
-                  ? l.missionsProjectEmpty
-                  : l.missionsProjectFromCompass(fromCompass),
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: p.textSecondary,
-              ),
-            )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  project.title.trim().isEmpty
-                      ? l.missionsProjectUntitled
-                      : project.title,
-                  style: theme.textTheme.bodyLarge,
-                ),
-                const SizedBox(height: 8),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 6,
-                  children: [
-                    ChipTag(
-                      label: projectStatusLabel(l, project.status),
-                      icon: projectStatusIcon(project.status),
-                      tone: ChipTone.accent,
-                    ),
-                    if (project.milestones.isNotEmpty)
-                      ChipTag(
-                        label: l.missionsProjectMilestones(
-                          project.milestones.where((m) => m.done).length,
-                          project.milestones.length,
-                        ),
-                        icon: Icons.flag_outlined,
-                      ),
-                  ],
-                ),
-              ],
-            ),
-    );
-  }
+  Widget build(BuildContext context) => const ProjectCard();
 }

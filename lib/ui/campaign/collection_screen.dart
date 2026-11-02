@@ -8,6 +8,7 @@ import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
 import '../compass/formatting.dart';
 import '../journal/journal_kit.dart';
+import '../missions/project_history_screen.dart';
 import '../persona/persona_copy.dart';
 import '../persona/persona_ops.dart';
 import '../theme/cartha_theme.dart';
@@ -23,8 +24,9 @@ import 'try_screen.dart';
 /// Keepsakes: the experiments tried (each experiment once, with every try
 /// and its note exactly as typed), the achievements with their badges and
 /// how each was earned (by reflecting, by trying — naming the experiment —
-/// or by doing), and the avatar extras chosen. With the Campaign off there
-/// are no achievements to show: what was tried stays.
+/// or by doing), the avatar extras chosen, and the month projects finished
+/// (opening their history). With the Campaign off there are no achievements
+/// to show: what was tried stays.
 class CollectionScreen extends StatelessWidget {
   const CollectionScreen({super.key});
 
@@ -152,6 +154,9 @@ class CollectionScreen extends StatelessWidget {
                 pushCampaignScreen(context, const MakeItYoursScreen()),
           ),
         ),
+
+        // ── Projects finished (nothing until one is) ───────────────────
+        const PastProjectsKeepsake(),
       ],
     );
   }

@@ -10,11 +10,18 @@ import '../theme/cartha_theme.dart';
 import '../widgets/widgets.dart';
 import 'missions_copy.dart';
 import 'missions_logic.dart';
+import 'project_art.dart';
+import 'project_art_picker.dart';
+import 'project_finish.dart';
+import 'project_history_screen.dart';
+import 'project_ops.dart';
 
 /// The one-month project (F-030): a title linked to Compass › one-month
-/// project (editing offers to update the Compass, never silently), status,
-/// milestones and a retrospective — all autosaved. Nothing is stored until
-/// the user changes something.
+/// project (editing offers to update the Compass, never silently), a
+/// picture (a painted scene or a photo), status, milestones and a
+/// retrospective — all autosaved. Nothing is stored until the user changes
+/// something. **Finish this project** keeps it in the history (with its
+/// milestones, tasks and attempts); the history is one tap away.
 class ProjectScreen extends StatefulWidget {
   const ProjectScreen({super.key});
 
@@ -31,11 +38,14 @@ class _ProjectScreenState extends State<ProjectScreen> {
   /// The title the user chose to keep different from the Compass.
   String? _keptTitle;
 
+  /// The project just finished on this screen (its "kept" card).
+  MonthProject? _finished;
+
   @override
   void initState() {
     super.initState();
     _state = context.read<AppState>();
-    _title = BoundText(_state.projectOrDraft.title);
+    _title = BoundText(_state.projectShownTitle);
     _titleSave = Autosaver((text) {
       _title.saved(text);
       return _state.setProjectTitle(text);
@@ -49,7 +59,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
   }
 
   void _syncTitle() =>
-      _title.sync(_state.projectOrDraft.title, pending: _titleSave.hasPending);
+      _title.sync(_state.projectShownTitle, pending: _titleSave.hasPending);
 
   @override
   void dispose() {
@@ -67,6 +77,90 @@ class _ProjectScreenState extends State<ProjectScreen> {
           // Undo stays for the usual few seconds, not until dismissed.
           SnackBar(content: Text(text), action: action, persist: false),
         );
+
+  /// Runs [change], which creates the project from the draft on the first
+  /// change. The draft takes the Compass's title; when the screen shows
+  /// another one (typed, or none because the Compass names a finished
+  /// project), that title is saved first, so what is seen is what is kept.
+  Future<void> _withProject(Future<void> Function() change) {
+    if (_state.data.project == null) _titleSave.flush();
+    if (_state.data.project != null) return change();
+    final shown = _title.controller.text;
+    if (shown.trim() == _state.compass.monthProject.trim()) return change();
+    _title.saved(shown);
+    return _state.setProjectTitle(shown).then((_) => change());
+  }
+
+  /// Says so when the last change didn't reach the phone's storage (the
+  /// save indicator on the page offers Retry).
+  bool _reportFailedSave() {
+    if (_state.saveStatus != SaveStatus.failed) return false;
+    _snack(AppLocalizations.of(context).projectsNotSaved);
+    return true;
+  }
+
+  Future<void> _chooseArt() async {
+    FocusManager.instance.primaryFocus?.unfocus();
+    await showProjectArtPicker(
+      context,
+      current: _state.data.project?.art,
+      onChoose: (art) async {
+        await _withProject(() => _state.setProjectArt(art));
+        if (mounted) _reportFailedSave();
+      },
+    );
+  }
+
+  Future<void> _removeArt() async {
+    final l = AppLocalizations.of(context);
+    final art = _state.data.project?.art;
+    if (art == null) return;
+    if (art.photo != null) {
+      // A camera photo may exist nowhere else: ask first.
+      final ok = await confirmDialog(
+        context,
+        title: l.projectsPhotoRemoveTitle,
+        body: l.projectsPhotoRemoveBody,
+        action: l.projectsPhotoRemoveConfirm,
+        destructive: true,
+      );
+      if (!ok) return;
+    }
+    await _state.setProjectArt(null);
+    if (!mounted || _reportFailedSave()) return;
+    _snack(l.projectsPictureRemoved);
+  }
+
+  /// "Finish this project": the notes typed so far are saved first, the
+  /// sheet asks for a short look back, then the project moves to the
+  /// history. "Kept" is said only once that reached the phone's storage.
+  Future<void> _finish() async {
+    final l = AppLocalizations.of(context);
+    // Leaving the fields saves what was typed (a focus change is applied
+    // in a microtask; the save follows it at once).
+    FocusManager.instance.primaryFocus?.unfocus();
+    _titleSave.flush();
+    await Future<void>.microtask(() {});
+    if (!mounted) return;
+    final project = _state.data.project;
+    if (project == null) return;
+    final state = _state;
+    final retro = await showFinishProjectSheet(
+      context,
+      project: project,
+      onKeep: (text) {
+        if (state.data.project?.id == project.id) {
+          state.setProjectRetrospective(text);
+        }
+      },
+    );
+    if (retro == null || !mounted) return;
+    if (_state.data.project?.id != project.id) return;
+    final archived = await _state.archiveProject(retrospective: retro);
+    if (!mounted || _reportFailedSave()) return;
+    setState(() => _finished = archived);
+    _snack(l.projectsFinishedSnack);
+  }
 
   Future<void> _updateCompass() async {
     final l = AppLocalizations.of(context);
@@ -88,7 +182,9 @@ class _ProjectScreenState extends State<ProjectScreen> {
       maxLines: 3,
     );
     if (text == null || text.trim().isEmpty) return;
-    await _state.addMilestone(text);
+    await _withProject(() async {
+      await _state.addMilestone(text);
+    });
   }
 
   Future<void> _renameMilestone(Milestone m) async {
@@ -127,7 +223,9 @@ class _ProjectScreenState extends State<ProjectScreen> {
     final ok = await confirmDialog(
       context,
       title: l.missionsProjectClearTitle,
-      body: l.missionsProjectClearBody,
+      body: _state.data.project?.art?.photo != null
+          ? l.projectsClearBodyPhoto
+          : l.missionsProjectClearBody,
       action: l.missionsProjectClearConfirm,
       destructive: true,
     );
@@ -144,6 +242,8 @@ class _ProjectScreenState extends State<ProjectScreen> {
     final state = context.watch<AppState>();
     final saved = state.data.project;
     final project = state.projectOrDraft;
+    final past = state.pastProjects;
+    final finished = saved == null ? _finished : null;
     final compassTitle = state.compass.monthProject.trim();
     final typed = _title.controller.text.trim();
     final linked = typed.isNotEmpty && typed == compassTitle;
@@ -170,6 +270,29 @@ class _ProjectScreenState extends State<ProjectScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    if (past.isNotEmpty && finished == null) ...[
+                      Align(
+                        alignment: AlignmentDirectional.centerStart,
+                        child: TextLinkButton(
+                          key: const ValueKey('project-history-link'),
+                          label: l.projectsHistoryLink(past.length),
+                          icon: Icons.history,
+                          onPressed: () => openProjectHistory(context),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                    ],
+                    if (finished != null) ...[
+                      _FinishedCard(
+                        project: finished,
+                        onHistory: () => openProjectHistory(context),
+                        onNext: () {
+                          setState(() => _finished = null);
+                          _titleFocus.requestFocus();
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                    ],
                     SectionCard(
                       glyph: CarthaGlyph.direction,
                       title: l.missionsProjectTitleLabel,
@@ -217,6 +340,12 @@ class _ProjectScreenState extends State<ProjectScreen> {
                       ),
                     ),
                     const SizedBox(height: 16),
+                    _PictureCard(
+                      art: saved?.art,
+                      onChoose: _chooseArt,
+                      onRemove: _removeArt,
+                    ),
+                    const SizedBox(height: 16),
                     SectionCard(
                       icon: Icons.timeline,
                       title: l.missionsProjectStatus,
@@ -230,7 +359,9 @@ class _ProjectScreenState extends State<ProjectScreen> {
                               label: Text(projectStatusLabel(l, s)),
                               avatar: Icon(projectStatusIcon(s)),
                               selected: project.status == s,
-                              onSelected: (_) => _state.setProjectStatus(s),
+                              onSelected: (_) => _withProject(
+                                () => _state.setProjectStatus(s),
+                              ),
                             ),
                         ],
                       ),
@@ -292,7 +423,9 @@ class _ProjectScreenState extends State<ProjectScreen> {
                             decoration: InputDecoration(
                               hintText: l.missionsRetroHint,
                             ),
-                            onSave: _state.setProjectRetrospective,
+                            onSave: (text) => _withProject(
+                              () => _state.setProjectRetrospective(text),
+                            ),
                           ),
                         ],
                       ),
@@ -303,7 +436,15 @@ class _ProjectScreenState extends State<ProjectScreen> {
                       child: SaveIndicator(),
                     ),
                     if (saved != null) ...[
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 20),
+                      SecondaryButton(
+                        key: const ValueKey('project-finish'),
+                        label: l.projectsFinish,
+                        icon: Icons.flag_outlined,
+                        expand: true,
+                        onPressed: _finish,
+                      ),
+                      const SizedBox(height: 8),
                       Center(
                         child: TextLinkButton(
                           label: l.missionsProjectClear,
@@ -318,6 +459,150 @@ class _ProjectScreenState extends State<ProjectScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// The project's picture: the chosen scene or photo with **Change picture**
+/// and **Remove picture**, or a line and **Choose a picture**.
+class _PictureCard extends StatelessWidget {
+  const _PictureCard({
+    required this.art,
+    required this.onChoose,
+    required this.onRemove,
+  });
+
+  final ProjectArt? art;
+  final VoidCallback onChoose;
+  final VoidCallback onRemove;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final p = CarthaPalette.of(context);
+    final theme = Theme.of(context);
+    final art = this.art;
+    return SectionCard(
+      key: const ValueKey('project-picture'),
+      icon: Icons.image_outlined,
+      title: l.projectsPictureTitle,
+      child: art == null
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l.projectsPictureEmpty,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: p.textSecondary,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                SecondaryButton(
+                  key: const ValueKey('project-art-choose'),
+                  label: l.projectsPictureChoose,
+                  icon: Icons.add_photo_alternate_outlined,
+                  onPressed: onChoose,
+                ),
+              ],
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                ProjectArtBanner(
+                  art,
+                  key: const ValueKey('project-art'),
+                  height: 150,
+                  aspectRatio: 2.4,
+                  semanticLabel: projectArtLabel(l, art),
+                ),
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 4,
+                  children: [
+                    TextLinkButton(
+                      key: const ValueKey('project-art-change'),
+                      label: l.projectsPictureChange,
+                      icon: Icons.image_outlined,
+                      onPressed: onChoose,
+                    ),
+                    TextLinkButton(
+                      key: const ValueKey('project-art-remove'),
+                      label: l.projectsPictureRemove,
+                      icon: Icons.hide_image_outlined,
+                      onPressed: onRemove,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+    );
+  }
+}
+
+/// Just finished: "Finished and kept", with the way to the history and to
+/// the next project.
+class _FinishedCard extends StatelessWidget {
+  const _FinishedCard({
+    required this.project,
+    required this.onHistory,
+    required this.onNext,
+  });
+
+  final MonthProject project;
+  final VoidCallback onHistory;
+  final VoidCallback onNext;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    final art = project.art;
+    final title = project.title.trim().isEmpty
+        ? l.missionsProjectUntitled
+        : project.title.trim();
+    return SectionCard(
+      key: const ValueKey('project-finished'),
+      icon: Icons.check_circle_outline,
+      title: l.projectsFinishedTitle,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: [
+              if (art != null) ...[
+                ProjectArtThumb(art, size: 48),
+                const SizedBox(width: 12),
+              ],
+              Expanded(
+                child: Text(
+                  l.projectsFinishedBody(title),
+                  style: theme.textTheme.bodyMedium,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              SecondaryButton(
+                key: const ValueKey('project-finished-history'),
+                label: l.projectsViewHistory,
+                icon: Icons.history,
+                onPressed: onHistory,
+              ),
+              TextLinkButton(
+                key: const ValueKey('project-finished-next'),
+                label: l.projectsPlanNext,
+                trailingIcon: Icons.arrow_forward,
+                onPressed: onNext,
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
