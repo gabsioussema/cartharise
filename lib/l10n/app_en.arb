@@ -313,15 +313,6 @@
       }
     }
   },
-  "campaignLogShowAll": "Show all {count}",
-  "@campaignLogShowAll": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "campaignLogShowFewer": "Show fewer",
   "campaignLogEditLabel": "Edit the attempt from {date}",
   "@campaignLogEditLabel": {
     "placeholders": {
@@ -349,7 +340,6 @@
       }
     }
   },
-  "campaignEarned": "Earned",
   "campaignNotYet": "Not yet",
   "campaignAchievementObserver": "The Observer",
   "campaignAchievementObserverBody": "Wrote all four present-reality reflections",
@@ -472,26 +462,7 @@
       }
     }
   },
-  "campaignExtraNext": "Next: {item} · {how}",
-  "@campaignExtraNext": {
-    "placeholders": {
-      "item": {
-        "type": "String"
-      },
-      "how": {
-        "type": "String"
-      }
-    }
-  },
   "campaignExtrasAll": "Every extra unlocked.",
-  "campaignAchievementExtra": "For your avatar: {item}",
-  "@campaignAchievementExtra": {
-    "placeholders": {
-      "item": {
-        "type": "String"
-      }
-    }
-  },
   "campaignQuestXp": "+{xp} XP",
   "@campaignQuestXp": {
     "placeholders": {
@@ -507,6 +478,246 @@
         "type": "int"
       }
     }
+  },
+  "campaignXpRuleExperiment": "+{xp} XP for each new experiment you try (once each)",
+  "@campaignXpRuleExperiment": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      }
+    }
+  },
+  "campaignNoticeTitle": "Notice",
+  "campaignNoticeLine": "A question or idea to look at again.",
+  "campaignTryTitle": "Try",
+  "campaignTryLine": "A tiny experiment for real life.",
+  "campaignYoursTitle": "Make it yours",
+  "campaignYoursLine": "Your avatar and motto.",
+  "campaignYoursPicks": "{count, plural, =1{1 reward pick to choose} other{{count} reward picks to choose}}",
+  "@campaignYoursPicks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "campaignLinkRoute": "Route",
+  "campaignLinkChapters": "Chapters",
+  "campaignLinkBattleLog": "Battle log",
+  "campaignLinkBattleLogDraft": "Battle log · draft kept",
+  "campaignLinkCollection": "Collection",
+  "campaignRouteTitle": "The route",
+  "campaignRouteSubtitle": "One stop per level. Rest never moves you back.",
+  "campaignRouteStops": "Stops",
+  "campaignRouteStopHere": "You're here",
+  "campaignRouteStopReached": "Reached",
+  "campaignRouteStopAhead": "{xp} XP to go",
+  "@campaignRouteStopAhead": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      }
+    }
+  },
+  "campaignChaptersTitle": "Chapters",
+  "campaignChapterTried": "{count, plural, =1{1 experiment tried} other{{count} experiments tried}}",
+  "@campaignChapterTried": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "campaignChapterTry": "Try one",
+  "campaignChapterTryLabel": "Try an experiment from chapter {number}, {name}",
+  "@campaignChapterTryLabel": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "campaignBattleLogTitle": "Battle log",
+  "campaignAttemptDraftNote": "Kept on this phone as you type.",
+  "campaignAttemptNotSaved": "Not saved on this phone yet. Your words are still here. Retry at the top.",
+  "campaignNotSavedYet": "Not saved on this phone yet. Retry at the top.",
+  "campaignCollectionTitle": "Collection",
+  "campaignCollectionSubtitle": "What you tried, earned and chose.",
+  "campaignCollectionTried": "{count, plural, =0{Experiments tried} =1{1 experiment tried} other{{count} experiments tried}}",
+  "@campaignCollectionTried": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "campaignCollectionTriedEmpty": "Nothing tried yet. Try has small experiments.",
+  "campaignTryOpen": "Open Try",
+  "campaignExperimentUnknown": "An experiment",
+  "campaignTriedOn": "Tried {date}",
+  "@campaignTriedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "campaignTriedEditLabel": "Edit the note from {date}",
+  "@campaignTriedEditLabel": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "campaignTriedSave": "Save note",
+  "campaignTriedRemove": "Remove this try",
+  "campaignTriedRemoveTitle": "Remove this try?",
+  "campaignTriedRemoveBody": "It leaves your Collection, with its note.",
+  "campaignTriedRemoved": "Try removed",
+  "campaignAchievementsRoutes": "A chapter's badge: answer its questions in one reset, or try one of its experiments.",
+  "campaignEarnedByReflecting": "Earned by reflecting",
+  "campaignEarnedByTrying": "Earned by trying",
+  "campaignEarnedByDoing": "Earned by doing",
+  "campaignCollectionExtras": "Extras chosen",
+  "campaignCollectionExtrasEmpty": "No extras chosen yet.",
+  "campaignTryScreenSubtitle": "Small experiments. Nothing joins your tasks unless you add it.",
+  "campaignTryMinutes": "About {minutes} min",
+  "@campaignTryMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "campaignTryXpLabel": "Earns {xp} XP the first time",
+  "@campaignTryXpLabel": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      }
+    }
+  },
+  "campaignTryStepLabel": "Step {number}: {step}",
+  "@campaignTryStepLabel": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "step": {
+        "type": "String"
+      }
+    }
+  },
+  "campaignTryNoteLabel": "A note (optional)",
+  "campaignTryNoteHint": "How did it go? One line is plenty.",
+  "campaignTryDone": "I tried it",
+  "campaignTryRecorded": "Saved to your Collection.",
+  "campaignTryAddTask": "Add to my tasks",
+  "campaignTryAdded": "Added to your tasks.",
+  "campaignTryAlreadyTask": "Already in your tasks.",
+  "campaignTryOpenTasks": "Open tasks",
+  "campaignTryPrevious": "Previous",
+  "campaignTryPosition": "{index} of {total}",
+  "@campaignTryPosition": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "campaignTryEmpty": "No experiments here yet.",
+  "campaignNoticeScreenSubtitle": "Pick one. Each opens a question or a lesson.",
+  "campaignNoticeKindPrompt": "Reflection",
+  "campaignNoticeKindLesson": "Lesson",
+  "campaignNoticeOpens": "Opens: {title}",
+  "@campaignNoticeOpens": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "campaignNoticeWritten": "Written",
+  "campaignNoticeRead": "Read",
+  "campaignNoticeEmpty": "Nothing to notice here yet.",
+  "campaignYoursScreenSubtitle": "Your look and motto. Extras are cosmetic and yours to keep.",
+  "campaignRewardCardTitle": "Reward picks",
+  "campaignRewardTitle": "Choose your reward",
+  "campaignRewardPicks": "{count, plural, =1{1 pick to spend. What you choose stays yours.} other{{count} picks to spend. What you choose stays yours.}}",
+  "@campaignRewardPicks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "campaignRewardSuggestedLine": "Suggested: {item}",
+  "@campaignRewardSuggestedLine": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "campaignRewardSuggested": "Suggested · {kind}",
+  "@campaignRewardSuggested": {
+    "description": "Under the suggested reward: the kind of extra (Banner, Carry, Headwear, Colour).",
+    "placeholders": {
+      "kind": {
+        "type": "String"
+      }
+    }
+  },
+  "campaignRewardChoose": "Choose {item}",
+  "@campaignRewardChoose": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "campaignRewardChosen": "{item} is yours to keep.",
+  "@campaignRewardChosen": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "campaignRewardWear": "Wear it",
+  "campaignRewardPreviewLabel": "Your avatar wearing {item}",
+  "@campaignRewardPreviewLabel": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "campaignRewardNone": "No pick to spend right now.",
+  "campaignRewardGameOff": "With the Campaign off, every extra is already open.",
+  "campaignInviteTitle": "Play the Campaign?",
+  "campaignInviteBody": "XP and levels for what you do.",
+  "campaignInvitePlay": "Play",
+  "campaignInvitePlaying": "The Campaign is on. It lives in Compass.",
+  "campaignInviteLater": "You can turn it on in You.",
+  "campaignToastPick": "{count, plural, =1{A new pick for your avatar} other{{count} new picks for your avatar}}",
+  "@campaignToastPick": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "campaignQuestFromTry": "Experiment",
+  "@campaignQuestFromTry": {
+    "description": "A small label on a task added from the Playground's \"Try\"."
   },
   "compassTitle": "Compass",
   "@compassTitle": {
@@ -1185,26 +1396,19 @@
   "personaEdit": "Edit your avatar",
   "personaSilhouette": "Silhouette",
   "personaLocked": "Locked",
-  "personaUnlockStop": "Reach {place}",
-  "@personaUnlockStop": {
+  "personaUnlockWithPick": "Choose it with a reward pick",
+  "personaNextPickStop": "Next pick at {place}",
+  "@personaNextPickStop": {
     "placeholders": {
       "place": {
         "type": "String"
       }
     }
   },
-  "personaUnlockAchievement": "Earn {achievement}",
-  "@personaUnlockAchievement": {
+  "personaNextPickAchievement": "Next pick: earn {achievement}",
+  "@personaNextPickAchievement": {
     "placeholders": {
       "achievement": {
-        "type": "String"
-      }
-    }
-  },
-  "personaUnlocked": "New for your avatar: {item}",
-  "@personaUnlocked": {
-    "placeholders": {
-      "item": {
         "type": "String"
       }
     }

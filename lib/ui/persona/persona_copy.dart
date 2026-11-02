@@ -1,3 +1,4 @@
+import '../../domain/campaign.dart';
 import '../../domain/persona.dart';
 import '../../l10n/app_localizations.dart';
 import '../campaign/campaign_copy.dart';
@@ -40,14 +41,32 @@ String unlockableName(AppLocalizations l, Unlockable u) => switch (u) {
   Unlockable.sigilLaurel => partName(l, Sigil.laurel),
 };
 
-/// How to unlock [u], e.g. "Reach the Alps" or "Earn The Strategist".
+/// How a locked extra becomes the user's: with a reward pick (the same for
+/// every extra since picks replaced fixed unlocks; [u] is the extra asked
+/// about).
 String unlockReason(AppLocalizations l, Unlockable u) =>
-    switch (unlockSource(u)) {
-      UnlockSource(waypoint: final w?) => l.personaUnlockStop(
-        l.campaignWaypoint(w.name),
-      ),
-      UnlockSource(achievement: final a?) => l.personaUnlockAchievement(
-        achievementName(l, a),
-      ),
-      _ => '',
-    };
+    l.personaUnlockWithPick;
+
+/// When the next reward pick comes: the next route stop ("Next pick at the
+/// Ebro"), else the first achievement not earned yet ("Next pick: earn The
+/// Challenger"); null once every milestone is reached.
+String? nextPickReason(AppLocalizations l, CampaignProgress progress) {
+  final stop = progress.nextWaypoint;
+  if (stop != null) return l.personaNextPickStop(l.campaignWaypoint(stop.name));
+  final achievement = progress.nextAchievement;
+  if (achievement != null) {
+    return l.personaNextPickAchievement(achievementName(l, achievement));
+  }
+  return null;
+}
+
+/// The lock text of a locked extra: [unlockReason] while a reward pick is
+/// left, else when the next pick comes ([nextPickReason]).
+String lockedExtraNote(
+  AppLocalizations l,
+  Unlockable u, {
+  required CampaignProgress progress,
+  required int picksLeft,
+}) => picksLeft > 0
+    ? unlockReason(l, u)
+    : nextPickReason(l, progress) ?? unlockReason(l, u);

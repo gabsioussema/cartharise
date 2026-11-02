@@ -7,6 +7,14 @@ library;
 import 'package:cartharise/content/en.dart';
 import 'package:cartharise/domain/app_data.dart';
 import 'package:cartharise/domain/persona.dart';
+import 'package:cartharise/ui/campaign/battle_log_screen.dart';
+import 'package:cartharise/ui/campaign/campaign_invite.dart';
+import 'package:cartharise/ui/campaign/chapters_screen.dart';
+import 'package:cartharise/ui/campaign/collection_screen.dart';
+import 'package:cartharise/ui/campaign/make_it_yours_screen.dart';
+import 'package:cartharise/ui/campaign/notice_screen.dart';
+import 'package:cartharise/ui/campaign/route_screen.dart';
+import 'package:cartharise/ui/campaign/try_screen.dart';
 import 'package:cartharise/ui/compass/compass_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -94,61 +102,93 @@ AppData _data() {
         createdAt: _at,
       ),
     ],
+    experimentLog: [
+      ExperimentEntry(
+        id: 'e2',
+        experimentId: 'try.autopilot.02',
+        day: '2026-11-02',
+        note: 'Reached for it four times. Lunch tasted better.',
+        createdAt: _at,
+      ),
+      ExperimentEntry(
+        id: 'e1',
+        experimentId: 'try.terrain.01',
+        day: '2026-11-01',
+        createdAt: _at,
+      ),
+    ],
+    lessonsRead: const {'lesson.02'},
+    avatarUnlocked: const {Unlockable.accessoryScroll},
   );
 }
 
 void main() {
   for (final b in ['dark', 'light']) {
     final brightness = b == 'dark' ? Brightness.dark : Brightness.light;
-    testWidgets('campaign ($b)', (tester) async {
+
+    Future<void> shoot(
+      WidgetTester tester,
+      String name,
+      Widget home, {
+      Size size = const Size(390, 844),
+      AppData? data,
+    }) async {
       await pumpCartha(
         tester,
-        data: _data(),
+        data: data ?? _data(),
         brightness: brightness,
         content: englishContent,
-        home: const CompassTab(initial: CompassSection.campaign),
-        size: const Size(390, 5200),
+        home: home,
+        size: size,
       );
-      await captureScreenshot(tester, 'campaign_01_campaign_$b');
+      await captureScreenshot(tester, '${name}_$b');
+    }
+
+    testWidgets('the hub on a phone ($b)', (tester) async {
+      await shoot(
+        tester,
+        'campaign_01_hub',
+        const CompassTab(initial: CompassSection.campaign),
+      );
     });
 
-    testWidgets('campaign on a phone ($b)', (tester) async {
-      await pumpCartha(
+    testWidgets('the hub with the invitation ($b)', (tester) async {
+      await shoot(
         tester,
-        data: _data(),
-        brightness: brightness,
-        content: englishContent,
-        home: const CompassTab(initial: CompassSection.campaign),
+        'campaign_02_invite',
+        const Scaffold(body: SafeArea(child: CampaignInviteCard())),
+        size: const Size(390, 320),
+        data: onboardedData(
+          settings: const AppSettings(game: false, gameInvited: false),
+        ),
       );
-      await captureScreenshot(tester, 'campaign_02_phone_$b');
     });
 
-    testWidgets('your strategist on a phone ($b)', (tester) async {
+    for (final (name, home, height) in [
+      ('campaign_03_try', const TryScreen(), 844.0),
+      ('campaign_04_notice', const NoticeScreen(), 2200.0),
+      ('campaign_05_yours', const MakeItYoursScreen(), 844.0),
+      ('campaign_06_collection', const CollectionScreen(), 2400.0),
+      ('campaign_07_route', const CampaignRouteScreen(), 2600.0),
+      ('campaign_08_chapters', const ChaptersScreen(), 2000.0),
+      ('campaign_09_log', const BattleLogScreen(), 1400.0),
+    ]) {
+      testWidgets('$name ($b)', (tester) async {
+        await shoot(tester, name, home, size: Size(390, height));
+      });
+    }
+
+    testWidgets('choose your reward ($b)', (tester) async {
       await pumpCartha(
         tester,
         data: _data(),
         brightness: brightness,
         content: englishContent,
-        home: const CompassTab(initial: CompassSection.campaign),
+        home: const MakeItYoursScreen(),
       );
-      await tester.ensureVisible(
-        find.byKey(const ValueKey('campaign-strategist')),
-      );
+      await tester.tap(find.byKey(const ValueKey('campaign-reward-open')));
       await pumpFrames(tester);
-      await captureScreenshot(tester, 'campaign_04_strategist_$b');
-    });
-
-    testWidgets('battle log and achievements on a phone ($b)', (tester) async {
-      await pumpCartha(
-        tester,
-        data: _data(),
-        brightness: brightness,
-        content: englishContent,
-        home: const CompassTab(initial: CompassSection.campaign),
-      );
-      await tester.ensureVisible(find.text('Battle log · 2 attempts'));
-      await pumpFrames(tester);
-      await captureScreenshot(tester, 'campaign_03_log_$b');
+      await captureScreenshot(tester, 'campaign_10_reward_$b');
     });
   }
 }

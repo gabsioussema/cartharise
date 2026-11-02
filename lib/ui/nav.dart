@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'awakening/awakening_screen.dart';
+import 'campaign/campaign_pages.dart';
 import 'awakening/lesson_screen.dart';
 import 'compass/compass_tab.dart';
 import 'journal/journal_entry_screen.dart';
@@ -116,6 +117,13 @@ abstract final class AppNav {
   /// The Campaign section (the Compass when the game layer is off).
   static Future<void> openCampaign(BuildContext context) =>
       openCompass(context, section: CompassSection.campaign);
+
+  /// One of the Campaign's pages (Notice, Try, Make it yours, Route,
+  /// Chapters, Battle log, Collection).
+  static Future<void> openCampaignPage(
+    BuildContext context,
+    CampaignPage page,
+  ) => _push<void>(context, campaignPageScreen(page));
 
   static Future<void> openPathDay(BuildContext context, int day) =>
       _push<void>(context, PathDayScreen(day: day));

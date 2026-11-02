@@ -1,13 +1,18 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../domain/persona.dart';
 import '../../l10n/app_localizations.dart';
+import '../../state/app_state.dart';
+import '../campaign/campaign_ops.dart';
 import '../theme/avatar_palette.dart';
 import '../theme/cartha_theme.dart';
 import 'avatar_view.dart';
 import 'builder_categories.dart';
+import 'persona_copy.dart';
+import 'persona_ops.dart';
 
 /// How one choice can be used right now.
 enum OptionAccess {
@@ -18,7 +23,8 @@ enum OptionAccess {
   /// worn is ever taken away).
   kept,
 
-  /// A locked extra: visible with its lock and reason, not selectable.
+  /// A locked extra (not chosen with a reward pick yet): visible with its
+  /// lock and how to open it, not selectable.
   locked,
 }
 
@@ -56,7 +62,10 @@ class BuilderOptionGrid extends StatelessWidget {
   final Avatar draft;
   final OptionAccess Function(Enum value) accessOf;
 
-  /// How to unlock a locked extra ("Reach the Alps").
+  /// How to open a locked extra while a reward pick is left
+  /// (`unlockReason`: "Choose it with a reward pick"). With no pick left the
+  /// tile names when the next one comes instead ("Next pick at the Alps",
+  /// `nextPickReason`).
   final String Function(Enum value) reasonOf;
   final ValueChanged<Enum?> onPick;
 
@@ -65,8 +74,15 @@ class BuilderOptionGrid extends StatelessWidget {
     final l = AppLocalizations.of(context);
     final selected = category.valueOf(draft);
     final scale = MediaQuery.textScalerOf(context).scale(14) / 14;
+    // Reward picks: with none left, a locked extra says when the next one
+    // comes rather than how to spend one.
+    final state = context.watch<AppState>();
+    final nextPick = state.picksLeft > 0
+        ? null
+        : nextPickReason(l, state.campaign);
     final tiles = [
-      for (final value in category.options) _tile(l, value, value == selected),
+      for (final value in category.options)
+        _tile(l, value, value == selected, nextPick),
     ];
     return Semantics(
       container: true,
@@ -106,7 +122,12 @@ class BuilderOptionGrid extends StatelessWidget {
     );
   }
 
-  Widget _tile(AppLocalizations l, Enum? value, bool selected) {
+  Widget _tile(
+    AppLocalizations l,
+    Enum? value,
+    bool selected,
+    String? nextPick,
+  ) {
     final access = value == null ? OptionAccess.open : accessOf(value);
     return BuilderOptionTile(
       key: ValueKey(
@@ -119,7 +140,7 @@ class BuilderOptionGrid extends StatelessWidget {
       note: switch (access) {
         OptionAccess.open => null,
         OptionAccess.kept => l.personaBuilderKept,
-        OptionAccess.locked => reasonOf(value!),
+        OptionAccess.locked => nextPick ?? reasonOf(value!),
       },
       preview: AvatarView(
         avatar: category.apply(draft, value),
@@ -157,7 +178,7 @@ class BuilderOptionTile extends StatelessWidget {
   final bool selected;
   final OptionAccess access;
 
-  /// Under the name: the unlock reason, or "Yours to keep".
+  /// Under the name: how to open a locked extra, or "Yours to keep".
   final String? note;
 
   /// Null when the choice is locked.

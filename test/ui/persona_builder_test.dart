@@ -340,8 +340,13 @@ void main() {
         findsOneWidget,
       );
       final star = _option(BuilderCategory.sigil, Sigil.star);
+      // Changed by design (reward picks): with no pick to spend yet, a
+      // locked extra says when the next pick comes.
       expect(
-        find.descendant(of: star, matching: find.text('Reach the Alps')),
+        find.descendant(
+          of: star,
+          matching: find.text('Next pick at New Carthage'),
+        ),
         findsOneWidget,
       );
       expect(
@@ -351,17 +356,17 @@ void main() {
       final data = _semantics(tester, star);
       expect(data.label, contains('North star'));
       expect(data.label, contains('Locked'));
-      expect(data.label, contains('Reach the Alps'));
+      expect(data.label, contains('Next pick at New Carthage'));
       expect(data.flagsCollection.isEnabled == Tristate.isTrue, isFalse);
       expect(data.flagsCollection.isSelected == Tristate.isTrue, isFalse);
 
       await _tap(tester, star);
       expect(_preview(tester).sigil, Sigil.elephant, reason: 'not selectable');
-      // Achievements name the achievement.
+      // Every locked extra opens the same way (any pick buys any extra).
       expect(
         find.descendant(
           of: _option(BuilderCategory.sigil, Sigil.laurel),
-          matching: find.text('Earn The Challenger'),
+          matching: find.text('Next pick at New Carthage'),
         ),
         findsOneWidget,
       );
@@ -406,7 +411,7 @@ void main() {
       expect(
         find.descendant(
           of: _option(BuilderCategory.headwear, Headwear.circlet),
-          matching: find.text('Reach the Pyrenees'),
+          matching: find.text('Next pick at New Carthage'),
         ),
         findsOneWidget,
       );

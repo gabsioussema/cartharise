@@ -1,7 +1,8 @@
 import '../../domain/campaign.dart';
 import '../../l10n/app_localizations.dart';
 
-/// Localized names for the Campaign's chapters and achievements.
+/// Localized names for the Campaign's chapters and achievements, and how
+/// an achievement was earned.
 
 String chapterName(AppLocalizations l, CampaignChapter c) => switch (c) {
   CampaignChapter.terrain => l.campaignChapterTerrain,
@@ -37,4 +38,11 @@ String achievementBody(AppLocalizations l, Achievement a) => switch (a) {
   Achievement.strategist => l.campaignAchievementStrategistBody,
   Achievement.practitioner => l.campaignAchievementPractitionerBody,
   Achievement.challenger => l.campaignAchievementChallengerBody,
+};
+
+/// How an achievement was earned, e.g. "Earned by trying".
+String earnedByLabel(AppLocalizations l, EarnedRoute route) => switch (route) {
+  EarnedRoute.reflecting => l.campaignEarnedByReflecting,
+  EarnedRoute.trying => l.campaignEarnedByTrying,
+  EarnedRoute.doing => l.campaignEarnedByDoing,
 };
