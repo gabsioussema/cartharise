@@ -8,6 +8,7 @@ import '../../state/app_state.dart';
 import '../persona/avatar_view.dart';
 import '../persona/persona_ops.dart';
 import '../theme/cartha_theme.dart';
+import '../widgets/route_scenes.dart';
 import '../widgets/widgets.dart';
 import 'campaign_invite.dart';
 import 'campaign_kit.dart';
@@ -127,8 +128,8 @@ class CampaignView extends StatelessWidget {
   }
 }
 
-/// Level, the route with the avatar at the current stop, and the XP to the
-/// next stop (F-060).
+/// Level, the route with the avatar at the current stop over that stop's
+/// painted landscape, and the XP to the next stop (F-060).
 class _StatusCard extends StatelessWidget {
   const _StatusCard({required this.progress, required this.avatar});
 
@@ -150,10 +151,16 @@ class _StatusCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            CampaignRouteMap(
-              id: 'campaign-route',
-              progress: progress,
-              avatar: avatar,
+            // The current stop's landscape, the route and the avatar on it.
+            RouteSceneWindow(
+              key: const ValueKey('campaign-scene'),
+              waypoint: progress.waypoint,
+              semanticLabel: l.sceneryRouteScene(progress.waypoint.name),
+              overlay: CampaignRouteMap(
+                id: 'campaign-route',
+                progress: progress,
+                avatar: avatar,
+              ),
             ),
             const SizedBox(height: 12),
             Text(

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../domain/app_data.dart';
 import '../../domain/campaign.dart';
+import '../../domain/content.dart' show ContentLibrary;
 import '../../domain/persona.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
@@ -13,6 +14,7 @@ import '../missions/project_history_screen.dart';
 import '../persona/persona_copy.dart';
 import '../persona/persona_ops.dart';
 import '../theme/cartha_theme.dart';
+import '../widgets/route_scenes.dart';
 import '../widgets/widgets.dart';
 import 'campaign_copy.dart';
 import 'campaign_kit.dart';
@@ -57,6 +59,13 @@ class CollectionScreen extends StatelessWidget {
       title: l.campaignCollectionTitle,
       subtitle: l.campaignCollectionSubtitle,
       children: [
+        // ── Keepsakes (once something was tried) ───────────────────────
+        if (groups.isNotEmpty)
+          KeepsakeShelf(
+            kept: keptKeepsakes(state.experimentLog, state.content),
+            showAll: game,
+          ),
+
         // ── Experiments tried ──────────────────────────────────────────
         // One row per experiment, so the count matches the rows.
         AreaSectionLabel(l.campaignCollectionTried(groups.length)),
@@ -161,6 +170,159 @@ class CollectionScreen extends StatelessWidget {
         // ── Projects finished (nothing until one is) ───────────────────
         const PastProjectsKeepsake(),
       ],
+    );
+  }
+}
+
+/// How many distinct experiments of each chapter [log] holds, for the
+/// chapters with at least one (their keepsake is kept). Tries of
+/// experiments [content] no longer has are left out.
+Map<CampaignChapter, int> keptKeepsakes(
+  List<ExperimentEntry> log,
+  ContentLibrary content,
+) {
+  final tried = <CampaignChapter, Set<String>>{};
+  for (final entry in log) {
+    final experiment = content.experiment(entry.experimentId);
+    if (experiment == null) continue;
+    (tried[experiment.chapter] ??= {}).add(experiment.id);
+  }
+  return {
+    for (final chapter in CampaignChapter.values)
+      if (tried[chapter] case final ids?) chapter: ids.length,
+  };
+}
+
+/// The chapter keepsakes: a small painting of each chapter's object (a
+/// spyglass, a mosaic tile, a banner, an hourglass, a scroll) with its name,
+/// its chapter and, in words, "Kept · 2 tried" or "Not yet". With the
+/// Campaign off ([showAll] false) only the kept ones show — no empty slots to
+/// fill.
+class KeepsakeShelf extends StatelessWidget {
+  const KeepsakeShelf({super.key, required this.kept, required this.showAll});
+
+  /// Experiments tried per chapter (see [keptKeepsakes]).
+  final Map<CampaignChapter, int> kept;
+
+  /// Also show the chapters not kept yet, as empty slots.
+  final bool showAll;
+
+  /// The narrowest a keepsake column gets (scaled with the text size).
+  static const minItemWidth = 100.0;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final p = CarthaPalette.of(context);
+    final theme = Theme.of(context);
+    final chapters = [
+      for (final c in CampaignChapter.values)
+        if (showAll || kept.containsKey(c)) c,
+    ];
+    final scale = MediaQuery.textScalerOf(context).scale(1);
+    return Column(
+      key: const ValueKey('collection-keepsakes'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        AreaSectionLabel(l.sceneryKeepsakesTitle),
+        SectionCard(
+          padding: const EdgeInsetsDirectional.fromSTEB(12, 16, 12, 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsetsDirectional.symmetric(horizontal: 4),
+                child: Text(
+                  l.sceneryKeepsakesLine,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: p.textSecondary,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  const gap = 8.0;
+                  final columns =
+                      (constraints.maxWidth / (minItemWidth * scale))
+                          .floor()
+                          .clamp(1, CampaignChapter.values.length);
+                  final width =
+                      (constraints.maxWidth - gap * (columns - 1)) / columns;
+                  return Wrap(
+                    alignment: WrapAlignment.center,
+                    spacing: gap,
+                    runSpacing: 16,
+                    children: [
+                      for (final c in chapters)
+                        SizedBox(
+                          width: width,
+                          child: _KeepsakeTile(chapter: c, tried: kept[c]),
+                        ),
+                    ],
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// One keepsake: the painting, its name, its chapter and whether it is kept
+/// (in words; the painting's shape says it too), read out as one phrase.
+class _KeepsakeTile extends StatelessWidget {
+  const _KeepsakeTile({required this.chapter, required this.tried});
+
+  final CampaignChapter chapter;
+
+  /// Experiments of the chapter tried; null when none (not yet).
+  final int? tried;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final p = CarthaPalette.of(context);
+    final theme = Theme.of(context);
+    final count = tried;
+    final name = l.sceneryKeepsakeName(chapter.name);
+    final from = chapterName(l, chapter);
+    final status = count == null
+        ? l.sceneryKeepsakeNotYet
+        : l.sceneryKeepsakeKept(count);
+    return Semantics(
+      key: ValueKey('collection-keepsake-${chapter.name}'),
+      container: true,
+      label: l.sceneryKeepsakeLabel(name, from, status),
+      excludeSemantics: true,
+      child: Column(
+        children: [
+          Keepsake(chapter, kept: count != null),
+          const SizedBox(height: 6),
+          Text(
+            name,
+            textAlign: TextAlign.center,
+            style: theme.textTheme.titleSmall,
+          ),
+          const SizedBox(height: 2),
+          Text(
+            from,
+            textAlign: TextAlign.center,
+            style: theme.textTheme.bodySmall?.copyWith(color: p.textSecondary),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            status,
+            textAlign: TextAlign.center,
+            style: theme.textTheme.labelMedium?.copyWith(
+              color: count == null ? p.textSecondary : p.accent,
+              fontWeight: count == null ? null : FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

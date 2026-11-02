@@ -41,7 +41,8 @@ a readable-width list with the bottom inset).
 2. **Status** (forest hero): "Level n · x XP" and **Hannibal's route** — one
    stop per level (Carthage, New Carthage, the Ebro, the Pyrenees, the Rhône,
    the Alps, Italy; places, never labels for the person), the road walked so
-   far and the stretch towards the next stop. The user's avatar
+   far and the stretch towards the next stop, laid along the bottom of a
+   painting of the stop the user is at (see **Scenery**). The user's avatar
    (`AvatarView`, 36 dp; the emblem until they make one) stands above the
    current stop — decoration only; the route's label ("Hannibal's route: the
    Ebro, stop 3 of 7.") says where they are. "You're at the Ebro", "90 XP to
@@ -128,9 +129,11 @@ picks run out while the sheet is open, it says so instead of offering a
 choice. `extraPart(u)` / `avatarWearing(avatar, u)` map an extra to the part
 it puts on (preview only).
 
-**Route** (`route_screen.dart`): the status hero again (44 dp avatar, the XP
-note, **How XP is earned**), **Stops** — each place with an icon and words:
-"You're here", "Reached" or "n XP to go" — then **The strategist's map** (the
+**Route** (`route_screen.dart`): the status hero again (the current stop's
+painting with the route and a 44 dp avatar on it, the XP note, **How XP is
+earned**), **Stops** — each place with an icon and words: "You're here",
+"Reached" or "n XP to go", and, where the words keep the room, a small
+painting of that stop (misty while it is still ahead) — then **The strategist's map** (the
 table above; **Build your strategy** → Compass, **Open daily quests** →
 Missions; from the hub these pop back and switch the section in place) and
 **Act II · The 30-day becoming** (F-064): quests completed, 30-day notes
@@ -176,6 +179,10 @@ history). Collection › tries also say what each one holds.
   A7).
 
 **Collection** (`collection_screen.dart`, keepsakes):
+* **Keepsakes** (once anything was tried) — one painted object per chapter
+  (see **Scenery**) with its name, its chapter and, in words, "Kept · 2
+  tried" or "Not yet". With the game off only the kept ones show (no empty
+  slots to fill).
 * **Experiments tried** — "n experiments tried" and one card per experiment
   (most recently tried first): its title once, then each try with its note
   exactly as typed and "Tried <date>" (so the count matches the cards; audit
@@ -214,6 +221,73 @@ fewer than 3 quests are done today (`kQuestDaysCap`, the same count as the XP
 rules: each quest once per day). Done quests, a used-up day and the game layer
 off show no chip; the quest itself never changes. A quest added from Try
 carries an "Experiment" label (`quest-source-<id>`), with or without the game.
+
+## Scenery (evolve step 3 › J)
+
+Painted in the brand scene style of the onboarding scenes and the lesson
+illustrations (`ScenePalette`: hero colours only, calm layered ridges, one
+clear subject), so each theme repaints them in its own hero family, the same
+in light and dark. No photos, no weapons, no combat. Files:
+`lib/ui/widgets/route_scenes.dart` (widgets), `lib/ui/widgets/art/route_art.dart`
+and `lib/ui/widgets/art/keepsake_art.dart` (painters).
+
+**The seven stops** (`RouteScene(waypoint)`, `RouteScenePainter`):
+
+| Stop | The painting |
+|---|---|
+| Carthage | the round harbour at dawn: the ring of arched ship sheds, the island's round hall, a ship under sail at the harbour mouth, the Byrsa hill with its temple and houses |
+| New Carthage | white houses stepping up a hill above a quiet bay, a temple on top, the town wall, small boats, morning sun |
+| The Ebro | a wide river winding through the plain, poplars on its banks, cattails in front |
+| The Pyrenees | a high pass between two snowy peaks at dusk, the sun low in the notch, a trail up to it, pines either side |
+| The Rhône | an elephant crossing the misty river on a raft (the brand's elephant), a wood on the far bank |
+| The Alps | a path climbing toward the snow by moonlight, a lantern on the way, the range around |
+| Italy | cypresses along a road down into fields, stone pines, a far bell tower, the morning sun |
+
+* The subject is composed around the centre at the frame's height and sky,
+  land and water run to the sides, so a stop reads on a 72 × 48 thumbnail, a
+  320 dp phone and a 4.7 : 1 tablet card alike; narrower frames than 1.6 : 1
+  are cropped at the sides.
+* **Motion:** the light lifts once (sun, moon, glow and stars come up over
+  1.6 s) when the scene is first shown or the stop changes; it is painted
+  still when the device asks for reduced motion, Settings › Motion is off, or
+  for thumbnails. Nothing loops.
+* **`RouteSceneWindow`** frames a stop in a rounded window, `width / 2` tall
+  within 112–200 dp on the hub (1.8, 128–240 dp on the Route page), and lays
+  the route map with the avatar along its bottom over a soft hero shade, so
+  the road's dots read on every painting.
+* **Words:** the hub's and the Route page's painting is an image with its
+  own label ("The Rhône: an elephant crossing the river on a raft"); the
+  Route list's thumbnails are decorative (the row says the place and its
+  status). Pictures never mirror in right-to-left layouts; rows and the
+  overlay use `EdgeInsetsDirectional` / `PositionedDirectional`.
+* **Veiled** (`veiled: true`): a light mist of the hero colour over a stop
+  still ahead, in the Route list. "You're here" / "Reached" / "n XP to go"
+  stay in words with their icon.
+
+**The keepsakes** (`Keepsake(chapter, kept:)`, `KeepsakePainter`), one per
+chapter, each on a small pointed stele (the stone tablets of ancient
+Carthage):
+
+| Chapter | Keepsake |
+|---|---|
+| See the terrain | a spyglass |
+| Find the pattern | a mosaic tile |
+| Raise your banner | a banner with a sun on it |
+| Break autopilot | an hourglass |
+| Plan the campaign | a scroll with a short list and a seal |
+
+* **Kept** (any experiment of the chapter tried, `keptKeepsakes(log,
+  content)` counting distinct experiments; tries of experiments the content no
+  longer has keep nothing): a filled hero stele with a bronze rim on a plinth,
+  the object in bronze and light. **Not yet:** an empty slot with a dashed rim,
+  no plinth, the object in outline only — the shape differs, never the colour
+  alone. Always shown with words (name, chapter, "Kept · n tried" / "Not
+  yet"); the tile is read out as one phrase ("Hourglass, Break autopilot:
+  Kept · 2 tried"). Nothing is earned or lost: a keepsake only shows what was
+  tried, as the list below it does.
+* Strings: `l10n_src/scenery_{en,fr,ar}.arb` (`scenery…`). The French and
+  Arabic texts are drafts, like every translation (see
+  `docs/translations.md`): native review before release.
 
 ## The Playground's content (`lib/content/en.dart`)
 
@@ -425,7 +499,10 @@ invitation.
 | `lib/ui/campaign/route_screen.dart` | the Route, the strategist's map, Act II |
 | `lib/ui/campaign/chapters_screen.dart` | Act I's chapters |
 | `lib/ui/campaign/battle_log_screen.dart` | the boss, the attempt form (draft autosave, honest recording), the log |
-| `lib/ui/campaign/collection_screen.dart` | experiments tried, achievements and how earned, extras chosen |
+| `lib/ui/campaign/collection_screen.dart` | keepsakes (`KeepsakeShelf`, `keptKeepsakes`), experiments tried, achievements and how earned, extras chosen |
+| `lib/ui/widgets/route_scenes.dart` | `RouteScene`, `RouteSceneWindow`, `Keepsake` (Scenery) |
+| `lib/ui/widgets/art/route_art.dart` | `RouteScenePainter`: the seven stops |
+| `lib/ui/widgets/art/keepsake_art.dart` | `KeepsakePainter`: the five keepsakes |
 | `lib/ui/campaign/experiment_entry_sheet.dart` | correct a try's note / remove the try; asks before dropping a changed note |
 | `lib/ui/campaign/attempt_sheet.dart` | correct / delete an attempt |
 | `lib/ui/campaign/campaign_copy.dart` | chapter and achievement names, `earnedByLabel` |
@@ -438,6 +515,7 @@ invitation.
 | `lib/domain/content.dart` | `CampaignChapter`, `CarthaGlyph`, `Experiment`, `Notice` |
 | `lib/content/en.dart` | the English experiments and notices |
 | `l10n_src/campaign_en.arb` | strings (`campaign…`) |
+| `l10n_src/scenery_{en,fr,ar}.arb` | scenery strings (`scenery…`): the paintings' descriptions, the keepsakes |
 
 ## Tests
 
@@ -510,6 +588,26 @@ invitation.
   Battle log, Route and Chapters.
 * `test/ui/a11y_test.dart` — the hub in dark and light against the tap size,
   label and contrast guidelines.
+* `test/ui/scenery_test.dart` — every stop and every keepsake painting in all
+  six themes, dark and light, at thumbnail to wide-tablet sizes (and empty
+  ones), rising, still and veiled; seven distinct paintings and five distinct
+  keepsakes, kept and not yet differing in shape; repaint rules; no raw
+  colour in the scenery files; a label makes a painting an image, without one
+  it is decorative; the light lifts once, again for a new stop, and is still
+  with Settings › Motion off, with the device's reduced motion and when
+  motion is switched off mid-rise; the window's height bounds and overlay;
+  the hub showing each stop's painting with its words and the route and
+  avatar inside it, none with the game off; the Route page's hero and
+  thumbnails (misty ahead, none where the words need the room, at the start
+  in Arabic); `keptKeepsakes`; the Collection's shelf (all five with the game
+  on, read out in words; only the kept ones with it off; none before a try;
+  right to left in Arabic); the guidelines for the hub, the Route and the
+  Collection, and the size matrix in dark and light, English and Arabic.
+* `test/screenshots/scenery_screenshots_test.dart` — the seven paintings on a
+  phone, a tablet and a 4.7 : 1 card, thumbnails clear and veiled, the
+  keepsakes at three sizes, every theme in both brightnesses, the hub, the
+  Route and the Collection (dark and light; the hub on a tablet and, in
+  Arabic, at 320 dp and 200 % text; the Route and the Collection in Arabic).
 * `test/ui/persona_journey_test.dart` — the avatar on the hub's route and in
   Make it yours.
 * `test/screenshots/campaign_screenshots_test.dart` — the hub, the
