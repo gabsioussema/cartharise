@@ -1,3 +1,58 @@
 {
-  "@@locale": "fr"
+  "@@locale": "fr",
+  "appTitle": "Cartharise",
+  "appTagline": "Maîtrisez-vous. Avancez avec un but.",
+  "appPromise": "Comprenez-vous. Choisissez votre chemin. Avancez avec un but.",
+
+  "tabToday": "Aujourd’hui",
+  "tabReset": "Recentrage",
+  "tabCompass": "Boussole",
+  "tabJournal": "Journal",
+  "tabYou": "Vous",
+
+  "save": "Enregistrer",
+  "cancel": "Annuler",
+  "delete": "Supprimer",
+  "skip": "Passer",
+  "back": "Retour",
+  "next": "Suivant",
+  "done": "Terminé",
+  "retry": "Réessayer",
+  "close": "Fermer",
+  "edit": "Modifier",
+  "add": "Ajouter",
+  "keepGoing": "Continuer",
+  "tryAgain": "Réessayer",
+  "notNow": "Pas maintenant",
+  "moreInfo": "En savoir plus",
+
+  "saveStatusSaving": "Enregistrement…",
+  "saveStatusSaved": "Enregistré sur ce téléphone",
+  "saveStatusFailed": "Dernière modification non enregistrée.",
+  "saveFailedHelp": "Vos mots sont toujours là. Réessayez, ou exportez une copie.",
+  "saveExportCopy": "Exporter une copie",
+
+  "bootLoading": "Préparation de votre espace…",
+  "bootLoadErrorTitle": "Vos données n’ont pas pu être ouvertes",
+  "bootLoadErrorBody": "Cartharise n’a pas pu lire son fichier. Rien n’a été supprimé.",
+  "bootLoadErrorHint": "Réessayez. Si le problème persiste, libérez de l’espace.",
+  "bootStartFresh": "Repartir de zéro et garder le fichier illisible",
+  "bootStartFreshConfirmTitle": "Repartir de zéro ?",
+  "bootStartFreshConfirmBody": "Le fichier illisible est mis de côté, pas supprimé. Cartharise repart à vide.",
+
+  "storageTransparency": "Uniquement sur ce téléphone. Rien n’est synchronisé, copié dans les sauvegardes du téléphone ou du cloud, ni chiffré par Cartharise. Supprimer l’app ou vos données efface tout.",
+
+  "storageErrorTitle": "Problème de stockage",
+  "storageErrorBody": "Impossible d’enregistrer sur ce téléphone pour l’instant. Vos mots restent à l’écran jusqu’à ce que vous quittiez.",
+
+  "linkOpenFailed": "Le lien n’a pas pu s’ouvrir. Vous pouvez y aller vous-même : {url}",
+  "shareFailed": "Le partage n’a pas pu s’ouvrir sur ce téléphone.",
+
+  "reminderChannelName": "Rappels des pauses",
+  "reminderChannelDescription": "Pauses facultatives dans la journée, issues de votre recentrage Cartharise.",
+
+  "loaderLabel": "Chargement",
+  "emblemLabel": "Emblème de Cartharise",
+  "progressLabel": "{value} pour cent",
+  "selectedLabel": "Sélectionné"
 }

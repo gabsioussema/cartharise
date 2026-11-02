@@ -4275,7 +4275,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get youAppearanceTitle => 'Appearance';
 
   @override
-  String get youAppearanceSubtitle => 'Colours, light or dark, and motion.';
+  String get youAppearanceSubtitle =>
+      'Language, colours, light or dark, and motion.';
+
+  @override
+  String get youLanguageTitle => 'Language';
+
+  @override
+  String get youLanguageSystem => 'Same as phone';
+
+  @override
+  String youLanguageSystemNow(String language) {
+    return 'Now: $language';
+  }
+
+  @override
+  String get youLanguageNote =>
+      'Lessons and questions change too. Your own words stay as you wrote them.';
 
   @override
   String get youThemeTitle => 'Theme';

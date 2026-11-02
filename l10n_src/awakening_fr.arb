@@ -1,3 +1,27 @@
 {
-  "@@locale": "fr"
+  "@@locale": "fr",
+  "awakeningTitle": "L’Éveil",
+  "awakeningSubtitle": "Sept idées derrière le recentrage. Facultatif, dans l’ordre de votre choix.",
+  "awakeningStripTitle": "Découvrir les idées d’abord (facultatif)",
+  "awakeningSeeAll": "Voir toutes les leçons",
+  "awakeningReadCount": "Lues : {read} sur {total}",
+  "awakeningLessonNumber": "Leçon {n}",
+  "awakeningLessonOf": "Leçon {n} sur {total}",
+  "awakeningRead": "Lue",
+  "awakeningNotRead": "Pas encore lue",
+  "awakeningExample": "Exemple",
+  "awakeningNuance": "Un regard, pas un verdict",
+  "awakeningCheckTitle": "Vérifier votre compréhension",
+  "awakeningCheckHint": "Choisissez la réponse qui convient le mieux. Rien n’est noté ni enregistré.",
+  "awakeningCheckRight": "C’est bien ça.",
+  "awakeningCheckNotQuite": "Pas tout à fait, et ce n’est pas grave.",
+  "awakeningTryIt": "Essayer",
+  "awakeningTryItBody": "Mettez cette idée en pratique avec une question du recentrage.",
+  "awakeningTryItPrompt": "Essayer : {title}",
+  "awakeningPrevious": "Leçon précédente",
+  "awakeningNext": "Leçon suivante",
+  "awakeningDone": "Retour aux leçons",
+  "awakeningSourceNote": "Avec les mots de Cartharise, d’après « {title} » de {author}. App indépendante.",
+  "awakeningSourceLink": "À propos de la source",
+  "awakeningMissing": "Cette leçon n’est pas disponible."
 }

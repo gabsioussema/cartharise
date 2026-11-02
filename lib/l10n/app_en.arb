@@ -2785,7 +2785,25 @@
   "youRemindersCalendarShared": "Calendar file shared. Open it in your calendar app.",
   "youShareDismissed": "Nothing was shared.",
   "youAppearanceTitle": "Appearance",
-  "youAppearanceSubtitle": "Colours, light or dark, and motion.",
+  "youAppearanceSubtitle": "Language, colours, light or dark, and motion.",
+  "youLanguageTitle": "Language",
+  "@youLanguageTitle": {
+    "description": "You › Appearance: heading of the language choice (each language is listed by its own name, e.g. Français, العربية)."
+  },
+  "youLanguageSystem": "Same as phone",
+  "@youLanguageSystem": {
+    "description": "Language option that follows the phone's preferred languages."
+  },
+  "youLanguageSystemNow": "Now: {language}",
+  "@youLanguageSystemNow": {
+    "description": "Under 'Same as phone': the language it resolves to, by its own name (English, Français, العربية).",
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+  "youLanguageNote": "Lessons and questions change too. Your own words stay as you wrote them.",
   "youThemeTitle": "Theme",
   "youThemeForest": "Forest",
   "youThemeOlive": "Olive",

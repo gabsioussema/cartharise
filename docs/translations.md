@@ -136,6 +136,68 @@ const ContentTranslation frenchTranslation = ContentTranslation(
 * Test right to left with `pumpCartha(data: onboardedData(settings: const AppSettings(language: AppLanguage.ar)))`.
   To test "Same as phone", set `tester.platformDispatcher.localesTestValue` before pumping.
 
+## French (draft)
+
+> **Draft, needs native review.** Every French string (`l10n_src/*_fr.arb`)
+> and content item (`lib/content/fr.dart`) was written for step 3 without a
+> native speaker's review. A native French speaker must read all of it, in
+> the app, before any release in French.
+
+Coverage: 1193/1193 strings and every content item (7 lessons, 30 prompts
+with their softer wording and examples, 30 path days, 15 experiments, 7
+notices, the credit). `test/french_test.dart` keeps it at 100 %.
+
+**Voice.** *Vouvoiement* throughout: calm and respectful, never *tu*. Plain,
+warm, short; action first. Wording avoids gendering the reader ("quand vous
+le souhaitez", not "quand vous serez prêt"; "Vous voici en Italie", not
+"Vous êtes entré"); the examples a fictional "quelqu’un" writes in the first
+person may agree either way.
+
+**Typography** (checked by `test/french_test.dart`):
+
+* a no-break space (U+00A0) before `:` `;` `!` `?` and inside `« »`. U+00A0,
+  not the narrow U+202F, because Cinzel (the headline font) has no U+202F;
+* the typographic apostrophe `’`, never `'`; quotes `« »`, with `“ ”` for a
+  quote inside a quote;
+* times as French writes them ("votre pause de 21 h"), file sizes in Ko /
+  Mo / Go;
+* counts that English writes "3 of 7 read" become "Lues : 3 sur 7", so the
+  noun never disagrees with 0 or 1; plurals use `one{…}` (0 and 1 in French)
+  and `other{…}`.
+
+**Glossary** (keep it consistent):
+
+| English | French |
+|---|---|
+| Today · Reset · Compass · Journal · You | Aujourd’hui · Recentrage · Boussole · Journal · Vous |
+| The Reset / a reset | Le Recentrage / un recentrage |
+| The Mirror · The Vision · The Interrupt · The Breakthrough | Le Miroir · La Vision · L’Interruption · La Percée |
+| Morning · Daytime · Evening | Matin · Journée · Soir |
+| daytime check-in | pause (de la journée) |
+| softer wording | version plus douce |
+| The Awakening · lesson | L’Éveil · leçon |
+| Life Compass · anti-vision · vision | Boussole de vie · anti-vision · vision |
+| one-year mission · one-month project · daily levers · boundaries | mission d’un an · projet du mois · leviers quotidiens · limites |
+| quest · milestone · board (Later, Ready, Doing, Done) | quête · jalon · tableau (Plus tard, Prêtes, En cours, Faites) |
+| 30-day path (Observe, Experiment, Build, Adjust) | parcours de 30 jours (Observer, Expérimenter, Construire, Ajuster) |
+| weekly review · Look back | bilan de la semaine · Regards |
+| Campaign · Playground | Campagne · Terrain de jeu |
+| Notice · Try · Make it yours | Remarquer · Essayer · À votre image |
+| experiment · attempt · Battle log | expérience · essai · Carnet de bataille |
+| achievement · reward pick · extra | haut fait · récompense à choisir · extra |
+| XP · level | XP · niveau |
+| Traveler (no name given) | âme voyageuse |
+| Record (voice note) · Save | Enregistrer · Enregistrer (the recorder's stop button says "Arrêter et garder") |
+
+The Today glance tiles are narrow: their French titles are "Réflexion" and
+"Jeu" (not "Recentrage" and "Campagne", which broke mid-word at 390 dp).
+French must never use *série*, *score*, *échec*/*échoué*, *en retard*,
+*manqué*, *paresse*, *culpabilité* or *auriez dû* (the test lists them);
+"diagnostic" appears only in the two "not therapy" notices, as in English.
+
+The language picker shows each language by its own name (English, Français,
+العربية) in every language: those names are not in the ARB files.
+
 ## Adding a language
 
 1. Append it to `AppLanguage` and `kAppLanguages` (`lib/domain/language.dart`), and to
@@ -153,5 +215,5 @@ const ContentTranslation frenchTranslation = ContentTranslation(
 | Language | Strings | Content | Native review |
 |---|---|---|---|
 | English | source | source | n/a |
-| French | draft (see `--report`) | draft (`coverageFor`) | **not yet: required before release** |
+| French | draft, 100 % (1193/1193) | draft, 100 % (`coverageFor`) | **not yet: required before release** |
 | Arabic | draft (see `--report`) | draft (`coverageFor`) | **not yet: required before release** |

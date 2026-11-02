@@ -32,6 +32,16 @@ and the share sheet / file picker when the user asks for them.
   "Source default 13:30" hint and "Use 13:30" when changed; **Quiet hours**
   (From / Until, "Not set", a hint while only one is set, Clear); **Add to
   calendar (.ics)**.
+- **Language** (first on Appearance, step 3). Four radio rows: **Same as
+  phone** (with "Now: Français", what it gives on this phone), then
+  **English**, **Français** and **العربية**, each name written in its own
+  language whatever the language on screen (`languageEndonym`, never
+  localised) and in its own script's font family, and read by screen
+  readers in its own language (a `LocaleStringAttribute` on the name). A tap
+  calls `AppState.setLanguage`: strings, content, direction (Arabic is right
+  to left) and fonts switch at once, the same page stays open, and only
+  `AppSettings.language` changes. One line under the rows says lessons and
+  questions change too, and the user's own words stay as written.
 - **Appearance.** Six theme swatches in even columns, each with its name,
   and one line under them on what the chosen name stands for
   (`themeLabel`, `themeMeaning`):
@@ -151,7 +161,7 @@ and the share sheet / file picker when the user asks for them.
 | `lib/ui/you/you_tab.dart` | `YouTab` (§6): profile, pace, hub rows, about, licences, replay |
 | `lib/ui/you/inspiration_screen.dart` | `InspirationScreen` (§6) |
 | `lib/ui/you/reminders_screen.dart` | `RemindersScreen` (§6) |
-| `lib/ui/you/appearance_screen.dart` | `AppearanceScreen`, `themeLabel`, `appearanceLabel` |
+| `lib/ui/you/appearance_screen.dart` | `AppearanceScreen`, `LanguagePicker`, `languageEndonym`, `languageLabel`, `themeLabel`, `appearanceLabel` |
 | `lib/ui/you/data_screen.dart` | `DataScreen` (§6) |
 | `lib/ui/you/support_screen.dart` | `SupportScreen` (§6), `kHelplineDirectory` |
 | `lib/ui/you/backup_preview.dart` | `previewBackup` (validate + date), `backupErrorMessage` |
@@ -200,6 +210,18 @@ removes the files and the picker copies, files left are said) and
 no photos yet, the too-large warning, the zip round trip to another phone
 with the recording playing after the restore, delete all removes photos and
 recordings).
+
+Language (step 3): `test/ui/french_ui_test.dart` › "language picker" (the
+four rows in order, endonyms, Same as phone selected by default; choosing
+Français re-words the same page, the nav and the content at once and saves
+only the setting; the choice survives a restart; Same as phone follows a
+French phone and an explicit choice wins over it; names spoken in their own
+language; tap targets, labels and contrast in French; right to left in
+Arabic at every size of the matrix) and › "French on every main screen"
+(31 screens and the five-page welcome in French across the size matrix,
+dark and light). `test/screenshots/french_screenshots_test.dart` renders
+the picker in English, French and Arabic and the main screens in French
+(`french_*`).
 
 `test/screenshots/journal_you_screenshots_test.dart` renders the hub,
 Inspiration, Reminders, Appearance, Your data and Support in dark and light
