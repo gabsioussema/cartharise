@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import '../../domain/app_data.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
+import '../../state/attachment_ops.dart';
+import '../media/attachment_strip.dart';
 import '../theme/cartha_theme.dart';
 import '../widgets/widgets.dart';
 import 'journal_kit.dart';
@@ -12,9 +14,14 @@ import 'journal_kit.dart';
 /// typing (debounced, flushed when leaving or when the app goes to the
 /// background), written/edited timestamps and delete with confirmation.
 ///
-/// A new note ([entryId] null) is only created once something is typed, so
-/// opening and closing the editor never leaves an empty note behind. Words
-/// are saved exactly as typed.
+/// A new note ([entryId] null) is only created once something is typed (or
+/// a photo or voice note is added), so opening and closing the editor never
+/// leaves an empty note behind. Words are saved exactly as typed.
+///
+/// Media (step 2): photos and voice notes under the note
+/// ([AttachmentStrip]); selected words can be pinned as the Journal's
+/// pinned memory (**Pin** in the selection menu or the app bar), exactly as
+/// written.
 class JournalEntryScreen extends StatefulWidget {
   const JournalEntryScreen({super.key, this.entryId});
 
@@ -30,6 +37,7 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
   late final TextEditingController _title;
   late final TextEditingController _body;
   late final Autosaver _autosave;
+  final _bodyFocus = FocusNode();
 
   /// The saved note's id; null until a new note is first saved.
   String? _id;
@@ -54,6 +62,7 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
     _autosave.dispose();
     _title.dispose();
     _body.dispose();
+    _bodyFocus.dispose();
     super.dispose();
   }
 
@@ -95,12 +104,107 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
     );
   }
 
+  /// Puts a photo or recording on this note, creating the note first when
+  /// nothing was typed yet (with whatever is in the fields now). False when
+  /// that couldn't be saved on the phone yet.
+  Future<bool> _addToNote(Attachment attachment) async {
+    if (_id == null && _creating != null) await _creating;
+    final id = _id;
+    if (id != null) {
+      await _state.addAttachment(AttachmentHolder.journal, id, attachment);
+    } else {
+      _autosave.cancel();
+      final creating = _state.addJournalEntry(
+        title: _title.text.trim().isEmpty ? null : _title.text,
+        body: _body.text,
+        attachments: [attachment],
+      );
+      _creating = creating;
+      _id = (await creating).id;
+      if (mounted) setState(() {});
+    }
+    return _state.saveStatus != SaveStatus.failed;
+  }
+
+  /// The selected words of [c], without the spaces around them (still the
+  /// user's exact words), or null.
+  static String? _selected(TextEditingController c) {
+    final sel = c.selection;
+    if (!sel.isValid || sel.isCollapsed) return null;
+    final words = sel.textInside(c.text).trim();
+    return words.isEmpty ? null : words;
+  }
+
+  /// Pins the selected words as the Journal's pinned memory, exactly as
+  /// written (saved first, so the pin quotes the saved note).
+  Future<void> _pinSelection() async {
+    final l = AppLocalizations.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    void say(String text) {
+      messenger.hideCurrentSnackBar();
+      messenger.showSnackBar(SnackBar(content: Text(text)));
+    }
+
+    final words = _selected(_body) ?? _selected(_title);
+    if (words == null) {
+      say(l.mediaPinSelectFirst);
+      return;
+    }
+    _autosave.cancel();
+    await _save();
+    final id = _id;
+    if (id == null) {
+      say(l.mediaPinSelectFirst);
+      return;
+    }
+    try {
+      await _state.pinMemory(
+        kind: PinnedKind.passage,
+        sourceId: id,
+        excerpt: words,
+      );
+    } on ArgumentError {
+      say(l.mediaPinNotFound);
+      return;
+    }
+    say(
+      _state.saveStatus == SaveStatus.failed
+          ? l.mediaPinnedNotSaved
+          : l.mediaPinned,
+    );
+  }
+
+  /// The selection menu, with **Pin** first while words are selected.
+  Widget _selectionMenu(BuildContext context, EditableTextState editable) {
+    final l = AppLocalizations.of(context);
+    final items = [...editable.contextMenuButtonItems];
+    if (!_missing && !editable.textEditingValue.selection.isCollapsed) {
+      items.insert(
+        0,
+        ContextMenuButtonItem(
+          label: l.mediaPinWords,
+          onPressed: () {
+            ContextMenuController.removeAny();
+            _pinSelection();
+          },
+        ),
+      );
+    }
+    return AdaptiveTextSelectionToolbar.buttonItems(
+      anchors: editable.contextMenuAnchors,
+      buttonItems: items,
+    );
+  }
+
   Future<void> _delete() async {
     final l = AppLocalizations.of(context);
+    final hasMedia =
+        _id != null &&
+        (_state.journalEntryById(_id!)?.attachments.isNotEmpty ?? false);
     final ok = await confirmDialog(
       context,
       title: l.journalEntryDeleteTitle,
-      body: l.journalEntryDeleteBody,
+      body: hasMedia ? l.mediaNoteDeleteBody : l.journalEntryDeleteBody,
       action: l.delete,
       destructive: true,
     );
@@ -128,6 +232,13 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
     return Scaffold(
       appBar: AppBar(
         actions: [
+          if (!_missing)
+            IconButton(
+              key: const ValueKey('journal-entry-pin'),
+              tooltip: l.mediaPinWordsTooltip,
+              icon: const Icon(Icons.push_pin_outlined),
+              onPressed: _pinSelection,
+            ),
           if (canDelete)
             IconButton(
               key: const ValueKey('journal-entry-delete'),
@@ -168,12 +279,14 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
                     decoration: InputDecoration(
                       labelText: l.journalEntryTitleField,
                     ),
+                    contextMenuBuilder: _selectionMenu,
                     onChanged: (_) => _changed(),
                   ),
                   const SizedBox(height: 16),
                   TextField(
                     key: const ValueKey('journal-entry-body'),
                     controller: _body,
+                    focusNode: _bodyFocus,
                     autofocus: widget.entryId == null,
                     minLines: 8,
                     maxLines: null,
@@ -184,7 +297,15 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
                       hintText: l.journalEntryBodyHint,
                       alignLabelWithHint: true,
                     ),
+                    contextMenuBuilder: _selectionMenu,
                     onChanged: (_) => _changed(),
+                  ),
+                  const SizedBox(height: 16),
+                  AttachmentStrip(
+                    holder: AttachmentHolder.journal,
+                    entryId: _id,
+                    createWith: _addToNote,
+                    onWriteInstead: _bodyFocus.requestFocus,
                   ),
                   const SizedBox(height: 12),
                   const SaveIndicator(),

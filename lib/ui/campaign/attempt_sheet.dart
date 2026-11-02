@@ -4,12 +4,14 @@ import 'package:provider/provider.dart';
 import '../../domain/app_data.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
+import '../media/attachment_strip.dart';
 import '../widgets/widgets.dart';
 import 'campaign_ops.dart';
 
 enum _AttemptSheetResult { saved, delete }
 
-/// Corrects or deletes a battle-log attempt (F-061). Delete asks first.
+/// Corrects or deletes a battle-log attempt (F-061), and holds its photos
+/// and voice notes (saved as soon as they are added). Delete asks first.
 Future<void> showAttemptSheet(
   BuildContext context,
   BattleLogEntry entry,
@@ -51,6 +53,7 @@ class AttemptSheet extends StatefulWidget {
 class _AttemptSheetState extends State<AttemptSheet> {
   late final _attempt = TextEditingController(text: widget.entry.attempt);
   late final _learning = TextEditingController(text: widget.entry.learning);
+  final _learningFocus = FocusNode();
   String? _error;
   bool _busy = false;
 
@@ -58,6 +61,7 @@ class _AttemptSheetState extends State<AttemptSheet> {
   void dispose() {
     _attempt.dispose();
     _learning.dispose();
+    _learningFocus.dispose();
     super.dispose();
   }
 
@@ -118,10 +122,17 @@ class _AttemptSheetState extends State<AttemptSheet> {
           TextField(
             key: const ValueKey('attempt-edit-learning'),
             controller: _learning,
+            focusNode: _learningFocus,
             minLines: 2,
             maxLines: 6,
             textCapitalization: TextCapitalization.sentences,
             decoration: InputDecoration(labelText: l.campaignLearningLabel),
+          ),
+          const SizedBox(height: 16),
+          AttachmentStrip(
+            holder: AttachmentHolder.attempt,
+            entryId: widget.entry.id,
+            onWriteInstead: _learningFocus.requestFocus,
           ),
           const SizedBox(height: 24),
           PrimaryButton(

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show setEquals;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -6,7 +7,9 @@ import '../../l10n/app_localizations.dart';
 import '../../services/file_share.dart';
 import '../../services/media_picker.dart';
 import '../../state/app_state.dart';
+import '../../domain/app_data.dart';
 import '../journal/journal_kit.dart';
+import '../media/media_kit.dart';
 import '../theme/cartha_theme.dart';
 import '../widgets/widgets.dart';
 import 'backup_preview.dart';
@@ -23,7 +26,9 @@ const String kBackupZipMimeType = 'application/zip';
 ///   Cartharise, not synced);
 /// * export everything as the documented v2 backup (`.zip` with the photos
 ///   and recordings) through the share sheet (also the "Export a copy"
-///   target after a failed save); files that couldn't be read are said;
+///   target after a failed save); what it includes is said (words and
+///   settings, how many photos and voice notes, their size), and when they
+///   are more than a backup can hold; files that couldn't be read are said;
 /// * restore a backup (v2 `.zip` or v1 JSON): the file is fully validated
 ///   first — a bad file is rejected with "your current data was not
 ///   changed" — then the user confirms replacing everything with the backup
@@ -250,6 +255,8 @@ class _DataScreenState extends State<DataScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(l.youDataExportBody, style: secondary),
+                  const SizedBox(height: 8),
+                  const _BackupContents(),
                   const SizedBox(height: 16),
                   PrimaryButton(
                     key: const ValueKey('data-export'),
@@ -270,6 +277,12 @@ class _DataScreenState extends State<DataScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(l.youDataImportBody, style: secondary),
+                  const SizedBox(height: 4),
+                  Text(
+                    l.mediaDataImportFormats,
+                    key: const ValueKey('data-import-formats'),
+                    style: secondary,
+                  ),
                   if (_importError != null) ...[
                     const SizedBox(height: 12),
                     _ImportError(reason: _importError!),
@@ -305,6 +318,82 @@ class _DataScreenState extends State<DataScreen> {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// What a backup includes: the words and settings, plus how many photos
+/// and voice notes and the space they take on this phone — and, when they
+/// are more than a backup can hold ([kMaxBackupBytes]), that honestly.
+class _BackupContents extends StatefulWidget {
+  const _BackupContents();
+
+  @override
+  State<_BackupContents> createState() => _BackupContentsState();
+}
+
+class _BackupContentsState extends State<_BackupContents> {
+  Set<String>? _names;
+  Future<int>? _size;
+
+  static Future<int> _sizeOf(AppState state, Set<String> names) async {
+    var total = 0;
+    for (final name in names) {
+      try {
+        total += await state.attachmentStore.sizeOfFile(name);
+      } on Object {
+        // Unreadable: the export says so when it happens.
+      }
+    }
+    return total;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final p = CarthaPalette.of(context);
+    final theme = Theme.of(context);
+    final state = context.watch<AppState>();
+    final all = state.data.allAttachments.toList();
+    final names = {for (final a in all) a.fileName};
+    if (_names == null || !setEquals(names, _names)) {
+      _names = names;
+      _size = _sizeOf(state, names);
+    }
+    final style = theme.textTheme.bodyMedium?.copyWith(color: p.textSecondary);
+    if (all.isEmpty) {
+      return Text(
+        l.mediaDataNoFiles,
+        key: const ValueKey('data-media-summary'),
+        style: style,
+      );
+    }
+    final photos = all.where((a) => a.kind == AttachmentKind.photo).length;
+    final files = attachmentCountText(l, photos, all.length - photos)!;
+    return FutureBuilder<int>(
+      future: _size,
+      builder: (context, snapshot) {
+        final size = snapshot.data;
+        if (size == null) return const SizedBox.shrink();
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              l.mediaDataWithFiles(files, formatBytes(context, size)),
+              key: const ValueKey('data-media-summary'),
+              style: style,
+            ),
+            if (size > kMaxBackupBytes) ...[
+              const SizedBox(height: 8),
+              MediaNotice(
+                key: const ValueKey('data-media-too-large'),
+                message: l.mediaDataTooLarge,
+                tone: NoticeTone.warning,
+              ),
+            ],
+          ],
+        );
+      },
     );
   }
 }

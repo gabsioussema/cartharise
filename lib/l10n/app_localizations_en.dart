@@ -1606,6 +1606,391 @@ class AppLocalizationsEn extends AppLocalizations {
   String get journalPhaseEvening => 'Evening';
 
   @override
+  String get mediaAddPhoto => 'Add photo';
+
+  @override
+  String get mediaRecord => 'Record';
+
+  @override
+  String get mediaRecordLabel => 'Record a voice note';
+
+  @override
+  String get mediaPhotoSourceTitle => 'Add a photo';
+
+  @override
+  String get mediaTakePhoto => 'Take a photo';
+
+  @override
+  String get mediaChoosePhoto => 'Choose from your photos';
+
+  @override
+  String get mediaPhotoAdded => 'Photo added.';
+
+  @override
+  String get mediaNotSavedYet => 'Added, but not saved on this phone yet.';
+
+  @override
+  String mediaPhotoLabel(String date) {
+    return 'Photo, added $date';
+  }
+
+  @override
+  String get mediaPhotoOpenHint => 'Opens full screen';
+
+  @override
+  String get mediaPhotoMissing => 'Missing';
+
+  @override
+  String get mediaPhotoMissingLabel =>
+      'This photo isn\'t on this phone any more.';
+
+  @override
+  String get mediaPhotoTitle => 'Photo';
+
+  @override
+  String mediaPhotoAddedOn(String date) {
+    return 'Added $date';
+  }
+
+  @override
+  String get mediaPhotoRemove => 'Remove photo';
+
+  @override
+  String get mediaPhotoRemoveTitle => 'Remove this photo?';
+
+  @override
+  String get mediaPhotoRemoveBody =>
+      'It\'s deleted from this phone. This can\'t be undone.';
+
+  @override
+  String get mediaRemove => 'Remove';
+
+  @override
+  String get mediaPhotoRemoved => 'Photo removed.';
+
+  @override
+  String get mediaRemovedNotSaved =>
+      'Removed, but not saved on this phone yet.';
+
+  @override
+  String get mediaCameraDenied =>
+      'Camera access is off. Choose from your photos, or allow the camera in Settings.';
+
+  @override
+  String get mediaPhotosDenied =>
+      'Photo access is off. Allow it in Settings, or write instead.';
+
+  @override
+  String get mediaCameraUnavailable =>
+      'No camera here. Choose from your photos instead.';
+
+  @override
+  String get mediaPhotosUnavailable =>
+      'Photos can\'t be opened here. You can write instead.';
+
+  @override
+  String get mediaPickFailed => 'Couldn\'t open photos. Try again.';
+
+  @override
+  String get mediaPhotoUnreadable =>
+      'That photo couldn\'t be read. Nothing was added.';
+
+  @override
+  String get mediaPhotoTooLarge =>
+      'That photo is over 50 MB. Choose a smaller one.';
+
+  @override
+  String get mediaWriteFailed =>
+      'Couldn\'t save it on this phone. Storage may be full. Nothing was added.';
+
+  @override
+  String get mediaEntryGone =>
+      'This entry isn\'t here any more. Nothing was added.';
+
+  @override
+  String get mediaLostPhoto => 'A photo you took earlier wasn\'t added yet.';
+
+  @override
+  String get mediaLostPhotoAdd => 'Add it here';
+
+  @override
+  String get mediaLostPhotoDiscard => 'Discard';
+
+  @override
+  String get mediaDismiss => 'Dismiss';
+
+  @override
+  String get mediaRecorderTitle => 'Voice note';
+
+  @override
+  String get mediaRecorderStarting => 'Getting the microphone ready…';
+
+  @override
+  String get mediaRecorderRecording => 'Recording';
+
+  @override
+  String get mediaRecorderStop => 'Stop and save';
+
+  @override
+  String get mediaRecorderDiscard => 'Discard';
+
+  @override
+  String get mediaRecorderDiscardTitle => 'Discard this recording?';
+
+  @override
+  String get mediaRecorderDiscardBody => 'What you recorded is deleted.';
+
+  @override
+  String get mediaRecorderSaving => 'Saving…';
+
+  @override
+  String get mediaRecorderStarted =>
+      'Recording. Tap Stop and save when you\'re done.';
+
+  @override
+  String get mediaRecorderSaved => 'Voice note saved.';
+
+  @override
+  String mediaRecorderInterrupted(String time) {
+    return 'Interrupted. The $time recorded before it is saved.';
+  }
+
+  @override
+  String get mediaRecorderAgain => 'Record again';
+
+  @override
+  String get mediaMicDenied =>
+      'Microphone access is off. Allow it in Settings, or write instead.';
+
+  @override
+  String get mediaMicUnavailable =>
+      'Recording isn\'t available on this phone. You can write instead.';
+
+  @override
+  String get mediaRecordFailed =>
+      'The recording couldn\'t start. Try again, or write instead.';
+
+  @override
+  String get mediaNothingRecorded =>
+      'Nothing was recorded. Try again, or write instead.';
+
+  @override
+  String get mediaRecordStorageFailed =>
+      'Couldn\'t save the recording. Storage may be full.';
+
+  @override
+  String get mediaWriteInstead => 'Write instead';
+
+  @override
+  String get mediaVoiceNote => 'Voice note';
+
+  @override
+  String get mediaPartial => 'Partial';
+
+  @override
+  String get mediaPlay => 'Play voice note';
+
+  @override
+  String get mediaPause => 'Pause voice note';
+
+  @override
+  String mediaPositionOf(String position, String length) {
+    return '$position of $length';
+  }
+
+  @override
+  String get mediaVoiceMissing =>
+      'This recording isn\'t on this phone any more.';
+
+  @override
+  String get mediaPlayFailed => 'This recording can\'t be played.';
+
+  @override
+  String get mediaVoiceRemove => 'Remove voice note';
+
+  @override
+  String get mediaVoiceRemoveTitle => 'Remove this voice note?';
+
+  @override
+  String get mediaVoiceRemoveBody =>
+      'The recording is deleted from this phone. This can\'t be undone.';
+
+  @override
+  String get mediaVoiceRemoved => 'Voice note removed.';
+
+  @override
+  String get mediaTranscriptAdd => 'Type what you said';
+
+  @override
+  String get mediaTranscriptEdit => 'Edit your words';
+
+  @override
+  String get mediaTranscriptTitle => 'Your words for this recording';
+
+  @override
+  String get mediaTranscriptLabel => 'What you said (optional)';
+
+  @override
+  String get mediaTranscriptSaved => 'Your words are saved with the recording.';
+
+  @override
+  String mediaMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count minutes',
+      one: '1 minute',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String mediaSeconds(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count seconds',
+      one: '1 second',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mediaPinnedTitle => 'Pinned memory';
+
+  @override
+  String mediaPinnedFromNote(String date) {
+    return 'From a note · $date';
+  }
+
+  @override
+  String mediaPinnedFromTry(String date) {
+    return 'From an experiment · $date';
+  }
+
+  @override
+  String mediaPinnedFromAttempt(String date) {
+    return 'From an attempt · $date';
+  }
+
+  @override
+  String get mediaPinnedOpen => 'Open where it\'s from';
+
+  @override
+  String get mediaPinnedPhoto => 'Pinned photo';
+
+  @override
+  String get mediaPinPhoto => 'Pin as memory';
+
+  @override
+  String get mediaUnpin => 'Unpin';
+
+  @override
+  String get mediaPinned => 'Pinned to the top of your Journal.';
+
+  @override
+  String get mediaPinnedNotSaved => 'Pinned, but not saved on this phone yet.';
+
+  @override
+  String get mediaUnpinned => 'Unpinned. Nothing else changed.';
+
+  @override
+  String get mediaUnpinnedNotSaved =>
+      'Unpinned, but not saved on this phone yet.';
+
+  @override
+  String get mediaPinWords => 'Pin';
+
+  @override
+  String get mediaPinWordsTooltip => 'Pin selected words';
+
+  @override
+  String get mediaPinSelectFirst => 'Select some words first, then tap Pin.';
+
+  @override
+  String get mediaPinNotFound =>
+      'Those words couldn\'t be pinned. Select them again.';
+
+  @override
+  String mediaCountPhotos(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count photos',
+      one: '1 photo',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String mediaCountVoice(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count voice notes',
+      one: '1 voice note',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String mediaAnd(String first, String second) {
+    return '$first and $second';
+  }
+
+  @override
+  String get mediaNoteVoiceOnly => 'Voice note';
+
+  @override
+  String get mediaNotePhotoOnly => 'Photo note';
+
+  @override
+  String get mediaNoteDeleteBody =>
+      'The note, its photos and its recordings are removed from this phone. This can\'t be undone.';
+
+  @override
+  String get mediaTodayRecordSaved => 'Voice note saved in your Journal.';
+
+  @override
+  String get mediaTodayRecordNotSaved =>
+      'Recorded, but not saved yet. Retry at the top.';
+
+  @override
+  String get mediaTodayOpen => 'Open';
+
+  @override
+  String get mediaDataNoFiles =>
+      'Includes your words and settings. No photos or recordings yet.';
+
+  @override
+  String mediaDataWithFiles(String files, String size) {
+    return 'Includes your words and settings, plus $files ($size).';
+  }
+
+  @override
+  String get mediaDataTooLarge =>
+      'Your photos and recordings take more than a backup can hold (256 MB). Remove some for a complete backup.';
+
+  @override
+  String get mediaDataImportFormats =>
+      'Takes a .zip backup, or an older .json one.';
+
+  @override
+  String mediaSizeKb(String size) {
+    return '$size KB';
+  }
+
+  @override
+  String mediaSizeMb(String size) {
+    return '$size MB';
+  }
+
+  @override
+  String mediaSizeGb(String size) {
+    return '$size GB';
+  }
+
+  @override
   String get missionsIntro =>
       'Small steps toward your Compass. Rest counts too.';
 

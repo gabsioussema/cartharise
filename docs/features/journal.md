@@ -34,6 +34,82 @@ never goes into notifications or logs.
   switch that adds the current reset's answer under each one. It is the one
   past-reset screen: Reset › Past resets opens it too.
 
+## Media: photos, voice notes, the pinned memory (step 2 › F)
+
+Photos and voice recordings live on journal notes, experiments tried
+(Collection › a try) and attempts (Battle log › an attempt), through one
+widget, `AttachmentStrip`: thumbnails, voice notes, then **Add photo** ·
+**Record**. Everything is saved as soon as it is added; files go to the
+app's private `attachments/` folder (`AttachmentStore`), which is kept out
+of phone and cloud backups like the data file.
+
+### User flow
+
+- **Add photo** asks *Take a photo* or *Choose from your photos* (the system
+  picker or camera, only now; the Android photo picker needs no
+  permission). The picked photo (max 2048 px, JPEG 85) is copied into the
+  private folder and the picker's temporary copy is released whatever
+  happens. On a new note with nothing typed yet, the first photo or
+  recording creates the note (with whatever is in the fields).
+- A thumbnail opens the photo **full screen** (pinch to zoom, "Added …"),
+  with **Pin as memory** / **Unpin** and **Remove** (asks first; the file
+  is deleted once the removal is saved). A photo whose file is gone shows
+  "Missing" instead of failing.
+- **Record** opens the recorder and starts at once: the microphone is asked
+  for only then. While recording: a dot and the word **Recording** (never
+  colour alone), the time, a calm level meter, **Stop and save** and
+  **Discard** (asks first). Screen readers hear "Recording. Tap Stop and
+  save when you're done." and "Voice note saved." **Stop** saves it
+  immediately and closes. The sheet can't be swiped away; Back stops and
+  keeps the recording.
+- **Interrupted:** a call taking the microphone, or the app going to the
+  background, stops the recording and keeps what was recorded right away;
+  the sheet then says "Interrupted. The 0:12 recorded before it is saved."
+  with a **Partial** tag, **Done** and **Record again** (adds a second
+  voice note).
+- **Playback:** play / pause, a slider and "0:03 / 0:47"; one recording at
+  a time; leaving the page stops it. Moving the slider before playing only
+  sets where Play starts (it never starts the sound itself).
+- **Your own words for a recording:** **Type what you said** opens a text
+  box; what is typed is saved exactly (spaces included) beside the
+  recording; clearing it removes it. Never filled in by the app.
+- **Today › Write · Record:** Write opens a new note as before; Record
+  starts a voice note and keeps it in a new journal note (no title, empty
+  body), with "Voice note saved in your Journal." and **Open**. Record
+  again in the same sheet adds to the same note. Side by side; stacked
+  when narrow or with large text.
+- **Pinned memory:** select words in a note and tap **Pin** (in the
+  selection menu, or the pin in the app bar) to pin exactly those words
+  (the note is saved first; only the spaces around the selection are left
+  out). Or pin a photo from full screen. One pinned memory at a time; it
+  sits compact at the top of the Journal: the photo (opens full screen),
+  the words with a bronze bar, "From a note · Nov 2, 2026" (or an
+  experiment / an attempt), **Open where it's from** and **Unpin** (the
+  entry is untouched). Deleting the entry or the photo removes the pin.
+- **Note cards** say what they hold ("2 photos and 1 voice note"); a note
+  with no words reads "Voice note" or "Photo note".
+
+### Honest failures
+
+Every outcome is said inline (snackbars could hide behind a sheet), with
+the practical alternative:
+
+| What happened | What the user sees |
+|---|---|
+| Camera refused / no camera | why, and **Choose from your photos** |
+| Photos refused / unavailable | why, and **Write instead** (focuses the text) |
+| Microphone refused | "Microphone access is off…", **Write instead**, **Try again** |
+| No microphone / encoder | why, **Write instead** (no Try again) |
+| Storage full / copy failed | "Couldn't save it on this phone. Storage may be full. Nothing was added." |
+| Photo over 50 MB | "That photo is over 50 MB. Choose a smaller one." |
+| Nothing recorded (empty file) | "Nothing was recorded. Try again, or write instead." (never "saved") |
+| The data save failed | "Added, but not saved on this phone yet." / "Removed, but not saved…" with **Retry** |
+| The entry was deleted meanwhile | "This entry isn't here any more. Nothing was added." (the file is deleted) |
+| A photo taken while Android closed the app | offered back once: **Add it here** / **Discard** |
+
+Privacy: no file name, path or user text is logged; playback reads local
+files only; the recorder writes straight into the private folder.
+
 ## Behaviour rules
 
 - **Words are saved exactly as typed** (no trimming of the body). A note's
@@ -78,6 +154,23 @@ never goes into notifications or logs.
 | `lib/ui/journal/past_reset_screen.dart` | `PastResetScreen(journeyId)`, read-only answers |
 | `lib/ui/journal/journal_kit.dart` | `AreaListView` (readable width, insets), `AreaSectionLabel`, local date/time formatting, `Autosaver`, look-ups extension on `AppState` (no new state operations) |
 | `l10n_src/journal_en.arb` | all `journal…` strings |
+| `lib/ui/media/attachment_strip.dart` | `AttachmentStrip(holder, entryId, {createWith, onWriteInstead})`: thumbnails, voice notes, Add photo · Record, inline notices, lost-photo offer |
+| `lib/ui/media/photo_tile.dart` | `AttachmentImage` (bytes from the store, decoded at display size, "Missing"), `PhotoTile` |
+| `lib/ui/media/photo_viewer.dart` | `openPhotoViewer` / `PhotoViewerScreen`: full screen, pin, remove |
+| `lib/ui/media/recorder_sheet.dart` | `showRecorderSheet(context, keep:)` → `RecorderOutcome`; `RecorderSheet` (states, interruptions, failures) |
+| `lib/ui/media/voice_note_player.dart` | `VoiceNotePlayer`: play/pause, position, the user's own words, remove |
+| `lib/ui/media/pinned_memory_card.dart` | `PinnedMemoryCard` (top of the Journal) |
+| `lib/ui/media/media_kit.dart` | `showMediaSheet` (reduced motion), failure texts, `formatClock`, `spokenDuration`, `formatBytes`, `MediaNotice`, `announce` |
+| `l10n_src/media_en.arb` | all `media…` strings |
+
+Hooks elsewhere: `JournalEntryScreen` (strip, Pin), `JournalTab` (pinned
+memory, note card summary), `ExperimentEntrySheet` and `AttemptSheet`
+(strip only), `TodayTab` (Write · Record), `DataScreen` (what a backup
+includes). The operations are the step 2.0 contracts: `AttachmentOps`
+(`addAttachment`, `removeAttachment`, `setAttachmentTranscript`,
+`pinMemory`, `unpinMemory`), `addJournalEntry(attachments:)`, the
+`AttachmentStore`, `MediaPicker`, `VoiceRecorder` and `VoicePlayer`
+services (faked in `test/support/fakes.dart`).
 
 Navigation into the area goes through `AppNav.openJournalEntry` and
 `AppNav.openReview`; the area leaves it only through `AppNav.openCompass`.
@@ -103,6 +196,32 @@ Navigation into the area goes through `AppNav.openJournalEntry` and
 `test/screenshots/journal_you_screenshots_test.dart` (tag `screenshots`)
 renders the notes, reviews, look back, note, review (view and new) and
 earlier reset screens in dark and light to `test/screenshots/out/journal_*`.
+
+`test/ui/media_test.dart` (fake picker, recorder, player and in-memory
+store): photos from library and camera, cancelled picker, new note created
+by its first photo, camera / photos denied with their alternatives, full
+storage and oversize photos (nothing added, picker copy released), a
+failed save with Retry, full screen and remove (cancel / confirm, file
+deleted; a failed removal keeps the file), "Missing", the lost-photo offer;
+recording (state, time, level meter, announcements, saved at once), a call
+and the app going to the background (kept, labelled), Record again,
+microphone denied / Try again, no microphone, nothing recorded, storage
+full, Discard, Back, a failed save, reduced motion; playback (play, pause,
+resume, position, seek, the end, leaving stops it, the slider before
+playing), unplayable and missing recordings, the transcript stored exactly
+and cleared, removing a voice note; photos and voice notes on an
+experiment tried and an attempt; Today's Record (a new note, Open, Write
+instead) and the note card; pinning selected words (app bar and selection
+menu, unsaved words saved first, nothing selected), the card at the top of
+the Journal (open, unpin), pinning a photo and losing the pin with it, a
+pin from an attempt; the backup copy, the too-large warning, the zip round
+trip to another phone and playback after restore, "Delete all data";
+size matrix × dark/light and a11y guidelines.
+
+`test/screenshots/media_screenshots_test.dart` renders the note with media,
+recording, interrupted, full screen, pinned passage and photo, Today's
+capture row (regular and 320 dp @ 200 %), Your data, microphone denied,
+the try sheet and the photo source sheet to `test/screenshots/out/media_*`.
 
 ## Requirements satisfied
 

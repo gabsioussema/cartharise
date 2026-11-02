@@ -5,6 +5,8 @@ import '../../domain/app_data.dart';
 import '../../domain/local_date.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
+import '../media/media_kit.dart' show attachmentCountText;
+import '../media/pinned_memory_card.dart';
 import '../nav.dart';
 import '../theme/cartha_theme.dart';
 import '../widgets/widgets.dart';
@@ -16,7 +18,8 @@ enum JournalSection { notes, reviews, lookBack }
 
 /// Journal & Reflection (board): Notes (F-032) · Reviews (F-033) ·
 /// Look back (F-034, F-035). Notes and reviews open full screen through
-/// [AppNav]; everything stays on this phone.
+/// [AppNav]; everything stays on this phone. The pinned memory (step 2),
+/// when there is one, sits compact at the top.
 class JournalTab extends StatefulWidget {
   const JournalTab({super.key});
 
@@ -30,6 +33,9 @@ class _JournalTabState extends State<JournalTab> {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
+    final pinned = context.select<AppState, bool>(
+      (s) => s.data.pinnedMemory != null,
+    );
     return Scaffold(
       body: SafeArea(
         bottom: false,
@@ -40,6 +46,10 @@ class _JournalTabState extends State<JournalTab> {
               subtitle: l.journalSubtitle,
               padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 16),
             ),
+            if (pinned) ...[
+              const PinnedMemoryCard(),
+              const SizedBox(height: 16),
+            ],
             PillTabs<JournalSection>(
               key: const ValueKey('journal-sections'),
               tabs: [
@@ -157,6 +167,17 @@ class _NoteCard extends StatelessWidget {
     final headline = noteHeadline(entry);
     final hasTitle = (entry.title?.trim() ?? '').isNotEmpty;
     final preview = hasTitle ? firstLine(entry.body) : null;
+    // Photos and voice notes on the note, said in words (step 2).
+    final photos = entry.attachments
+        .where((a) => a.kind == AttachmentKind.photo)
+        .length;
+    final voice = entry.attachments.length - photos;
+    final media = attachmentCountText(l, photos, voice);
+    final untitled = voice > 0
+        ? l.mediaNoteVoiceOnly
+        : photos > 0
+        ? l.mediaNotePhotoOnly
+        : l.journalUntitled;
     return SectionCard(
       key: ValueKey('note-${entry.id}'),
       onTap: () => AppNav.openJournalEntry(context, entryId: entry.id),
@@ -170,7 +191,7 @@ class _NoteCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  headline ?? l.journalUntitled,
+                  headline ?? untitled,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: theme.textTheme.titleSmall?.copyWith(
@@ -186,6 +207,28 @@ class _NoteCard extends StatelessWidget {
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: p.textSecondary,
                     ),
+                  ),
+                ],
+                if (media != null) ...[
+                  const SizedBox(height: 4),
+                  Row(
+                    key: ValueKey('note-media-${entry.id}'),
+                    children: [
+                      Icon(
+                        voice > 0 ? Icons.graphic_eq : Icons.photo_outlined,
+                        size: 16,
+                        color: p.accent,
+                      ),
+                      const SizedBox(width: 6),
+                      Flexible(
+                        child: Text(
+                          media,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: p.textSecondary,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
                 const SizedBox(height: 4),
