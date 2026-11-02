@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../domain/app_data.dart';
+import 'cartha_fonts.dart';
 import 'cartha_theme_spec.dart';
+
+export 'cartha_fonts.dart';
 
 /// Brand colours and the few colours that are the same in every theme.
 /// Theme-internal: screens use [CarthaPalette] tokens instead (enforced by
@@ -263,12 +266,48 @@ abstract final class CarthaTheme {
   static ThemeData dark([AppTheme theme = AppTheme.forest]) =>
       build(theme, Brightness.dark);
 
-  static ThemeData build(AppTheme theme, Brightness brightness) => _build(
+  /// The theme for [theme] in [brightness], written in [fonts] (the
+  /// language's families: `CarthaFonts.forLanguage`; Latin by default).
+  static ThemeData build(
+    AppTheme theme,
+    Brightness brightness, {
+    CarthaFonts fonts = CarthaFonts.latin,
+  }) => _build(
     brightness,
     CarthaPalette.from(CarthaThemeSpec.of(theme), brightness),
+    fonts,
   );
 
-  static ThemeData _build(Brightness brightness, CarthaPalette p) {
+  /// For a script whose letters join (Arabic): letter spacing 0 on every
+  /// style, so Material's own type geometry can't pull letters apart.
+  static TextTheme _joinedScript(CarthaFonts fonts, TextTheme t) {
+    if (fonts.letterSpacing) return t;
+    TextStyle? none(TextStyle? s) => s?.copyWith(letterSpacing: 0);
+    return t.copyWith(
+      displayLarge: none(t.displayLarge),
+      displayMedium: none(t.displayMedium),
+      displaySmall: none(t.displaySmall),
+      headlineLarge: none(t.headlineLarge),
+      headlineMedium: none(t.headlineMedium),
+      headlineSmall: none(t.headlineSmall),
+      titleLarge: none(t.titleLarge),
+      titleMedium: none(t.titleMedium),
+      titleSmall: none(t.titleSmall),
+      bodyLarge: none(t.bodyLarge),
+      bodyMedium: none(t.bodyMedium),
+      bodySmall: none(t.bodySmall),
+      labelLarge: none(t.labelLarge),
+      labelMedium: none(t.labelMedium),
+      labelSmall: none(t.labelSmall),
+    );
+  }
+
+  static ThemeData _build(
+    Brightness brightness,
+    CarthaPalette p,
+    CarthaFonts fonts,
+  ) {
+    final font = fonts.text;
     final scheme = ColorScheme(
       brightness: brightness,
       primary: p.primary,
@@ -311,7 +350,7 @@ abstract final class CarthaTheme {
       brightness: brightness,
       colorScheme: scheme,
       useMaterial3: true,
-      fontFamily: 'Inter',
+      fontFamily: font,
       scaffoldBackgroundColor: p.background,
       canvasColor: p.background,
       disabledColor: p.textDisabled,
@@ -320,27 +359,28 @@ abstract final class CarthaTheme {
       splashColor: p.pressed,
       highlightColor: p.pressed,
       materialTapTargetSize: MaterialTapTargetSize.padded,
-      extensions: [p],
+      extensions: [p, fonts],
     );
     final text = base.textTheme.apply(
       bodyColor: p.textPrimary,
       displayColor: p.textPrimary,
-      fontFamily: 'Inter',
+      fontFamily: font,
     );
-    // Cinzel only for display/headline (short brand-voice titles).
+    // Cinzel only for display/headline (short brand-voice titles); the
+    // language's own family for every style where Cinzel has no letters.
     TextStyle? cinzel(TextStyle? s, {FontWeight weight = FontWeight.w600}) =>
         s?.copyWith(
-          fontFamily: 'Cinzel',
+          fontFamily: fonts.display,
           fontWeight: weight,
-          letterSpacing: 0.4,
-          height: 1.2,
+          letterSpacing: fonts.spacing(0.4),
+          height: fonts.displayHeight,
         );
     const pill = StadiumBorder();
-    const buttonText = TextStyle(
-      fontFamily: 'Inter',
+    final buttonText = TextStyle(
+      fontFamily: font,
       fontSize: 16,
       fontWeight: FontWeight.w600,
-      letterSpacing: 0.2,
+      letterSpacing: fonts.spacing(0.2),
     );
 
     Color? overlay(Set<WidgetState> states) =>
@@ -364,23 +404,26 @@ abstract final class CarthaTheme {
         );
 
     return base.copyWith(
-      textTheme: text.copyWith(
-        displayLarge: cinzel(text.displayLarge, weight: FontWeight.w400),
-        displayMedium: cinzel(text.displayMedium, weight: FontWeight.w400),
-        displaySmall: cinzel(text.displaySmall),
-        headlineLarge: cinzel(text.headlineLarge),
-        headlineMedium: cinzel(text.headlineMedium),
-        headlineSmall: cinzel(text.headlineSmall),
-        titleLarge: text.titleLarge?.copyWith(
-          fontWeight: FontWeight.w600,
-          letterSpacing: -0.2,
+      textTheme: _joinedScript(
+        fonts,
+        text.copyWith(
+          displayLarge: cinzel(text.displayLarge, weight: FontWeight.w400),
+          displayMedium: cinzel(text.displayMedium, weight: FontWeight.w400),
+          displaySmall: cinzel(text.displaySmall),
+          headlineLarge: cinzel(text.headlineLarge),
+          headlineMedium: cinzel(text.headlineMedium),
+          headlineSmall: cinzel(text.headlineSmall),
+          titleLarge: text.titleLarge?.copyWith(
+            fontWeight: FontWeight.w600,
+            letterSpacing: fonts.spacing(-0.2),
+          ),
+          titleMedium: text.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+          titleSmall: text.titleSmall?.copyWith(fontWeight: FontWeight.w600),
+          labelLarge: text.labelLarge?.copyWith(fontWeight: FontWeight.w600),
+          bodyLarge: text.bodyLarge?.copyWith(height: 1.5),
+          bodyMedium: text.bodyMedium?.copyWith(height: 1.45),
+          bodySmall: text.bodySmall?.copyWith(color: p.textSecondary),
         ),
-        titleMedium: text.titleMedium?.copyWith(fontWeight: FontWeight.w600),
-        titleSmall: text.titleSmall?.copyWith(fontWeight: FontWeight.w600),
-        labelLarge: text.labelLarge?.copyWith(fontWeight: FontWeight.w600),
-        bodyLarge: text.bodyLarge?.copyWith(height: 1.5),
-        bodyMedium: text.bodyMedium?.copyWith(height: 1.45),
-        bodySmall: text.bodySmall?.copyWith(color: p.textSecondary),
       ),
       iconTheme: IconThemeData(color: p.textSecondary),
       textSelectionTheme: TextSelectionThemeData(
@@ -397,7 +440,7 @@ abstract final class CarthaTheme {
         scrolledUnderElevation: 0,
         centerTitle: false,
         titleTextStyle: TextStyle(
-          fontFamily: 'Inter',
+          fontFamily: font,
           fontSize: 18,
           fontWeight: FontWeight.w600,
           color: p.textPrimary,
@@ -498,7 +541,7 @@ abstract final class CarthaTheme {
         height: 68,
         labelTextStyle: WidgetStateProperty.resolveWith(
           (states) => TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: font,
             fontSize: 12,
             fontWeight: states.contains(WidgetState.selected)
                 ? FontWeight.w600
@@ -595,7 +638,7 @@ abstract final class CarthaTheme {
         checkmarkColor: p.accent,
         iconTheme: IconThemeData(color: p.accent, size: 18),
         labelStyle: TextStyle(
-          fontFamily: 'Inter',
+          fontFamily: font,
           fontWeight: FontWeight.w500,
           color: WidgetStateColor.resolveWith(
             (s) => s.contains(WidgetState.disabled)
@@ -624,13 +667,13 @@ abstract final class CarthaTheme {
         barrierColor: p.scrim,
         surfaceTintColor: Colors.transparent,
         titleTextStyle: TextStyle(
-          fontFamily: 'Inter',
+          fontFamily: font,
           fontSize: 20,
           fontWeight: FontWeight.w600,
           color: p.textPrimary,
         ),
         contentTextStyle: TextStyle(
-          fontFamily: 'Inter',
+          fontFamily: font,
           fontSize: 15,
           height: 1.45,
           color: p.textPrimary,
@@ -641,7 +684,7 @@ abstract final class CarthaTheme {
       ),
       snackBarTheme: SnackBarThemeData(
         backgroundColor: p.inverseSurface,
-        contentTextStyle: TextStyle(fontFamily: 'Inter', color: p.textInverse),
+        contentTextStyle: TextStyle(fontFamily: font, color: p.textInverse),
         actionTextColor: p.isDark ? p.hero : p.heroAccent,
         closeIconColor: p.textInverse,
         behavior: SnackBarBehavior.floating,
@@ -653,7 +696,7 @@ abstract final class CarthaTheme {
         iconColor: p.accent,
         textColor: p.textPrimary,
         subtitleTextStyle: TextStyle(
-          fontFamily: 'Inter',
+          fontFamily: font,
           fontSize: 13,
           color: p.textSecondary,
         ),
@@ -740,7 +783,7 @@ abstract final class CarthaTheme {
       popupMenuTheme: PopupMenuThemeData(
         color: p.dialog,
         surfaceTintColor: Colors.transparent,
-        textStyle: TextStyle(fontFamily: 'Inter', color: p.textPrimary),
+        textStyle: TextStyle(fontFamily: font, color: p.textPrimary),
       ),
       dropdownMenuTheme: DropdownMenuThemeData(
         menuStyle: MenuStyle(
@@ -753,7 +796,7 @@ abstract final class CarthaTheme {
           color: p.inverseSurface,
           borderRadius: BorderRadius.circular(8),
         ),
-        textStyle: TextStyle(fontFamily: 'Inter', color: p.textInverse),
+        textStyle: TextStyle(fontFamily: font, color: p.textInverse),
       ),
       datePickerTheme: DatePickerThemeData(
         backgroundColor: p.dialog,

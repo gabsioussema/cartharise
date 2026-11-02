@@ -11,8 +11,11 @@
 library;
 
 import 'content.dart';
+import 'language.dart';
 import 'local_date.dart';
 import 'persona.dart';
+
+export 'language.dart';
 
 /// 2 (step 2): quest stages, project ids and history, attachments on notes,
 /// experiments and attempts, the pinned memory. Version 1 files load with
@@ -419,6 +422,7 @@ class AppSettings {
     this.gameInvited = true,
     this.todayPin = TodayPin.auto,
     this.hintsSeen = const {},
+    this.language = AppLanguage.system,
   });
 
   final AppearanceMode appearance;
@@ -451,6 +455,10 @@ class AppSettings {
   /// First-use hints whose feature was used: they are not shown again.
   final Set<FirstUseHint> hintsSeen;
 
+  /// The app's language (step 3). [AppLanguage.system] follows the phone
+  /// (`resolveLanguage`); older files have none and load as system.
+  final AppLanguage language;
+
   AppSettings copyWith({
     AppearanceMode? appearance,
     AppTheme? theme,
@@ -462,6 +470,7 @@ class AppSettings {
     bool? gameInvited,
     TodayPin? todayPin,
     Set<FirstUseHint>? hintsSeen,
+    AppLanguage? language,
   }) => AppSettings(
     appearance: appearance ?? this.appearance,
     theme: theme ?? this.theme,
@@ -473,6 +482,7 @@ class AppSettings {
     gameInvited: gameInvited ?? this.gameInvited,
     todayPin: todayPin ?? this.todayPin,
     hintsSeen: hintsSeen ?? this.hintsSeen,
+    language: language ?? this.language,
   );
 
   Map<String, Object?> toJson() => {
@@ -489,6 +499,7 @@ class AppSettings {
       for (final h in FirstUseHint.values)
         if (hintsSeen.contains(h)) h.name,
     ],
+    'language': language.name,
   };
 
   factory AppSettings.fromJson(Object? json) {
@@ -521,6 +532,14 @@ class AppSettings {
       gameInvited: _bool(j, 'gameInvited', fallback: true),
       todayPin: _lenientEnum(TodayPin.values, j, 'todayPin', TodayPin.auto),
       hintsSeen: hintsSeen,
+      // Older files have none; a language from a newer version follows the
+      // phone instead.
+      language: _lenientEnum(
+        AppLanguage.values,
+        j,
+        'language',
+        AppLanguage.system,
+      ),
     );
   }
 }

@@ -4,13 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'app.dart';
+import 'app_locale.dart';
 import 'content/content.dart';
+import 'content/en.dart';
 import 'data/backup_exclusion.dart';
 import 'data/data_store.dart';
 import 'reminders/reminder_scheduler.dart';
 import 'services/attachment_store.dart';
 import 'services/file_share.dart';
+import 'services/dictation.dart';
 import 'services/media_picker.dart';
+import 'services/read_aloud.dart';
 import 'services/voice_player.dart';
 import 'services/voice_recorder.dart';
 import 'state/app_state.dart';
@@ -34,7 +38,11 @@ Future<void> main() async {
     attachments: FileAttachmentStore(
       excludeFromBackup: platformBackupExclusion(),
     ),
-    content: contentFor(PlatformDispatcher.instance.locale.languageCode),
+    // English is the source; `contentFor` gives the library of the
+    // language shown (the setting, or the phone's languages for "system").
+    content: englishContent,
+    contentFor: contentFor,
+    deviceLanguages: languageCodesOf(PlatformDispatcher.instance.locales),
     reminders: LocalReminderScheduler(),
   );
   // BootScreen calls state.load() behind the animated emblem.
@@ -45,6 +53,10 @@ Future<void> main() async {
       mediaPicker: SystemMediaPicker(),
       voiceRecorder: RecordVoiceRecorder(),
       voicePlayer: AudioVoicePlayer(),
+      // Until the platform implementations land: dictation says
+      // "unsupported" (Record or type instead), Listen is not offered.
+      dictation: const UnsupportedDictation(),
+      readAloud: const UnavailableReadAloud(),
     ),
   );
 }

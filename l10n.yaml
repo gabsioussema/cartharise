@@ -1,5 +1,6 @@
-# Generated from lib/l10n/app_en.arb, which `dart run tool/merge_arb.dart`
-# builds from the per-area fragments in l10n_src/ (run `make l10n`).
+# Generated from lib/l10n/app_<lang>.arb (en is the template; fr and ar fall
+# back to English per key), which `dart run tool/merge_arb.dart` builds from
+# the per-area fragments in l10n_src/ (run `make l10n`; docs/translations.md).
 arb-dir: lib/l10n
 template-arb-file: app_en.arb
 output-localization-file: app_localizations.dart

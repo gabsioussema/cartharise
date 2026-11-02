@@ -33,19 +33,31 @@ const int kCompassHistoryLimit = 50;
 class AppState extends ChangeNotifier {
   /// [attachments] defaults to an in-memory store (tests, previews); the app
   /// passes the real `FileAttachmentStore`.
+  ///
+  /// Languages (step 3): with [contentFor] (the app passes
+  /// `content/content.dart`'s), [content] follows the resolved [language];
+  /// without it (tests) [content] is always the library passed in.
+  /// [deviceLanguages] are the phone's preferred language codes, most
+  /// preferred first (what [AppLanguage.system] resolves against); the app
+  /// updates them with [setDeviceLanguages] when the phone's change.
   AppState({
     required this._store,
     required this._content,
     required ReminderScheduler reminders,
     AttachmentStore? attachments,
     DateTime Function()? clock,
+    this._contentFor,
+    List<String> deviceLanguages = const [],
   }) : _scheduler = reminders,
        _attachments = attachments ?? MemoryAttachmentStore(clock: clock),
-       _clock = clock ?? DateTime.now;
+       _clock = clock ?? DateTime.now,
+       _deviceLanguages = List.unmodifiable(deviceLanguages);
 
   final DataStore _store;
   final AttachmentStore _attachments;
   final ContentLibrary _content;
+  final ContentLibrary Function(AppLanguage language)? _contentFor;
+  List<String> _deviceLanguages;
   final ReminderScheduler _scheduler;
   final DateTime Function() _clock;
   final _random = Random();
@@ -88,7 +100,36 @@ class AppState extends ChangeNotifier {
   /// error, "Delete all data". Whatever celebrates a difference (Campaign
   /// moments) starts over instead of treating the swap as progress.
   int get dataGeneration => _dataGeneration;
-  ContentLibrary get content => _content;
+
+  /// What the app teaches and asks, in [language] (English per item where
+  /// not translated). Switching language never touches the user's data:
+  /// answers, logs and links are keyed by permanent ids.
+  ContentLibrary get content => _contentFor?.call(language) ?? _content;
+
+  /// The language the app speaks now (never [AppLanguage.system]): the
+  /// setting, or for system the phone's first preferred language that
+  /// Cartharise ships, else English.
+  AppLanguage get language =>
+      resolveLanguage(_data.settings.language, _deviceLanguages);
+
+  /// The phone's preferred language codes, most preferred first.
+  List<String> get deviceLanguages => _deviceLanguages;
+
+  /// The phone's preferred languages changed (the app calls this from
+  /// `didChangeLocales`). Rebuilds — and re-words the scheduled check-ins —
+  /// only when that changes the language shown.
+  void setDeviceLanguages(List<String> codes) {
+    final before = language;
+    _deviceLanguages = List.unmodifiable(codes);
+    if (language == before) return;
+    notifyListeners();
+    if (_loaded && settings.remindersEnabled) unawaited(_replan());
+  }
+
+  /// Switches the app's language (You › Appearance). Only the setting
+  /// changes; the check-in notifications are re-worded.
+  Future<void> setLanguage(AppLanguage language) =>
+      updateSettings(settings.copyWith(language: language));
 
   /// The private folder of photos and recordings (import, record, read,
   /// delete). Ops that drop attachments from the data call
@@ -355,10 +396,13 @@ class AppState extends ChangeNotifier {
 
   Future<void> updateSettings(AppSettings settings) async {
     final before = _data.settings;
+    final languageBefore = language;
     await mutate((d) => d.copyWith(settings: settings));
     if (before.remindersEnabled != settings.remindersEnabled ||
         before.quietStart != settings.quietStart ||
-        before.quietEnd != settings.quietEnd) {
+        before.quietEnd != settings.quietEnd ||
+        // Check-in notifications carry prompt titles in the app's language.
+        (language != languageBefore && settings.remindersEnabled)) {
       await _replan();
     }
   }
@@ -473,7 +517,7 @@ class AppState extends ChangeNotifier {
   }
 
   PhaseProgress progressFor(PromptPhase phase) {
-    final prompts = _content.byPhase(phase);
+    final prompts = content.byPhase(phase);
     var answered = 0, skipped = 0;
     for (final p in prompts) {
       final a = journey.answer(p.id);
@@ -493,7 +537,7 @@ class AppState extends ChangeNotifier {
 
   /// Answered core prompts / all core prompts (bonus excluded), 0–1.
   double get coreProgress {
-    final core = _content.corePrompts;
+    final core = content.corePrompts;
     if (core.isEmpty) return 0;
     final answered = core.where((p) => journey.answer(p.id)?.answered ?? false);
     return answered.length / core.length;
@@ -502,7 +546,7 @@ class AppState extends ChangeNotifier {
   /// Core prompts in reset order: morning, daytime, evening.
   List<Prompt> get _coreInOrder => [
     for (final phase in PromptPhase.values)
-      ..._content.byPhase(phase).where((p) => p.core),
+      ...content.byPhase(phase).where((p) => p.core),
   ];
 
   /// Where to resume (F-037): the active prompt if it is still open, else the
@@ -517,7 +561,7 @@ class AppState extends ChangeNotifier {
     final ordered = _coreInOrder;
     if (ordered.isEmpty) return null;
     final activeId = journey.activePromptId;
-    final active = activeId == null ? null : _content.prompt(activeId);
+    final active = activeId == null ? null : content.prompt(activeId);
     if (active != null && open(active)) return active;
     final start = active == null
         ? 0
@@ -553,7 +597,7 @@ class AppState extends ChangeNotifier {
   /// Constraints are never mapped (F-025).
   Map<CompassField, String> get compassImportPreview {
     final preview = <CompassField, String>{};
-    for (final p in _content.byPhase(PromptPhase.evening)) {
+    for (final p in content.byPhase(PromptPhase.evening)) {
       final field = p.mapsTo;
       if (field == null || field == CompassField.constraints) continue;
       final body = journey.answer(p.id)?.body ?? '';
@@ -963,7 +1007,7 @@ class AppState extends ChangeNotifier {
   List<ReminderPreference> get reminders {
     final saved = {for (final r in _data.reminders) r.promptId: r};
     return [
-      for (final p in _content.byPhase(PromptPhase.daytime))
+      for (final p in content.byPhase(PromptPhase.daytime))
         if (p.defaultTime != null)
           saved[p.id] ??
               ReminderPreference(promptId: p.id, time: p.defaultTime!),
@@ -1019,7 +1063,7 @@ class AppState extends ChangeNotifier {
   /// The notifications that should exist right now.
   List<PlannedReminder> get plannedReminders => planReminders(
     preferences: reminders,
-    titles: {for (final p in _content.prompts) p.id: p.title},
+    titles: {for (final p in content.prompts) p.id: p.title},
     enabled: settings.remindersEnabled,
     quietStart: settings.quietStart,
     quietEnd: settings.quietEnd,
@@ -1053,7 +1097,7 @@ class AppState extends ChangeNotifier {
   /// The 30-day `.ics` of the enabled check-ins (prompt titles only), worded
   /// with [texts] (localized by the UI).
   String calendarExport(CalendarTexts texts) {
-    final titles = {for (final p in _content.prompts) p.id: p.title};
+    final titles = {for (final p in content.prompts) p.id: p.title};
     return buildCheckinCalendar(
       texts: texts,
       now: now(),

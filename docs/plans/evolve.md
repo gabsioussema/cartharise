@@ -1,6 +1,6 @@
 # Plan: lighter days, the Playground, the board, voice and languages
 
-**Status:** step 1 done (contracts, Today + onboarding, the Playground, the visual system, integrated on `main`; audit findings A1–A10 fixed); step 2 done (2.0 contracts; 2.1 board, projects and media integrated on `main` with journeys in `test/ui/evolve2_journey_test.dart`; audit findings S2-M1–M3 and S2-m1–m9 fixed, tests in `test/evolve2_fixes_test.dart`); next: step 3.
+**Status:** step 1 done (contracts, Today + onboarding, the Playground, the visual system, integrated on `main`; audit findings A1–A10 fixed); step 2 done (2.0 contracts; 2.1 board, projects and media integrated on `main` with journeys in `test/ui/evolve2_journey_test.dart`; audit findings S2-M1–M3 and S2-m1–m9 fixed, tests in `test/evolve2_fixes_test.dart`); step 3: **3.0 done** (languages, multi-locale strings and content, voice interfaces; tests in `test/evolve3_contracts_test.dart`, guide in `docs/translations.md`); next: 3.1 feature agents.
 
 Source: an external product review (Nov 2026) of Cartharise. The owner chose to build
 **all three steps**, with these decisions:

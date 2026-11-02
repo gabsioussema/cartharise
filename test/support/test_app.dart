@@ -51,6 +51,8 @@ class CarthaHarness {
     required this.media,
     required this.recorder,
     required this.player,
+    required this.dictation,
+    required this.readAloud,
   });
 
   final AppState state;
@@ -64,6 +66,10 @@ class CarthaHarness {
   final FakeMediaPicker media;
   final FakeVoiceRecorder recorder;
   final FakeVoicePlayer player;
+
+  /// Speech to text and Listen (step 3).
+  final FakeDictation dictation;
+  final FakeReadAloud readAloud;
 }
 
 /// Data for a user who finished onboarding (so the app opens on RootShell).
@@ -122,6 +128,12 @@ Future<void> loadCarthaFonts() async {
 ///   the named ones).
 /// * [media] — the photo picker (e.g. with a `lostPhoto` the camera hands
 ///   back at launch).
+/// * [dictation] / [readAloud] — the voice services (default: every
+///   language available).
+/// * [contentFor] — content per language, as the app wires it (default:
+///   [content] in every language). The phone's preferred languages are the
+///   test's `tester.platformDispatcher.locales` (set `localesTestValue`
+///   before pumping to test "Same as phone").
 ///
 /// The boot loader animates forever, so this pumps a fixed number of frames
 /// instead of `pumpAndSettle`; do the same while a `CarthaLoader` is visible.
@@ -141,6 +153,9 @@ Future<CarthaHarness> pumpCartha(
   int frames = 6,
   MemoryAttachmentStore? attachments,
   FakeMediaPicker? media,
+  FakeDictation? dictation,
+  FakeReadAloud? readAloud,
+  ContentLibrary Function(AppLanguage language)? contentFor,
 }) async {
   await tester.runAsync(loadCarthaFonts);
   tester.view.physicalSize = size;
@@ -171,12 +186,19 @@ Future<CarthaHarness> pumpCartha(
   final picker = media ?? FakeMediaPicker();
   final recorder = FakeVoiceRecorder(store: attachmentStore);
   final player = FakeVoicePlayer();
+  final speech = dictation ?? FakeDictation();
+  final voice = readAloud ?? FakeReadAloud();
   final state = AppState(
     store: store,
     content: content ?? fakeContent,
     reminders: reminders,
     attachments: attachmentStore,
     clock: () => clock,
+    contentFor: contentFor,
+    deviceLanguages: [
+      for (final locale in tester.platformDispatcher.locales)
+        locale.languageCode,
+    ],
   );
   if (home != null) await state.load();
   await tester.pumpWidget(
@@ -188,6 +210,8 @@ Future<CarthaHarness> pumpCartha(
         mediaPicker: picker,
         voiceRecorder: recorder,
         voicePlayer: player,
+        dictation: speech,
+        readAloud: voice,
         shell: controller,
         home: home,
         themeMode: brightness == Brightness.dark
@@ -207,6 +231,8 @@ Future<CarthaHarness> pumpCartha(
     media: picker,
     recorder: recorder,
     player: player,
+    dictation: speech,
+    readAloud: voice,
   );
 }
 

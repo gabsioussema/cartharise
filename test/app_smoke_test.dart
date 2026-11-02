@@ -34,9 +34,16 @@ const _expectedFields = {
 
 void main() {
   test('the app wires the real English content library', () {
-    expect(identical(contentFor('en'), englishContent), isTrue);
-    // Other languages fall back to English until a reviewed translation exists.
-    expect(identical(contentFor('fr'), englishContent), isTrue);
+    expect(identical(contentFor(AppLanguage.en), englishContent), isTrue);
+    expect(identical(contentForCode('en-GB'), englishContent), isTrue);
+    // Step 3: French and Arabic are their own libraries, but an item not
+    // translated yet falls back to English (by permanent id).
+    final fr = contentFor(AppLanguage.fr);
+    expect(fr.languageCode, 'fr');
+    for (final p in englishContent.prompts) {
+      if (coverageFor(AppLanguage.fr).translatedIds.contains(p.id)) continue;
+      expect(fr.prompt(p.id)!.question, p.question);
+    }
   });
 
   test('first launch → onboarding → first prompt → answers persist → Compass import', () async {

@@ -9,16 +9,20 @@ action is opening the credited source links in the browser).
 ```
 lib/
   main.dart            bootstrap: edge-to-edge, time zone, AppState, runApp
-  app.dart             CarthaApp: providers + MaterialApp (theme, l10n, motion)
-  domain/              pure Dart contracts: content, AppData (+ JSON), dates, backup format
-  content/             ContentLibrary per language (English) — prompts, lessons, 30-day path, credit
+  app.dart             CarthaApp: providers + MaterialApp (theme, l10n, locale, motion)
+  app_locale.dart      Locale per AppLanguage (kAppLocales, localeFor, resolveAppLocale)
+  domain/              pure Dart contracts: content (+ content_translation), AppData (+ JSON),
+                       language (AppLanguage, resolveLanguage), dates, backup format
+  content/             ContentLibrary per language: en.dart (source), fr.dart, ar.dart (English
+                       per item until translated); contentFor(AppLanguage), coverageFor
   data/data_store.dart DataStore: FileDataStore (atomic JSON file) · MemoryDataStore (tests)
   state/app_state.dart AppState — the single ChangeNotifier (PLAN.md §5)
   reminders/           reminder_plan.dart (pure planning) · reminder_scheduler.dart (notifications)
   services/            ics_export.dart (pure .ics) · file_share.dart (share sheet / file picker)
                        attachment_store.dart (photos + recordings folder) · media_picker.dart
                        (image_picker) · voice_recorder.dart (record) · voice_player.dart (audioplayers)
-  l10n/                generated AppLocalizations (from l10n_src/ fragments)
+                       dictation.dart · read_aloud.dart (step 3 interfaces, pure Dart; stubs)
+  l10n/                generated AppLocalizations en · fr · ar (from l10n_src/ fragments)
   ui/                  theme/, widgets/, boot_screen, root_shell, nav + one folder per area
 ```
 
@@ -162,11 +166,46 @@ pushes detail screens on the root navigator and switches tabs from anywhere
 
 ## Localisation
 
-Strings live in per-area fragments `l10n_src/<area>_en.arb` (area-prefixed keys).
+Strings live in per-area fragments `l10n_src/<area>_<lang>.arb` (area-prefixed
+keys; English is the source, French and Arabic translate it).
 `make l10n` runs `tool/merge_arb.dart` (common first, then alphabetical; fails on
-invalid JSON or a duplicate key) and `flutter gen-l10n`. `lib/l10n/` is a build
-output; `test/merge_arb_test.dart` fails if it is stale. Prompt and lesson text
-is content (`ContentLibrary`), not ARB.
+invalid JSON or a duplicate key; every English key in every language, falling
+back to English and reported; a translation's placeholders, plurals and selects
+must match English) and `flutter gen-l10n`. `lib/l10n/` is a build output;
+`test/merge_arb_test.dart` fails if it is stale. Prompt and lesson text is
+content (`ContentLibrary`), not ARB. Details, the coverage report and how to
+add a language: [translations.md](translations.md).
+
+## Languages and voice (step 3)
+
+* **One resolved language.** `AppSettings.language` (`system | en | fr | ar`)
+  → `AppState.language` (`resolveLanguage`: the setting, or for system the
+  phone's first preferred language Cartharise ships, else English; never
+  `system`). The phone's languages come from `main.dart` and, live, from
+  `didChangeLocales` → `AppState.setDeviceLanguages`. `MaterialApp.locale`,
+  `AppState.content` (`contentFor`), the text direction (Arabic right to left
+  through the global localisations) and `CarthaFonts` all follow it, so strings
+  and content can never disagree.
+* **Content per language** (`lib/content/{en,fr,ar}.dart`): a
+  `ContentTranslation` keyed by permanent id laid over English
+  (`translateContent`); structure is always English, a missing or incomplete
+  item stays English whole. Switching language changes only the setting (and
+  re-words the check-in notifications); user data is keyed by ids.
+* **Fonts per language** (`CarthaFonts`, a theme extension):
+  Cinzel + Inter for Latin; one Arabic family for every style (never Cinzel)
+  and no added letter spacing for Arabic. `CarthaFonts.arabicFamily` is the
+  bundled font's slot (null → Inter + the phone's Arabic font).
+* **Voice interfaces** (`lib/services/dictation.dart`, `read_aloud.dart`, pure
+  Dart, provided like the media services; fakes `FakeDictation`,
+  `FakeReadAloud` in `test/support/fakes.dart`). `Dictation` is on-device only
+  (never a network recognizer, never a silent fallback): `availability(tag)`,
+  `start(tag)` → `Stream<DictationEvent>` (partial, final, level, error with a
+  typed reason, ended), `stop()`, `cancel()`; text is shown for review before
+  it is inserted. `ReadAloud` speaks only on a tap: `available(tag)`,
+  `speak(text, languageTag:)`, `stop()`, `speaking`. Until the platform
+  implementations land, the app wires `UnsupportedDictation` and
+  `UnavailableReadAloud` (Record or type instead; no Listen).
+* Contract tests: `test/evolve3_contracts_test.dart`.
 
 ## Tests
 

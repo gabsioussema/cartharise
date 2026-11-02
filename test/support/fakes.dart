@@ -6,8 +6,10 @@ import 'dart:typed_data';
 import 'package:cartharise/reminders/reminder_plan.dart';
 import 'package:cartharise/reminders/reminder_scheduler.dart';
 import 'package:cartharise/services/attachment_store.dart';
+import 'package:cartharise/services/dictation.dart';
 import 'package:cartharise/services/file_share.dart';
 import 'package:cartharise/services/media_picker.dart';
+import 'package:cartharise/services/read_aloud.dart';
 import 'package:cartharise/services/voice_player.dart';
 import 'package:cartharise/services/voice_recorder.dart';
 
@@ -345,4 +347,161 @@ class FakeVoicePlayer implements VoicePlayer {
 
   @override
   Future<void> dispose() async {}
+}
+
+/// Dictation driven by the test. [availabilityFor] answers per language tag
+/// (else [availabilityDefault]); [start] on anything but `available`
+/// reports the matching [DictationFailure] and ends. While listening, the
+/// test sends [partial], [level] and [fail]; [stop] sends [finalText] (if
+/// set) then ends, [cancel] ends without a final text.
+class FakeDictation implements Dictation {
+  FakeDictation({
+    this.availabilityDefault = DictationAvailability.available,
+    Map<String, DictationAvailability>? availabilityFor,
+  }) : availabilityFor = availabilityFor ?? {};
+
+  DictationAvailability availabilityDefault;
+  final Map<String, DictationAvailability> availabilityFor;
+
+  /// The text [stop] delivers as [DictationFinal] (null = none heard).
+  String? finalText;
+
+  /// Language tags [availability] was asked about, and [start]ed with.
+  final List<String> checked = [];
+  final List<String> started = [];
+  int stopCount = 0;
+  int cancelCount = 0;
+  StreamController<DictationEvent>? _events;
+
+  DictationAvailability _availability(String tag) =>
+      availabilityFor[tag] ?? availabilityDefault;
+
+  @override
+  Future<DictationAvailability> availability(String languageTag) async {
+    checked.add(languageTag);
+    return _availability(languageTag);
+  }
+
+  @override
+  Stream<DictationEvent> start(String languageTag) {
+    started.add(languageTag);
+    if (_events != null) {
+      return Stream.fromIterable(const [
+        DictationError(DictationFailure.busy),
+        DictationEnded(),
+      ]);
+    }
+    final failure = switch (_availability(languageTag)) {
+      DictationAvailability.available => null,
+      DictationAvailability.needsModel => DictationFailure.needsModel,
+      DictationAvailability.unsupported => DictationFailure.unsupported,
+      DictationAvailability.noPermission => DictationFailure.noPermission,
+      DictationAvailability.tooOld => DictationFailure.tooOld,
+    };
+    if (failure != null) {
+      return Stream.fromIterable([
+        DictationError(failure),
+        const DictationEnded(),
+      ]);
+    }
+    final events = StreamController<DictationEvent>();
+    _events = events;
+    return events.stream;
+  }
+
+  /// Sends the text recognised so far.
+  void partial(String text) => _events?.add(DictationPartial(text));
+
+  /// Sends an input level (0–1).
+  void level(double value) => _events?.add(DictationLevel(value));
+
+  /// Fails the running dictation with [reason], then ends it.
+  Future<void> fail(DictationFailure reason) async {
+    final events = _events;
+    if (events == null) return;
+    _events = null;
+    events
+      ..add(DictationError(reason))
+      ..add(const DictationEnded());
+    await events.close();
+  }
+
+  @override
+  Future<void> stop() async {
+    final events = _events;
+    if (events == null) return;
+    stopCount++;
+    _events = null;
+    final text = finalText;
+    if (text != null) events.add(DictationFinal(text));
+    events.add(const DictationEnded());
+    await events.close();
+  }
+
+  @override
+  Future<void> cancel() async {
+    final events = _events;
+    if (events == null) return;
+    cancelCount++;
+    _events = null;
+    events.add(const DictationEnded());
+    await events.close();
+  }
+
+  @override
+  bool get isListening => _events != null;
+}
+
+/// Read aloud: [availableTags] can be spoken (all when null); [spoken]
+/// records what was read, in the test only; [finish] ends speech as the
+/// engine would; [failSpeak] makes [speak] throw.
+class FakeReadAloud implements ReadAloud {
+  FakeReadAloud({this.availableTags});
+
+  Set<String>? availableTags;
+  ReadAloudFailure? failSpeak;
+  final List<({String text, String languageTag})> spoken = [];
+  int stopCount = 0;
+  bool _speaking = false;
+  final _states = StreamController<bool>.broadcast();
+
+  bool _available(String tag) => availableTags?.contains(tag) ?? true;
+
+  void _set(bool speaking) {
+    if (_speaking == speaking) return;
+    _speaking = speaking;
+    _states.add(speaking);
+  }
+
+  @override
+  Future<bool> available(String languageTag) async => _available(languageTag);
+
+  @override
+  Future<void> speak(String text, {required String languageTag}) async {
+    final failure = failSpeak;
+    if (failure != null) throw ReadAloudException(failure);
+    if (!_available(languageTag)) {
+      throw const ReadAloudException(ReadAloudFailure.noVoice);
+    }
+    spoken.add((text: text, languageTag: languageTag));
+    _set(true);
+  }
+
+  /// Ends the current speech as the engine would.
+  void finish() => _set(false);
+
+  @override
+  Future<void> stop() async {
+    stopCount++;
+    _set(false);
+  }
+
+  @override
+  Stream<bool> get speaking => _states.stream;
+
+  @override
+  bool get isSpeaking => _speaking;
+
+  @override
+  Future<void> dispose() async => _set(false);
 }

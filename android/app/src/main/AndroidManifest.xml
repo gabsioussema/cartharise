@@ -11,6 +11,9 @@
          INTERNET permission: nothing leaves the phone (test/privacy_test.dart). -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
+    <!-- Languages (en, fr, ar): Android 13+ lists them in the system's
+         per-app language setting (res/xml/locales_config.xml); the app's
+         "Same as phone" follows that choice. -->
     <!-- Privacy: the user's writing, photos and recordings stay on this
          phone. No Auto Backup to the cloud and no device-to-device transfer
          (Android 12+ rules), so "Delete all data" or removing the app really
@@ -22,7 +25,8 @@
         android:allowBackup="false"
         android:fullBackupContent="@xml/full_backup_content"
         android:dataExtractionRules="@xml/data_extraction_rules"
-        tools:targetApi="31">
+        android:localeConfig="@xml/locales_config"
+        tools:targetApi="33">
         <activity
             android:name=".MainActivity"
             android:exported="true"
