@@ -1037,6 +1037,50 @@
   "journalPhaseDaytime": "Daytime",
   "journalPhaseBonus": "Bonus",
   "journalPhaseEvening": "Evening",
+  "listenAction": "Listen",
+  "@listenAction": {
+    "description": "Button: read this lesson, question, notice or experiment aloud with the phone's voice."
+  },
+  "listenStop": "Stop reading",
+  "@listenStop": {
+    "description": "Button while text is being read aloud: stops at once."
+  },
+  "listenMyNote": "Listen to my note",
+  "@listenMyNote": {
+    "description": "Button: read the user's own note aloud. Only ever on this explicit tap."
+  },
+  "listenMyAnswer": "Listen to my answer",
+  "@listenMyAnswer": {
+    "description": "Button: read the user's own answer aloud. Only ever on this explicit tap."
+  },
+  "listenStarted": "Reading aloud.",
+  "@listenStarted": {
+    "description": "Screen reader announcement when reading aloud starts."
+  },
+  "listenStopped": "Stopped reading.",
+  "@listenStopped": {
+    "description": "Screen reader announcement when the user stops reading aloud."
+  },
+  "listenHearHint": "Can't hear it? Check the volume and silent mode.",
+  "@listenHearHint": {
+    "description": "Small line under Stop while reading aloud (the silent switch can mute it)."
+  },
+  "listenNoVoice": "No voice for this language on this phone. You can add one in its speech settings.",
+  "@listenNoVoice": {
+    "description": "Shown instead of Listen when the phone has no offline voice for the language."
+  },
+  "listenUnavailable": "Listen isn't available on this phone.",
+  "@listenUnavailable": {
+    "description": "Shown when the phone has no text-to-speech at all."
+  },
+  "listenSilent": "Your phone is on silent. Turn the sound on, or use headphones.",
+  "@listenSilent": {
+    "description": "Listen was tapped while the phone is on silent and would play on its speaker."
+  },
+  "listenFailed": "Couldn't read this aloud. Try again.",
+  "@listenFailed": {
+    "description": "Reading aloud failed for another reason."
+  },
   "mediaAddPhoto": "Add photo",
   "@mediaAddPhoto": {
     "description": "Button: add a photo to a note, an experiment tried or an attempt."

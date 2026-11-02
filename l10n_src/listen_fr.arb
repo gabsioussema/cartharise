@@ -1,0 +1,14 @@
+{
+  "@@locale": "fr",
+  "listenAction": "Écouter",
+  "listenStop": "Arrêter la lecture",
+  "listenMyNote": "Écouter ma note",
+  "listenMyAnswer": "Écouter ma réponse",
+  "listenStarted": "Lecture à voix haute.",
+  "listenStopped": "Lecture arrêtée.",
+  "listenHearHint": "Pas de son ? Vérifiez le volume et le mode silencieux.",
+  "listenNoVoice": "Aucune voix pour cette langue sur ce téléphone. Vous pouvez en ajouter une dans ses réglages de synthèse vocale.",
+  "listenUnavailable": "L'écoute n'est pas disponible sur ce téléphone.",
+  "listenSilent": "Votre téléphone est en mode silencieux. Activez le son ou utilisez des écouteurs.",
+  "listenFailed": "Impossible de lire ce texte à voix haute. Réessayez."
+}

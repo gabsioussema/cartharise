@@ -1606,6 +1606,42 @@ class AppLocalizationsAr extends AppLocalizations {
   String get journalPhaseEvening => 'Evening';
 
   @override
+  String get listenAction => 'استمع';
+
+  @override
+  String get listenStop => 'أوقف القراءة';
+
+  @override
+  String get listenMyNote => 'استمع إلى ملاحظتي';
+
+  @override
+  String get listenMyAnswer => 'استمع إلى إجابتي';
+
+  @override
+  String get listenStarted => 'تجري القراءة بصوت عالٍ.';
+
+  @override
+  String get listenStopped => 'توقفت القراءة.';
+
+  @override
+  String get listenHearHint =>
+      'لا تسمع شيئًا؟ تحقّق من مستوى الصوت ووضع الصامت.';
+
+  @override
+  String get listenNoVoice =>
+      'لا يوجد صوت لهذه اللغة على هذا الهاتف. يمكنك إضافة صوت من إعدادات تحويل النص إلى كلام.';
+
+  @override
+  String get listenUnavailable => 'الاستماع غير متاح على هذا الهاتف.';
+
+  @override
+  String get listenSilent =>
+      'هاتفك في وضع الصامت. شغّل الصوت أو استخدم سماعات الرأس.';
+
+  @override
+  String get listenFailed => 'تعذّرت القراءة بصوت عالٍ. حاول مرة أخرى.';
+
+  @override
   String get mediaAddPhoto => 'Add photo';
 
   @override

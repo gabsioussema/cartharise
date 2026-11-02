@@ -1606,6 +1606,42 @@ class AppLocalizationsEn extends AppLocalizations {
   String get journalPhaseEvening => 'Evening';
 
   @override
+  String get listenAction => 'Listen';
+
+  @override
+  String get listenStop => 'Stop reading';
+
+  @override
+  String get listenMyNote => 'Listen to my note';
+
+  @override
+  String get listenMyAnswer => 'Listen to my answer';
+
+  @override
+  String get listenStarted => 'Reading aloud.';
+
+  @override
+  String get listenStopped => 'Stopped reading.';
+
+  @override
+  String get listenHearHint =>
+      'Can\'t hear it? Check the volume and silent mode.';
+
+  @override
+  String get listenNoVoice =>
+      'No voice for this language on this phone. You can add one in its speech settings.';
+
+  @override
+  String get listenUnavailable => 'Listen isn\'t available on this phone.';
+
+  @override
+  String get listenSilent =>
+      'Your phone is on silent. Turn the sound on, or use headphones.';
+
+  @override
+  String get listenFailed => 'Couldn\'t read this aloud. Try again.';
+
+  @override
   String get mediaAddPhoto => 'Add photo';
 
   @override
