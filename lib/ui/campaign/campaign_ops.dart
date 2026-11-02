@@ -50,10 +50,13 @@ extension CampaignOps on AppState {
 
   /// Records an attempt at the monthly project for today (F-061). The words
   /// are stored exactly as typed; [attempt] must not be blank. The attempt
-  /// draft is removed in the same change.
+  /// draft is removed in the same change. While a project is active the
+  /// attempt is linked to it ([AppState.activeProjectId]); [attachments]
+  /// are photos and recordings already in the attachment store.
   Future<BattleLogEntry> recordAttempt(
     String attempt, {
     String learning = '',
+    List<Attachment> attachments = const [],
   }) async {
     if (attempt.trim().isEmpty) {
       throw ArgumentError.value(attempt, 'attempt', 'must not be blank');
@@ -64,6 +67,8 @@ extension CampaignOps on AppState {
       attempt: attempt,
       learning: learning,
       createdAt: now(),
+      projectId: activeProjectId,
+      attachments: attachments,
     );
     await mutate(
       (d) => d.copyWith(
@@ -74,7 +79,8 @@ extension CampaignOps on AppState {
     return entry;
   }
 
-  /// Corrects an attempt (its day stays the day it was recorded).
+  /// Corrects an attempt (its day stays the day it was recorded; its
+  /// project and attachments are kept).
   Future<void> editAttempt(
     String id, {
     required String attempt,
@@ -83,18 +89,16 @@ extension CampaignOps on AppState {
     if (attempt.trim().isEmpty) {
       throw ArgumentError.value(attempt, 'attempt', 'must not be blank');
     }
+    final at = now();
     return mutate(
       (d) => d.copyWith(
         campaignLog: [
           for (final e in d.campaignLog)
             if (e.id == id)
-              BattleLogEntry(
-                id: e.id,
-                day: e.day,
+              e.copyWith(
                 attempt: attempt,
                 learning: learning,
-                createdAt: e.createdAt,
-                editedAt: now(),
+                editedAt: () => at,
               )
             else
               e,
@@ -103,14 +107,34 @@ extension CampaignOps on AppState {
     );
   }
 
-  Future<void> deleteAttempt(String id) => mutate(
+  /// Links an attempt to the project [projectId] (current or past), or with
+  /// null, unlinks it.
+  Future<void> setAttemptProject(String id, String? projectId) => mutate(
     (d) => d.copyWith(
       campaignLog: [
         for (final e in d.campaignLog)
-          if (e.id != id) e,
+          if (e.id == id) e.copyWith(projectId: () => projectId) else e,
       ],
     ),
   );
+
+  /// Deletes an attempt, its photos and recordings (once saved) and the
+  /// pinned memory taken from it.
+  Future<void> deleteAttempt(String id) async {
+    final removed = data.attachmentsOf(AttachmentHolder.attempt, id);
+    await mutate(
+      (d) => AppState.withoutPinFrom(
+        d.copyWith(
+          campaignLog: [
+            for (final e in d.campaignLog)
+              if (e.id != id) e,
+          ],
+        ),
+        id,
+      ),
+    );
+    await releaseAttachments(removed);
+  }
 
   // ── The Playground ("Try") ──────────────────────────────────────────────
 
@@ -148,9 +172,12 @@ extension CampaignOps on AppState {
   /// in the same change. Trying it again adds another entry; XP counts each
   /// experiment once ([kXpPerExperiment]). Throws [ArgumentError] for an id
   /// the content does not have.
+  /// [attachments] are photos and recordings already in the attachment
+  /// store.
   Future<ExperimentEntry> tryExperiment(
     String experimentId, {
     String note = '',
+    List<Attachment> attachments = const [],
   }) async {
     if (content.experiment(experimentId) == null) {
       throw ArgumentError.value(experimentId, 'experimentId', 'is unknown');
@@ -161,6 +188,7 @@ extension CampaignOps on AppState {
       day: today,
       note: note,
       createdAt: now(),
+      attachments: attachments,
     );
     await mutate(
       (d) => d.copyWith(
@@ -177,43 +205,43 @@ extension CampaignOps on AppState {
   }
 
   /// Corrects the note of a tried experiment (exactly as typed; '' = none).
-  /// Its day stays the day it was tried.
+  /// Its day stays the day it was tried; its attachments are kept.
   Future<void> editExperimentEntry(String id, {required String note}) {
     final at = now();
     return mutate(
       (d) => d.copyWith(
         experimentLog: [
           for (final e in d.experimentLog)
-            if (e.id == id)
-              ExperimentEntry(
-                id: e.id,
-                experimentId: e.experimentId,
-                day: e.day,
-                note: note,
-                createdAt: e.createdAt,
-                editedAt: at,
-              )
-            else
-              e,
+            if (e.id == id) e.copyWith(note: note, editedAt: () => at) else e,
         ],
       ),
     );
   }
 
-  Future<void> deleteExperimentEntry(String id) => mutate(
-    (d) => d.copyWith(
-      experimentLog: [
-        for (final e in d.experimentLog)
-          if (e.id != id) e,
-      ],
-    ),
-  );
+  /// Deletes a tried experiment, its photos and recordings (once saved) and
+  /// the pinned memory taken from it.
+  Future<void> deleteExperimentEntry(String id) async {
+    final removed = data.attachmentsOf(AttachmentHolder.experiment, id);
+    await mutate(
+      (d) => AppState.withoutPinFrom(
+        d.copyWith(
+          experimentLog: [
+            for (final e in d.experimentLog)
+              if (e.id != id) e,
+          ],
+        ),
+        id,
+      ),
+    );
+    await releaseAttachments(removed);
+  }
 
   /// "Add to my tasks": a one-off quest titled like the experiment, with
   /// [QuestSource.experiment]. While that quest is still open, adding it
   /// again returns it instead of a duplicate. Adding earns nothing; the
-  /// quest earns quest XP when done, like any other. Throws [ArgumentError]
-  /// for an id the content does not have.
+  /// quest earns quest XP when done, like any other. Playground experiments
+  /// stay apart from the month project (not linked to it). Throws
+  /// [ArgumentError] for an id the content does not have.
   Future<Quest> addExperimentToTasks(String experimentId) {
     final experiment = content.experiment(experimentId);
     if (experiment == null) {
@@ -227,6 +255,6 @@ extension CampaignOps on AppState {
         return Future.value(q);
       }
     }
-    return addQuest(title, source: QuestSource.experiment);
+    return addQuest(title, source: QuestSource.experiment, linkProject: false);
   }
 }

@@ -5,11 +5,16 @@
          reboot or an app update. The app itself makes no network calls. -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- Voice notes, recorded on the phone into the app's private folder.
+         Asked only when the user taps Record. Photos come from the system
+         photo picker / camera app, which need no permission here. No
+         INTERNET permission: nothing leaves the phone (test/privacy_test.dart). -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
-    <!-- Privacy: the user's writing stays on this phone. No Auto Backup to
-         the cloud and no device-to-device transfer (Android 12+ rules), so
-         "Delete all data" or removing the app really erases it. Moving data
-         is the user's own export (You › Your data). -->
+    <!-- Privacy: the user's writing, photos and recordings stay on this
+         phone. No Auto Backup to the cloud and no device-to-device transfer
+         (Android 12+ rules), so "Delete all data" or removing the app really
+         erases it. Moving data is the user's own export (You › Your data). -->
     <application
         android:label="Cartharise"
         android:name="${applicationName}"

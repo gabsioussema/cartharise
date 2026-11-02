@@ -1,6 +1,6 @@
 # Plan: lighter days, the Playground, the board, voice and languages
 
-**Status:** step 1 done (contracts, Today + onboarding, the Playground, the visual system, integrated on `main`; audit findings A1–A10 fixed); next: step 2.
+**Status:** step 1 done (contracts, Today + onboarding, the Playground, the visual system, integrated on `main`; audit findings A1–A10 fixed); step 2: **2.0 done** (contracts on `main`); next: 2.1 feature agents (board, projects, media).
 
 Source: an external product review (Nov 2026) of Cartharise. The owner chose to build
 **all three steps**, with these decisions:

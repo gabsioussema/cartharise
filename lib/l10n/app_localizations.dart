@@ -5641,7 +5641,7 @@ abstract class AppLocalizations {
   /// No description provided for @youDataExportBody.
   ///
   /// In en, this message translates to:
-  /// **'Saves everything as one JSON file. It isn\'t encrypted, so keep it private.'**
+  /// **'Saves everything, photos and recordings too, as one .zip file. It isn\'t encrypted, so keep it private.'**
   String get youDataExportBody;
 
   /// No description provided for @youDataExportButton.
@@ -5655,6 +5655,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Backup shared.'**
   String get youDataExported;
+
+  /// No description provided for @youDataExportedPartial.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup shared, but some photos or recordings couldn\'t be read and aren\'t in it.'**
+  String get youDataExportedPartial;
 
   /// No description provided for @youDataImportTitle.
   ///
@@ -5697,6 +5703,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'an unknown date'**
   String get youDataImportUnknownDate;
+
+  /// No description provided for @youDataImportMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{One photo or recording it names is missing. Its entry is kept.} other{{count} photos or recordings it names are missing. Their entries are kept.}}'**
+  String youDataImportMissing(int count);
+
+  /// No description provided for @youDataImportFilesFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Its photos and recordings couldn\'t be saved on this phone.'**
+  String get youDataImportFilesFailed;
 
   /// No description provided for @youDataImported.
   ///
@@ -5791,7 +5809,7 @@ abstract class AppLocalizations {
   /// No description provided for @youDataDeleteConfirm1Body.
   ///
   /// In en, this message translates to:
-  /// **'Answers, Compass, quests, notes, reviews and settings will be erased.'**
+  /// **'Answers, Compass, quests, notes, photos, recordings, reviews and settings will be erased.'**
   String get youDataDeleteConfirm1Body;
 
   /// No description provided for @youDataDeleteConfirm1Action.
@@ -5829,6 +5847,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Deleted, but a temporary export copy couldn\'t be removed. Removing the app erases it.'**
   String get youDataDeleteCopiesLeft;
+
+  /// No description provided for @youDataDeleteFilesLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted, but some photos or recordings couldn\'t be removed yet. Opening the app again removes them.'**
+  String get youDataDeleteFilesLeft;
 
   /// No description provided for @youSupportTitle.
   ///

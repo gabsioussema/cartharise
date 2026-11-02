@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Android 6–11 (API 23–30): backups are already off (allowBackup="false");
-     this also excludes everything should that flag ever change. See
+     this also excludes everything (the data file and the attachments
+     folder included) should that flag ever change. See
      data_extraction_rules.xml for Android 12+. -->
 <full-backup-content>
     <exclude domain="root" path="." />

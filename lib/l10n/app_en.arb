@@ -2325,9 +2325,10 @@
   "youDataSubtitle": "Everything you write stays on this phone.",
   "youDataWhereTitle": "Where your data lives",
   "youDataExportTitle": "Export a backup",
-  "youDataExportBody": "Saves everything as one JSON file. It isn't encrypted, so keep it private.",
+  "youDataExportBody": "Saves everything, photos and recordings too, as one .zip file. It isn't encrypted, so keep it private.",
   "youDataExportButton": "Export backup",
   "youDataExported": "Backup shared.",
+  "youDataExportedPartial": "Backup shared, but some photos or recordings couldn't be read and aren't in it.",
   "youDataImportTitle": "Restore a backup",
   "youDataImportBody": "Replaces everything with a backup. You'll confirm first.",
   "youDataImportButton": "Choose a backup file",
@@ -2342,6 +2343,15 @@
   },
   "youDataImportConfirmAction": "Replace",
   "youDataImportUnknownDate": "an unknown date",
+  "youDataImportMissing": "{count, plural, =1{One photo or recording it names is missing. Its entry is kept.} other{{count} photos or recordings it names are missing. Their entries are kept.}}",
+  "@youDataImportMissing": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "youDataImportFilesFailed": "Its photos and recordings couldn't be saved on this phone.",
   "youDataImported": "Backup restored.",
   "youDataImportedNotSaved": "Backup opened but not saved yet. Retry at the top, or export a copy.",
   "youDataImportFailedTitle": "This file couldn't be used",
@@ -2357,13 +2367,14 @@
   "youDataDeleteBody": "Erases everything on this phone and cancels reminders. Export first to keep a copy.",
   "youDataDeleteButton": "Delete all data",
   "youDataDeleteConfirm1Title": "Delete all data?",
-  "youDataDeleteConfirm1Body": "Answers, Compass, quests, notes, reviews and settings will be erased.",
+  "youDataDeleteConfirm1Body": "Answers, Compass, quests, notes, photos, recordings, reviews and settings will be erased.",
   "youDataDeleteConfirm1Action": "Continue",
   "youDataDeleteConfirm2Title": "This can't be undone",
   "youDataDeleteConfirm2Body": "There's no other copy. Only an exported backup can bring it back.",
   "youDataDeleteConfirm2Action": "Delete everything",
   "youDataDeleteFailed": "Couldn't delete. Your writing is still here; try again.",
   "youDataDeleteCopiesLeft": "Deleted, but a temporary export copy couldn't be removed. Removing the app erases it.",
+  "youDataDeleteFilesLeft": "Deleted, but some photos or recordings couldn't be removed yet. Opening the app again removes them.",
   "youSupportTitle": "Support & safety",
   "youSupportSubtitle": "Reflection can stir things up. That's normal.",
   "youSupportNotTherapyTitle": "Not therapy",

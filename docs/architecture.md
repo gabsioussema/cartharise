@@ -16,6 +16,8 @@ lib/
   state/app_state.dart AppState — the single ChangeNotifier (PLAN.md §5)
   reminders/           reminder_plan.dart (pure planning) · reminder_scheduler.dart (notifications)
   services/            ics_export.dart (pure .ics) · file_share.dart (share sheet / file picker)
+                       attachment_store.dart (photos + recordings folder) · media_picker.dart
+                       (image_picker) · voice_recorder.dart (record) · voice_player.dart (audioplayers)
   l10n/                generated AppLocalizations (from l10n_src/ fragments)
   ui/                  theme/, widgets/, boot_screen, root_shell, nav + one folder per area
 ```
@@ -68,13 +70,53 @@ widget ──calls──▶ AppState.saveAnswer(...)        (or an area extensio
   `loadError`, `mutate` refuses to write, and the boot screen says honestly that
   nothing was deleted, with **Try again**. "Start fresh" renames the bad file
   to `cartharise.unreadable-<time>.json` (kept, not deleted) and starts empty.
-* Export = `exportBackup()` shared through the system share sheet
-  (`FileShare.shareTextFile`). Import = `FileShare.pickTextFile()` →
-  `importBackup(text)`, which decodes and validates everything before touching
-  state; a `FormatException` leaves current data untouched. Notification consent
-  is per device, so an import keeps this device's `remindersEnabled`.
-* `deleteAllData()` cancels every reminder, deletes the file and resets to
-  `AppData.empty` (→ onboarding). If deletion fails it throws and nothing changes.
+* Export = `exportBackupArchive()` (backup v2 `.zip`, see "Data (step 2)")
+  shared through the system share sheet (`FileShare.shareBytesFile`). Import =
+  `FileShare.pickFileBytes()` → `previewRestore(bytes)` (v2 `.zip` or v1 JSON)
+  → `restoreBackup(preview)`; `importBackup(text)` still takes a v1 JSON. Both
+  decode and validate everything before touching state; a `FormatException`
+  leaves current data untouched. Notification consent is per device, so an
+  import keeps this device's `remindersEnabled`.
+* `deleteAllData()` cancels every reminder, deletes the file, then the
+  `attachments/` folder, and resets to `AppData.empty` (→ onboarding). If the
+  data file can't be deleted it throws and nothing changes; if only attachment
+  files stay it returns false (said in the UI; the next load removes them).
+
+## Data (step 2)
+
+* **Schema 2** (`kSchemaVersion`): quest stages (`QuestStage`, lane per day
+  via `Quest.laneOn`), project ids + `pastProjects` + `ProjectArt`,
+  `Quest.projectId` / `BattleLogEntry.projectId`, attachments on notes,
+  experiments tried and attempts, `pinnedMemory`. Version 1 files load with
+  fallbacks; an older app refuses a version 2 file rather than dropping data.
+* **Attachments folder.** Photos and recordings are files in
+  `<app support>/attachments/` next to `cartharise.json` (`AttachmentStore`:
+  `FileAttachmentStore` in the app, `MemoryAttachmentStore` in tests). The
+  data names each by `Attachment.fileName`, a plain generated name (never a
+  path, never the phone's original name). Kept out of OS backups like the
+  data file (Android: the `file` domain is excluded; iOS: the folder is marked
+  `isExcludedFromBackup` through the same channel). Imports and restores
+  write through a temporary file + rename. Recordings are written straight
+  into the folder (`newRecordingPath` → `adoptRecording`; an interrupted one
+  is kept, an empty one is never claimed).
+* **Files follow the data.** Deleting a note, a try, an attempt, an
+  attachment or a project photo deletes its file once that change is saved
+  (`releaseAttachments`; never a file the data still names). On every load
+  the files the saved data doesn't name are removed (`deleteOrphans`; pending
+  recordings are kept). An unreadable data file cleans nothing, and "Start
+  fresh" sets the folder aside with the file (`attachments.unreadable-<time>`).
+* **Backup v2** (`domain/backup.dart`, pure Dart, `archive`): a `.zip` with
+  `data.json` (the JSON envelope, `"format": 2`) and `attachments/<fileName>`
+  for each file the data names. Restore accepts the v2 `.zip` and the v1 JSON,
+  validates everything before asking, ignores zip entries that aren't named
+  attachments (no path can escape the folder), checks sizes and CRCs, and
+  counts files the data names that are neither in the backup nor on the
+  phone (kept on their entries, shown as missing — never dropped).
+* **Media services** are injected like `FileShare` (providers in
+  `CarthaApp`; fakes in `test/support/fakes.dart`). Permissions are asked by
+  the system only when the user taps (Android declares only `RECORD_AUDIO`;
+  photos come from the system picker / camera app). No network permission or
+  package (`test/privacy_test.dart` pins the allow-lists).
 
 ## Reminders
 

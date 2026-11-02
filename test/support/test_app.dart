@@ -47,6 +47,10 @@ class CarthaHarness {
     required this.reminders,
     required this.files,
     required this.shell,
+    required this.attachments,
+    required this.media,
+    required this.recorder,
+    required this.player,
   });
 
   final AppState state;
@@ -54,6 +58,12 @@ class CarthaHarness {
   final FakeReminderScheduler reminders;
   final FakeFileShare files;
   final ShellController shell;
+
+  /// The photos and recordings "on the phone".
+  final MemoryAttachmentStore attachments;
+  final FakeMediaPicker media;
+  final FakeVoiceRecorder recorder;
+  final FakeVoicePlayer player;
 }
 
 /// Data for a user who finished onboarding (so the app opens on RootShell).
@@ -107,6 +117,9 @@ Future<void> loadCarthaFonts() async {
 /// * [now] — the clock (default [kTestNow]).
 /// * [readDelay] / [frames] — slow the first read and pump fewer frames to
 ///   observe the boot loader.
+/// * [attachments] — photos and recordings already "on the phone" (files
+///   the saved data names must be in it, or the load's cleanup keeps only
+///   the named ones).
 ///
 /// The boot loader animates forever, so this pumps a fixed number of frames
 /// instead of `pumpAndSettle`; do the same while a `CarthaLoader` is visible.
@@ -124,6 +137,7 @@ Future<CarthaHarness> pumpCartha(
   ShellController? shell,
   Duration readDelay = Duration.zero,
   int frames = 6,
+  MemoryAttachmentStore? attachments,
 }) async {
   await tester.runAsync(loadCarthaFonts);
   tester.view.physicalSize = size;
@@ -149,10 +163,16 @@ Future<CarthaHarness> pumpCartha(
   final files = FakeFileShare();
   final controller = shell ?? ShellController();
   final clock = now ?? kTestNow;
+  final attachmentStore =
+      attachments ?? MemoryAttachmentStore(clock: () => clock);
+  final media = FakeMediaPicker();
+  final recorder = FakeVoiceRecorder(store: attachmentStore);
+  final player = FakeVoicePlayer();
   final state = AppState(
     store: store,
     content: content ?? fakeContent,
     reminders: reminders,
+    attachments: attachmentStore,
     clock: () => clock,
   );
   if (home != null) await state.load();
@@ -162,6 +182,9 @@ Future<CarthaHarness> pumpCartha(
       child: CarthaApp(
         state: state,
         fileShare: files,
+        mediaPicker: media,
+        voiceRecorder: recorder,
+        voicePlayer: player,
         shell: controller,
         home: home,
         themeMode: brightness == Brightness.dark
@@ -177,6 +200,10 @@ Future<CarthaHarness> pumpCartha(
     reminders: reminders,
     files: files,
     shell: controller,
+    attachments: attachmentStore,
+    media: media,
+    recorder: recorder,
+    player: player,
   );
 }
 

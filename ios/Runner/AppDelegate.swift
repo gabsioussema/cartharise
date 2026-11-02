@@ -24,11 +24,12 @@ import flutter_local_notifications
     registerStorageChannel(messenger: engineBridge.applicationRegistrar.messenger())
   }
 
-  /// Privacy: the user's writing stays on this phone. iOS includes
-  /// Library/Application Support in iCloud and computer backups by default,
-  /// so after every save the Dart side (lib/data/backup_exclusion.dart) asks
-  /// to mark the data folder as excluded from backup. Paths only; no user
-  /// text crosses this channel.
+  /// Privacy: the user's writing, photos and recordings stay on this phone.
+  /// iOS includes Library/Application Support in iCloud and computer
+  /// backups by default, so after every save the Dart side
+  /// (lib/data/backup_exclusion.dart) asks to mark the data folder — and the
+  /// attachments folder inside it — as excluded from backup. Paths only; no
+  /// user text crosses this channel.
   private func registerStorageChannel(messenger: FlutterBinaryMessenger) {
     let channel = FlutterMethodChannel(
       name: "app.cartharise/storage",

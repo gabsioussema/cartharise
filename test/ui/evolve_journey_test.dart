@@ -615,7 +615,8 @@ void main() {
     expect(find.byType(DataScreen), findsOneWidget);
     await _tap(tester, _key('data-export'));
     final backup = h.files.shared.last;
-    final exported = decodeBackup(backup.content);
+    // Step 2: the export is the v2 backup (.zip with data.json).
+    final exported = decodeBackupBytes(backup.bytes).data;
     expect(exported.settings.todayPin, TodayPin.notes);
     expect(exported.settings.gameInvited, isTrue);
     expect(exported.attemptDraft!.attempt, _attempt);
@@ -658,7 +659,7 @@ void main() {
     // Restore: every new field comes back, and the question is answered.
     await _openTab(tester, 'You');
     await _tap(tester, _key('you-data'));
-    h.files.pickResult = backup.content;
+    h.files.pickBytes = backup.bytes;
     await _tap(tester, _key('data-import'));
     await _tap(tester, find.widgetWithText(FilledButton, 'Replace'));
     expect(find.text('Backup restored.'), findsOneWidget);

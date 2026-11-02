@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -20,9 +21,22 @@ abstract class FileShare {
     String mimeType,
   );
 
+  /// Writes [bytes] to a temporary [filename] (e.g. the `.zip` backup) and
+  /// opens the share sheet. Throws on failure (show an honest message).
+  Future<ShareOutcome> shareBytesFile(
+    String filename,
+    Uint8List bytes,
+    String mimeType,
+  );
+
   /// Lets the user pick a text file; its contents, or null if cancelled.
   /// Throws [FormatException] for files that are not UTF-8 text or too large.
   Future<String?> pickTextFile();
+
+  /// Lets the user pick any file (a `.zip` or `.json` backup); its bytes,
+  /// or null if cancelled. Throws [FormatException] ('The file is too
+  /// large') above [maxBytes].
+  Future<Uint8List?> pickFileBytes({int maxBytes = kMaxImportBytes});
 
   /// Deletes every copy of the user's words made while moving files in and
   /// out: export files in the app's private temporary folder (ours and the
@@ -31,7 +45,8 @@ abstract class FileShare {
   Future<void> clearTemporaryFiles();
 }
 
-/// Largest file [pickTextFile] accepts (a backup of years of writing is far smaller).
+/// Largest file [FileShare.pickTextFile] accepts (a backup of years of
+/// writing is far smaller).
 const int kMaxImportBytes = 20 * 1024 * 1024;
 
 class SystemFileShare implements FileShare {
@@ -51,13 +66,34 @@ class SystemFileShare implements FileShare {
     String filename,
     String content,
     String mimeType,
+  ) => _share(
+    filename,
+    mimeType,
+    (file) => file.writeAsString(content, flush: true),
+  );
+
+  @override
+  Future<ShareOutcome> shareBytesFile(
+    String filename,
+    Uint8List bytes,
+    String mimeType,
+  ) => _share(
+    filename,
+    mimeType,
+    (file) => file.writeAsBytes(bytes, flush: true),
+  );
+
+  Future<ShareOutcome> _share(
+    String filename,
+    String mimeType,
+    Future<File> Function(File file) write,
   ) async {
     final dir = await _temp(_shareFolder);
     if (await dir.exists()) await dir.delete(recursive: true);
     await dir.create(recursive: true);
     final file = File('${dir.path}/$filename');
     try {
-      await file.writeAsString(content, flush: true);
+      await write(file);
       final result = await SharePlus.instance.share(
         ShareParams(files: [XFile(file.path, mimeType: mimeType)]),
       );
@@ -76,22 +112,29 @@ class SystemFileShare implements FileShare {
 
   @override
   Future<String?> pickTextFile() async {
+    final bytes = await pickFileBytes();
+    if (bytes == null) return null;
+    try {
+      return utf8.decode(bytes);
+    } on FormatException {
+      throw const FormatException('Not a text file');
+    }
+  }
+
+  @override
+  Future<Uint8List?> pickFileBytes({int maxBytes = kMaxImportBytes}) async {
     final picked = await FilePicker.pickFile(type: FileType.any);
     if (picked == null) return null;
     try {
       final length = await picked.length();
-      if (length != null && length > kMaxImportBytes) {
+      if (length != null && length > maxBytes) {
         throw const FormatException('The file is too large');
       }
       final bytes = await picked.readAsBytes();
-      if (bytes.length > kMaxImportBytes) {
+      if (bytes.length > maxBytes) {
         throw const FormatException('The file is too large');
       }
-      try {
-        return utf8.decode(bytes);
-      } on FormatException {
-        throw const FormatException('Not a text file');
-      }
+      return bytes;
     } finally {
       // The picker may have cached a copy of the file (Android:
       // cache/file_picker): it has been read, so remove it now. A failure

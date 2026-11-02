@@ -10,10 +10,13 @@ import '../domain/content.dart';
 import '../domain/local_date.dart';
 import '../reminders/reminder_plan.dart';
 import '../reminders/reminder_scheduler.dart';
+import '../services/attachment_store.dart';
 import '../services/ics_export.dart';
 import 'state_types.dart';
 
 export '../reminders/reminder_scheduler.dart' show ReminderPermission;
+export '../services/attachment_store.dart'
+    show AttachmentException, AttachmentFailure, AttachmentStore;
 export '../services/ics_export.dart' show CalendarTexts;
 export 'state_types.dart';
 
@@ -28,15 +31,20 @@ const int kCompassHistoryLimit = 50;
 /// Features that need a new operation add an `extension` on [AppState] in
 /// their own folder, built on [mutate], [data], [now] and [newId].
 class AppState extends ChangeNotifier {
+  /// [attachments] defaults to an in-memory store (tests, previews); the app
+  /// passes the real `FileAttachmentStore`.
   AppState({
     required this._store,
     required this._content,
     required ReminderScheduler reminders,
+    AttachmentStore? attachments,
     DateTime Function()? clock,
   }) : _scheduler = reminders,
+       _attachments = attachments ?? MemoryAttachmentStore(clock: clock),
        _clock = clock ?? DateTime.now;
 
   final DataStore _store;
+  final AttachmentStore _attachments;
   final ContentLibrary _content;
   final ReminderScheduler _scheduler;
   final DateTime Function() _clock;
@@ -80,6 +88,11 @@ class AppState extends ChangeNotifier {
   /// moments) starts over instead of treating the swap as progress.
   int get dataGeneration => _dataGeneration;
   ContentLibrary get content => _content;
+
+  /// The private folder of photos and recordings (import, record, read,
+  /// delete). Ops that drop attachments from the data call
+  /// [releaseAttachments] so their files go too.
+  AttachmentStore get attachmentStore => _attachments;
   AppSettings get settings => _data.settings;
   DateTime now() => _clock();
 
@@ -96,6 +109,10 @@ class AppState extends ChangeNotifier {
       // gives reward picks, it never adds extras by itself.
       _data = await _store.read() ?? AppData.empty;
       _dataGeneration++;
+      // Files no entry refers to any more (an entry deleted while a save
+      // failed, a restore replaced) are removed before anything can start
+      // a new recording. Never a file the saved data still names.
+      await _cleanAttachments();
       _loaded = true;
     } on Object catch (e) {
       _loadError = e;
@@ -114,6 +131,13 @@ class AppState extends ChangeNotifier {
   /// empty. Returns where the old file was kept.
   Future<String?> startFreshAfterLoadError() async {
     final kept = await _store.moveAside();
+    // The set-aside file may name photos and recordings: keep them with it,
+    // so they are not cleaned up as orphans of the fresh start.
+    try {
+      await _attachments.moveAside();
+    } on Object {
+      // They stay in place (a later load may then clean them as orphans).
+    }
     _data = AppData.empty;
     _dataGeneration++;
     _loadError = null;
@@ -165,6 +189,33 @@ class AppState extends ChangeNotifier {
     if (_saveStatus == status) return;
     _saveStatus = status;
     notifyListeners();
+  }
+
+  /// Removes attachment files nothing in [data] refers to (pending
+  /// recordings are kept). Best effort: a failure is retried next time.
+  Future<void> _cleanAttachments() async {
+    try {
+      await _attachments.deleteOrphans(_data.attachmentFileNames);
+    } on Object {
+      // Tried again on the next load.
+    }
+  }
+
+  /// Deletes the files of [removed] attachments that [data] no longer
+  /// refers to — once the change that dropped them is saved. If the save
+  /// failed (or is still pending) the files stay, and the next load removes
+  /// whichever the saved data doesn't name. Best effort; never throws.
+  Future<void> releaseAttachments(Iterable<Attachment> removed) async {
+    if (removed.isEmpty || _saveStatus != SaveStatus.saved) return;
+    final keep = _data.attachmentFileNames;
+    for (final a in removed) {
+      if (keep.contains(a.fileName)) continue;
+      try {
+        await _attachments.delete(a);
+      } on Object {
+        // An orphan now: removed on the next load.
+      }
+    }
   }
 
   /// A new unique id, e.g. `quest_lz3k9a1f`.
@@ -548,15 +599,32 @@ class AppState extends ChangeNotifier {
     return null;
   }
 
+  /// The current project new quests and attempts are linked to: the saved
+  /// project unless it is done (finished work stops collecting new tasks,
+  /// even before it is archived). Null when there is none.
+  String? get activeProjectId {
+    final project = _data.project;
+    if (project == null || project.status == ProjectStatus.done) return null;
+    return project.id;
+  }
+
+  /// Adds a quest on the board lane [stage] (not done: complete it to get
+  /// there). While a project is active ([activeProjectId]) the quest is
+  /// linked to it, unless [linkProject] is false.
   Future<Quest> addQuest(
     String title, {
     QuestRecurrence recurrence = QuestRecurrence.none,
     String? dueDate,
     QuestSource source = QuestSource.manual,
+    QuestStage stage = QuestStage.ready,
+    bool linkProject = true,
   }) async {
     final text = title.trim();
     if (text.isEmpty) throw ArgumentError.value(title, 'title', 'is empty');
     if (dueDate != null) parseDateKey(dueDate);
+    if (stage == QuestStage.done) {
+      throw ArgumentError.value(stage, 'stage', 'a new quest is not done');
+    }
     final quest = Quest(
       id: newId('quest'),
       title: text,
@@ -564,6 +632,8 @@ class AppState extends ChangeNotifier {
       recurrence: recurrence,
       dueDate: dueDate,
       source: source,
+      stage: stage,
+      projectId: linkProject ? activeProjectId : null,
     );
     await mutate(
       (d) => _questsIntroduced(d).copyWith(quests: [...d.quests, quest]),
@@ -582,14 +652,20 @@ class AppState extends ChangeNotifier {
           ),
         );
 
-  Future<void> updateQuest(Quest quest) => mutate(
-    (d) => d.copyWith(
-      quests: [for (final q in d.quests) q.id == quest.id ? quest : q],
-    ),
-  );
+  /// Replaces the quest with the same id (its stage kept in step with its
+  /// completion, [Quest.normalized]).
+  Future<void> updateQuest(Quest quest) {
+    final next = quest.normalized();
+    return mutate(
+      (d) => d.copyWith(
+        quests: [for (final q in d.quests) q.id == next.id ? next : q],
+      ),
+    );
+  }
 
   /// Completes or reopens a quest for local [day] (default today). A one-off
-  /// quest reopened is open on every day again.
+  /// quest reopened is open on every day again. The board follows
+  /// ([Quest.completedFor]).
   Future<void> setQuestDone(String id, bool done, {String? day}) {
     final key = day ?? today;
     parseDateKey(key);
@@ -597,16 +673,7 @@ class AppState extends ChangeNotifier {
       (d) => d.copyWith(
         quests: [
           for (final q in d.quests)
-            if (q.id != id)
-              q
-            else if (q.recurrence == QuestRecurrence.daily)
-              q.copyWith(
-                completedOn: done
-                    ? {...q.completedOn, key}
-                    : ({...q.completedOn}..remove(key)),
-              )
-            else
-              q.copyWith(completedOn: done ? {key} : const {}),
+            if (q.id != id) q else q.completedFor(key, done),
         ],
       ),
     );
@@ -671,8 +738,13 @@ class AppState extends ChangeNotifier {
     return added.length;
   }
 
-  Future<void> saveProject(MonthProject? project) =>
-      mutate((d) => d.copyWith(project: () => project));
+  /// Replaces (or with null, removes) the current project. A photo it no
+  /// longer wears is deleted once saved.
+  Future<void> saveProject(MonthProject? project) async {
+    final before = _data.project?.art?.photo;
+    await mutate((d) => d.copyWith(project: () => project));
+    if (before != null) await releaseAttachments([before]);
+  }
 
   /// Saves the thirty-day path note for [day] (1–30) exactly as typed.
   Future<void> savePathAnswer(int day, String body) {
@@ -690,22 +762,27 @@ class AppState extends ChangeNotifier {
 
   // ── Journal & reviews ───────────────────────────────────────────────────
 
+  /// Adds a note; [attachments] are photos and recordings already in the
+  /// attachment store (`importFile` / `adoptRecording`).
   Future<JournalEntry> addJournalEntry({
     String? title,
     required String body,
+    List<Attachment> attachments = const [],
   }) async {
     final entry = JournalEntry(
       id: newId('note'),
       title: title,
       body: body,
       createdAt: now(),
+      attachments: attachments,
     );
     await mutate((d) => d.copyWith(journal: [entry, ...d.journal]));
     return entry;
   }
 
-  /// Replaces the entry with the same id; keeps its creation time and stamps
-  /// `editedAt`.
+  /// Replaces the title and body of the entry with the same id; keeps its
+  /// creation time and its attachments (changed only through the attachment
+  /// ops) and stamps `editedAt`.
   Future<void> updateJournalEntry(JournalEntry entry) {
     final at = now();
     return mutate(
@@ -713,12 +790,10 @@ class AppState extends ChangeNotifier {
         journal: [
           for (final e in d.journal)
             if (e.id == entry.id)
-              JournalEntry(
-                id: e.id,
-                title: entry.title,
+              e.copyWith(
+                title: () => entry.title,
                 body: entry.body,
-                createdAt: e.createdAt,
-                editedAt: at,
+                editedAt: () => at,
               )
             else
               e,
@@ -727,14 +802,36 @@ class AppState extends ChangeNotifier {
     );
   }
 
-  Future<void> deleteJournalEntry(String id) => mutate(
-    (d) => d.copyWith(
-      journal: [
-        for (final e in d.journal)
-          if (e.id != id) e,
-      ],
-    ),
-  );
+  /// Deletes a note, its photos and recordings (once saved) and the pinned
+  /// memory taken from it.
+  Future<void> deleteJournalEntry(String id) async {
+    final removed = _data.attachmentsOf(AttachmentHolder.journal, id);
+    await mutate(
+      (d) => withoutPinFrom(
+        d.copyWith(
+          journal: [
+            for (final e in d.journal)
+              if (e.id != id) e,
+          ],
+        ),
+        id,
+      ),
+    );
+    await releaseAttachments(removed);
+  }
+
+  /// [d] without its pinned memory when that came from the entry
+  /// [sourceId] (or, with [attachmentId], from that attachment).
+  static AppData withoutPinFrom(
+    AppData d,
+    String sourceId, {
+    String? attachmentId,
+  }) {
+    final pin = d.pinnedMemory;
+    if (pin == null || pin.sourceId != sourceId) return d;
+    if (attachmentId != null && pin.attachmentId != attachmentId) return d;
+    return d.copyWith(pinnedMemory: () => null);
+  }
 
   /// Creates (no/unknown [id]) or updates a weekly review. Reviews are kept
   /// newest week first.
@@ -904,15 +1001,72 @@ class AppState extends ChangeNotifier {
 
   // ── Data (F-040–F-043) ──────────────────────────────────────────────────
 
-  /// Everything the user owns, as the documented JSON backup.
+  /// Everything the user owns as the documented JSON backup (v1: words
+  /// only, no attachment files — "Export backup" makes the v2 `.zip`).
   String exportBackup() => encodeBackup(_data, now());
 
-  /// Replaces all data with a backup. The text is fully decoded and
-  /// validated first; a [FormatException] leaves current data untouched.
-  /// Notification consent is per device, so `remindersEnabled` keeps this
-  /// device's value.
-  Future<void> importBackup(String text) async {
-    final incoming = decodeBackup(text);
+  /// Everything the user owns as a v2 backup (`.zip`): `data.json` and every
+  /// photo and recording still on this phone. Files that couldn't be read
+  /// are listed in [BackupArchive.missing] (say so); the data still names
+  /// them, so a restore reports them as missing too.
+  Future<BackupArchive> exportBackupArchive() async {
+    final data = _data;
+    final files = <String, List<int>>{};
+    final missing = <String>{};
+    for (final name in data.attachmentFileNames) {
+      try {
+        files[name] = await _attachments.readFile(name);
+      } on Object {
+        missing.add(name);
+      }
+    }
+    return BackupArchive(
+      bytes: encodeBackupArchive(data, now(), files),
+      missing: missing,
+    );
+  }
+
+  /// Reads a backup file (v2 `.zip` or v1 JSON) for the "Replace
+  /// everything?" question. Fully validated; throws [FormatException] and
+  /// changes nothing. [RestorePreview.missing] counts the photos and
+  /// recordings the data names that are neither in the backup nor on this
+  /// phone (they stay listed on their entries, shown as missing).
+  Future<RestorePreview> previewRestore(List<int> bytes) async {
+    final contents = decodeBackupBytes(bytes);
+    final missing = <String>{};
+    for (final name in contents.notIncluded) {
+      bool here;
+      try {
+        here = await _attachments.hasFile(name);
+      } on Object {
+        here = false;
+      }
+      if (!here) missing.add(name);
+    }
+    return RestorePreview(contents: contents, missing: missing);
+  }
+
+  /// Replaces all data with a previewed backup: its attachment files are
+  /// written first — if that fails an [AttachmentException] is thrown and
+  /// the current data is untouched — then the data is replaced as
+  /// [importBackup] does. Files only the old data named are removed once
+  /// the restored data is saved.
+  Future<void> restoreBackup(RestorePreview preview) async {
+    final contents = preview.contents;
+    for (final MapEntry(key: name, value: bytes) in contents.files.entries) {
+      await _attachments.writeFile(name, bytes);
+    }
+    await _replaceAll(contents.data);
+  }
+
+  /// Replaces all data with a JSON backup (v1). The text is fully decoded
+  /// and validated first; a [FormatException] leaves current data
+  /// untouched. Notification consent is per device, so `remindersEnabled`
+  /// keeps this device's value.
+  Future<void> importBackup(String text) async =>
+      _replaceAll(decodeBackup(text));
+
+  Future<void> _replaceAll(AppData incoming) async {
     final remindersOn = settings.remindersEnabled;
     _draftJourney = null;
     // A restore replaces everything: nothing in it is a new moment.
@@ -922,12 +1076,16 @@ class AppState extends ChangeNotifier {
         settings: incoming.settings.copyWith(remindersEnabled: remindersOn),
       ),
     );
+    if (_saveStatus == SaveStatus.saved) await _cleanAttachments();
     await _replan();
   }
 
-  /// Cancels reminders, deletes the saved file and returns to onboarding.
-  /// Throws if the file couldn't be deleted (data is then left as it was).
-  Future<void> deleteAllData() async {
+  /// Cancels reminders, deletes the saved file and every photo and
+  /// recording, and returns to onboarding. Throws if the data file couldn't
+  /// be deleted (everything is then left as it was). Returns false when the
+  /// data is gone but some attachment files couldn't be removed (say so;
+  /// the next launch removes them).
+  Future<bool> deleteAllData() async {
     try {
       await _scheduler.cancelAll();
     } on Object catch (e) {
@@ -935,11 +1093,42 @@ class AppState extends ChangeNotifier {
     }
     await _writeQueue;
     await _store.clear();
+    var filesGone = true;
+    try {
+      await _attachments.deleteAll();
+    } on Object {
+      filesGone = false;
+    }
     _data = AppData.empty;
     _dataGeneration++;
     _draftJourney = null;
     _saveStatus = SaveStatus.idle;
     _saveError = null;
     notifyListeners();
+    return filesGone;
   }
+}
+
+/// A v2 backup ready to share.
+class BackupArchive {
+  const BackupArchive({required this.bytes, this.missing = const {}});
+
+  /// The `.zip`.
+  final Uint8List bytes;
+
+  /// Attachment files the data names that couldn't be read (not in it).
+  final Set<String> missing;
+}
+
+/// A validated backup and what it lacks, before "Replace everything?".
+class RestorePreview {
+  const RestorePreview({required this.contents, this.missing = const {}});
+
+  final BackupContents contents;
+
+  /// Attachment files the backup's data names that are neither in it nor on
+  /// this phone. Restored entries keep them, shown as missing.
+  final Set<String> missing;
+
+  DateTime? get exportedAt => contents.exportedAt;
 }

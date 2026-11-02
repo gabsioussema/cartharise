@@ -73,14 +73,23 @@ and the share sheet / file picker when the user asks for them.
   check-ins (the
   button is disabled with a hint when none are on). Shared / dismissed /
   unavailable outcomes and failures are reported, never claimed as success.
-- **Export:** `cartharise-backup-<yyyy-MM-dd>.json`, `application/json`, the
-  documented format from `exportBackup()`.
-- **Import:** pick → fully decode and validate (`previewBackup`) → on any
-  problem show "This file couldn't be used", the plain reason (not JSON, not
-  a Cartharise backup, unsupported version, damaged, too large, not text) and
-  **"Your current data was not changed."**, with nothing written → otherwise
-  ask "Replace everything on this phone with the backup from <date>?" →
-  `importBackup`. Cancel at any point changes nothing. If the restored data
+- **Export (backup v2, step 2):** `cartharise-backup-<yyyy-MM-dd>.zip`,
+  `application/zip` — `data.json` (the documented JSON, `"format": 2`) plus
+  `attachments/<file>` for every photo and recording, from
+  `exportBackupArchive()` through `FileShare.shareBytesFile`. Files that
+  couldn't be read are said ("…couldn't be read and aren't in it"); the data
+  still names them.
+- **Import:** `FileShare.pickFileBytes` → `previewRestore(bytes)` fully
+  decodes and validates a v2 `.zip` or a v1 `.json` → on any problem show
+  "This file couldn't be used", the plain reason (not JSON, not a Cartharise
+  backup, unsupported version, damaged, too large, not text) and **"Your
+  current data was not changed."**, with nothing written → otherwise ask
+  "Replace everything on this phone with the backup from <date>?", adding
+  how many photos or recordings it names are missing (neither in the backup
+  nor on this phone; their entries are kept) → `restoreBackup` writes the
+  files first (if that fails: "Its photos and recordings couldn't be saved on
+  this phone." and nothing is replaced). Cancel at any point changes
+  nothing. If the restored data
   then can't be written (`saveStatus == failed`), the snackbar says "The
   backup is open on screen, but it couldn't be saved on this phone yet…"
   instead of "Backup restored." (F-055); the save indicator offers Retry
@@ -88,10 +97,14 @@ and the share sheet / file picker when the user asks for them.
 - **Delete all:** two destructive confirmations ("Delete all data?" then
   "This can't be undone") → `FileShare.clearTemporaryFiles()` (export copies
   in the private temp folder, ours and share_plus's, and the file picker's
-  cached imports) → `deleteAllData()`; `BootScreen` closes the pushed pages
-  and shows onboarding. If deleting fails, the user is told the writing is
-  still there; if only a temporary copy couldn't be removed, the data is
-  still deleted and the user is told so ("Removing the app erases it").
+  cached imports) and `MediaPicker.clearTemporaryFiles()` (photo picker
+  copies) → `deleteAllData()` (data file, then the `attachments/` folder and
+  with it the pinned memory); `BootScreen` closes the pushed pages and shows
+  onboarding. If deleting fails, the user is told the writing is still
+  there; if only photos or recordings couldn't be removed, the data is
+  still deleted and the user is told so (the next launch removes them); if
+  only a temporary copy couldn't be removed, likewise ("Removing the app
+  erases it").
 - **No copies left behind:** every export's temp file is deleted when the
   share sheet returns (also when dismissed), and the picker's cached copy
   right after an import file is read (`SystemFileShare`).

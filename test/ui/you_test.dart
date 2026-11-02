@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:archive/archive.dart';
 import 'package:cartharise/domain/app_data.dart';
 import 'package:cartharise/domain/backup.dart';
 import 'package:cartharise/l10n/app_localizations_en.dart';
@@ -477,16 +478,24 @@ void main() {
       );
     });
 
-    testWidgets('export shares a complete, valid JSON backup', (tester) async {
+    // Step 2 (by design): the backup is the v2 .zip — data.json (the same
+    // documented JSON) plus the photos and recordings.
+    testWidgets('export shares a complete, valid backup (.zip)', (
+      tester,
+    ) async {
       final h = await pumpCartha(tester, data: withNote('My words'));
       await _openHub(tester, 'you-data');
       await _tap(tester, find.byKey(const ValueKey('data-export')));
       final file = h.files.shared.single;
-      expect(file.filename, 'cartharise-backup-2026-11-03.json');
-      expect(file.mimeType, 'application/json');
-      final json = jsonDecode(file.content) as Map<String, Object?>;
+      expect(file.filename, 'cartharise-backup-2026-11-03.zip');
+      expect(file.mimeType, 'application/zip');
+      final backup = decodeBackupBytes(file.bytes);
+      expect(backup.format, kBackupArchiveFormat);
+      expect(backup.data.journal.single.body, 'My words');
+      final entry = ZipDecoder().decodeBytes(file.bytes).find('data.json')!;
+      final json =
+          jsonDecode(utf8.decode(entry.readBytes()!)) as Map<String, Object?>;
       expect(json['app'], 'cartharise');
-      expect(decodeBackup(file.content).journal.single.body, 'My words');
       expect(find.text('Backup shared.'), findsOneWidget);
     });
 

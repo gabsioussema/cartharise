@@ -218,7 +218,8 @@ void main() {
     expect(find.byType(DataScreen), findsOneWidget);
     await _tap(tester, find.byKey(const ValueKey('data-export')));
     final backup = h.files.shared.last;
-    final exported = decodeBackup(backup.content);
+    // Step 2: the export is the v2 backup (.zip with data.json).
+    final exported = decodeBackupBytes(backup.bytes).data;
     expect(exported.persona!.avatar, _expected);
     expect(exported.persona!.motto, _motto);
     await _waitOutSnackBars(tester);
@@ -252,7 +253,7 @@ void main() {
       find.byKey(const ValueKey('you-data')),
       screen: find.byType(YouTab),
     );
-    h.files.pickResult = backup.content;
+    h.files.pickBytes = backup.bytes;
     await _tap(tester, find.byKey(const ValueKey('data-import')));
     await _tap(tester, find.widgetWithText(FilledButton, 'Replace'));
     expect(find.text('Backup restored.'), findsOneWidget);

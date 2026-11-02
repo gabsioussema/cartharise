@@ -7,7 +7,9 @@
 /// * iOS: `Library/Application Support` is in iCloud and computer backups
 ///   by default, so after every save [FileDataStore] asks the native side
 ///   (`ios/Runner/AppDelegate.swift`) to mark the data folder
-///   `isExcludedFromBackup`. Only a folder path crosses the channel.
+///   `isExcludedFromBackup`, and `FileAttachmentStore` does the same for its
+///   `attachments/` folder inside it. Only a folder path crosses the
+///   channel.
 library;
 
 import 'dart:io';

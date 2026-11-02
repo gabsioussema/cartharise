@@ -49,6 +49,12 @@
 		</dict>
 		<key>UIApplicationSupportsIndirectInputEvents</key>
 		<true/>
+		<key>NSMicrophoneUsageDescription</key>
+		<string>To record voice notes you keep on this phone. Only when you tap Record.</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>To add a photo you choose to a note. It stays on this phone.</string>
+		<key>NSCameraUsageDescription</key>
+		<string>To take a photo for a note. It stays on this phone.</string>
 		<key>LSApplicationQueriesSchemes</key>
 		<array>
 			<string>https</string>

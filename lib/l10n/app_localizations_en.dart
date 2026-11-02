@@ -3539,13 +3539,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get youDataExportBody =>
-      'Saves everything as one JSON file. It isn\'t encrypted, so keep it private.';
+      'Saves everything, photos and recordings too, as one .zip file. It isn\'t encrypted, so keep it private.';
 
   @override
   String get youDataExportButton => 'Export backup';
 
   @override
   String get youDataExported => 'Backup shared.';
+
+  @override
+  String get youDataExportedPartial =>
+      'Backup shared, but some photos or recordings couldn\'t be read and aren\'t in it.';
 
   @override
   String get youDataImportTitle => 'Restore a backup';
@@ -3570,6 +3574,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get youDataImportUnknownDate => 'an unknown date';
+
+  @override
+  String youDataImportMissing(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count photos or recordings it names are missing. Their entries are kept.',
+      one: 'One photo or recording it names is missing. Its entry is kept.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get youDataImportFilesFailed =>
+      'Its photos and recordings couldn\'t be saved on this phone.';
 
   @override
   String get youDataImported => 'Backup restored.';
@@ -3622,7 +3642,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get youDataDeleteConfirm1Body =>
-      'Answers, Compass, quests, notes, reviews and settings will be erased.';
+      'Answers, Compass, quests, notes, photos, recordings, reviews and settings will be erased.';
 
   @override
   String get youDataDeleteConfirm1Action => 'Continue';
@@ -3644,6 +3664,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get youDataDeleteCopiesLeft =>
       'Deleted, but a temporary export copy couldn\'t be removed. Removing the app erases it.';
+
+  @override
+  String get youDataDeleteFilesLeft =>
+      'Deleted, but some photos or recordings couldn\'t be removed yet. Opening the app again removes them.';
 
   @override
   String get youSupportTitle => 'Support & safety';

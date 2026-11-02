@@ -1,30 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../domain/backup.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/file_share.dart';
+import '../../services/media_picker.dart';
 import '../../state/app_state.dart';
 import '../journal/journal_kit.dart';
 import '../theme/cartha_theme.dart';
 import '../widgets/widgets.dart';
 import 'backup_preview.dart';
 
-/// MIME type of the JSON backup.
+/// MIME type of a v1 JSON backup.
 const String kBackupMimeType = 'application/json';
+
+/// MIME type of the v2 backup (`.zip`: data.json + attachments/).
+const String kBackupZipMimeType = 'application/zip';
 
 /// Your data (F-040–F-043, F-055):
 ///
 /// * where the data lives, honestly (on this device, not encrypted by
 ///   Cartharise, not synced);
-/// * export everything as the documented JSON backup through the share
-///   sheet (also the "Export a copy" target after a failed save);
-/// * restore a backup: the file is fully validated first — a bad file is
-///   rejected with "your current data was not changed" — then the user
-///   confirms replacing everything with the backup from its date; if the
-///   restored data couldn't be saved, it says so instead of "restored";
-/// * delete all data after two explicit confirmations: the saved file,
-///   reminders and every temporary export/import copy
-///   ([FileShare.clearTemporaryFiles]); the app then returns to onboarding.
+/// * export everything as the documented v2 backup (`.zip` with the photos
+///   and recordings) through the share sheet (also the "Export a copy"
+///   target after a failed save); files that couldn't be read are said;
+/// * restore a backup (v2 `.zip` or v1 JSON): the file is fully validated
+///   first — a bad file is rejected with "your current data was not
+///   changed" — then the user confirms replacing everything with the backup
+///   from its date, told how many photos or recordings it names are
+///   missing; if the restored data couldn't be saved, it says so instead of
+///   "restored";
+/// * delete all data after two explicit confirmations: the saved file, the
+///   photos and recordings, reminders and every temporary export/import
+///   copy ([FileShare.clearTemporaryFiles], [MediaPicker.clearTemporaryFiles]);
+///   the app then returns to onboarding.
 class DataScreen extends StatefulWidget {
   const DataScreen({super.key});
 
@@ -47,14 +56,17 @@ class _DataScreenState extends State<DataScreen> {
     final l = AppLocalizations.of(context);
     setState(() => _exporting = true);
     try {
-      final outcome = await files.shareTextFile(
-        'cartharise-backup-${state.today}.json',
-        state.exportBackup(),
-        kBackupMimeType,
+      final archive = await state.exportBackupArchive();
+      final outcome = await files.shareBytesFile(
+        'cartharise-backup-${state.today}.zip',
+        archive.bytes,
+        kBackupZipMimeType,
       );
       messenger.showSnackBar(
         SnackBar(
           content: Text(switch (outcome) {
+            ShareOutcome.shared when archive.missing.isNotEmpty =>
+              l.youDataExportedPartial,
             ShareOutcome.shared => l.youDataExported,
             ShareOutcome.dismissed => l.youShareDismissed,
             ShareOutcome.unavailable => l.shareFailed,
@@ -78,9 +90,9 @@ class _DataScreenState extends State<DataScreen> {
       _importError = null;
     });
     try {
-      final String? text;
+      final List<int>? bytes;
       try {
-        text = await files.pickTextFile();
+        bytes = await files.pickFileBytes(maxBytes: kMaxBackupBytes);
       } on FormatException catch (e) {
         _fail(backupErrorMessage(l, e));
         return;
@@ -88,29 +100,35 @@ class _DataScreenState extends State<DataScreen> {
         _fail(l.youDataImportOpenFailed);
         return;
       }
-      if (text == null || !mounted) return;
-      final BackupPreview preview;
+      if (bytes == null || !mounted) return;
+      final RestorePreview preview;
       try {
-        preview = previewBackup(text);
+        preview = await state.previewRestore(bytes);
       } on FormatException catch (e) {
         _fail(backupErrorMessage(l, e));
         return;
       }
+      if (!mounted) return;
       final date = preview.exportedAt == null
           ? l.youDataImportUnknownDate
           : formatDayTime(context, preview.exportedAt!);
+      final missing = preview.missing.length;
       final ok = await confirmDialog(
         context,
         title: l.youDataImportConfirmTitle,
-        body: l.youDataImportConfirmBody(date),
+        body: missing == 0
+            ? l.youDataImportConfirmBody(date)
+            : '${l.youDataImportConfirmBody(date)}\n\n'
+                  '${l.youDataImportMissing(missing)}',
         action: l.youDataImportConfirmAction,
         destructive: true,
       );
       if (!ok) return;
       try {
-        await state.importBackup(text);
-      } on FormatException catch (e) {
-        _fail(backupErrorMessage(l, e));
+        await state.restoreBackup(preview);
+      } on AttachmentException {
+        // Nothing was replaced: the files had to be written first.
+        _fail(l.youDataImportFilesFailed);
         return;
       }
       // Never claim a restore that wasn't saved (F-055): the backup is on
@@ -137,6 +155,7 @@ class _DataScreenState extends State<DataScreen> {
     final l = AppLocalizations.of(context);
     final state = context.read<AppState>();
     final files = context.read<FileShare>();
+    final media = context.read<MediaPicker>();
     final messenger = ScaffoldMessenger.of(context);
     final first = await confirmDialog(
       context,
@@ -165,13 +184,23 @@ class _DataScreenState extends State<DataScreen> {
         copiesLeft = true;
       }
       try {
+        await media.clearTemporaryFiles();
+      } on Object {
+        copiesLeft = true;
+      }
+      final bool filesGone;
+      try {
         // The app returns to onboarding by itself (BootScreen).
-        await state.deleteAllData();
+        filesGone = await state.deleteAllData();
       } on Object {
         messenger.showSnackBar(SnackBar(content: Text(l.youDataDeleteFailed)));
         return;
       }
-      if (copiesLeft) {
+      if (!filesGone) {
+        messenger.showSnackBar(
+          SnackBar(content: Text(l.youDataDeleteFilesLeft)),
+        );
+      } else if (copiesLeft) {
         messenger.showSnackBar(
           SnackBar(content: Text(l.youDataDeleteCopiesLeft)),
         );

@@ -477,14 +477,15 @@ void main() {
     await _settle(tester);
     await _waitOutSnackBars(tester);
 
-    // ── Export JSON → delete all → restore the backup ──────────────────────
+    // ── Export the backup → delete all → restore it ────────────────────────
+    // (Step 2, by design: the backup is the v2 .zip with data.json.)
     await _tap(tester, find.byKey(const ValueKey('you-data')));
     expect(find.byType(DataScreen), findsOneWidget);
     await _tap(tester, find.byKey(const ValueKey('data-export')));
     final backup = h.files.shared.last;
-    expect(backup.mimeType, 'application/json');
-    expect(backup.filename, 'cartharise-backup-2026-11-03.json');
-    final exported = decodeBackup(backup.content);
+    expect(backup.mimeType, 'application/zip');
+    expect(backup.filename, 'cartharise-backup-2026-11-03.zip');
+    final exported = decodeBackupBytes(backup.bytes).data;
     expect(exported.profile!.displayName, 'Ana');
     expect(exported.compass.vision, myVision);
     await _waitOutSnackBars(tester);
@@ -500,7 +501,7 @@ void main() {
     await _quickOnboarding(tester);
     await _openTab(tester, 'You');
     await _tap(tester, find.byKey(const ValueKey('you-data')));
-    h.files.pickResult = backup.content;
+    h.files.pickBytes = backup.bytes;
     await _tap(tester, find.byKey(const ValueKey('data-import')));
     expect(find.textContaining('Replace everything on this phone'), findsOne);
     await _tap(tester, find.widgetWithText(FilledButton, 'Replace'));

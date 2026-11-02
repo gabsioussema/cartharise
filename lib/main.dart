@@ -8,7 +8,11 @@ import 'content/content.dart';
 import 'data/backup_exclusion.dart';
 import 'data/data_store.dart';
 import 'reminders/reminder_scheduler.dart';
+import 'services/attachment_store.dart';
 import 'services/file_share.dart';
+import 'services/media_picker.dart';
+import 'services/voice_player.dart';
+import 'services/voice_recorder.dart';
 import 'state/app_state.dart';
 import 'ui/you/font_licenses.dart';
 
@@ -25,9 +29,22 @@ Future<void> main() async {
   final state = AppState(
     // Kept out of OS backups: Android by the manifest, iOS per write.
     store: FileDataStore(excludeFromBackup: platformBackupExclusion()),
+    // Photos and recordings: `attachments/` next to the data file, kept out
+    // of OS backups the same way.
+    attachments: FileAttachmentStore(
+      excludeFromBackup: platformBackupExclusion(),
+    ),
     content: contentFor(PlatformDispatcher.instance.locale.languageCode),
     reminders: LocalReminderScheduler(),
   );
   // BootScreen calls state.load() behind the animated emblem.
-  runApp(CarthaApp(state: state, fileShare: SystemFileShare()));
+  runApp(
+    CarthaApp(
+      state: state,
+      fileShare: SystemFileShare(),
+      mediaPicker: SystemMediaPicker(),
+      voiceRecorder: RecordVoiceRecorder(),
+      voicePlayer: AudioVoicePlayer(),
+    ),
+  );
 }

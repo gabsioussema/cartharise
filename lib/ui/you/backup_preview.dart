@@ -1,8 +1,8 @@
 /// Reading a backup before restoring it (F-041): validate it completely
-/// first, and know its date for the "Replace everything…?" question.
+/// first, and know its date for the "Replace everything…?" question. Backup
+/// files (v2 `.zip` or v1 JSON) go through `AppState.previewRestore`, which
+/// also counts the photos and recordings they lack.
 library;
-
-import 'dart:convert';
 
 import '../../domain/app_data.dart';
 import '../../domain/backup.dart';
@@ -18,16 +18,11 @@ class BackupPreview {
   final DateTime? exportedAt;
 }
 
-/// Decodes and validates [text] as a Cartharise backup. Throws
+/// Decodes and validates [text] as a Cartharise JSON backup. Throws
 /// [FormatException] for anything else; current data is never touched.
 BackupPreview previewBackup(String text) {
-  final data = decodeBackup(text);
-  DateTime? exportedAt;
-  final root = jsonDecode(text);
-  if (root is Map && root['exportedAt'] is String) {
-    exportedAt = DateTime.tryParse(root['exportedAt'] as String);
-  }
-  return BackupPreview(data: data, exportedAt: exportedAt);
+  final contents = decodeBackupJson(text);
+  return BackupPreview(data: contents.data, exportedAt: contents.exportedAt);
 }
 
 /// Why a file can't be restored, in plain language.

@@ -4,18 +4,26 @@ import 'package:provider/provider.dart';
 
 import 'l10n/app_localizations.dart';
 import 'services/file_share.dart';
+import 'services/media_picker.dart';
+import 'services/voice_player.dart';
+import 'services/voice_recorder.dart';
 import 'state/app_state.dart';
 import 'ui/boot_screen.dart';
 import 'ui/nav.dart';
 import 'ui/theme/cartha_theme.dart';
 
-/// The app: providers (AppState, FileShare, ShellController) above one
-/// MaterialApp whose whole look comes from `CarthaTheme` (lib/ui/theme/).
+/// The app: providers (AppState, FileShare, MediaPicker, VoiceRecorder,
+/// VoicePlayer, ShellController) above one MaterialApp whose whole look
+/// comes from `CarthaTheme` (lib/ui/theme/). The attachment files are the
+/// state's (`AppState.attachmentStore`).
 class CarthaApp extends StatelessWidget {
   const CarthaApp({
     super.key,
     required this.state,
     required this.fileShare,
+    required this.mediaPicker,
+    required this.voiceRecorder,
+    required this.voicePlayer,
     this.shell,
     this.home,
     this.themeMode,
@@ -23,6 +31,15 @@ class CarthaApp extends StatelessWidget {
 
   final AppState state;
   final FileShare fileShare;
+
+  /// Photos from the system picker or camera (only when the user taps).
+  final MediaPicker mediaPicker;
+
+  /// Voice recordings (microphone asked only when the user taps Record).
+  final VoiceRecorder voiceRecorder;
+
+  /// Plays the user's recordings back.
+  final VoicePlayer voicePlayer;
 
   /// Tests may pass their own to drive or inspect tab switching.
   final ShellController? shell;
@@ -38,6 +55,9 @@ class CarthaApp extends StatelessWidget {
     providers: [
       ChangeNotifierProvider<AppState>.value(value: state),
       Provider<FileShare>.value(value: fileShare),
+      Provider<MediaPicker>.value(value: mediaPicker),
+      Provider<VoiceRecorder>.value(value: voiceRecorder),
+      Provider<VoicePlayer>.value(value: voicePlayer),
       if (shell != null)
         ChangeNotifierProvider<ShellController>.value(value: shell!)
       else
