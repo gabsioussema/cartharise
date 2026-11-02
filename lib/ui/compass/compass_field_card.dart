@@ -53,7 +53,7 @@ class CompassFieldCard extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsetsDirectional.only(top: 2),
-                child: Icon(copy.icon, color: p.accent, size: 24),
+                child: copy.mark(context),
               ),
               const SizedBox(width: 12),
               Expanded(

@@ -106,6 +106,53 @@ The board's "loading / charging" animation, rebuilt from
 * In widget tests, use `pump(duration)` / `pumpFrames`, not `pumpAndSettle`,
   while a loader is on screen.
 
+## Visual system (`lib/ui/widgets/glyphs.dart`, `art/`, `scenes.dart`)
+
+Recognition over recall: **one stable picture per idea, always next to its
+word**. Everything is painted (no image assets), in palette tokens only, and
+static (only `BrandScene` rises once, and not with reduced motion).
+
+**Glyphs** — `GlyphIcon(glyph, {size = 24, color, semanticLabel})` paints a
+`CarthaGlyph` in the emblem's line style (`GlyphArt`: a 24-unit grid, one
+stroke weight with mitred corners and flat ends, a few filled tapers). The
+weight is a little heavier at 16 px and lighter at 48 px, never under 1.2 px.
+Colour defaults to `accent`; pass `heroAccent` on hero surfaces. Decorative
+unless `semanticLabel` is given (then an image with that label).
+`GlyphTitle(glyph, title)` is a `SectionCard`-style heading row with a glyph.
+
+| Idea | Glyph | Where (Step 1) |
+|---|---|---|
+| Notice | an arched standing mirror | Awakening title, Reset strip title, "Lesson n of 7" |
+| Direction | a compass whose needle points to the north star | Compass hero ("My direction"), empty-Compass card |
+| Experiment | a seedling | weekly review "Next experiment" (Playground: agent B) |
+| Boundaries | a shelter with a doorway | Compass › Boundaries field, its version view, the import note |
+| Reflection | a lantern on an open notebook | Journal note and review cards, Weekly review title |
+| Progress | a path narrowing to an obelisk | for the Campaign and milestones (agent B) |
+
+**Lesson illustrations** — `LessonIllustration(lessonId, {height = 120})`,
+one scene per lesson (`LessonScene.of`: `lesson.01` roots under a tree,
+`.02` an iceberg mostly under the water, `.03` a walled town with its gate
+open, `.04` arches opening wider, `.05` a sailboat tacking to a lighthouse,
+`.06` one day's arc from sun to moon with pauses, `.07` a marked route to a
+summit flag; other ids cycle). Drawn with `SceneSketch` in `ScenePalette`
+(hero) colours, so they read the same in light and dark. The subject is
+composed at the box's height around the centre and sky, land and sea extend
+sideways: boxes narrower than 1.8 : 1 are cropped at the sides, wider ones
+become panoramas. Decorative; clipped to `radiusSmall`.
+
+**Achievement badges** — `AchievementBadge(achievement, {earned, size = 48})`:
+seven symbols (eye, signpost, rising sun, owl, folded map, anvil, summit flag)
+on a medallion like the avatar's disc. *Earned*: hero disc, bronze double rim,
+two ribbon tails. *Not yet*: an empty slot with a dashed rim, no ribbons, the
+symbol in outline only — different in shape, not only colour. Decorative (the
+tile says "Earned" / "Not yet").
+
+**Compact scene** — `BrandScene.compact(kind:)` (or `compact: true` on the
+named scenes, e.g. `DawnRuinsScene(compact: true)`) for Today's next action:
+3 : 1 instead of 4 : 3, the *same* art composed at 2 : 1 and cropped to its
+band of interest (`ScenePainter.focusOf`). The existing constructors are
+unchanged.
+
 ## State, data & services
 
 See `docs/architecture.md`. AppState implements every member of PLAN.md §5 plus:
@@ -176,7 +223,9 @@ provided above `MaterialApp`; `AppNav` helpers: `switchTab`, `tabWidget`,
 | `test/ui/a11y_test.dart` | every main screen (+ onboarding), dark and light: `androidTapTargetGuideline`, `iOSTapTargetGuideline`, `labeledTapTargetGuideline`, `textContrastGuideline`; keyboard-only Tab traversal of the guided prompt (field → Save & continue → Back → Skip → Jump → Pause → Feeling heavy?, Enter activates) |
 | `test/privacy_test.dart` | Android manifest/backup rules, iOS backup-exclusion channel, `FileDataStore` exclusion after each write (failure keeps the save, retried), clear |
 | `test/splash_test.dart` | the Android 12 splash icon keeps the whole emblem inside the system's circular mask (`assets/brand/splash_android12.png`) |
+| `test/ui/visual_system_test.dart` | six glyphs at 16–48 px in the accent (dark + light), label → image, given colour, six distinct drawings, stroke weight ≥ 1.2 px; one distinct scene per lesson at narrow / phone / tablet widths, decorative; seven distinct badges, earned vs not yet by shape (ribbons + disc vs dashed slot); compact scene framing, old constructors unchanged, rise vs reduced motion; placements in Awakening, Reset strip, lesson, Compass, import sheet, Journal and review, each glyph next to a word; size matrix (dark + light); palette tokens only |
 | `test/screenshots/foundation_screens_test.dart` | tagged `screenshots`: boot, load error, shell, UI-base gallery (Forest + Olive, dark + light), the charging frames → `test/screenshots/out/` |
+| `test/screenshots/visual_system_screenshots_test.dart` | tagged `screenshots`: glyph sheet, badges, lesson art (phone, wide, narrow), compact scenes, Awakening list and a lesson → `visual_*` |
 | `test/brand/export_brand_assets_test.dart` | tagged `brand`: writes the brand assets from `EmblemGeometry` (`make brand`) |
 
 Test support (`test/support/`): `pumpCartha(tester, {data, home, size,

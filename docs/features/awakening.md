@@ -7,15 +7,17 @@ tab's "Learn the ideas first (optional)" strip and its "See all lessons" link
 
 ## User flow
 
-1. **Awakening list** (`AwakeningScreen`): "The Awakening" + "Seven ideas
-   behind the reset, in plain words. Optional, and in any order.", "n of 7
-   read", then one card per lesson (Lesson n, title, summary, read state as a
-   chip with words: "Read" ✓ / "Not read yet"). Footer: "Paraphrased in
-   Cartharise's own words from “{title}” by {author}. Cartharise is
-   independent." + "About the source" → `AppNav.openInspiration`.
+1. **Awakening list** (`AwakeningScreen`): the Notice glyph (mirror) by "The
+   Awakening" + "Seven ideas behind the reset. Optional, any order.", "n of 7
+   read", then one card per lesson: its **illustration** (96 dp), Lesson n,
+   title, summary, read state as a chip with words ("Read" ✓ / "Not read
+   yet"). Footer: "In Cartharise's words, from “{title}” by {author}.
+   Independent app." + "About the source" → `AppNav.openInspiration`.
 2. **Lesson** (`LessonScreen(lessonId:)`):
-   * `LESSON n OF 7` eyebrow, **Cinzel** title (`headlineSmall`), summary,
-     read chip.
+   * The lesson's **illustration** across the top (148 dp on phones, 200 dp
+     from 600 dp wide).
+   * The mirror + `LESSON n OF 7` eyebrow, **Cinzel** title
+     (`headlineSmall`), summary, read chip.
    * Explanation split into paragraphs on blank lines (Inter `bodyLarge`).
    * **Example** card and **A lens, not a verdict** card (the nuance).
    * **Check your understanding**: the question, "Pick the answer that fits
@@ -29,6 +31,28 @@ tab's "Learn the ideas first (optional)" strip and its "See all lessons" link
      "Back to the lessons". Moving between lessons replaces the route, so back
      always returns to where the user came from.
    * The same source note as the list.
+
+The Reset tab's strip (`LessonStrip`) has the mirror by "Learn the ideas
+first (optional)" and compact cards with a 72 dp illustration.
+
+## Illustrations
+
+One memorable scene per lesson (`LessonIllustration`, `LessonScene.of`),
+painted in the brand scenes' hero colours, calm and static, the same in light
+and dark. Decorative: the title next to it says what it is.
+
+| Lesson | Scene | Why |
+|---|---|---|
+| 1 Who you are comes first | a tree at sunrise, its roots (drawn in the earth below) wider than its crown | actions grow from who you are |
+| 2 Your actions have reasons | an iceberg under the moon, most of it below the waterline | reasons are often hidden |
+| 3 Why change can feel risky | a walled hilltop town at dusk, the gate open, light spilling down the path | we guard our sense of self; change is a way out |
+| 4 Ways of seeing can widen | arches opening wider and wider around a sea horizon | ways of seeing grow broader |
+| 5 Aim, check, adjust | a sailboat tacking toward a lighthouse, its zigzag wake behind | steer, check, correct course |
+| 6 A day off autopilot | one day's arc: morning sun, short pauses, midday, evening moon | the reset's morning · daytime · evening |
+| 7 Your direction as a game | a marked route with waypoints up to a flag on the summit | goal, missions and quests as a game |
+
+The subject stays centred at any width (narrow strip card to tablet column);
+see the Visual system in [foundation.md](foundation.md).
 
 ## Behaviour rules
 
@@ -47,7 +71,8 @@ tab's "Learn the ideas first (optional)" strip and its "See all lessons" link
 | `lib/ui/awakening/awakening_screen.dart` | `AwakeningScreen`, `AwakeningSourceNote` |
 | `lib/ui/awakening/lesson_screen.dart` | `LessonScreen`, `LessonReadTagFor` |
 | `lib/ui/awakening/knowledge_check.dart` | `KnowledgeCheckCard` |
-| `lib/ui/awakening/lesson_card.dart` | `LessonCard`, `LessonReadTag`, `LessonStrip` (used by the Reset tab), `lessonsInOrder` |
+| `lib/ui/awakening/lesson_card.dart` | `LessonCard` (illustration on top; `compact` for the strip), `LessonReadTag`, `LessonStrip` (used by the Reset tab), `lessonsInOrder` |
+| `lib/ui/widgets/glyphs.dart`, `lib/ui/widgets/art/lesson_art.dart` | `LessonIllustration`, `LessonScene`, `LessonArtPainter` (visual system) |
 | `l10n_src/awakening_en.arb` | all `awakening…` strings |
 
 Layout helpers (`ReadingColumn`, `Eyebrow`, `SectionTitle`) come from
@@ -64,6 +89,14 @@ id; every real English lesson renders with its Try-it links; size matrix ×
 dark/light for the list and a lesson with feedback shown. Screenshots
 `25_awakening_*`, `26_lesson_*` come from
 `test/screenshots/reset_screenshots_test.dart`.
+
+`test/ui/visual_system_test.dart`: one distinct scene per lesson (pixels
+compared), at narrow, phone and tablet widths in dark and light; every card
+carries its lesson's illustration; the strip's cards are 72 dp; a lesson opens
+on its scene with the mirror by "Lesson n of 7"; each glyph sits next to a
+word; the strip in the size matrix. Screenshots `visual_03`–`visual_05`
+(illustrations), `visual_07_awakening_*`, `visual_08_lesson_*` come from
+`test/screenshots/visual_system_screenshots_test.dart`.
 
 ## Requirements satisfied
 

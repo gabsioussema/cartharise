@@ -81,7 +81,22 @@ class _LessonScreenState extends State<LessonScreen> {
         child: ReadingColumn(
           top: 0,
           children: [
-            Eyebrow(l.awakeningLessonOf(lesson.ordinal, lessons.length)),
+            LessonIllustration(
+              lesson.id,
+              height: MediaQuery.sizeOf(context).width >= 600 ? 200 : 148,
+            ),
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                const GlyphIcon(CarthaGlyph.notice, size: 18),
+                const SizedBox(width: 8),
+                Flexible(
+                  child: Eyebrow(
+                    l.awakeningLessonOf(lesson.ordinal, lessons.length),
+                  ),
+                ),
+              ],
+            ),
             const SizedBox(height: 8),
             Semantics(
               header: true,

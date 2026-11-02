@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../../domain/app_data.dart';
 import '../../domain/content.dart';
 import '../../l10n/app_localizations.dart';
+import '../theme/cartha_theme.dart';
+import '../widgets/widgets.dart';
 
 /// What each Compass field is called and how it is explained (F-023).
 class CompassFieldCopy {
@@ -11,6 +13,7 @@ class CompassFieldCopy {
     required this.help,
     required this.hint,
     required this.icon,
+    this.glyph,
   });
 
   final String title;
@@ -21,6 +24,15 @@ class CompassFieldCopy {
 
   /// Monochrome, tinted with the accent token.
   final IconData icon;
+
+  /// The visual system's glyph for this field's idea, shown instead of
+  /// [icon] where a widget fits (Boundaries: the shelter).
+  final CarthaGlyph? glyph;
+
+  /// The field's mark: its [glyph] when it has one, else its [icon].
+  Widget mark(BuildContext context, {double size = 24}) => glyph == null
+      ? Icon(icon, color: CarthaPalette.of(context).accent, size: size)
+      : GlyphIcon(glyph!, size: size);
 
   static CompassFieldCopy of(AppLocalizations l, CompassField field) =>
       switch (field) {
@@ -59,6 +71,7 @@ class CompassFieldCopy {
           help: l.compassFieldConstraintsHelp,
           hint: l.compassFieldConstraintsHint,
           icon: Icons.shield_outlined,
+          glyph: CarthaGlyph.boundaries,
         ),
       };
 }

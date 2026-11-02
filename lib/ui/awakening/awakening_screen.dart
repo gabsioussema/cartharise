@@ -29,6 +29,7 @@ class AwakeningScreen extends StatelessWidget {
           top: 0,
           children: [
             ScreenHeader(
+              leading: const GlyphIcon(CarthaGlyph.notice, size: 32),
               title: l.awakeningTitle,
               subtitle: l.awakeningSubtitle,
               padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
