@@ -1,1 +1,1 @@
-80a937107ac8d9502ae8c448bfea89036daee297bbac22493d8f139e3bcf47f6  cartharise-1.0.0-arm64-v8a.apk
+ab04f08df36516181c74b5fc56eb787f34af75c06a6a01286bce0b0a3b6e1527  cartharise-1.0.0-arm64-v8a.apk
