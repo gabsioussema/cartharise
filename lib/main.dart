@@ -14,7 +14,7 @@ import 'services/attachment_store.dart';
 import 'services/file_share.dart';
 import 'services/dictation_platform.dart';
 import 'services/media_picker.dart';
-import 'services/read_aloud.dart';
+import 'services/read_aloud_platform.dart';
 import 'services/voice_player.dart';
 import 'services/voice_recorder.dart';
 import 'state/app_state.dart';
@@ -56,8 +56,9 @@ Future<void> main() async {
       // Dictation: the phone's on-device recognizer only (Android 12+,
       // iOS); otherwise it says why, and offers Record or typing instead.
       dictation: PlatformDictation(),
-      // Until the platform implementation lands, Listen is not offered.
-      readAloud: const UnavailableReadAloud(),
+      // Listen: the phone's own text-to-speech, offline voices only, and
+      // only when the user taps Listen.
+      readAloud: PlatformReadAloud(),
     ),
   );
 }

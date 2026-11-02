@@ -89,5 +89,10 @@
             <action android:name="android.intent.action.VIEW" />
             <data android:scheme="https" />
         </intent>
+        <!-- Listen: find the phone's text-to-speech engine (Android 11+
+             package visibility). Offline voices only; no permission. -->
+        <intent>
+            <action android:name="android.intent.action.TTS_SERVICE" />
+        </intent>
     </queries>
 </manifest>

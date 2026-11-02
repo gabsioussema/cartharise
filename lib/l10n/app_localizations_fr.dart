@@ -1606,6 +1606,44 @@ class AppLocalizationsFr extends AppLocalizations {
   String get journalPhaseEvening => 'Evening';
 
   @override
+  String get listenAction => 'Écouter';
+
+  @override
+  String get listenStop => 'Arrêter la lecture';
+
+  @override
+  String get listenMyNote => 'Écouter ma note';
+
+  @override
+  String get listenMyAnswer => 'Écouter ma réponse';
+
+  @override
+  String get listenStarted => 'Lecture à voix haute.';
+
+  @override
+  String get listenStopped => 'Lecture arrêtée.';
+
+  @override
+  String get listenHearHint =>
+      'Pas de son ? Vérifiez le volume et le mode silencieux.';
+
+  @override
+  String get listenNoVoice =>
+      'Aucune voix pour cette langue sur ce téléphone. Vous pouvez en ajouter une dans ses réglages de synthèse vocale.';
+
+  @override
+  String get listenUnavailable =>
+      'L\'écoute n\'est pas disponible sur ce téléphone.';
+
+  @override
+  String get listenSilent =>
+      'Votre téléphone est en mode silencieux. Activez le son ou utilisez des écouteurs.';
+
+  @override
+  String get listenFailed =>
+      'Impossible de lire ce texte à voix haute. Réessayez.';
+
+  @override
   String get mediaAddPhoto => 'Add photo';
 
   @override

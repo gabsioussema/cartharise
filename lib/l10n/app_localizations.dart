@@ -2680,6 +2680,72 @@ abstract class AppLocalizations {
   /// **'Evening'**
   String get journalPhaseEvening;
 
+  /// Button: read this lesson, question, notice or experiment aloud with the phone's voice.
+  ///
+  /// In en, this message translates to:
+  /// **'Listen'**
+  String get listenAction;
+
+  /// Button while text is being read aloud: stops at once.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop reading'**
+  String get listenStop;
+
+  /// Button: read the user's own note aloud. Only ever on this explicit tap.
+  ///
+  /// In en, this message translates to:
+  /// **'Listen to my note'**
+  String get listenMyNote;
+
+  /// Button: read the user's own answer aloud. Only ever on this explicit tap.
+  ///
+  /// In en, this message translates to:
+  /// **'Listen to my answer'**
+  String get listenMyAnswer;
+
+  /// Screen reader announcement when reading aloud starts.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading aloud.'**
+  String get listenStarted;
+
+  /// Screen reader announcement when the user stops reading aloud.
+  ///
+  /// In en, this message translates to:
+  /// **'Stopped reading.'**
+  String get listenStopped;
+
+  /// Small line under Stop while reading aloud (the silent switch can mute it).
+  ///
+  /// In en, this message translates to:
+  /// **'Can\'t hear it? Check the volume and silent mode.'**
+  String get listenHearHint;
+
+  /// Shown instead of Listen when the phone has no offline voice for the language.
+  ///
+  /// In en, this message translates to:
+  /// **'No voice for this language on this phone. You can add one in its speech settings.'**
+  String get listenNoVoice;
+
+  /// Shown when the phone has no text-to-speech at all.
+  ///
+  /// In en, this message translates to:
+  /// **'Listen isn\'t available on this phone.'**
+  String get listenUnavailable;
+
+  /// Listen was tapped while the phone is on silent and would play on its speaker.
+  ///
+  /// In en, this message translates to:
+  /// **'Your phone is on silent. Turn the sound on, or use headphones.'**
+  String get listenSilent;
+
+  /// Reading aloud failed for another reason.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t read this aloud. Try again.'**
+  String get listenFailed;
+
   /// Button: add a photo to a note, an experiment tried or an attempt.
   ///
   /// In en, this message translates to:
