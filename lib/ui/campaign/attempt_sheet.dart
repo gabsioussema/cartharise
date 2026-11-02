@@ -7,6 +7,7 @@ import '../../state/app_state.dart';
 import '../media/attachment_strip.dart';
 import '../missions/project_link.dart';
 import '../missions/project_ops.dart';
+import '../voice/dictate_button.dart';
 import '../widgets/widgets.dart';
 import 'campaign_ops.dart';
 
@@ -65,6 +66,13 @@ class _AttemptSheetState extends State<AttemptSheet> {
   late bool _linked = _project != null && widget.entry.projectId == _project.id;
   String? _error;
   bool _busy = false;
+
+  /// A voice note recorded instead of dictating goes on this attempt.
+  late final _keepRecording = keepRecordingOn(
+    context.read<AppState>(),
+    AttachmentHolder.attempt,
+    widget.entry.id,
+  );
 
   @override
   void dispose() {
@@ -132,7 +140,16 @@ class _AttemptSheetState extends State<AttemptSheet> {
               if (_error != null) setState(() => _error = null);
             },
           ),
-          const SizedBox(height: 12),
+          DictateButton(
+            key: const ValueKey('attempt-edit-attempt-dictate'),
+            controller: _attempt,
+            fieldLabel: l.campaignAttemptLabel,
+            onInserted: (_) {
+              if (_error != null) setState(() => _error = null);
+            },
+            recordInstead: _keepRecording,
+          ),
+          const SizedBox(height: 4),
           TextField(
             key: const ValueKey('attempt-edit-learning'),
             controller: _learning,
@@ -141,6 +158,13 @@ class _AttemptSheetState extends State<AttemptSheet> {
             maxLines: 6,
             textCapitalization: TextCapitalization.sentences,
             decoration: InputDecoration(labelText: l.campaignLearningLabel),
+          ),
+          DictateButton(
+            key: const ValueKey('attempt-edit-learning-dictate'),
+            controller: _learning,
+            focusNode: _learningFocus,
+            fieldLabel: l.campaignLearningLabel,
+            recordInstead: _keepRecording,
           ),
           if (_project != null) ...[
             const SizedBox(height: 8),

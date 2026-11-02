@@ -22,7 +22,13 @@ import flutter_local_notifications
     }
     GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
     registerStorageChannel(messenger: engineBridge.applicationRegistrar.messenger())
+    // Dictation through the phone's on-device recognizer only (step 3,
+    // DictationChannel.swift).
+    dictation = DictationChannel(messenger: engineBridge.applicationRegistrar.messenger())
   }
+
+  /// Kept for the app's lifetime (it answers the dictation channels).
+  private var dictation: DictationChannel?
 
   /// Privacy: the user's writing, photos and recordings stay on this phone.
   /// iOS includes Library/Application Support in iCloud and computer

@@ -5,6 +5,7 @@ import '../../domain/app_data.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
 import '../media/attachment_strip.dart';
+import '../voice/dictate_button.dart';
 import '../widgets/widgets.dart';
 import 'campaign_ops.dart';
 
@@ -165,7 +166,18 @@ class _ExperimentEntrySheetState extends State<ExperimentEntrySheet> {
             decoration: InputDecoration(labelText: l.campaignTryNoteLabel),
             onChanged: (text) => widget.edited?.value = text,
           ),
-          const SizedBox(height: 16),
+          DictateButton(
+            key: const ValueKey('tried-edit-dictate'),
+            controller: _note,
+            focusNode: _noteFocus,
+            onInserted: (text) => widget.edited?.value = text,
+            recordInstead: keepRecordingOn(
+              context.read<AppState>(),
+              AttachmentHolder.experiment,
+              widget.entry.id,
+            ),
+          ),
+          const SizedBox(height: 8),
           AttachmentStrip(
             holder: AttachmentHolder.experiment,
             entryId: widget.entry.id,

@@ -7,6 +7,7 @@ import '../../state/app_state.dart';
 import '../../state/attachment_ops.dart';
 import '../media/attachment_strip.dart';
 import '../theme/cartha_theme.dart';
+import '../voice/dictate_button.dart';
 import '../widgets/widgets.dart';
 import 'journal_kit.dart';
 
@@ -300,7 +301,14 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
                     contextMenuBuilder: _selectionMenu,
                     onChanged: (_) => _changed(),
                   ),
-                  const SizedBox(height: 16),
+                  DictateButton(
+                    key: const ValueKey('journal-entry-dictate'),
+                    controller: _body,
+                    focusNode: _bodyFocus,
+                    onInserted: (_) => _changed(),
+                    recordInstead: _addToNote,
+                  ),
+                  const SizedBox(height: 8),
                   AttachmentStrip(
                     holder: AttachmentHolder.journal,
                     entryId: _id,

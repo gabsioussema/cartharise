@@ -123,6 +123,7 @@ class _PathDayScreenState extends State<PathDayScreen> {
                         key: ValueKey('path-answer-$day'),
                         value: state.data.pathAnswers[day]?.body ?? '',
                         minLines: 6,
+                        dictation: true,
                         semanticLabel: l.missionsDayAnswerLabel(day),
                         decoration: InputDecoration(
                           hintText: l.missionsDayAnswerHint,

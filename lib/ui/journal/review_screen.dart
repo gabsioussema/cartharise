@@ -6,6 +6,7 @@ import '../../domain/local_date.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
 import '../theme/cartha_theme.dart';
+import '../voice/dictate_button.dart';
 import '../widgets/widgets.dart';
 import 'journal_kit.dart';
 
@@ -229,21 +230,31 @@ class _ReviewScreenState extends State<ReviewScreen> {
       String label,
       String hint,
     ) => Padding(
-      padding: const EdgeInsetsDirectional.only(bottom: 16),
-      child: TextField(
-        key: key,
-        controller: controller,
-        minLines: 3,
-        maxLines: null,
-        keyboardType: TextInputType.multiline,
-        textCapitalization: TextCapitalization.sentences,
-        decoration: InputDecoration(
-          labelText: label,
-          helperText: hint,
-          helperMaxLines: 3,
-          alignLabelWithHint: true,
-        ),
-        onChanged: (_) => _changed(),
+      padding: const EdgeInsetsDirectional.only(bottom: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          TextField(
+            key: key,
+            controller: controller,
+            minLines: 3,
+            maxLines: null,
+            keyboardType: TextInputType.multiline,
+            textCapitalization: TextCapitalization.sentences,
+            decoration: InputDecoration(
+              labelText: label,
+              helperText: hint,
+              helperMaxLines: 3,
+              alignLabelWithHint: true,
+            ),
+            onChanged: (_) => _changed(),
+          ),
+          DictateButton(
+            controller: controller,
+            fieldLabel: label,
+            onInserted: (_) => _changed(),
+          ),
+        ],
       ),
     );
     return AreaListView(

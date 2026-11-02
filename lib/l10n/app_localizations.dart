@@ -6220,6 +6220,204 @@ abstract class AppLocalizations {
   /// **'{title}: {value}. {detail}'**
   String todayTileLabel(String title, String value, String detail);
 
+  /// Small button under a text field: speak, then check the recognised text before it is added. Recognition happens on the phone only.
+  ///
+  /// In en, this message translates to:
+  /// **'Dictate'**
+  String get voiceDictate;
+
+  /// Screen-reader label of the Dictate button when a screen has several fields.
+  ///
+  /// In en, this message translates to:
+  /// **'Dictate: {field}'**
+  String voiceDictateInto(String field);
+
+  /// Screen-reader hint of the Dictate button.
+  ///
+  /// In en, this message translates to:
+  /// **'Speak, then check the text before it goes in.'**
+  String get voiceDictateHint;
+
+  /// No description provided for @voiceSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Dictate'**
+  String get voiceSheetTitle;
+
+  /// No description provided for @voiceStarting.
+  ///
+  /// In en, this message translates to:
+  /// **'Getting dictation ready…'**
+  String get voiceStarting;
+
+  /// Shown with a dot while the microphone listens (the word carries the state, not the colour).
+  ///
+  /// In en, this message translates to:
+  /// **'Listening'**
+  String get voiceListening;
+
+  /// Screen-reader announcement when dictation starts.
+  ///
+  /// In en, this message translates to:
+  /// **'Listening. Tap Stop when you\'re done.'**
+  String get voiceListeningStarted;
+
+  /// No description provided for @voiceOnPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Recognised on this phone. Nothing is sent.'**
+  String get voiceOnPhone;
+
+  /// No description provided for @voiceHeardLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Heard so far'**
+  String get voiceHeardLabel;
+
+  /// No description provided for @voiceSpeakNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Speak. Your words appear here.'**
+  String get voiceSpeakNow;
+
+  /// No description provided for @voiceStop.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop'**
+  String get voiceStop;
+
+  /// No description provided for @voiceCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get voiceCancel;
+
+  /// No description provided for @voiceFinishing.
+  ///
+  /// In en, this message translates to:
+  /// **'Finishing…'**
+  String get voiceFinishing;
+
+  /// No description provided for @voiceReviewLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Dictated text'**
+  String get voiceReviewLabel;
+
+  /// No description provided for @voiceReviewHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit it if you like. It goes in only when you tap Insert.'**
+  String get voiceReviewHint;
+
+  /// Screen-reader announcement when the recognised text is ready for review.
+  ///
+  /// In en, this message translates to:
+  /// **'Done listening. Check the text, then Insert.'**
+  String get voiceReviewReady;
+
+  /// No description provided for @voiceStoppedEarly.
+  ///
+  /// In en, this message translates to:
+  /// **'Dictation stopped early. Here\'s what was heard.'**
+  String get voiceStoppedEarly;
+
+  /// No description provided for @voiceInsert.
+  ///
+  /// In en, this message translates to:
+  /// **'Insert'**
+  String get voiceInsert;
+
+  /// No description provided for @voiceDiscard.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard'**
+  String get voiceDiscard;
+
+  /// No description provided for @voiceDiscardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard this text?'**
+  String get voiceDiscardTitle;
+
+  /// No description provided for @voiceDiscardBody.
+  ///
+  /// In en, this message translates to:
+  /// **'It won\'t be added.'**
+  String get voiceDiscardBody;
+
+  /// No description provided for @voiceKeep.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep'**
+  String get voiceKeep;
+
+  /// Screen-reader announcement after the reviewed text was inserted into the field.
+  ///
+  /// In en, this message translates to:
+  /// **'Text inserted.'**
+  String get voiceInserted;
+
+  /// No description provided for @voiceUnsupported.
+  ///
+  /// In en, this message translates to:
+  /// **'Dictation in this language isn\'t available on this phone.'**
+  String get voiceUnsupported;
+
+  /// No description provided for @voiceNeedsModel.
+  ///
+  /// In en, this message translates to:
+  /// **'To dictate, add this language for offline speech in your phone\'s settings.'**
+  String get voiceNeedsModel;
+
+  /// No description provided for @voiceNoPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Microphone or speech access is off. Allow it in Settings to dictate.'**
+  String get voiceNoPermission;
+
+  /// No description provided for @voiceTooOld.
+  ///
+  /// In en, this message translates to:
+  /// **'Dictation needs a newer system version on this phone.'**
+  String get voiceTooOld;
+
+  /// No description provided for @voiceNothingHeard.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing was heard. Try again, or type instead.'**
+  String get voiceNothingHeard;
+
+  /// No description provided for @voiceInterrupted.
+  ///
+  /// In en, this message translates to:
+  /// **'Dictation stopped: a call or another app took the microphone.'**
+  String get voiceInterrupted;
+
+  /// No description provided for @voiceBusy.
+  ///
+  /// In en, this message translates to:
+  /// **'Dictation is busy. Try again in a moment.'**
+  String get voiceBusy;
+
+  /// No description provided for @voiceFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Dictation stopped. Try again, or type instead.'**
+  String get voiceFailed;
+
+  /// No description provided for @voiceRecordInstead.
+  ///
+  /// In en, this message translates to:
+  /// **'Record instead'**
+  String get voiceRecordInstead;
+
+  /// No description provided for @voiceTypeInstead.
+  ///
+  /// In en, this message translates to:
+  /// **'Type instead'**
+  String get voiceTypeInstead;
+
   /// You tab screen title (Cinzel, keep short).
   ///
   /// In en, this message translates to:

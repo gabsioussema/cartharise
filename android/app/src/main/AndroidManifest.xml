@@ -6,7 +6,8 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <!-- Voice notes, recorded on the phone into the app's private folder.
-         Asked only when the user taps Record. Photos come from the system
+         Asked only when the user taps Record (or Dictate: speech is
+         recognised on the phone only, step 3). Photos come from the system
          photo picker / camera app, which need no permission here. No
          INTERNET permission: nothing leaves the phone (test/privacy_test.dart). -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -74,6 +75,13 @@
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
+        </intent>
+        <!-- Dictation (step 3): lets SpeechRecognizer find the phone's
+             on-device speech service (Android 11+ package visibility).
+             Only createOnDeviceSpeechRecognizer is used; audio stays on the
+             phone (DictationPlugin.kt). -->
+        <intent>
+            <action android:name="android.speech.RecognitionService" />
         </intent>
         <!-- url_launcher: open the credited article / newsletter and the
              support helpline directory in the browser. -->

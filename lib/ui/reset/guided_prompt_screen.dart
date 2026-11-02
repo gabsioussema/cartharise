@@ -8,6 +8,7 @@ import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
 import '../nav.dart';
 import '../theme/cartha_theme.dart';
+import '../voice/dictate_button.dart';
 import '../widgets/widgets.dart';
 import 'reset_complete_screen.dart';
 import 'reset_flow.dart';
@@ -420,6 +421,12 @@ class _GuidedPromptScreenState extends State<GuidedPromptScreen>
                     hintText: l.resetAnswerHint,
                     alignLabelWithHint: true,
                   ),
+                ),
+                // Speak, review, then it goes in at the cursor (autosaved).
+                DictateButton(
+                  key: const ValueKey('reset-answer-dictate'),
+                  controller: _controller,
+                  onInserted: _onChanged,
                 ),
                 if (status == PromptStatus.skipped) ...[
                   const SizedBox(height: 8),

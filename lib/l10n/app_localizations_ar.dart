@@ -3950,6 +3950,116 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get voiceDictate => 'Dictate';
+
+  @override
+  String voiceDictateInto(String field) {
+    return 'Dictate: $field';
+  }
+
+  @override
+  String get voiceDictateHint =>
+      'Speak, then check the text before it goes in.';
+
+  @override
+  String get voiceSheetTitle => 'Dictate';
+
+  @override
+  String get voiceStarting => 'Getting dictation ready…';
+
+  @override
+  String get voiceListening => 'Listening';
+
+  @override
+  String get voiceListeningStarted => 'Listening. Tap Stop when you\'re done.';
+
+  @override
+  String get voiceOnPhone => 'Recognised on this phone. Nothing is sent.';
+
+  @override
+  String get voiceHeardLabel => 'Heard so far';
+
+  @override
+  String get voiceSpeakNow => 'Speak. Your words appear here.';
+
+  @override
+  String get voiceStop => 'Stop';
+
+  @override
+  String get voiceCancel => 'Cancel';
+
+  @override
+  String get voiceFinishing => 'Finishing…';
+
+  @override
+  String get voiceReviewLabel => 'Dictated text';
+
+  @override
+  String get voiceReviewHint =>
+      'Edit it if you like. It goes in only when you tap Insert.';
+
+  @override
+  String get voiceReviewReady => 'Done listening. Check the text, then Insert.';
+
+  @override
+  String get voiceStoppedEarly =>
+      'Dictation stopped early. Here\'s what was heard.';
+
+  @override
+  String get voiceInsert => 'Insert';
+
+  @override
+  String get voiceDiscard => 'Discard';
+
+  @override
+  String get voiceDiscardTitle => 'Discard this text?';
+
+  @override
+  String get voiceDiscardBody => 'It won\'t be added.';
+
+  @override
+  String get voiceKeep => 'Keep';
+
+  @override
+  String get voiceInserted => 'Text inserted.';
+
+  @override
+  String get voiceUnsupported =>
+      'Dictation in this language isn\'t available on this phone.';
+
+  @override
+  String get voiceNeedsModel =>
+      'To dictate, add this language for offline speech in your phone\'s settings.';
+
+  @override
+  String get voiceNoPermission =>
+      'Microphone or speech access is off. Allow it in Settings to dictate.';
+
+  @override
+  String get voiceTooOld =>
+      'Dictation needs a newer system version on this phone.';
+
+  @override
+  String get voiceNothingHeard =>
+      'Nothing was heard. Try again, or type instead.';
+
+  @override
+  String get voiceInterrupted =>
+      'Dictation stopped: a call or another app took the microphone.';
+
+  @override
+  String get voiceBusy => 'Dictation is busy. Try again in a moment.';
+
+  @override
+  String get voiceFailed => 'Dictation stopped. Try again, or type instead.';
+
+  @override
+  String get voiceRecordInstead => 'Record instead';
+
+  @override
+  String get voiceTypeInstead => 'Type instead';
+
+  @override
   String get youTitle => 'You';
 
   @override
