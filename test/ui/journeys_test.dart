@@ -148,13 +148,13 @@ List<String> _mockLauncher(WidgetTester tester) {
   return launched;
 }
 
-/// The quickest honest way through the welcome: Skip the intro, confirm
-/// 18+ (required), Next through the setup pages, Finish.
+/// The quickest honest way through the five-page welcome: Begin, confirm
+/// 18+ (required), Next through the setup pages, Start.
 Future<void> _quickOnboarding(WidgetTester tester) async {
   expect(find.byType(OnboardingFlow), findsOneWidget);
-  await _tap(tester, find.text('Skip'));
+  await _tap(tester, find.byKey(_next)); // Begin
   await _tap(tester, find.byKey(_adult));
-  for (var i = 0; i < 4; i++) {
+  for (var i = 0; i < 3; i++) {
     await _tap(tester, find.byKey(_next));
   }
   await _tap(tester, find.byKey(_finish));
@@ -183,14 +183,10 @@ void main() {
     final h = await pumpCartha(tester, content: _content, size: _phone);
     final credit = _content.credit;
 
-    // ── First launch → onboarding (F-001–F-004, D-11) ──────────────────────
+    // ── First launch → the five-page welcome (F-001–F-004, D-11) ───────────
     expect(find.byType(OnboardingFlow), findsOneWidget);
-    for (var i = 0; i < 5; i++) {
-      await _tap(tester, find.byKey(_next)); // brand + four carousel pages
-    }
+    await _tap(tester, find.byKey(_next)); // the brand page
     expect(find.text("Before you start"), findsOneWidget);
-    await _tap(tester, find.byKey(_adult));
-    await _tap(tester, find.byKey(_next));
     // Inspired by: title, author and the exact article link.
     expect(find.text('“${credit.title}”'), findsOneWidget);
     expect(
@@ -199,6 +195,7 @@ void main() {
     );
     await _tap(tester, find.byKey(const ValueKey('onboarding-credit-article')));
     expect(launched, [credit.articleUrl]);
+    await _tap(tester, find.byKey(_adult));
     await _tap(tester, find.byKey(_next));
     await _tap(tester, find.byKey(const ValueKey('onboarding-pace-oneDay')));
     await _tap(tester, find.byKey(_next));

@@ -1091,29 +1091,15 @@
   "missionsDayMissing": "This day isn't available.",
   "onboardingBrandIntro": "One honest day of reflection. Then small steps.",
   "@onboardingBrandIntro": {
-    "description": "Brand page, under the tagline."
+    "description": "Brand page, under the tagline: the one-line promise."
   },
   "onboardingBegin": "Begin",
   "onboardingNext": "Next",
-  "onboardingGetStarted": "Get started",
-  "onboardingSkip": "Skip",
-  "onboardingSkipLabel": "Skip the introduction",
-  "@onboardingSkipLabel": {
-    "description": "Screen-reader label of Skip: it jumps to the setup steps."
+  "onboardingStart": "Start",
+  "@onboardingStart": {
+    "description": "Last welcome page: finishes the welcome and opens Today."
   },
-  "onboardingFinish": "Finish",
-  "onboardingPageDots": "Page {current} of {total}",
-  "@onboardingPageDots": {
-    "placeholders": {
-      "current": {
-        "type": "int"
-      },
-      "total": {
-        "type": "int"
-      }
-    }
-  },
-  "onboardingStepCounter": "Setup {current} of {total}",
+  "onboardingStepCounter": "Step {current} of {total}",
   "@onboardingStepCounter": {
     "placeholders": {
       "current": {
@@ -1124,22 +1110,12 @@
       }
     }
   },
-  "onboardingUnderstandTitle": "Understand Yourself",
-  "onboardingUnderstandBody": "See what you want, and what holds you back.",
-  "onboardingResetTitle": "Reset Your Life",
-  "onboardingResetBody": "One day of questions: morning, daytime, evening.",
-  "onboardingDirectionTitle": "Choose a Direction",
-  "onboardingDirectionBody": "Turn your answers into a Life Compass.",
-  "onboardingStepsTitle": "Improve Step by Step",
-  "onboardingStepsBody": "Small daily steps, adjusted each week. No pressure.",
   "onboardingLimitsTitle": "Before you start",
   "onboardingLimitsIntro": "A few honest words.",
   "onboardingLimitsClarityTitle": "One day can bring clarity",
   "onboardingLimitsClarityBody": "See where you stand and what you want.",
   "onboardingLimitsNoGuaranteeTitle": "It won't fix your life overnight",
   "onboardingLimitsNoGuaranteeBody": "Change comes from small steps, week by week.",
-  "onboardingLimitsPracticeTitle": "An ongoing practice",
-  "onboardingLimitsPracticeBody": "Redo the reset or change your goals anytime.",
   "onboardingLimitsNotTherapyTitle": "Not therapy",
   "onboardingLimitsNotTherapyBody": "No diagnosis. For help, see You › Support.",
   "onboardingLimitsControlTitle": "You stay in control",
@@ -1148,7 +1124,6 @@
   "onboardingAdultConfirmHelp": "Made for adults.",
   "onboardingAdultRequired": "Confirm you're 18 or older to continue.",
   "onboardingCreditTitle": "Inspired by",
-  "onboardingCreditIntro": "Built on the ideas of:",
   "onboardingCreditByline": "by {author} · {date}",
   "@onboardingCreditByline": {
     "placeholders": {
@@ -1671,13 +1646,17 @@
   "todaySubtitle": "Clarity today. Progress tomorrow.",
   "todayNextEyebrow": "Your next step",
   "todayNextStartTitle": "Begin the morning reflection",
-  "todayNextStartBody": "{count} short questions, one at a time. Skip any of them, pause whenever you like.",
+  "todayNextStartBody": "{count} short questions. Skip any, pause anytime.",
   "@todayNextStartBody": {
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
+  },
+  "todayNextStartHint": "Morning, daytime, evening: one day, at your own pace.",
+  "@todayNextStartHint": {
+    "description": "First-use hint on the first reset's start card (replaces the old 'Reset your life' welcome page)."
   },
   "todayNextStartAction": "Begin",
   "todayNextLessonsAction": "Learn the {count} ideas (optional)",
@@ -1719,7 +1698,12 @@
     }
   },
   "todayNextResumeAction": "Continue",
-  "todayNextSeeReset": "See the whole reset",
+  "todayNextQuestBody": "One of today's quests.",
+  "todayNextQuestAction": "Mark done",
+  "todayNextQuestOption": "Do one of today's quests",
+  "@todayNextQuestOption": {
+    "description": "Row in 'Choose something else' (opens Missions)."
+  },
   "todayNextCompassTitle": "Build your Compass",
   "todayNextCompassImportBody": "Your evening answers can fill your Compass. You choose.",
   "todayNextCompassManualBody": "Write your vision, a month project and daily levers.",
@@ -1727,17 +1711,46 @@
   "todayNextLeversTitle": "Turn your levers into quests",
   "todayNextLeversBody": "Turn your daily levers into small quests.",
   "todayNextLeversAction": "Choose quests",
+  "todayNextProjectTitle": "Work on your project",
+  "todayNextProjectNext": "Next: {milestone}",
+  "@todayNextProjectNext": {
+    "placeholders": {
+      "milestone": {
+        "type": "String"
+      }
+    }
+  },
+  "todayNextProjectAction": "Open the project",
   "todayNextReviewTitle": "Look back on your week",
   "todayNextReviewBody": "What went well, what got in the way, what's next.",
   "todayNextReviewAction": "Start a weekly review",
   "todayNextJournalTitle": "Write a note",
   "todayNextJournalBody": "A few lines about today.",
   "todayNextJournalAction": "New note",
-  "todayOpenJournal": "Open the journal",
   "todayOpenCompass": "Open Compass",
+  "todayChooseOther": "Choose something else",
+  "todayChooseSteps": "Other steps",
+  "todayPinTitle": "Help me with",
+  "@todayPinTitle": {
+    "description": "Heading of the choice that steers Today's next step."
+  },
+  "todayPinProject": "My project",
+  "todayPinReflection": "Reflection",
+  "todayPinNotes": "Notes",
+  "todayPinAuto": "Decide for me",
+  "todayPinNoProject": "No project yet. Today decides for now.",
+  "todayDoneTitle": "Done. That can be enough for today.",
+  "todayDoneMore": "One more",
+  "todayDoneMoreLabel": "Show one more step",
+  "todayWriteHint": "Write a few lines…",
+  "todayWriteLabel": "Write a new note",
   "todayFocusTitle": "Today's focus",
   "todayFocusEmptyTitle": "No quests for today",
   "todayFocusEmptyBody": "Add a small quest when you're ready.",
+  "todayHintQuests": "Quests are small steps you choose. Adjust them each week.",
+  "@todayHintQuests": {
+    "description": "First-use hint while no quest exists yet (replaces the old 'Improve step by step' welcome page)."
+  },
   "todayFocusAdd": "Add a quest",
   "todayFocusSeeAll": "See all {count} quests",
   "@todayFocusSeeAll": {
@@ -1794,12 +1807,28 @@
     }
   },
   "todayDirectionTitle": "Your direction",
+  "todayDirectionSummary": "Your vision and this month's project.",
+  "todayDirectionLabel": "{title}. {summary}",
+  "@todayDirectionLabel": {
+    "description": "Screen-reader label of the collapsible direction card.",
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "summary": {
+        "type": "String"
+      }
+    }
+  },
+  "todayDirectionEmpty": "Your Compass is empty.",
+  "todayHintCompass": "Your answers can become a Life Compass.",
+  "@todayHintCompass": {
+    "description": "First-use hint while the Compass was never filled (replaces the old 'Choose a direction' welcome page)."
+  },
   "todayDirectionVision": "Vision",
   "todayDirectionMonth": "This month",
   "todayDirectionNoVision": "No vision written yet.",
   "todayDirectionNoMonth": "No month project yet.",
-  "todayDirectionEmptyTitle": "Your Compass is empty",
-  "todayDirectionEmptyBody": "Your vision, month project and daily levers.",
   "todayTileReset": "Reset",
   "todayTileResetValue": "{answered}/{total}",
   "@todayTileResetValue": {

@@ -103,9 +103,9 @@ AvatarView _avatarIn(WidgetTester tester, Finder scope) =>
 /// The quickest honest way through the welcome after "Delete all data".
 Future<void> _quickOnboarding(WidgetTester tester) async {
   expect(find.byType(OnboardingFlow), findsOneWidget);
-  await _tap(tester, find.text('Skip'));
+  await _tap(tester, find.byKey(const ValueKey('onboarding-next'))); // Begin
   await _tap(tester, find.byKey(const ValueKey('onboarding-adult')));
-  for (var i = 0; i < 4; i++) {
+  for (var i = 0; i < 3; i++) {
     await _tap(tester, find.byKey(const ValueKey('onboarding-next')));
   }
   await _tap(tester, find.byKey(const ValueKey('onboarding-finish')));

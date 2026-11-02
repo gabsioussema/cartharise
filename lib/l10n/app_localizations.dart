@@ -2722,7 +2722,7 @@ abstract class AppLocalizations {
   /// **'This day isn\'t available.'**
   String get missionsDayMissing;
 
-  /// Brand page, under the tagline.
+  /// Brand page, under the tagline: the one-line promise.
   ///
   /// In en, this message translates to:
   /// **'One honest day of reflection. Then small steps.'**
@@ -2740,89 +2740,17 @@ abstract class AppLocalizations {
   /// **'Next'**
   String get onboardingNext;
 
-  /// No description provided for @onboardingGetStarted.
+  /// Last welcome page: finishes the welcome and opens Today.
   ///
   /// In en, this message translates to:
-  /// **'Get started'**
-  String get onboardingGetStarted;
-
-  /// No description provided for @onboardingSkip.
-  ///
-  /// In en, this message translates to:
-  /// **'Skip'**
-  String get onboardingSkip;
-
-  /// Screen-reader label of Skip: it jumps to the setup steps.
-  ///
-  /// In en, this message translates to:
-  /// **'Skip the introduction'**
-  String get onboardingSkipLabel;
-
-  /// No description provided for @onboardingFinish.
-  ///
-  /// In en, this message translates to:
-  /// **'Finish'**
-  String get onboardingFinish;
-
-  /// No description provided for @onboardingPageDots.
-  ///
-  /// In en, this message translates to:
-  /// **'Page {current} of {total}'**
-  String onboardingPageDots(int current, int total);
+  /// **'Start'**
+  String get onboardingStart;
 
   /// No description provided for @onboardingStepCounter.
   ///
   /// In en, this message translates to:
-  /// **'Setup {current} of {total}'**
+  /// **'Step {current} of {total}'**
   String onboardingStepCounter(int current, int total);
-
-  /// No description provided for @onboardingUnderstandTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Understand Yourself'**
-  String get onboardingUnderstandTitle;
-
-  /// No description provided for @onboardingUnderstandBody.
-  ///
-  /// In en, this message translates to:
-  /// **'See what you want, and what holds you back.'**
-  String get onboardingUnderstandBody;
-
-  /// No description provided for @onboardingResetTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Reset Your Life'**
-  String get onboardingResetTitle;
-
-  /// No description provided for @onboardingResetBody.
-  ///
-  /// In en, this message translates to:
-  /// **'One day of questions: morning, daytime, evening.'**
-  String get onboardingResetBody;
-
-  /// No description provided for @onboardingDirectionTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose a Direction'**
-  String get onboardingDirectionTitle;
-
-  /// No description provided for @onboardingDirectionBody.
-  ///
-  /// In en, this message translates to:
-  /// **'Turn your answers into a Life Compass.'**
-  String get onboardingDirectionBody;
-
-  /// No description provided for @onboardingStepsTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Improve Step by Step'**
-  String get onboardingStepsTitle;
-
-  /// No description provided for @onboardingStepsBody.
-  ///
-  /// In en, this message translates to:
-  /// **'Small daily steps, adjusted each week. No pressure.'**
-  String get onboardingStepsBody;
 
   /// No description provided for @onboardingLimitsTitle.
   ///
@@ -2859,18 +2787,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Change comes from small steps, week by week.'**
   String get onboardingLimitsNoGuaranteeBody;
-
-  /// No description provided for @onboardingLimitsPracticeTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'An ongoing practice'**
-  String get onboardingLimitsPracticeTitle;
-
-  /// No description provided for @onboardingLimitsPracticeBody.
-  ///
-  /// In en, this message translates to:
-  /// **'Redo the reset or change your goals anytime.'**
-  String get onboardingLimitsPracticeBody;
 
   /// No description provided for @onboardingLimitsNotTherapyTitle.
   ///
@@ -2919,12 +2835,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Inspired by'**
   String get onboardingCreditTitle;
-
-  /// No description provided for @onboardingCreditIntro.
-  ///
-  /// In en, this message translates to:
-  /// **'Built on the ideas of:'**
-  String get onboardingCreditIntro;
 
   /// No description provided for @onboardingCreditByline.
   ///
@@ -4051,8 +3961,14 @@ abstract class AppLocalizations {
   /// No description provided for @todayNextStartBody.
   ///
   /// In en, this message translates to:
-  /// **'{count} short questions, one at a time. Skip any of them, pause whenever you like.'**
+  /// **'{count} short questions. Skip any, pause anytime.'**
   String todayNextStartBody(int count);
+
+  /// First-use hint on the first reset's start card (replaces the old 'Reset your life' welcome page).
+  ///
+  /// In en, this message translates to:
+  /// **'Morning, daytime, evening: one day, at your own pace.'**
+  String get todayNextStartHint;
 
   /// No description provided for @todayNextStartAction.
   ///
@@ -4090,11 +4006,23 @@ abstract class AppLocalizations {
   /// **'Continue'**
   String get todayNextResumeAction;
 
-  /// No description provided for @todayNextSeeReset.
+  /// No description provided for @todayNextQuestBody.
   ///
   /// In en, this message translates to:
-  /// **'See the whole reset'**
-  String get todayNextSeeReset;
+  /// **'One of today\'s quests.'**
+  String get todayNextQuestBody;
+
+  /// No description provided for @todayNextQuestAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark done'**
+  String get todayNextQuestAction;
+
+  /// Row in 'Choose something else' (opens Missions).
+  ///
+  /// In en, this message translates to:
+  /// **'Do one of today\'s quests'**
+  String get todayNextQuestOption;
 
   /// No description provided for @todayNextCompassTitle.
   ///
@@ -4138,6 +4066,24 @@ abstract class AppLocalizations {
   /// **'Choose quests'**
   String get todayNextLeversAction;
 
+  /// No description provided for @todayNextProjectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Work on your project'**
+  String get todayNextProjectTitle;
+
+  /// No description provided for @todayNextProjectNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next: {milestone}'**
+  String todayNextProjectNext(String milestone);
+
+  /// No description provided for @todayNextProjectAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the project'**
+  String get todayNextProjectAction;
+
   /// No description provided for @todayNextReviewTitle.
   ///
   /// In en, this message translates to:
@@ -4174,17 +4120,89 @@ abstract class AppLocalizations {
   /// **'New note'**
   String get todayNextJournalAction;
 
-  /// No description provided for @todayOpenJournal.
-  ///
-  /// In en, this message translates to:
-  /// **'Open the journal'**
-  String get todayOpenJournal;
-
   /// No description provided for @todayOpenCompass.
   ///
   /// In en, this message translates to:
   /// **'Open Compass'**
   String get todayOpenCompass;
+
+  /// No description provided for @todayChooseOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose something else'**
+  String get todayChooseOther;
+
+  /// No description provided for @todayChooseSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'Other steps'**
+  String get todayChooseSteps;
+
+  /// Heading of the choice that steers Today's next step.
+  ///
+  /// In en, this message translates to:
+  /// **'Help me with'**
+  String get todayPinTitle;
+
+  /// No description provided for @todayPinProject.
+  ///
+  /// In en, this message translates to:
+  /// **'My project'**
+  String get todayPinProject;
+
+  /// No description provided for @todayPinReflection.
+  ///
+  /// In en, this message translates to:
+  /// **'Reflection'**
+  String get todayPinReflection;
+
+  /// No description provided for @todayPinNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get todayPinNotes;
+
+  /// No description provided for @todayPinAuto.
+  ///
+  /// In en, this message translates to:
+  /// **'Decide for me'**
+  String get todayPinAuto;
+
+  /// No description provided for @todayPinNoProject.
+  ///
+  /// In en, this message translates to:
+  /// **'No project yet. Today decides for now.'**
+  String get todayPinNoProject;
+
+  /// No description provided for @todayDoneTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Done. That can be enough for today.'**
+  String get todayDoneTitle;
+
+  /// No description provided for @todayDoneMore.
+  ///
+  /// In en, this message translates to:
+  /// **'One more'**
+  String get todayDoneMore;
+
+  /// No description provided for @todayDoneMoreLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Show one more step'**
+  String get todayDoneMoreLabel;
+
+  /// No description provided for @todayWriteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a few lines…'**
+  String get todayWriteHint;
+
+  /// No description provided for @todayWriteLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a new note'**
+  String get todayWriteLabel;
 
   /// No description provided for @todayFocusTitle.
   ///
@@ -4203,6 +4221,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add a small quest when you\'re ready.'**
   String get todayFocusEmptyBody;
+
+  /// First-use hint while no quest exists yet (replaces the old 'Improve step by step' welcome page).
+  ///
+  /// In en, this message translates to:
+  /// **'Quests are small steps you choose. Adjust them each week.'**
+  String get todayHintQuests;
 
   /// No description provided for @todayFocusAdd.
   ///
@@ -4264,6 +4288,30 @@ abstract class AppLocalizations {
   /// **'Your direction'**
   String get todayDirectionTitle;
 
+  /// No description provided for @todayDirectionSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Your vision and this month\'s project.'**
+  String get todayDirectionSummary;
+
+  /// Screen-reader label of the collapsible direction card.
+  ///
+  /// In en, this message translates to:
+  /// **'{title}. {summary}'**
+  String todayDirectionLabel(String title, String summary);
+
+  /// No description provided for @todayDirectionEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Compass is empty.'**
+  String get todayDirectionEmpty;
+
+  /// First-use hint while the Compass was never filled (replaces the old 'Choose a direction' welcome page).
+  ///
+  /// In en, this message translates to:
+  /// **'Your answers can become a Life Compass.'**
+  String get todayHintCompass;
+
   /// No description provided for @todayDirectionVision.
   ///
   /// In en, this message translates to:
@@ -4287,18 +4335,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No month project yet.'**
   String get todayDirectionNoMonth;
-
-  /// No description provided for @todayDirectionEmptyTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Your Compass is empty'**
-  String get todayDirectionEmptyTitle;
-
-  /// No description provided for @todayDirectionEmptyBody.
-  ///
-  /// In en, this message translates to:
-  /// **'Your vision, month project and daily levers.'**
-  String get todayDirectionEmptyBody;
 
   /// No description provided for @todayTileReset.
   ///

@@ -11,15 +11,17 @@ import '../theme/cartha_theme.dart';
 import '../widgets/widgets.dart';
 import 'onboarding_steps.dart';
 
-/// Board-style welcome (F-001–F-004, F-043, D-11): brand page, a four-page
-/// carousel with the brand scenes, then setup — what this is and isn't
-/// (18+ confirmation), the inspiration credit, pace, an optional name and
-/// where the data lives. Finish calls `AppState.completeOnboarding`, which
+/// The five-page welcome (F-001–F-004, F-043, D-11; evolve plan Step 1 › A):
+/// the brand page with the one-line promise, then the source credit with
+/// what this is and isn't (not therapy) and the 18+ confirmation, pace, an
+/// optional name and where the data lives. Features are introduced on first
+/// use instead (one-line hints on Today). Start calls
+/// `AppState.completeOnboarding(askAboutGame: true)` — a brand-new profile
+/// starts with the Campaign off and its one-time invitation pending — which
 /// switches the app to the shell, then [onDone].
 ///
 /// Back (button, swipe or system back) works on every page and keeps every
-/// choice; Skip jumps from the intro to the first setup page, never past the
-/// 18+ confirmation.
+/// choice; nothing gets past the 18+ confirmation.
 class OnboardingFlow extends StatefulWidget {
   const OnboardingFlow({super.key, this.onDone});
 
@@ -72,8 +74,6 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
 
   void _back() => _go(_step.previous);
 
-  void _skip() => _go(OnboardingStep.skipTarget);
-
   Future<void> _finish() async {
     if (!_adult || _finishing) return;
     setState(() => _finishing = true);
@@ -81,6 +81,9 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
       displayName: _name.text,
       pace: _pace,
       adultConfirmed: true,
+      // A brand-new profile starts with the Campaign off; Today invites
+      // once. A replayed welcome keeps the user's Campaign settings.
+      askAboutGame: true,
     );
     if (mounted) setState(() => _finishing = false);
     widget.onDone?.call();
@@ -111,28 +114,10 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
   Widget _page(BuildContext context) {
     final l = AppLocalizations.of(context);
     return switch (_step) {
-      OnboardingStep.brand => _IntroPage(
-        step: _step,
+      OnboardingStep.brand => _BrandPage(
         onNext: _next,
-        onBack: _back,
-        onSkip: _skip,
         onSwipe: _onSwipe,
         nextLabel: l.onboardingBegin,
-        child: const _BrandContent(),
-      ),
-      OnboardingStep.understand ||
-      OnboardingStep.reset ||
-      OnboardingStep.direction ||
-      OnboardingStep.steps => _IntroPage(
-        step: _step,
-        onNext: _next,
-        onBack: _back,
-        onSkip: _skip,
-        onSwipe: _onSwipe,
-        nextLabel: _step == OnboardingStep.steps
-            ? l.onboardingGetStarted
-            : l.onboardingNext,
-        child: _CarouselContent(step: _step),
       ),
       OnboardingStep.limits => _SetupPage(
         step: _step,
@@ -148,6 +133,8 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
         ),
         hint: _adult ? null : l.onboardingAdultRequired,
         children: [
+          const _CreditCard(),
+          const SizedBox(height: 16),
           const _LimitsCard(),
           const SizedBox(height: 16),
           _AdultCard(
@@ -155,13 +142,6 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
             onChanged: (v) => setState(() => _adult = v),
           ),
         ],
-      ),
-      OnboardingStep.credit => _SetupPage(
-        step: _step,
-        title: l.onboardingCreditTitle,
-        onBack: _back,
-        action: _nextButton(l),
-        children: const [_CreditCard()],
       ),
       OnboardingStep.pace => _SetupPage(
         step: _step,
@@ -221,7 +201,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
         onBack: _back,
         action: PrimaryButton(
           key: const ValueKey('onboarding-finish'),
-          label: l.onboardingFinish,
+          label: l.onboardingStart,
           trailingIcon: Icons.arrow_forward,
           expand: true,
           busy: _finishing,
@@ -242,32 +222,23 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
   );
 }
 
-// ── Intro (hero) pages ──────────────────────────────────────────────────────
+// ── Brand (hero) page ───────────────────────────────────────────────────────
 
-/// Brand page and carousel: forest hero surface in both brightnesses, bronze
-/// pill, Skip, page dots, swipe.
-class _IntroPage extends StatelessWidget {
-  const _IntroPage({
-    required this.step,
+/// The first page: forest hero surface in both brightnesses, bronze pill;
+/// a left swipe moves on like the pill.
+class _BrandPage extends StatelessWidget {
+  const _BrandPage({
     required this.onNext,
-    required this.onBack,
-    required this.onSkip,
     required this.onSwipe,
     required this.nextLabel,
-    required this.child,
   });
 
-  final OnboardingStep step;
   final VoidCallback onNext;
-  final VoidCallback onBack;
-  final VoidCallback onSkip;
   final GestureDragEndCallback onSwipe;
   final String nextLabel;
-  final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    final l = AppLocalizations.of(context);
     return OnHeroTheme(
       child: Builder(
         builder: (context) {
@@ -279,35 +250,16 @@ class _IntroPage extends StatelessWidget {
               body: GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onHorizontalDragEnd: onSwipe,
-                child: SafeArea(
+                child: const SafeArea(
                   bottom: false,
-                  child: Column(
-                    children: [
-                      _TopBar(
-                        onBack: step.previous == null ? null : onBack,
-                        trailing: Semantics(
-                          button: true,
-                          label: l.onboardingSkipLabel,
-                          onTap: onSkip,
-                          excludeSemantics: true,
-                          child: TextLinkButton(
-                            key: const ValueKey('onboarding-skip'),
-                            label: l.onboardingSkip,
-                            onPressed: onSkip,
-                          ),
-                        ),
-                      ),
-                      Expanded(child: child),
-                    ],
+                  child: Padding(
+                    padding: EdgeInsetsDirectional.only(top: 24),
+                    child: _BrandContent(),
                   ),
                 ),
               ),
               bottomNavigationBar: _BottomBar(
                 children: [
-                  if (step.carouselPosition != null) ...[
-                    _PageDots(current: step.carouselPosition!),
-                    const SizedBox(height: 16),
-                  ],
                   PrimaryButton(
                     key: const ValueKey('onboarding-next'),
                     label: nextLabel,
@@ -418,83 +370,6 @@ class _BrandContent extends StatelessWidget {
   }
 }
 
-class _CarouselContent extends StatelessWidget {
-  const _CarouselContent({required this.step});
-
-  final OnboardingStep step;
-
-  @override
-  Widget build(BuildContext context) {
-    final l = AppLocalizations.of(context);
-    final p = CarthaPalette.of(context);
-    final theme = Theme.of(context);
-    final (Widget scene, String title, String body) = switch (step) {
-      OnboardingStep.understand => (
-        const SunriseScene(aspectRatio: null),
-        l.onboardingUnderstandTitle,
-        l.onboardingUnderstandBody,
-      ),
-      OnboardingStep.reset => (
-        const PathScene(aspectRatio: null),
-        l.onboardingResetTitle,
-        l.onboardingResetBody,
-      ),
-      OnboardingStep.direction => (
-        const CompassScene(aspectRatio: null),
-        l.onboardingDirectionTitle,
-        l.onboardingDirectionBody,
-      ),
-      _ => (
-        const StepsScene(aspectRatio: null),
-        l.onboardingStepsTitle,
-        l.onboardingStepsBody,
-      ),
-    };
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        // The scene takes up to ~half the page, keeping its proportions.
-        final maxHeight = (constraints.maxHeight * 0.5).clamp(140.0, 520.0);
-        final width = math.min(constraints.maxWidth, 600.0);
-        final height = math.min(width / kSceneAspectRatio, maxHeight);
-        return _Scroll(
-          children: [
-            Center(
-              child: SizedBox(
-                width: math.min(width, height * kSceneAspectRatio),
-                height: height,
-                child: _FadedScene(child: scene),
-              ),
-            ),
-            const SizedBox(height: 8),
-            Padding(
-              padding: const EdgeInsetsDirectional.symmetric(horizontal: 28),
-              child: Semantics(
-                header: true,
-                child: Text(
-                  title,
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.headlineMedium?.copyWith(
-                    color: p.onHero,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(32, 0, 32, 16),
-              child: Text(
-                body,
-                textAlign: TextAlign.center,
-                style: theme.textTheme.bodyLarge?.copyWith(color: p.onHero),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-}
-
 /// A scene that melts into the hero background at its bottom (and top).
 /// With an [aspectRatio] it sizes itself; otherwise it fills its parent.
 class _FadedScene extends StatelessWidget {
@@ -538,45 +413,6 @@ class _FadedScene extends StatelessWidget {
   }
 }
 
-class _PageDots extends StatelessWidget {
-  const _PageDots({required this.current});
-
-  /// 1-based.
-  final int current;
-
-  @override
-  Widget build(BuildContext context) {
-    final l = AppLocalizations.of(context);
-    final p = CarthaPalette.of(context);
-    const total = OnboardingStep.carouselLength;
-    return Semantics(
-      label: l.onboardingPageDots(current, total),
-      excludeSemantics: true,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          for (var i = 1; i <= total; i++)
-            Container(
-              key: ValueKey(
-                'onboarding-dot-$i${i == current ? '-active' : ''}',
-              ),
-              margin: const EdgeInsetsDirectional.symmetric(horizontal: 4),
-              // The current page is a longer pill, not only another colour.
-              width: i == current ? 24 : 8,
-              height: 8,
-              decoration: BoxDecoration(
-                color: i == current
-                    ? p.heroAccent
-                    : p.onHeroMuted.withValues(alpha: 0.45),
-                borderRadius: BorderRadius.circular(4),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-}
-
 // ── Setup pages ─────────────────────────────────────────────────────────────
 
 class _SetupPage extends StatelessWidget {
@@ -616,8 +452,8 @@ class _SetupPage extends StatelessWidget {
                 padding: const EdgeInsetsDirectional.only(end: 12),
                 child: Text(
                   l.onboardingStepCounter(
-                    step.setupPosition!,
-                    OnboardingStep.setupLength,
+                    step.position,
+                    OnboardingStep.length,
                   ),
                   style: theme.textTheme.labelLarge?.copyWith(
                     color: p.textSecondary,
@@ -777,11 +613,6 @@ class _LimitsCard extends StatelessWidget {
         l.onboardingLimitsNoGuaranteeBody,
       ),
       (
-        Icons.autorenew,
-        l.onboardingLimitsPracticeTitle,
-        l.onboardingLimitsPracticeBody,
-      ),
-      (
         Icons.health_and_safety_outlined,
         l.onboardingLimitsNotTherapyTitle,
         l.onboardingLimitsNotTherapyBody,
@@ -845,56 +676,51 @@ class _CreditCard extends StatelessWidget {
     final p = CarthaPalette.of(context);
     final theme = Theme.of(context);
     final credit = context.read<AppState>().content.credit;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        SectionCard(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+    return SectionCard(
+      key: const ValueKey('onboarding-credit'),
+      title: l.onboardingCreditTitle,
+      icon: Icons.menu_book_outlined,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            '“${credit.title}”',
+            key: const ValueKey('onboarding-credit-title'),
+            style: theme.textTheme.titleSmall,
+          ),
+          const SizedBox(height: 4),
+          Text(
+            l.onboardingCreditByline(credit.author, credit.publishedOn),
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: p.textSecondary,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 4,
             children: [
-              Text(
-                l.onboardingCreditIntro,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: p.textSecondary,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                '“${credit.title}”',
-                key: const ValueKey('onboarding-credit-title'),
-                style: theme.textTheme.titleMedium,
-              ),
-              const SizedBox(height: 4),
-              Text(
-                l.onboardingCreditByline(credit.author, credit.publishedOn),
-                style: theme.textTheme.bodyMedium,
-              ),
-              const SizedBox(height: 16),
-              SecondaryButton(
+              TextLinkButton(
                 key: const ValueKey('onboarding-credit-article'),
                 label: l.onboardingCreditArticle,
                 trailingIcon: Icons.open_in_new,
-                expand: true,
                 onPressed: () =>
                     openExternalLink(context, Uri.parse(credit.articleUrl)),
               ),
-              const SizedBox(height: 8),
-              SecondaryButton(
+              TextLinkButton(
                 key: const ValueKey('onboarding-credit-newsletter'),
                 label: l.onboardingCreditNewsletter,
                 trailingIcon: Icons.open_in_new,
-                expand: true,
                 onPressed: () =>
                     openExternalLink(context, Uri.parse(credit.newsletterUrl)),
               ),
-              const SizedBox(height: 16),
-              Text(credit.independenceNotice, style: theme.textTheme.bodySmall),
             ],
           ),
-        ),
-        const SizedBox(height: 16),
-        _Point(icon: Icons.lightbulb_outline, body: l.onboardingCreditNoNeed),
-      ],
+          const SizedBox(height: 8),
+          Text(credit.independenceNotice, style: theme.textTheme.bodySmall),
+          const SizedBox(height: 12),
+          _Point(icon: Icons.lightbulb_outline, body: l.onboardingCreditNoNeed),
+        ],
+      ),
     );
   }
 }

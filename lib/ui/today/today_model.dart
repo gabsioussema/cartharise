@@ -19,6 +19,41 @@ DayPart dayPartAt(DateTime time) {
   return DayPart.evening;
 }
 
+/// One-line first-use hints that introduce a feature where it first shows
+/// up on Today; they replace the welcome carousel's pages (reset, direction,
+/// small steps). Each is derived from stored data — nothing extra is saved —
+/// and shows only until the feature is first used, so once used it never
+/// comes back.
+@immutable
+class FirstUseHints {
+  const FirstUseHints({
+    required this.reset,
+    required this.compass,
+    required this.quests,
+  });
+
+  factory FirstUseHints.of(AppData data) => FirstUseHints(
+    reset: data.journeys.every(
+      (j) =>
+          j.answers.isEmpty &&
+          j.activePromptId == null &&
+          j.completedAt == null,
+    ),
+    compass: data.compass.isEmpty && data.compassHistory.isEmpty,
+    quests: data.quests.isEmpty,
+  );
+
+  /// No reset was ever begun: the start card says what the reset is.
+  final bool reset;
+
+  /// The Compass was never written (nor saved as a version): the direction
+  /// card says answers can become a Compass.
+  final bool compass;
+
+  /// No quest exists yet: the quests card says what quests are.
+  final bool quests;
+}
+
 /// The core phases shown on Today (bonus contemplations are optional and
 /// never counted).
 const kCorePhases = [

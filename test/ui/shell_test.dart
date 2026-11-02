@@ -40,18 +40,18 @@ void main() {
     testWidgets('onboarding leads into the app', (tester) async {
       final h = await pumpCartha(tester);
       expect(find.byType(OnboardingFlow), findsOneWidget);
-      // Skip the intro, confirm 18+ (required), Next through setup, Finish.
-      await tester.tap(find.text('Skip'));
+      // Begin, confirm 18+ (required), Next through the setup, Start.
+      await tester.tap(find.text('Begin'));
       await pumpFrames(tester);
       await tester.ensureVisible(find.text("I'm 18 or older"));
       await pumpFrames(tester, count: 2);
       await tester.tap(find.text("I'm 18 or older"));
       await pumpFrames(tester, count: 2);
-      for (var i = 0; i < 4; i++) {
+      for (var i = 0; i < 3; i++) {
         await tester.tap(find.text('Next'));
         await pumpFrames(tester);
       }
-      await tester.tap(find.text('Finish'));
+      await tester.tap(find.text('Start'));
       await pumpFrames(tester);
       expect(h.state.needsOnboarding, isFalse);
       expect(find.byType(RootShell), findsOneWidget);
