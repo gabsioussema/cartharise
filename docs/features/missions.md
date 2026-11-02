@@ -150,11 +150,19 @@ its move button."
 * **Past project** (`PastProjectScreen`): picture, title, months, "Finished
   <date>", milestones (tick or ring **and** Done / Open in words), the look back
   exactly as typed, the linked tasks (Done / Open / Every day) and attempts
-  (what was tried, "Learned: …", day). **Remove from history** (destructive
-  confirm) deletes the project and its photo; its tasks and attempts stay.
+  (what was tried, "Learned: …", day, and — step 2 media — "1 photo and 1
+  voice note" with the photos as thumbnails that open full screen). Tapping
+  an attempt opens its sheet (play a voice note, correct or delete it), as in
+  the battle log. **Remove from history** (destructive confirm) deletes the
+  project and its photo; its tasks and attempts stay.
 * **Attempts** in the battle log show the project they were recorded for
-  (`LinkedProjectTag`; `recordAttempt` links to the active project). Labels
-  only — linking attempts by hand stays an op (`setAttemptProject`).
+  (`LinkedProjectTag`; `recordAttempt` links to the active project). The
+  attempt sheet has the same **Part of the month project** switch as the
+  quest sheet (`linkableProjectForAttempt`: its own project, current or past,
+  else the active one) to link or unlink it (`setAttemptProject`).
+* A finished project's name is never offered as current: Today's next action
+  ("Help me with: my project") and the battle log's boss line ignore a Compass
+  one-month project that is already in the history (`compassProjectFinished`).
 * **Picture** (`_PictureCard` → `showProjectArtPicker`): **Your photo** —
   "Choose a photo" (system picker) / "Take a photo" (camera), asked only on
   that tap, "Photos stay on this phone." — then the nine **Painted scenes**,

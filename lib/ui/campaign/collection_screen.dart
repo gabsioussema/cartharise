@@ -8,6 +8,7 @@ import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
 import '../compass/formatting.dart';
 import '../journal/journal_kit.dart';
+import '../media/media_kit.dart' show AttachmentCountLine;
 import '../missions/project_history_screen.dart';
 import '../persona/persona_copy.dart';
 import '../persona/persona_ops.dart';
@@ -80,7 +81,9 @@ class CollectionScreen extends StatelessWidget {
         else
           for (final tries in groups)
             _TriedGroup(
-              key: ValueKey('collection-experiment-${tries.first.experimentId}'),
+              key: ValueKey(
+                'collection-experiment-${tries.first.experimentId}',
+              ),
               tries: tries,
             ),
 
@@ -272,6 +275,14 @@ class _TryRow extends StatelessWidget {
                         color: p.textSecondary,
                       ),
                     ),
+                    // Its photos and voice notes, in words.
+                    if (entry.attachments.isNotEmpty) ...[
+                      const SizedBox(height: 2),
+                      AttachmentCountLine(
+                        entry.attachments,
+                        key: ValueKey('try-media-${entry.id}'),
+                      ),
+                    ],
                   ],
                 ),
               ),

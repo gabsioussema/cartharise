@@ -5,6 +5,8 @@ import '../../domain/app_data.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
 import '../media/attachment_strip.dart';
+import '../missions/project_link.dart';
+import '../missions/project_ops.dart';
 import '../widgets/widgets.dart';
 import 'campaign_ops.dart';
 
@@ -54,6 +56,13 @@ class _AttemptSheetState extends State<AttemptSheet> {
   late final _attempt = TextEditingController(text: widget.entry.attempt);
   late final _learning = TextEditingController(text: widget.entry.learning);
   final _learningFocus = FocusNode();
+
+  /// The project this attempt can be linked to (its own, else the active
+  /// one), and whether it is.
+  late final MonthProject? _project = context
+      .read<AppState>()
+      .linkableProjectForAttempt(widget.entry);
+  late bool _linked = _project != null && widget.entry.projectId == _project.id;
   String? _error;
   bool _busy = false;
 
@@ -72,11 +81,16 @@ class _AttemptSheetState extends State<AttemptSheet> {
       return;
     }
     setState(() => _busy = true);
-    await context.read<AppState>().editAttempt(
+    final state = context.read<AppState>();
+    await state.editAttempt(
       widget.entry.id,
       attempt: _attempt.text,
       learning: _learning.text,
     );
+    final project = _linked ? _project?.id : null;
+    if (_project != null && project != widget.entry.projectId) {
+      await state.setAttemptProject(widget.entry.id, project);
+    }
     if (mounted) Navigator.of(context).pop(_AttemptSheetResult.saved);
   }
 
@@ -128,6 +142,16 @@ class _AttemptSheetState extends State<AttemptSheet> {
             textCapitalization: TextCapitalization.sentences,
             decoration: InputDecoration(labelText: l.campaignLearningLabel),
           ),
+          if (_project != null) ...[
+            const SizedBox(height: 8),
+            ProjectLinkSwitch(
+              key: const ValueKey('attempt-project-link'),
+              project: _project,
+              past: context.read<AppState>().data.project?.id != _project.id,
+              value: _linked,
+              onChanged: (v) => setState(() => _linked = v),
+            ),
+          ],
           const SizedBox(height: 16),
           AttachmentStrip(
             holder: AttachmentHolder.attempt,

@@ -15,6 +15,7 @@ import '../../domain/content.dart';
 import '../../domain/local_date.dart';
 import '../../state/app_state.dart';
 import '../missions/missions_logic.dart';
+import '../missions/project_ops.dart';
 
 enum NextStepKind {
   /// One of today's open quests: do it.
@@ -144,7 +145,7 @@ class NextStepFacts {
       }
     }
     // The saved project (unless finished), else the Compass's month project
-    // (Missions shows it as the project draft).
+    // (Missions shows it as the project draft) unless that one is finished.
     final saved = state.data.project;
     final String title;
     String? milestone;
@@ -157,7 +158,8 @@ class NextStepFacts {
         }
       }
     } else {
-      title = state.compass.monthProject.trim();
+      // Not one already finished (it is in the project history).
+      title = state.projectShownTitle;
     }
     return NextStepFacts(
       lessonsRead: state.data.lessonsRead.length,
@@ -382,8 +384,7 @@ NextStep? _pinnedStep(NextStepFacts f) {
 
 /// The one next step: what the pin asks for when it applies, else the first
 /// of the app's own order (see [_autoSteps]).
-NextStep nextStepFor(NextStepFacts f) =>
-    _pinnedStep(f) ?? _autoSteps(f).first;
+NextStep nextStepFor(NextStepFacts f) => _pinnedStep(f) ?? _autoSteps(f).first;
 
 /// Everything that makes sense now, for "Choose something else": the app's
 /// own order with the month project (when there is one) before the note.

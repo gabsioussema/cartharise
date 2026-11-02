@@ -5,7 +5,7 @@ import '../../domain/app_data.dart';
 import '../../domain/local_date.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
-import '../media/media_kit.dart' show attachmentCountText;
+import '../media/media_kit.dart' show AttachmentCountLine, attachmentCountText;
 import '../media/pinned_memory_card.dart';
 import '../nav.dart';
 import '../theme/cartha_theme.dart';
@@ -211,24 +211,9 @@ class _NoteCard extends StatelessWidget {
                 ],
                 if (media != null) ...[
                   const SizedBox(height: 4),
-                  Row(
+                  AttachmentCountLine(
+                    entry.attachments,
                     key: ValueKey('note-media-${entry.id}'),
-                    children: [
-                      Icon(
-                        voice > 0 ? Icons.graphic_eq : Icons.photo_outlined,
-                        size: 16,
-                        color: p.accent,
-                      ),
-                      const SizedBox(width: 6),
-                      Flexible(
-                        child: Text(
-                          media,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: p.textSecondary,
-                          ),
-                        ),
-                      ),
-                    ],
                   ),
                 ],
                 const SizedBox(height: 4),

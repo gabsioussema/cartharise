@@ -153,7 +153,11 @@ then "Every milestone reached. Boss beaten."; with none, "Add milestones…" →
 `ProjectScreen`), **What did you actually try?** (required) and **What did you
 learn? (optional)** → **Record this attempt**, then every attempt, newest
 first; tapping one opens a sheet to correct it or **Delete attempt**
-(confirmation first).
+(confirmation first). Each attempt says what it holds ("1 photo and 1 voice
+note", step 2 media) and its project; the sheet also holds its photos and
+voice notes and a **Part of the month project** switch. The boss line ignores
+a Compass one-month project that is already finished (in the project
+history). Collection › tries also say what each one holds.
 * **The draft is kept.** Both fields autosave as `AppData.attemptDraft`
   (`saveAttemptDraft`, exactly as typed) 600 ms after the last keystroke, when
   the page closes and when the app goes to the background (the Compass

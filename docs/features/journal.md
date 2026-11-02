@@ -41,7 +41,10 @@ Photos and voice recordings live on journal notes, experiments tried
 widget, `AttachmentStrip`: thumbnails, voice notes, then **Add photo** ·
 **Record**. Everything is saved as soon as it is added; files go to the
 app's private `attachments/` folder (`AttachmentStore`), which is kept out
-of phone and cloud backups like the data file.
+of phone and cloud backups like the data file. `AttachmentCountLine`
+(media_kit) says what an entry holds in words ("2 photos and 1 voice note")
+on note cards, battle-log attempts, Collection tries and a past project's
+attempts.
 
 ### User flow
 

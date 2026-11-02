@@ -5,8 +5,12 @@ import 'package:provider/provider.dart';
 import '../../domain/app_data.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
+import '../campaign/attempt_sheet.dart';
 import '../compass/formatting.dart';
 import '../journal/journal_kit.dart' show AreaListView, AreaSectionLabel;
+import '../media/media_kit.dart' show AttachmentCountLine;
+import '../media/photo_tile.dart';
+import '../media/photo_viewer.dart';
 import '../theme/cartha_theme.dart';
 import '../widgets/widgets.dart';
 import 'missions_logic.dart';
@@ -433,8 +437,11 @@ class _DoneRow extends StatelessWidget {
   }
 }
 
-/// One linked attempt: what was tried and learned, exactly as typed, and
-/// its day.
+/// One linked attempt: what was tried and learned, exactly as typed, its
+/// day, and its photos and voice notes (step 2 media): the photos as
+/// thumbnails that open full screen, both kinds counted in words. Tapping
+/// the row opens the attempt (to play a voice note, correct or remove it),
+/// as in the battle log.
 class _AttemptRow extends StatelessWidget {
   const _AttemptRow({super.key, required this.entry});
 
@@ -445,36 +452,95 @@ class _AttemptRow extends StatelessWidget {
     final l = AppLocalizations.of(context);
     final p = CarthaPalette.of(context);
     final theme = Theme.of(context);
+    final date = formatDayKey(context, entry.day);
+    final photos = [
+      for (final a in entry.attachments)
+        if (a.kind == AttachmentKind.photo) a,
+    ];
     return Padding(
       padding: const EdgeInsetsDirectional.only(bottom: 8),
-      child: Container(
-        padding: const EdgeInsetsDirectional.fromSTEB(14, 10, 14, 10),
-        decoration: BoxDecoration(
-          color: p.raised,
+      child: Material(
+        color: p.raised,
+        shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(CarthaTheme.radiusSmall),
-          border: BorderDirectional(
-            start: BorderSide(color: p.accent, width: 3),
-          ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(entry.attempt, style: theme.textTheme.bodyLarge),
-            if (entry.learning.trim().isNotEmpty) ...[
-              const SizedBox(height: 4),
-              Text(
-                l.campaignLogLearned(entry.learning),
-                style: theme.textTheme.bodyMedium,
-              ),
-            ],
-            const SizedBox(height: 4),
-            Text(
-              formatDayKey(context, entry.day),
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: p.textSecondary,
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: () => showAttemptSheet(context, entry),
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              border: BorderDirectional(
+                start: BorderSide(color: p.accent, width: 3),
               ),
             ),
-          ],
+            child: Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(14, 10, 8, 10),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(entry.attempt, style: theme.textTheme.bodyLarge),
+                        if (entry.learning.trim().isNotEmpty) ...[
+                          const SizedBox(height: 4),
+                          Text(
+                            l.campaignLogLearned(entry.learning),
+                            style: theme.textTheme.bodyMedium,
+                          ),
+                        ],
+                        const SizedBox(height: 4),
+                        Text(
+                          date,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: p.textSecondary,
+                          ),
+                        ),
+                        if (entry.attachments.isNotEmpty) ...[
+                          const SizedBox(height: 6),
+                          AttachmentCountLine(
+                            entry.attachments,
+                            key: ValueKey('past-attempt-media-${entry.id}'),
+                          ),
+                        ],
+                        if (photos.isNotEmpty) ...[
+                          const SizedBox(height: 8),
+                          Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: [
+                              for (final a in photos)
+                                PhotoTile(
+                                  key: ValueKey('past-attempt-photo-${a.id}'),
+                                  attachment: a,
+                                  size: 56,
+                                  onTap: () => openPhotoViewer(
+                                    context,
+                                    holder: AttachmentHolder.attempt,
+                                    entryId: entry.id,
+                                    attachmentId: a.id,
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  Padding(
+                    padding: const EdgeInsetsDirectional.all(4),
+                    child: Icon(
+                      Icons.edit_outlined,
+                      color: p.textSecondary,
+                      semanticLabel: l.campaignLogEditLabel(date),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );

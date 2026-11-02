@@ -27,9 +27,16 @@ F-054 (gentle progress), F-031 (non-punitive), F-055 (honest save failure).
    and levels for what you do." with **Play** / **Not now**, see
    `campaign.md`) while `AppSettings.gameInvited` is false, i.e. for a brand-new
    profile until the user answers it once. Existing users never see it.
-5. **Write** — a quick capture ("Write a few lines…", read out as "Write a
-   new note") that opens a new journal note (`AppNav.openJournalEntry`;
-   nothing is saved until something is typed there).
+5. **Write · Record** — a quick capture (key `today-capture`). **Write**
+   ("Write a few lines…", read out as "Write a new note") opens a new journal
+   note (`AppNav.openJournalEntry`; nothing is saved until something is typed
+   there). **Record** (read out as "Record a voice note", step 2 media) opens
+   the recorder sheet; the microphone is asked for only on that tap. A stopped
+   recording is kept in a new journal note ("Voice note saved in your
+   Journal." with **Open**); a save that failed says "Recorded, but not saved
+   yet. Retry at the top."; denied or unavailable offers Write instead. The
+   two sit side by side, stacked when narrow or with large text. See
+   `journal.md` › Media.
 6. **At a glance** — up to three small tappable tiles (three across on a
    phone, fewer with large text): **Reset** "3/27 reflections" with a bar (→
    Reset tab; "Start" / "Done" before and after), **Campaign** "Level n · x
@@ -85,7 +92,7 @@ else the app's own order decides (the card is then not "pinned"):
 
 | Pin | Card |
 |---|---|
-| **My project** | "Work on your project": the project title as typed, "Next: <first open milestone>", **Open the project** → `AppNav.openProject`. The project is the saved one unless it is finished, else the Compass's month project (Missions' draft). No project → falls back (the sheet says "No project yet. Today decides for now."). |
+| **My project** | "Work on your project": the project title as typed, "Next: <first open milestone>", **Open the project** → `AppNav.openProject`. The project is the saved one unless it is finished, else the Compass's month project (Missions' draft) unless that one is already in the project history. No project → falls back (the sheet says "No project yet. Today decides for now."). |
 | **Reflection** | Begin the reset, else resume it, else the weekly review (Friday–Sunday, none yet this week), else falls back. |
 | **Notes** | "Write a note". |
 | **Decide for me** | `auto`: the app's own order. |
@@ -172,7 +179,7 @@ files: none; unknown names dropped) and cleared by "Delete all data":
 
 | File | Role |
 |---|---|
-| `lib/ui/today/today_tab.dart` | `TodayTab()`: layout, Write capture, glance tiles, focus card, collapsed direction |
+| `lib/ui/today/today_tab.dart` | `TodayTab()`: layout, Write · Record capture, glance tiles, focus card, collapsed direction |
 | `lib/ui/today/next_action.dart` | `NextActionCard()`: hero card, done state, "Choose something else" sheet |
 | `lib/ui/today/next_step.dart` | `NextStepFacts`, `DoneToday`, `NextStep`, `nextStepFor`, `stepOptions`, `doneForToday` (pure) |
 | `lib/ui/today/today_model.dart` | `dayPartAt`, `currentPathDay`, `nextPathDay`, `JourneySummary`, `FirstUseHints` |

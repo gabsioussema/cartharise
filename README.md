@@ -109,6 +109,11 @@ and credited, and the article itself is never reproduced (see [Credits](#credits
     <td align="center"><img src="docs/screenshots/you-avatar-light.png" width="220" alt="You, with your avatar, light"><br><sub>You · light</sub></td>
   </tr>
   <tr>
+    <td align="center"><img src="docs/screenshots/board-dark.png" width="220" alt="Missions as a board: Later, Ready, Doing, Done"><br><sub>The board: Later · Ready · Doing · Done</sub></td>
+    <td align="center"><img src="docs/screenshots/project-history-dark.png" width="220" alt="A finished project in the project history"><br><sub>Project history</sub></td>
+    <td align="center"><img src="docs/screenshots/journal-pinned-dark.png" width="220" alt="Journal with a pinned memory and a note with photos and a voice note"><br><sub>Pinned memory, photos & voice notes</sub></td>
+  </tr>
+  <tr>
     <td colspan="3" align="center"><img src="docs/screenshots/themes.png" width="680" alt="Today in the six themes, dark and light"><br><sub>Six themes, dark and light: Forest · Olive · Oasis · Tyrian Rose · Alpine · Obsidian</sub></td>
   </tr>
 </table>
@@ -129,7 +134,7 @@ Five tabs: **Today · Reset · Compass · Journal · You**.
 - 🧭 **One next action**, worked out from what you've actually done: an open quest, start or resume the reset, build your Compass, turn levers into quests, a weekly review or a note, on a smaller dawn scene
 - 🔀 **Choose something else** lists the other steps that make sense now, plus **Help me with**: my project · reflection · notes · decide for me. Your choice is remembered
 - ✅ Once that kind of action is done today: **"Done. That can be enough for today."** with a quiet "One more". After a long absence there are no missed-day counts, just the next action
-- ✍️ **Write**: a quick capture that opens a new journal note
+- ✍️ **Write · Record**: a quick capture. Write opens a new journal note; Record keeps a voice note in a new one (the microphone is asked for only when you tap it)
 - 📊 At a glance: three small tiles for your reset (3/27), your Campaign level and your 30-day path day, then today's quests; your direction stays collapsed until you open it
 - 🧑 Your avatar beside the greeting, once you've made one
 
@@ -153,6 +158,9 @@ Five tabs: **Today · Reset · Compass · Journal · You**.
 **Missions: small steps**
 - ⚡ Daily levers become up to three **editable** daily quests, never added without your OK
 - ✅ One‑off and daily quests with Undo. A month project with milestones
+- 🗂️ **List or Board:** the same quests as lanes **Later → Ready → Doing → Done** (stacked on phones, four columns on tablets). Move a card with **Move to…** or by dragging, with Undo. A gentle note when Doing gets crowded, Done folded away, and a **Today** filter. Moving earns nothing; finishing a quest earns what ticking it does. Daily quests come back to Ready the next day
+- 🏛️ **Project history:** **Finish this project** with a short look back, kept exactly as you write it. Past projects stay readable month by month, with their milestones, the tasks and attempts linked to them, and their photos and voice notes
+- 🖼️ **A picture for each project:** one of nine painted scenes, or your own photo, shown small on its tasks and attempts
 - 🗺️ An optional **30‑day path** in four stages (Observe · Experiment · Build · Adjust). Every day is open, go at your own pace
 
 **Campaign: the article as a game (optional)**
@@ -172,6 +180,8 @@ Five tabs: **Today · Reset · Compass · Journal · You**.
 
 **Journal: write and look back**
 - 📝 Free notes, **weekly reviews** (wins, friction, next experiment)
+- 📷 **Photos and voice notes** on notes, tries and attempts: pick a photo or take one, or tap **Record** (a clear "Recording" state, Stop and save; a call or leaving the app keeps what was recorded). Play them back, and add your own words to a voice note if you like; nothing is transcribed for you
+- 📌 **Pinned memory:** pin a passage you wrote (the exact words you select) or a photo to the top of the Journal
 - 🔍 **Look back:** compare two Compass moments side by side and reread earlier resets
 
 **You: your space, your choices**
@@ -179,7 +189,7 @@ Five tabs: **Today · Reset · Compass · Journal · You**.
 - 🙏 **Inspiration:** the article, its author and both links, and what is from the source vs added by Cartharise
 - 🔔 **Reminders:** opt‑in, six editable check‑in times, quiet hours, or **Add to calendar (.ics)** if you'd rather not get notifications
 - 🎨 **Appearance:** six themes, each named for a piece of the story: **Forest**, **Olive**, **Oasis** (palm green and date gold), **Tyrian Rose** (the rose dye of Tyre, Carthage's mother city), **Alpine** (granite and snow of Hannibal's crossing) and **Obsidian** (black and gold, true black when dark) · system / light / dark · motion on/off
-- 💾 **Your data:** export or restore a JSON backup, or delete everything
+- 💾 **Your data:** export a **.zip backup** with your words, settings, photos and voice notes (it says what it includes and how big it is), restore a .zip or an older .json, or delete everything
 - 💚 **Support & safety:** what to do when a question feels heavy, and where to find help
 
 **Made for real life**
@@ -194,10 +204,10 @@ Five tabs: **Today · Reset · Compass · Journal · You**.
 flowchart LR
     L["Awakening<br/>7 lessons · optional"] -.->|Try it| R
     R["Reset<br/>14 morning · 6 check-ins · 7 evening"] -->|evening answers<br/>previewed, empty fields only| C["Life Compass<br/>6 fields + versions"]
-    C -->|daily levers<br/>edited & approved| M["Missions<br/>quests · month project · 30-day path"]
+    C -->|daily levers<br/>edited & approved| M["Missions<br/>list or board · month project + history · 30-day path"]
     M --> T["Today<br/>next step · focus · progress"]
     T -->|continue| R
-    C --> J["Journal<br/>notes · weekly reviews · look back"]
+    C --> J["Journal<br/>notes · photos & voice notes · pinned memory · weekly reviews · look back"]
     M --> J
     C -.->|optional game layer| G["Campaign<br/>chapters · boss fight · XP"]
     M -.-> G
@@ -224,7 +234,7 @@ domain layer is pure Dart and unit‑tested. Details: [`docs/architecture.md`](d
 - **No streaks, countdowns or guilt.** Progress is counted in words, and nothing locks by time. The optional Campaign is off until you say Play; its XP counts participation only: it never drops, never judges what you write, and turns off in one tap
 - **Your words are saved exactly as typed.** Nothing is rewritten, summarised or inferred
 - **No labels or diagnoses.** Lessons are lenses, not verdicts. Cartharise is not therapy, and says so
-- **Honest when something fails.** Failed saves, denied notification permission and bad backups are shown plainly, with a practical alternative
+- **Honest when something fails.** Failed saves, denied notification, camera or microphone permission, interrupted recordings and bad backups are shown plainly, with a practical alternative
 - For adults (18+), confirmed during onboarding
 
 ---
@@ -237,7 +247,8 @@ domain layer is pure Dart and unit‑tested. Details: [`docs/architecture.md`](d
 | <img src="https://cdn.simpleicons.org/dart/0175C2" width="22"> | Core logic | **Dart 3.13**: pure‑Dart domain, hand‑written JSON, `intl` + gen‑l10n from per‑area ARB fragments |
 | 🎨 | Brand & motion | `EmblemGeometry` (one source for the emblem, its SVGs and icons), the "charging" loader as a `CustomPainter`, `flutter_svg` lockups, vector brand scenes |
 | 🔔 | Reminders | `flutter_local_notifications` (inexact daily), `timezone` + `flutter_timezone`; pure `.ics` export |
-| 💾 | Files | `path_provider` (atomic JSON store), `share_plus` (export), `file_picker` (restore) |
+| 💾 | Files | `path_provider` (atomic JSON store, private `attachments/`), `share_plus` (export), `file_picker` (restore), `archive` (.zip backups) |
+| 📷 | Media | `image_picker` (system photo picker / camera), `record` (voice notes, on tap only), `audioplayers` (playback); all on the phone |
 | 🔗 | Links | `url_launcher`, used only for the credited article links and the helpline directory |
 | <img src="https://cdn.simpleicons.org/googlefonts/4285F4" width="22"> | Typography | **Cinzel** for headlines, **Inter** for everything else (both bundled, OFL) |
 | <img src="https://cdn.simpleicons.org/swift/F05138" width="22"> | iOS native | **Swift**: excludes the data folder from iCloud/computer backups |
@@ -304,13 +315,13 @@ lib/
 ├── data/            DataStore: atomic JSON file · in-memory store for tests · backup exclusion
 ├── state/           AppState, the single ChangeNotifier
 ├── reminders/       reminder planning (pure) + notification scheduler
-├── services/        .ics export (pure) · share sheet / file picker
+├── services/        .ics export (pure) · share sheet / file picker · attachments store · photo picker · recorder · player
 ├── l10n/            generated AppLocalizations (from l10n_src/)
 └── ui/
     ├── theme/       Carthage Dusk palette, six themes, avatar colours, Cinzel/Inter type
     ├── widgets/     shared kit: buttons, cards, headers, loader, scenes, glyphs, lesson art, badges, pill tabs, save indicator…
     ├── boot_screen.dart · root_shell.dart · nav.dart
-    └── onboarding/ today/ reset/ awakening/ compass/ missions/ campaign/ persona/ journal/ you/
+    └── onboarding/ today/ reset/ awakening/ compass/ missions/ campaign/ persona/ journal/ media/ you/
 l10n_src/            per-area string fragments → make l10n
 assets/
 ├── brand/           emblem, wordmarks, loader reference, app icons, splash (from the brand guide)
@@ -342,8 +353,9 @@ tool/merge_arb.dart  merges the ARB fragments
 
 - No account, no Cartharise server, no analytics, ads or crash‑reporting SDKs. The release build doesn't even ask for internet access
 - Everything lives in **one file in the app's private folder**. It isn't encrypted by Cartharise and isn't synced, and it's **kept out of phone and cloud backups** (Android backup rules, iOS backup exclusion)
+- **Photos and voice notes stay on the phone**, copied into the app's private `attachments/` folder and kept out of phone and cloud backups like the data file. The **microphone** is asked for only when you tap Record, and the camera or photos only when you add a photo; a refusal is said plainly, with another way (typing, or choosing a photo instead)
 - Notifications show only the check‑in's title, **never your words**. Nothing you write goes into logs
-- **You › Your data:** export a JSON backup through the share sheet, restore one (fully validated and previewed before anything changes), or **delete all data**. Deleting removes the file and its temporary export/import copies and cancels every reminder
+- **You › Your data:** export a `.zip` backup (`data.json` plus your photos and voice notes) through the share sheet, restore a `.zip` or an older `.json` (fully validated and previewed before anything changes), or **delete all data**. Deleting removes the file, the photos and recordings, the temporary export/import copies, and cancels every reminder
 
 ---
 
@@ -360,11 +372,11 @@ failures, reminder planning (quiet hours across midnight, DST), the `.ics` forma
 
 - One widget test file per area, each run across a **size matrix**: 320×568 at 200 % text, 390×844, and 1024×1366 at 130 %, in dark and light
 - **Accessibility** checks (tap size, labels, text contrast) on 23 screens, plus a keyboard‑only pass
-- **End‑to‑end journeys** through the real app and content: onboarding → full reset → previewed Compass import → quests → journal → `.ics` → export, delete everything, restore; create an avatar → You, the Campaign and Today show it → backup, delete, restore; the five-page welcome → the Campaign invitation (Play / Not now); a remembered Today pin → "Done. That can be enough for today."; Try → Add to my tasks → Collection → Choose your reward; an honest failed attempt save with its draft kept
+- **End‑to‑end journeys** through the real app and content: onboarding → full reset → previewed Compass import → quests → journal → `.ics` → export, delete everything, restore; create an avatar → You, the Campaign and Today show it → backup, delete, restore; the five-page welcome → the Campaign invitation (Play / Not now); a remembered Today pin → "Done. That can be enough for today."; Try → Add to my tasks → Collection → Choose your reward; an honest failed attempt save with its draft kept; quests → the board → Move to… → Done, a daily quest back in Ready the next day; a project finished with its look back → the history with its tasks, attempts and their photos; a photo and a voice note on a note → a pinned passage → `.zip` backup → delete everything (files too) → restore; an older `.json` backup still restoring
 - Guard tests: no hard‑coded colours outside the theme, no streak or guilt copy, privacy settings pinned in the manifest
 
-Notifications, the share sheet and the file picker are tested with fakes. The real ones still need a
-check on a device.
+Notifications, the share sheet, the file picker, the photo picker, the recorder and the player are
+tested with fakes. The real ones still need a check on a device.
 
 ---
 
@@ -372,12 +384,12 @@ check on a device.
 
 | | |
 |---|---|
-| ✅ | Android app: all five tabs, reminders, `.ics`, backup and restore; analyze clean, tests green |
+| ✅ | Android app: all five tabs, reminders, `.ics`, the board, project history, photos and voice notes, `.zip` backup and restore; analyze clean, tests green |
 | 🧪 | iOS: configured (notifications, icons, splash, backup exclusion) but not yet compiled; needs a Mac with Xcode |
-| 🧪 | On‑device checks: notification permission, share sheet, file picker, Android 12+ splash, backup exclusion |
+| 🧪 | On‑device checks: notification permission, share sheet, file picker, photo picker and camera, microphone and playback, Android 12+ splash, backup exclusion |
 | 🔜 | Content & legal review of the paraphrased lessons and questions; trademark check on the name |
 | 🔜 | Store release: privacy policy, store privacy forms, signing, release builds |
-| 🔜 | Translations (strings and content are already split per language) |
+| 🔜 | Evolve plan step 3: on‑device dictation, read aloud, French and Arabic (strings and content are already split per language) |
 | 🔜 | Remember set‑aside lever drafts across restarts; per‑field "last updated" on the Compass |
 
 ---

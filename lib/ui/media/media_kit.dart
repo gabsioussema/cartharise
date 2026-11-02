@@ -11,6 +11,7 @@ import 'package:flutter/semantics.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../domain/app_data.dart';
 import '../../domain/local_date.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/media_picker.dart';
@@ -264,4 +265,42 @@ Widget retrySaveButton(BuildContext context, {VoidCallback? after}) {
       after?.call();
     },
   );
+}
+
+/// A quiet line saying what an entry holds besides its words — "2 photos
+/// and 1 voice note" — with a matching icon (never colour alone). Nothing
+/// when [attachments] is empty. Used on note cards, attempts and tries.
+class AttachmentCountLine extends StatelessWidget {
+  const AttachmentCountLine(this.attachments, {super.key});
+
+  final List<Attachment> attachments;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final p = CarthaPalette.of(context);
+    final photos = attachments
+        .where((a) => a.kind == AttachmentKind.photo)
+        .length;
+    final voice = attachments.length - photos;
+    final text = attachmentCountText(l, photos, voice);
+    if (text == null) return const SizedBox.shrink();
+    return Row(
+      children: [
+        Icon(
+          voice > 0 ? Icons.graphic_eq : Icons.photo_outlined,
+          size: 16,
+          color: p.accent,
+        ),
+        const SizedBox(width: 6),
+        Flexible(
+          child: Text(
+            text,
+            style: Theme.of(context).textTheme.bodySmall
+                ?.copyWith(color: p.textSecondary),
+          ),
+        ),
+      ],
+    );
+  }
 }

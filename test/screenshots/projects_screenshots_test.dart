@@ -180,6 +180,18 @@ AppData _data({MonthProject? project, bool current = true}) =>
           learning: 'Start small.',
           createdAt: DateTime(2026, 10, 12, 18),
           projectId: 'project_oct',
+          // Step 2 media on an attempt: shown in the battle log and the
+          // project history.
+          attachments: [
+            _photo('att_corner'),
+            Attachment(
+              id: 'att_corner_voice',
+              kind: AttachmentKind.audio,
+              fileName: 'att_corner_voice.m4a',
+              createdAt: DateTime(2026, 10, 12, 18),
+              durationMs: 42000,
+            ),
+          ],
         ),
       ],
     );
@@ -211,7 +223,9 @@ void main() {
       photo = (await tester.runAsync(_photoPng))!;
       final files = MemoryAttachmentStore(clock: () => _at)
         ..files['att_walk.png'] = photo
-        ..files['att_now.png'] = photo;
+        ..files['att_now.png'] = photo
+        ..files['att_corner.png'] = photo
+        ..files['att_corner_voice.m4a'] = Uint8List.fromList([1, 2, 3]);
       return pumpCartha(
         tester,
         data: data ?? _data(),

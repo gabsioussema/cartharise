@@ -1,6 +1,7 @@
 import '../../domain/app_data.dart';
 import '../../domain/campaign.dart';
 import '../../state/app_state.dart';
+import '../missions/project_ops.dart';
 
 /// Campaign operations on top of [AppState.mutate] (PLAN.md §4: feature
 /// extensions live in the feature's folder).
@@ -17,10 +18,12 @@ extension CampaignOps on AppState {
       updateSettings(settings.copyWith(game: enabled, gameInvited: true));
 
   /// The monthly "boss": the Missions project title if set, else the
-  /// Compass's one-month project (as on Today).
+  /// Compass's one-month project (as on Today) — unless that one is already
+  /// finished and kept in the project history.
   String get monthlyBoss {
     final project = data.project?.title.trim() ?? '';
-    return project.isNotEmpty ? project : compass.monthProject;
+    if (project.isNotEmpty) return project;
+    return compassProjectFinished ? '' : compass.monthProject;
   }
 
   // ── Battle log ──────────────────────────────────────────────────────────

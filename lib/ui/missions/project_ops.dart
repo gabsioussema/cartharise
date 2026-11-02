@@ -37,8 +37,15 @@ extension ProjectViewOps on AppState {
 
   /// The project a quest sheet offers to link: the quest's own project
   /// (current or past) when it still exists, else the active project.
-  MonthProject? linkableProjectFor(Quest? quest) {
-    final own = quest?.projectId;
+  MonthProject? linkableProjectFor(Quest? quest) =>
+      _linkableProject(quest?.projectId);
+
+  /// The project an attempt's sheet offers to link: the attempt's own
+  /// project (current or past) when it still exists, else the active one.
+  MonthProject? linkableProjectForAttempt(BattleLogEntry entry) =>
+      _linkableProject(entry.projectId);
+
+  MonthProject? _linkableProject(String? own) {
     if (own != null) {
       final project = projectById(own);
       if (project != null) return project;

@@ -7,6 +7,7 @@ import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
 import '../compass/autosave.dart';
 import '../compass/formatting.dart';
+import '../media/media_kit.dart' show AttachmentCountLine;
 import '../missions/project_art.dart';
 import '../nav.dart';
 import '../theme/cartha_theme.dart';
@@ -370,6 +371,14 @@ class _LogRow extends StatelessWidget {
                 ],
                 const SizedBox(height: 4),
                 Text(date, style: theme.textTheme.bodySmall),
+                // Its photos and voice notes, in words (open it to see them).
+                if (entry.attachments.isNotEmpty) ...[
+                  const SizedBox(height: 4),
+                  AttachmentCountLine(
+                    entry.attachments,
+                    key: ValueKey('attempt-media-${entry.id}'),
+                  ),
+                ],
                 if (entry.projectId != null) ...[
                   const SizedBox(height: 6),
                   LinkedProjectTag(
