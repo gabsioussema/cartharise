@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
@@ -7,21 +8,24 @@ import 'package:provider/provider.dart';
 import '../../domain/campaign.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
+import '../persona/persona_ops.dart';
 import '../theme/cartha_theme.dart';
 import '../widgets/motion.dart';
 import 'campaign_copy.dart';
 import 'campaign_ops.dart';
 
 /// Calm Campaign moments (F-060): a short "+20 XP" when a quest, an attempt,
-/// a weekly review or a first try of an experiment adds XP, and
-/// "Achievement earned: …" when one is earned. Only for an action: never
-/// while typing an answer (reflection XP, a chapter it completes, its
-/// achievement, and a route stop it reaches all stay quiet; the Campaign
-/// shows them), never for a restore (large jumps, or more reward picks at
-/// once than one action can earn, are ignored), never with the game layer
-/// off. Avatar extras no longer open by themselves (progress gives reward
-/// picks, spent by the user), so no extra is announced as new. Shown at the
-/// top for about two seconds and announced to screen readers.
+/// a weekly review or a first try of an experiment ("+10 XP") adds XP,
+/// "Achievement earned: …" when one is earned, and "A new pick for your
+/// avatar" when an action earns a reward pick that can be spent. Only for
+/// an action: never while typing an answer (reflection XP, a chapter it
+/// completes, its achievement, a route stop and the pick it gives all stay
+/// quiet; the Campaign shows them), never for a restore (large jumps, or
+/// more achievements or picks at once than one action can earn, are
+/// ignored), never with the game layer off, never for spending a pick.
+/// Extras never open by themselves (the user chooses them with picks), so
+/// no extra is announced as new. Shown at the top for about two seconds and
+/// announced to screen readers.
 class CampaignFeedback extends StatefulWidget {
   const CampaignFeedback({super.key, required this.child});
 
@@ -61,6 +65,7 @@ class _CampaignFeedbackState extends State<CampaignFeedback> {
   int _picks = 0;
   int _pendingXp = 0;
   final _pendingAchievements = <Achievement>[];
+  int _pendingPicks = 0;
   Timer? _settle;
   Timer? _hide;
   OverlayEntry? _entry;
@@ -111,7 +116,15 @@ class _CampaignFeedbackState extends State<CampaignFeedback> {
       for (final a in Achievement.values)
         if (newly.contains(a) && byAction(a)) a,
     ]);
-    if (_pendingXp == 0 && _pendingAchievements.isEmpty) return;
+    // A pick earned by this action, said only while there is one to spend
+    // (a pick that only covers an extra already kept is nothing new).
+    final action = gained > 0 || newly.any(_actionAchievements.contains);
+    if (action && newPicks > 0 && state.picksLeft > 0) {
+      _pendingPicks = math.min(_pendingPicks + newPicks, state.picksLeft);
+    }
+    if (_pendingXp == 0 && _pendingAchievements.isEmpty && _pendingPicks == 0) {
+      return;
+    }
     _settle?.cancel();
     _settle = Timer(CampaignFeedback.settle, _show);
   }
@@ -123,9 +136,11 @@ class _CampaignFeedbackState extends State<CampaignFeedback> {
       if (_pendingXp > 0) l.campaignToastXp(_pendingXp),
       for (final a in _pendingAchievements)
         l.campaignToastAchievement(achievementName(l, a)),
+      if (_pendingPicks > 0) l.campaignToastPick(_pendingPicks),
     ];
     _pendingXp = 0;
     _pendingAchievements.clear();
+    _pendingPicks = 0;
     final overlay = Navigator.maybeOf(context, rootNavigator: true)?.overlay;
     if (overlay == null) return;
     _remove();

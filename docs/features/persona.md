@@ -141,17 +141,24 @@ detail sheet and a 24–120 px size ladder, in dark and light) come from
 
 - **Nothing is stored before Save.** Save calls `savePersona(draft, motto:)`;
   on success the builder closes with "Avatar saved.".
-- **Campaign extras.** A locked extra (game layer on, not earned yet) stays
-  visible with a lock, a dimmed portrait and its reason ("Reach the Alps",
-  "Earn The Challenger" — `unlockReason`), and cannot be chosen (no tap
-  action; announced as disabled). Categories with a locked choice say
-  "Locked extras open along the Campaign." With the game layer off everything
-  is open. An extra the saved avatar already wears but hasn't unlocked (worn
-  while the game layer was off) stays selected and usable, marked "Yours to
-  keep" (`PersonaOps.canUse`): saving or removing the avatar keeps every
-  extra it wore for good (`AppData.avatarUnlocked`), so "Surprise me" or
-  another choice never takes it away. Extras the Campaign opened stay open
-  even if the progress goes down later (see `campaign.md`, "Kept for good").
+- **Campaign extras (reward picks).** A locked extra (game layer on, not
+  chosen with a reward pick, not kept, not worn) stays visible with a lock, a
+  dimmed portrait and how to open it, and cannot be chosen here (no tap
+  action; announced as disabled). The how follows the pick model
+  (`builder_options.dart`, `persona_copy.dart`): "Choose it with a reward
+  pick" while a pick is left (`unlockReason`; picks are spent in the
+  Campaign's Make it yours › **Choose your reward**), else when the next pick
+  comes — "Next pick at New Carthage", or "Next pick: earn The Challenger"
+  once every route stop is reached (`nextPickReason`). Any pick buys any
+  extra, so every locked tile says the same. Categories with a locked choice
+  say "Locked extras open along the Campaign." With the game layer off
+  everything is open. An extra the saved avatar already wears but hasn't
+  chosen (worn while the game layer was off) stays selected and usable,
+  marked "Yours to keep" (`PersonaOps.canUse`): saving or removing the avatar
+  keeps every extra it wore for good (`AppData.avatarUnlocked`), so
+  "Surprise me" or another choice never takes it away. Chosen extras stay
+  the user's even if the progress goes down later (see `campaign.md`, "Kept
+  for good").
 - **Surprise me** picks a random choice in every category among usable parts
   only, always a skin tone, never the same avatar twice in a row; "New look.
   Not saved yet." with **Undo**.
@@ -208,18 +215,53 @@ Screenshots: `test/screenshots/persona_builder_screenshots_test.dart`.
   (`ValueKey('today-avatar')`, no banner, hidden from screen readers since
   the greeting already speaks). Nothing is shown before one is made.
 - **The Campaign:** a 36 dp portrait walks Hannibal's route above the
-  current stop, and the "Your strategist" card shows the avatar, the motto
-  as typed, "n of 13 extras unlocked", the next extra and Create / Edit (see
-  `campaign.md`).
+  current stop on the hub (44 dp on the Route page). The **Make it yours**
+  page has the "Your strategist" card — the avatar (88 dp), the motto as
+  typed, "n of 13 extras unlocked" and Create / Edit — and **Reward picks**
+  (see `campaign.md`).
 - **Data:** the persona and the kept extras are part of the JSON backup and
   are removed by "Delete all data" (`AppData.persona`,
   `AppData.avatarUnlocked`); `test/persona_test.dart` covers the kept set
   (only grows, game off adds nothing, worn extras kept on save and remove,
   backup and delete).
 
+## Rewards (reward picks, evolve step 1)
+
+Each route stop after Carthage and each achievement gives one **reward
+pick**; the user spends it on the decorative extra they want. Appearance is
+never a reward (always free), and nothing chosen, kept or worn is ever taken
+away.
+
+- **Choose your reward** (`lib/ui/campaign/reward_sheet.dart`, from Make it
+  yours while `PersonaOps.picksLeft > 0`): the user's avatar — or the
+  silhouette, with no skin assumed — **wearing** the selected extra at
+  112 dp (read "Your avatar wearing North star"), then every extra a pick can
+  buy (`PersonaOps.rewardChoices`) as builder-style tiles, each a 48 dp
+  portrait wearing it, its name, its kind (Banner, Carry, Headwear, Colour —
+  so the two "Compass" extras are told apart) and a swatch for colours. The
+  milestone's suggested extra comes first and is preselected ("Suggested ·
+  Carry"). **Choose …** spends the pick (`chooseReward`); choosing never
+  changes the avatar ("Scroll is yours to keep." with **Wear it** → the
+  builder). A failed write says so; with the game off or no pick left the
+  sheet explains instead of offering a choice.
+- **No pick left:** Make it yours says when the next comes ("Next pick at
+  the Ebro"); every extra the user's → "Every extra unlocked." (only then).
+- **Game off:** "With the Campaign off, every extra is already open." — no
+  picks are counted or offered.
+- **Moments:** "A new pick for your avatar" when an action earns a pick that
+  can be spent (never from typing answers, never for a restore, never with
+  the game off).
+- **Builder:** locked tiles say "Choose it with a reward pick" while a pick
+  is left, else when the next pick comes (Rules, above).
+- `extraPart(u)` / `avatarWearing(avatar, u)` map an extra to the avatar
+  part it puts on (`requirementOf(extraPart(u)) == u`); tests in
+  `test/ui/playground_test.dart` (preview, order, choosing, refusals, sizes
+  and guidelines) and `test/ui/campaign_test.dart` (Make it yours).
+
 **Journey test:** `test/ui/persona_journey_test.dart` creates an avatar in
-the builder from You, then checks You, the Campaign (route and card) and
-Today show it; the exported backup carries it; "Delete all data" removes it
-everywhere; restoring the backup brings it back as it was. The builder is
+the builder from You, then checks You, the Campaign (the hub's route and Make
+it yours) and Today show it; the exported backup carries it; "Delete all
+data" removes it everywhere; restoring the backup brings it back as it was.
+The builder is
 also in the accessibility matrix (`test/ui/a11y_test.dart`) and the AppNav
 route check (`test/ui/journeys_test.dart`).

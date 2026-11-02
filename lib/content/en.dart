@@ -21,7 +21,7 @@ const String _srcPlan = 'Evening 05–07 · plan';
 
 const ContentLibrary englishContent = ContentLibrary(
   languageCode: 'en',
-  version: 1,
+  version: 2,
   lessons: _lessons,
   prompts: _prompts,
   thirtyDays: _thirtyDays,
@@ -1383,6 +1383,7 @@ const List<PathDay> _thirtyDays = [
 // sharing personal details; one to three short steps, action first.
 
 const List<Experiment> _experiments = [
+  // See the terrain: your days as they are.
   Experiment(
     id: 'try.terrain.01',
     chapter: CampaignChapter.terrain,
@@ -1390,6 +1391,159 @@ const List<Experiment> _experiments = [
     steps: [
       'Walk slowly through one room you use every day.',
       'Notice one thing you have stopped seeing.',
+    ],
+    minutes: 5,
+  ),
+  Experiment(
+    id: 'try.terrain.02',
+    chapter: CampaignChapter.terrain,
+    title: 'Count one small habit today',
+    steps: [
+      'Pick one small habit, like picking up your phone.',
+      'Make a tally mark each time it happens.',
+      'Look at the total tonight. Just look.',
+    ],
+    minutes: 5,
+  ),
+  Experiment(
+    id: 'try.terrain.03',
+    chapter: CampaignChapter.terrain,
+    title: 'Jot down one ordinary hour',
+    steps: [
+      'Choose one ordinary hour today.',
+      'Every 15 minutes, note what you are doing in a few words.',
+    ],
+    minutes: 5,
+  ),
+
+  // Find the pattern: what keeps repeating.
+  Experiment(
+    id: 'try.pattern.01',
+    chapter: CampaignChapter.pattern,
+    title: 'Do one routine a different way',
+    steps: [
+      'Pick a small routine: your route, your order of tasks.',
+      'Do it differently once today.',
+      'Notice what felt strange.',
+    ],
+    minutes: 10,
+  ),
+  Experiment(
+    id: 'try.pattern.02',
+    chapter: CampaignChapter.pattern,
+    title: 'Catch one "I\'m the kind of person who…"',
+    steps: [
+      'Listen for the phrase in your head today.',
+      'Write the sentence down as it came.',
+      'Ask yourself: is it still true?',
+    ],
+    minutes: 5,
+  ),
+  Experiment(
+    id: 'try.pattern.03',
+    chapter: CampaignChapter.pattern,
+    title: 'Pause before a familiar reason not to',
+    steps: [
+      'When an old reason to put something off shows up, take three slow breaths.',
+      'Then choose on purpose, either way.',
+    ],
+    minutes: 2,
+  ),
+
+  // Raise your banner: a glimpse of the life you want.
+  Experiment(
+    id: 'try.banner.01',
+    chapter: CampaignChapter.banner,
+    title: 'Spend ten minutes like your future self',
+    steps: [
+      'Picture a good, ordinary day a few years from now.',
+      'Pick one small thing you do on that day.',
+      'Do it for ten minutes today.',
+    ],
+    minutes: 10,
+  ),
+  Experiment(
+    id: 'try.banner.02',
+    chapter: CampaignChapter.banner,
+    title: 'Arrange one small space the way you like',
+    steps: [
+      'Choose a desk, a shelf or a corner.',
+      'Tidy or arrange it to feel the way you want your days to feel.',
+    ],
+    minutes: 10,
+  ),
+  Experiment(
+    id: 'try.banner.03',
+    chapter: CampaignChapter.banner,
+    title: 'Give ten minutes to a curiosity',
+    steps: [
+      'Pick something you would like to know more about.',
+      'Read, watch or try it for ten minutes.',
+    ],
+    minutes: 10,
+  ),
+
+  // Break autopilot: small interruptions during the day.
+  Experiment(
+    id: 'try.autopilot.01',
+    chapter: CampaignChapter.autopilot,
+    title: 'Set one gentle check-in',
+    steps: [
+      'Set a quiet alarm for later today.',
+      'When it rings, ask: what am I doing right now, and why?',
+    ],
+    minutes: 2,
+  ),
+  Experiment(
+    id: 'try.autopilot.02',
+    chapter: CampaignChapter.autopilot,
+    title: 'Leave your phone in another room',
+    steps: [
+      'For one meal or one short task, leave your phone out of reach.',
+      'Notice when you want to reach for it.',
+    ],
+    minutes: 20,
+  ),
+  Experiment(
+    id: 'try.autopilot.03',
+    chapter: CampaignChapter.autopilot,
+    title: 'Do one everyday task slowly',
+    steps: [
+      'Make tea, wash up or walk at half your usual speed.',
+      'Pay attention to each step.',
+    ],
+    minutes: 5,
+  ),
+
+  // Plan the campaign: one small step, made easy.
+  Experiment(
+    id: 'try.plan.01',
+    chapter: CampaignChapter.plan,
+    title: "Write tomorrow's first step tonight",
+    steps: [
+      'Before bed, write down the first small action for tomorrow.',
+      'Leave it where you will see it in the morning.',
+    ],
+    minutes: 3,
+  ),
+  Experiment(
+    id: 'try.plan.02',
+    chapter: CampaignChapter.plan,
+    title: 'Shrink one task until it feels easy',
+    steps: [
+      'Pick a task you keep putting off.',
+      'Cut it down until it takes five minutes.',
+      'Do that small piece.',
+    ],
+    minutes: 10,
+  ),
+  Experiment(
+    id: 'try.plan.03',
+    chapter: CampaignChapter.plan,
+    title: 'Cross off one thing that no longer matters',
+    steps: [
+      'Read through your to-do list or plans.',
+      'Remove one item you no longer need to do.',
     ],
     minutes: 5,
   ),
@@ -1401,5 +1555,41 @@ const List<Notice> _notices = [
     glyph: CarthaGlyph.notice,
     title: 'What you have learned to put up with',
     promptId: 'morning.01',
+  ),
+  Notice(
+    id: 'notice.02',
+    glyph: CarthaGlyph.reflection,
+    title: 'The complaints you keep repeating',
+    promptId: 'morning.02',
+  ),
+  Notice(
+    id: 'notice.03',
+    glyph: CarthaGlyph.notice,
+    title: 'Why your habits make sense',
+    lessonId: 'lesson.02',
+  ),
+  Notice(
+    id: 'notice.04',
+    glyph: CarthaGlyph.boundaries,
+    title: 'What you are putting off right now',
+    promptId: 'daytime.01',
+  ),
+  Notice(
+    id: 'notice.05',
+    glyph: CarthaGlyph.experiment,
+    title: 'Moments spent on autopilot',
+    lessonId: 'lesson.06',
+  ),
+  Notice(
+    id: 'notice.06',
+    glyph: CarthaGlyph.direction,
+    title: 'A good day, a few years from now',
+    promptId: 'morning.12',
+  ),
+  Notice(
+    id: 'notice.07',
+    glyph: CarthaGlyph.progress,
+    title: 'Aim, act, notice, adjust',
+    lessonId: 'lesson.05',
   ),
 ];

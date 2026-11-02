@@ -11,8 +11,10 @@ extension CampaignOps on AppState {
   /// Whether the user keeps the Campaign game layer on (F-060).
   bool get gameEnabled => settings.game;
 
+  /// Turns the game layer on or off (You › The Campaign). Choosing there
+  /// also answers the one-time invitation, so it isn't asked again.
   Future<void> setGameEnabled(bool enabled) =>
-      updateSettings(settings.copyWith(game: enabled));
+      updateSettings(settings.copyWith(game: enabled, gameInvited: true));
 
   /// The monthly "boss": the Missions project title if set, else the
   /// Compass's one-month project (as on Today).

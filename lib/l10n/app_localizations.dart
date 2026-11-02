@@ -838,18 +838,6 @@ abstract class AppLocalizations {
   /// **'Learned: {learning}'**
   String campaignLogLearned(String learning);
 
-  /// No description provided for @campaignLogShowAll.
-  ///
-  /// In en, this message translates to:
-  /// **'Show all {count}'**
-  String campaignLogShowAll(int count);
-
-  /// No description provided for @campaignLogShowFewer.
-  ///
-  /// In en, this message translates to:
-  /// **'Show fewer'**
-  String get campaignLogShowFewer;
-
   /// No description provided for @campaignLogEditLabel.
   ///
   /// In en, this message translates to:
@@ -909,12 +897,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{earned} of {total} earned'**
   String campaignAchievementsCount(int earned, int total);
-
-  /// No description provided for @campaignEarned.
-  ///
-  /// In en, this message translates to:
-  /// **'Earned'**
-  String get campaignEarned;
 
   /// No description provided for @campaignNotYet.
   ///
@@ -1162,23 +1144,11 @@ abstract class AppLocalizations {
   /// **'{count} of {total} extras unlocked'**
   String campaignExtrasCount(int count, int total);
 
-  /// No description provided for @campaignExtraNext.
-  ///
-  /// In en, this message translates to:
-  /// **'Next: {item} · {how}'**
-  String campaignExtraNext(String item, String how);
-
   /// No description provided for @campaignExtrasAll.
   ///
   /// In en, this message translates to:
   /// **'Every extra unlocked.'**
   String get campaignExtrasAll;
-
-  /// No description provided for @campaignAchievementExtra.
-  ///
-  /// In en, this message translates to:
-  /// **'For your avatar: {item}'**
-  String campaignAchievementExtra(String item);
 
   /// No description provided for @campaignQuestXp.
   ///
@@ -1191,6 +1161,528 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Earns {xp} XP when done'**
   String campaignQuestXpLabel(int xp);
+
+  /// No description provided for @campaignXpRuleExperiment.
+  ///
+  /// In en, this message translates to:
+  /// **'+{xp} XP for each new experiment you try (once each)'**
+  String campaignXpRuleExperiment(int xp);
+
+  /// No description provided for @campaignNoticeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notice'**
+  String get campaignNoticeTitle;
+
+  /// No description provided for @campaignNoticeLine.
+  ///
+  /// In en, this message translates to:
+  /// **'A question or idea to look at again.'**
+  String get campaignNoticeLine;
+
+  /// No description provided for @campaignTryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Try'**
+  String get campaignTryTitle;
+
+  /// No description provided for @campaignTryLine.
+  ///
+  /// In en, this message translates to:
+  /// **'A tiny experiment for real life.'**
+  String get campaignTryLine;
+
+  /// No description provided for @campaignYoursTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Make it yours'**
+  String get campaignYoursTitle;
+
+  /// No description provided for @campaignYoursLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Your avatar and motto.'**
+  String get campaignYoursLine;
+
+  /// No description provided for @campaignYoursPicks.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 reward pick to choose} other{{count} reward picks to choose}}'**
+  String campaignYoursPicks(int count);
+
+  /// No description provided for @campaignLinkRoute.
+  ///
+  /// In en, this message translates to:
+  /// **'Route'**
+  String get campaignLinkRoute;
+
+  /// No description provided for @campaignLinkChapters.
+  ///
+  /// In en, this message translates to:
+  /// **'Chapters'**
+  String get campaignLinkChapters;
+
+  /// No description provided for @campaignLinkBattleLog.
+  ///
+  /// In en, this message translates to:
+  /// **'Battle log'**
+  String get campaignLinkBattleLog;
+
+  /// No description provided for @campaignLinkBattleLogDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Battle log · draft kept'**
+  String get campaignLinkBattleLogDraft;
+
+  /// No description provided for @campaignLinkCollection.
+  ///
+  /// In en, this message translates to:
+  /// **'Collection'**
+  String get campaignLinkCollection;
+
+  /// No description provided for @campaignRouteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The route'**
+  String get campaignRouteTitle;
+
+  /// No description provided for @campaignRouteSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'One stop per level. Rest never moves you back.'**
+  String get campaignRouteSubtitle;
+
+  /// No description provided for @campaignRouteStops.
+  ///
+  /// In en, this message translates to:
+  /// **'Stops'**
+  String get campaignRouteStops;
+
+  /// No description provided for @campaignRouteStopHere.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re here'**
+  String get campaignRouteStopHere;
+
+  /// No description provided for @campaignRouteStopReached.
+  ///
+  /// In en, this message translates to:
+  /// **'Reached'**
+  String get campaignRouteStopReached;
+
+  /// No description provided for @campaignRouteStopAhead.
+  ///
+  /// In en, this message translates to:
+  /// **'{xp} XP to go'**
+  String campaignRouteStopAhead(int xp);
+
+  /// No description provided for @campaignChaptersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Chapters'**
+  String get campaignChaptersTitle;
+
+  /// No description provided for @campaignChapterTried.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 experiment tried} other{{count} experiments tried}}'**
+  String campaignChapterTried(int count);
+
+  /// No description provided for @campaignChapterTry.
+  ///
+  /// In en, this message translates to:
+  /// **'Try one'**
+  String get campaignChapterTry;
+
+  /// No description provided for @campaignChapterTryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Try an experiment from chapter {number}, {name}'**
+  String campaignChapterTryLabel(int number, String name);
+
+  /// No description provided for @campaignBattleLogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Battle log'**
+  String get campaignBattleLogTitle;
+
+  /// No description provided for @campaignAttemptDraftNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Kept on this phone as you type.'**
+  String get campaignAttemptDraftNote;
+
+  /// No description provided for @campaignAttemptNotSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Not saved on this phone yet. Your words are still here. Retry at the top.'**
+  String get campaignAttemptNotSaved;
+
+  /// No description provided for @campaignNotSavedYet.
+  ///
+  /// In en, this message translates to:
+  /// **'Not saved on this phone yet. Retry at the top.'**
+  String get campaignNotSavedYet;
+
+  /// No description provided for @campaignCollectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Collection'**
+  String get campaignCollectionTitle;
+
+  /// No description provided for @campaignCollectionSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What you tried, earned and chose.'**
+  String get campaignCollectionSubtitle;
+
+  /// No description provided for @campaignCollectionTried.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Experiments tried} =1{1 experiment tried} other{{count} experiments tried}}'**
+  String campaignCollectionTried(int count);
+
+  /// No description provided for @campaignCollectionTriedEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing tried yet. Try has small experiments.'**
+  String get campaignCollectionTriedEmpty;
+
+  /// No description provided for @campaignTryOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Try'**
+  String get campaignTryOpen;
+
+  /// No description provided for @campaignExperimentUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'An experiment'**
+  String get campaignExperimentUnknown;
+
+  /// No description provided for @campaignTriedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Tried {date}'**
+  String campaignTriedOn(String date);
+
+  /// No description provided for @campaignTriedEditLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit the note from {date}'**
+  String campaignTriedEditLabel(String date);
+
+  /// No description provided for @campaignTriedSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save note'**
+  String get campaignTriedSave;
+
+  /// No description provided for @campaignTriedRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove this try'**
+  String get campaignTriedRemove;
+
+  /// No description provided for @campaignTriedRemoveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove this try?'**
+  String get campaignTriedRemoveTitle;
+
+  /// No description provided for @campaignTriedRemoveBody.
+  ///
+  /// In en, this message translates to:
+  /// **'It leaves your Collection, with its note.'**
+  String get campaignTriedRemoveBody;
+
+  /// No description provided for @campaignTriedRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Try removed'**
+  String get campaignTriedRemoved;
+
+  /// No description provided for @campaignAchievementsRoutes.
+  ///
+  /// In en, this message translates to:
+  /// **'A chapter\'s badge: answer its questions in one reset, or try one of its experiments.'**
+  String get campaignAchievementsRoutes;
+
+  /// No description provided for @campaignEarnedByReflecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Earned by reflecting'**
+  String get campaignEarnedByReflecting;
+
+  /// No description provided for @campaignEarnedByTrying.
+  ///
+  /// In en, this message translates to:
+  /// **'Earned by trying'**
+  String get campaignEarnedByTrying;
+
+  /// No description provided for @campaignEarnedByDoing.
+  ///
+  /// In en, this message translates to:
+  /// **'Earned by doing'**
+  String get campaignEarnedByDoing;
+
+  /// No description provided for @campaignCollectionExtras.
+  ///
+  /// In en, this message translates to:
+  /// **'Extras chosen'**
+  String get campaignCollectionExtras;
+
+  /// No description provided for @campaignCollectionExtrasEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No extras chosen yet.'**
+  String get campaignCollectionExtrasEmpty;
+
+  /// No description provided for @campaignTryScreenSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Small experiments. Nothing joins your tasks unless you add it.'**
+  String get campaignTryScreenSubtitle;
+
+  /// No description provided for @campaignTryMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'About {minutes} min'**
+  String campaignTryMinutes(int minutes);
+
+  /// No description provided for @campaignTryXpLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Earns {xp} XP the first time'**
+  String campaignTryXpLabel(int xp);
+
+  /// No description provided for @campaignTryStepLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Step {number}: {step}'**
+  String campaignTryStepLabel(int number, String step);
+
+  /// No description provided for @campaignTryNoteLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'A note (optional)'**
+  String get campaignTryNoteLabel;
+
+  /// No description provided for @campaignTryNoteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'How did it go? One line is plenty.'**
+  String get campaignTryNoteHint;
+
+  /// No description provided for @campaignTryDone.
+  ///
+  /// In en, this message translates to:
+  /// **'I tried it'**
+  String get campaignTryDone;
+
+  /// No description provided for @campaignTryRecorded.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved to your Collection.'**
+  String get campaignTryRecorded;
+
+  /// No description provided for @campaignTryAddTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to my tasks'**
+  String get campaignTryAddTask;
+
+  /// No description provided for @campaignTryAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Added to your tasks.'**
+  String get campaignTryAdded;
+
+  /// No description provided for @campaignTryAlreadyTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Already in your tasks.'**
+  String get campaignTryAlreadyTask;
+
+  /// No description provided for @campaignTryOpenTasks.
+  ///
+  /// In en, this message translates to:
+  /// **'Open tasks'**
+  String get campaignTryOpenTasks;
+
+  /// No description provided for @campaignTryPrevious.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous'**
+  String get campaignTryPrevious;
+
+  /// No description provided for @campaignTryPosition.
+  ///
+  /// In en, this message translates to:
+  /// **'{index} of {total}'**
+  String campaignTryPosition(int index, int total);
+
+  /// No description provided for @campaignTryEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No experiments here yet.'**
+  String get campaignTryEmpty;
+
+  /// No description provided for @campaignNoticeScreenSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick one. Each opens a question or a lesson.'**
+  String get campaignNoticeScreenSubtitle;
+
+  /// No description provided for @campaignNoticeKindPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Reflection'**
+  String get campaignNoticeKindPrompt;
+
+  /// No description provided for @campaignNoticeKindLesson.
+  ///
+  /// In en, this message translates to:
+  /// **'Lesson'**
+  String get campaignNoticeKindLesson;
+
+  /// No description provided for @campaignNoticeOpens.
+  ///
+  /// In en, this message translates to:
+  /// **'Opens: {title}'**
+  String campaignNoticeOpens(String title);
+
+  /// No description provided for @campaignNoticeWritten.
+  ///
+  /// In en, this message translates to:
+  /// **'Written'**
+  String get campaignNoticeWritten;
+
+  /// No description provided for @campaignNoticeRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Read'**
+  String get campaignNoticeRead;
+
+  /// No description provided for @campaignNoticeEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to notice here yet.'**
+  String get campaignNoticeEmpty;
+
+  /// No description provided for @campaignYoursScreenSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your look and motto. Extras are cosmetic and yours to keep.'**
+  String get campaignYoursScreenSubtitle;
+
+  /// No description provided for @campaignRewardCardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reward picks'**
+  String get campaignRewardCardTitle;
+
+  /// No description provided for @campaignRewardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your reward'**
+  String get campaignRewardTitle;
+
+  /// No description provided for @campaignRewardPicks.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 pick to spend. What you choose stays yours.} other{{count} picks to spend. What you choose stays yours.}}'**
+  String campaignRewardPicks(int count);
+
+  /// No description provided for @campaignRewardSuggestedLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested: {item}'**
+  String campaignRewardSuggestedLine(String item);
+
+  /// Under the suggested reward: the kind of extra (Banner, Carry, Headwear, Colour).
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested · {kind}'**
+  String campaignRewardSuggested(String kind);
+
+  /// No description provided for @campaignRewardChoose.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose {item}'**
+  String campaignRewardChoose(String item);
+
+  /// No description provided for @campaignRewardChosen.
+  ///
+  /// In en, this message translates to:
+  /// **'{item} is yours to keep.'**
+  String campaignRewardChosen(String item);
+
+  /// No description provided for @campaignRewardWear.
+  ///
+  /// In en, this message translates to:
+  /// **'Wear it'**
+  String get campaignRewardWear;
+
+  /// No description provided for @campaignRewardPreviewLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your avatar wearing {item}'**
+  String campaignRewardPreviewLabel(String item);
+
+  /// No description provided for @campaignRewardNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No pick to spend right now.'**
+  String get campaignRewardNone;
+
+  /// No description provided for @campaignRewardGameOff.
+  ///
+  /// In en, this message translates to:
+  /// **'With the Campaign off, every extra is already open.'**
+  String get campaignRewardGameOff;
+
+  /// No description provided for @campaignInviteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Play the Campaign?'**
+  String get campaignInviteTitle;
+
+  /// No description provided for @campaignInviteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'XP and levels for what you do.'**
+  String get campaignInviteBody;
+
+  /// No description provided for @campaignInvitePlay.
+  ///
+  /// In en, this message translates to:
+  /// **'Play'**
+  String get campaignInvitePlay;
+
+  /// No description provided for @campaignInvitePlaying.
+  ///
+  /// In en, this message translates to:
+  /// **'The Campaign is on. It lives in Compass.'**
+  String get campaignInvitePlaying;
+
+  /// No description provided for @campaignInviteLater.
+  ///
+  /// In en, this message translates to:
+  /// **'You can turn it on in You.'**
+  String get campaignInviteLater;
+
+  /// No description provided for @campaignToastPick.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{A new pick for your avatar} other{{count} new picks for your avatar}}'**
+  String campaignToastPick(int count);
+
+  /// A small label on a task added from the Playground's "Try".
+  ///
+  /// In en, this message translates to:
+  /// **'Experiment'**
+  String get campaignQuestFromTry;
 
   /// Cinzel screen title of the Compass tab.
   ///
@@ -2992,23 +3484,23 @@ abstract class AppLocalizations {
   /// **'Locked'**
   String get personaLocked;
 
-  /// No description provided for @personaUnlockStop.
+  /// No description provided for @personaUnlockWithPick.
   ///
   /// In en, this message translates to:
-  /// **'Reach {place}'**
-  String personaUnlockStop(String place);
+  /// **'Choose it with a reward pick'**
+  String get personaUnlockWithPick;
 
-  /// No description provided for @personaUnlockAchievement.
+  /// No description provided for @personaNextPickStop.
   ///
   /// In en, this message translates to:
-  /// **'Earn {achievement}'**
-  String personaUnlockAchievement(String achievement);
+  /// **'Next pick at {place}'**
+  String personaNextPickStop(String place);
 
-  /// No description provided for @personaUnlocked.
+  /// No description provided for @personaNextPickAchievement.
   ///
   /// In en, this message translates to:
-  /// **'New for your avatar: {item}'**
-  String personaUnlocked(String item);
+  /// **'Next pick: earn {achievement}'**
+  String personaNextPickAchievement(String achievement);
 
   /// No description provided for @personaCategorySkin.
   ///

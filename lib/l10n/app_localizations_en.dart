@@ -454,14 +454,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String campaignLogShowAll(int count) {
-    return 'Show all $count';
-  }
-
-  @override
-  String get campaignLogShowFewer => 'Show fewer';
-
-  @override
   String campaignLogEditLabel(String date) {
     return 'Edit the attempt from $date';
   }
@@ -496,9 +488,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String campaignAchievementsCount(int earned, int total) {
     return '$earned of $total earned';
   }
-
-  @override
-  String get campaignEarned => 'Earned';
 
   @override
   String get campaignNotYet => 'Not yet';
@@ -664,17 +653,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String campaignExtraNext(String item, String how) {
-    return 'Next: $item · $how';
-  }
-
-  @override
   String get campaignExtrasAll => 'Every extra unlocked.';
-
-  @override
-  String campaignAchievementExtra(String item) {
-    return 'For your avatar: $item';
-  }
 
   @override
   String campaignQuestXp(int xp) {
@@ -685,6 +664,349 @@ class AppLocalizationsEn extends AppLocalizations {
   String campaignQuestXpLabel(int xp) {
     return 'Earns $xp XP when done';
   }
+
+  @override
+  String campaignXpRuleExperiment(int xp) {
+    return '+$xp XP for each new experiment you try (once each)';
+  }
+
+  @override
+  String get campaignNoticeTitle => 'Notice';
+
+  @override
+  String get campaignNoticeLine => 'A question or idea to look at again.';
+
+  @override
+  String get campaignTryTitle => 'Try';
+
+  @override
+  String get campaignTryLine => 'A tiny experiment for real life.';
+
+  @override
+  String get campaignYoursTitle => 'Make it yours';
+
+  @override
+  String get campaignYoursLine => 'Your avatar and motto.';
+
+  @override
+  String campaignYoursPicks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count reward picks to choose',
+      one: '1 reward pick to choose',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get campaignLinkRoute => 'Route';
+
+  @override
+  String get campaignLinkChapters => 'Chapters';
+
+  @override
+  String get campaignLinkBattleLog => 'Battle log';
+
+  @override
+  String get campaignLinkBattleLogDraft => 'Battle log · draft kept';
+
+  @override
+  String get campaignLinkCollection => 'Collection';
+
+  @override
+  String get campaignRouteTitle => 'The route';
+
+  @override
+  String get campaignRouteSubtitle =>
+      'One stop per level. Rest never moves you back.';
+
+  @override
+  String get campaignRouteStops => 'Stops';
+
+  @override
+  String get campaignRouteStopHere => 'You\'re here';
+
+  @override
+  String get campaignRouteStopReached => 'Reached';
+
+  @override
+  String campaignRouteStopAhead(int xp) {
+    return '$xp XP to go';
+  }
+
+  @override
+  String get campaignChaptersTitle => 'Chapters';
+
+  @override
+  String campaignChapterTried(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count experiments tried',
+      one: '1 experiment tried',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get campaignChapterTry => 'Try one';
+
+  @override
+  String campaignChapterTryLabel(int number, String name) {
+    return 'Try an experiment from chapter $number, $name';
+  }
+
+  @override
+  String get campaignBattleLogTitle => 'Battle log';
+
+  @override
+  String get campaignAttemptDraftNote => 'Kept on this phone as you type.';
+
+  @override
+  String get campaignAttemptNotSaved =>
+      'Not saved on this phone yet. Your words are still here. Retry at the top.';
+
+  @override
+  String get campaignNotSavedYet =>
+      'Not saved on this phone yet. Retry at the top.';
+
+  @override
+  String get campaignCollectionTitle => 'Collection';
+
+  @override
+  String get campaignCollectionSubtitle => 'What you tried, earned and chose.';
+
+  @override
+  String campaignCollectionTried(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count experiments tried',
+      one: '1 experiment tried',
+      zero: 'Experiments tried',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get campaignCollectionTriedEmpty =>
+      'Nothing tried yet. Try has small experiments.';
+
+  @override
+  String get campaignTryOpen => 'Open Try';
+
+  @override
+  String get campaignExperimentUnknown => 'An experiment';
+
+  @override
+  String campaignTriedOn(String date) {
+    return 'Tried $date';
+  }
+
+  @override
+  String campaignTriedEditLabel(String date) {
+    return 'Edit the note from $date';
+  }
+
+  @override
+  String get campaignTriedSave => 'Save note';
+
+  @override
+  String get campaignTriedRemove => 'Remove this try';
+
+  @override
+  String get campaignTriedRemoveTitle => 'Remove this try?';
+
+  @override
+  String get campaignTriedRemoveBody =>
+      'It leaves your Collection, with its note.';
+
+  @override
+  String get campaignTriedRemoved => 'Try removed';
+
+  @override
+  String get campaignAchievementsRoutes =>
+      'A chapter\'s badge: answer its questions in one reset, or try one of its experiments.';
+
+  @override
+  String get campaignEarnedByReflecting => 'Earned by reflecting';
+
+  @override
+  String get campaignEarnedByTrying => 'Earned by trying';
+
+  @override
+  String get campaignEarnedByDoing => 'Earned by doing';
+
+  @override
+  String get campaignCollectionExtras => 'Extras chosen';
+
+  @override
+  String get campaignCollectionExtrasEmpty => 'No extras chosen yet.';
+
+  @override
+  String get campaignTryScreenSubtitle =>
+      'Small experiments. Nothing joins your tasks unless you add it.';
+
+  @override
+  String campaignTryMinutes(int minutes) {
+    return 'About $minutes min';
+  }
+
+  @override
+  String campaignTryXpLabel(int xp) {
+    return 'Earns $xp XP the first time';
+  }
+
+  @override
+  String campaignTryStepLabel(int number, String step) {
+    return 'Step $number: $step';
+  }
+
+  @override
+  String get campaignTryNoteLabel => 'A note (optional)';
+
+  @override
+  String get campaignTryNoteHint => 'How did it go? One line is plenty.';
+
+  @override
+  String get campaignTryDone => 'I tried it';
+
+  @override
+  String get campaignTryRecorded => 'Saved to your Collection.';
+
+  @override
+  String get campaignTryAddTask => 'Add to my tasks';
+
+  @override
+  String get campaignTryAdded => 'Added to your tasks.';
+
+  @override
+  String get campaignTryAlreadyTask => 'Already in your tasks.';
+
+  @override
+  String get campaignTryOpenTasks => 'Open tasks';
+
+  @override
+  String get campaignTryPrevious => 'Previous';
+
+  @override
+  String campaignTryPosition(int index, int total) {
+    return '$index of $total';
+  }
+
+  @override
+  String get campaignTryEmpty => 'No experiments here yet.';
+
+  @override
+  String get campaignNoticeScreenSubtitle =>
+      'Pick one. Each opens a question or a lesson.';
+
+  @override
+  String get campaignNoticeKindPrompt => 'Reflection';
+
+  @override
+  String get campaignNoticeKindLesson => 'Lesson';
+
+  @override
+  String campaignNoticeOpens(String title) {
+    return 'Opens: $title';
+  }
+
+  @override
+  String get campaignNoticeWritten => 'Written';
+
+  @override
+  String get campaignNoticeRead => 'Read';
+
+  @override
+  String get campaignNoticeEmpty => 'Nothing to notice here yet.';
+
+  @override
+  String get campaignYoursScreenSubtitle =>
+      'Your look and motto. Extras are cosmetic and yours to keep.';
+
+  @override
+  String get campaignRewardCardTitle => 'Reward picks';
+
+  @override
+  String get campaignRewardTitle => 'Choose your reward';
+
+  @override
+  String campaignRewardPicks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count picks to spend. What you choose stays yours.',
+      one: '1 pick to spend. What you choose stays yours.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String campaignRewardSuggestedLine(String item) {
+    return 'Suggested: $item';
+  }
+
+  @override
+  String campaignRewardSuggested(String kind) {
+    return 'Suggested · $kind';
+  }
+
+  @override
+  String campaignRewardChoose(String item) {
+    return 'Choose $item';
+  }
+
+  @override
+  String campaignRewardChosen(String item) {
+    return '$item is yours to keep.';
+  }
+
+  @override
+  String get campaignRewardWear => 'Wear it';
+
+  @override
+  String campaignRewardPreviewLabel(String item) {
+    return 'Your avatar wearing $item';
+  }
+
+  @override
+  String get campaignRewardNone => 'No pick to spend right now.';
+
+  @override
+  String get campaignRewardGameOff =>
+      'With the Campaign off, every extra is already open.';
+
+  @override
+  String get campaignInviteTitle => 'Play the Campaign?';
+
+  @override
+  String get campaignInviteBody => 'XP and levels for what you do.';
+
+  @override
+  String get campaignInvitePlay => 'Play';
+
+  @override
+  String get campaignInvitePlaying =>
+      'The Campaign is on. It lives in Compass.';
+
+  @override
+  String get campaignInviteLater => 'You can turn it on in You.';
+
+  @override
+  String campaignToastPick(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count new picks for your avatar',
+      one: 'A new pick for your avatar',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get campaignQuestFromTry => 'Experiment';
 
   @override
   String get compassTitle => 'Compass';
@@ -1783,18 +2105,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get personaLocked => 'Locked';
 
   @override
-  String personaUnlockStop(String place) {
-    return 'Reach $place';
+  String get personaUnlockWithPick => 'Choose it with a reward pick';
+
+  @override
+  String personaNextPickStop(String place) {
+    return 'Next pick at $place';
   }
 
   @override
-  String personaUnlockAchievement(String achievement) {
-    return 'Earn $achievement';
-  }
-
-  @override
-  String personaUnlocked(String item) {
-    return 'New for your avatar: $item';
+  String personaNextPickAchievement(String achievement) {
+    return 'Next pick: earn $achievement';
   }
 
   @override

@@ -171,7 +171,9 @@ void main() {
     expect(find.text('Edit your avatar'), findsOneWidget);
     await _waitOutSnackBars(tester);
 
-    // ── The Campaign: on the route and in "Your strategist" ───────────────
+    // ── The Campaign: on the route, and in "Your strategist" ──────────────
+    // (Changed by design, evolve step 1: the hub is compact; the strategist
+    // card lives on its "Make it yours" page.)
     unawaited(AppNav.openCampaign(tester.element(find.byType(YouTab))));
     await _settle(tester);
     final campaign = find.byType(CampaignView);
@@ -183,14 +185,13 @@ void main() {
       ).avatar,
       _expected,
     );
+    await _tap(
+      tester,
+      find.byKey(const ValueKey('campaign-open-yours')),
+      screen: campaign,
+    );
     final strategist = find.byKey(const ValueKey('campaign-strategist'));
-    if (strategist.evaluate().isEmpty) {
-      await tester.scrollUntilVisible(
-        strategist,
-        200,
-        scrollable: _list(campaign),
-      );
-    }
+    expect(strategist, findsOneWidget);
     expect(_avatarIn(tester, strategist).avatar, _expected);
     expect(
       tester
@@ -199,6 +200,8 @@ void main() {
       _motto,
     );
     expect(find.text('Edit your avatar'), findsWidgets);
+    await tester.pageBack();
+    await _settle(tester);
 
     // ── Today: beside the greeting ─────────────────────────────────────────
     await _openTab(tester, 'Today');
