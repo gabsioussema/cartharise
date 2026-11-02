@@ -2782,6 +2782,162 @@ abstract class AppLocalizations {
   /// **'Delete'**
   String get missionsQuestDelete;
 
+  /// No description provided for @missionsViewLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Show quests as'**
+  String get missionsViewLabel;
+
+  /// No description provided for @missionsViewList.
+  ///
+  /// In en, this message translates to:
+  /// **'List'**
+  String get missionsViewList;
+
+  /// No description provided for @missionsViewBoard.
+  ///
+  /// In en, this message translates to:
+  /// **'Board'**
+  String get missionsViewBoard;
+
+  /// No description provided for @missionsBoardHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold a card to drag it, or use its move button.'**
+  String get missionsBoardHint;
+
+  /// No description provided for @missionsBoardTodayFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get missionsBoardTodayFilter;
+
+  /// No description provided for @missionsBoardTodayFilterTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Only daily quests and those planned for today'**
+  String get missionsBoardTodayFilterTooltip;
+
+  /// No description provided for @missionsLaneLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Later'**
+  String get missionsLaneLater;
+
+  /// No description provided for @missionsLaneReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready'**
+  String get missionsLaneReady;
+
+  /// No description provided for @missionsLaneDoing.
+  ///
+  /// In en, this message translates to:
+  /// **'Doing'**
+  String get missionsLaneDoing;
+
+  /// No description provided for @missionsLaneDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get missionsLaneDone;
+
+  /// No description provided for @missionsLaneSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{lane}, {count, plural, =0{no quests} =1{1 quest} other{{count} quests}}'**
+  String missionsLaneSummary(String lane, int count);
+
+  /// No description provided for @missionsLaneLaterEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Park ideas here for another time.'**
+  String get missionsLaneLaterEmpty;
+
+  /// No description provided for @missionsLaneReadyEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Quests ready to start.'**
+  String get missionsLaneReadyEmpty;
+
+  /// No description provided for @missionsLaneDoingEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Move a quest here when you start it.'**
+  String get missionsLaneDoingEmpty;
+
+  /// No description provided for @missionsLaneDoneEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Finished quests land here.'**
+  String get missionsLaneDoneEmpty;
+
+  /// No description provided for @missionsLaneTodayEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing here for today.'**
+  String get missionsLaneTodayEmpty;
+
+  /// No description provided for @missionsLaneDoneFolded.
+  ///
+  /// In en, this message translates to:
+  /// **'Folded away. Drop a card here to finish it.'**
+  String get missionsLaneDoneFolded;
+
+  /// No description provided for @missionsBoardDoingNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Fewer in Doing can feel lighter.'**
+  String get missionsBoardDoingNote;
+
+  /// No description provided for @missionsBoardAddTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to {lane}'**
+  String missionsBoardAddTo(String lane);
+
+  /// No description provided for @missionsBoardMoveTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Move \'{title}\' to…'**
+  String missionsBoardMoveTooltip(String title);
+
+  /// No description provided for @missionsBoardMoveToLane.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to {lane}'**
+  String missionsBoardMoveToLane(String lane);
+
+  /// No description provided for @missionsBoardMoved.
+  ///
+  /// In en, this message translates to:
+  /// **'\'{title}\' moved to {lane}'**
+  String missionsBoardMoved(String title, String lane);
+
+  /// No description provided for @missionsBoardDoneForToday.
+  ///
+  /// In en, this message translates to:
+  /// **'\'{title}\' done for today'**
+  String missionsBoardDoneForToday(String title);
+
+  /// No description provided for @missionsBoardDropHere.
+  ///
+  /// In en, this message translates to:
+  /// **'Drop to move here'**
+  String get missionsBoardDropHere;
+
+  /// No description provided for @missionsBoardHiddenByFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Added. The Today filter hides it.'**
+  String get missionsBoardHiddenByFilter;
+
+  /// No description provided for @missionsBoardShowAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Show all'**
+  String get missionsBoardShowAll;
+
   /// No description provided for @missionsNewQuestTitle.
   ///
   /// In en, this message translates to:

@@ -15,7 +15,15 @@ enum QuestSheetResult { saved, delete }
 
 /// Adds a quest (no [quest]) or edits one (F-027, F-029): title, "repeat
 /// every day", optional date. "Delete quest" deletes with Undo.
-Future<void> showQuestSheet(BuildContext context, {Quest? quest}) async {
+///
+/// A new quest starts in the board lane [stage] (Ready unless the board's
+/// "Add to …" says otherwise); [onAdded] hears about it once it is saved.
+Future<void> showQuestSheet(
+  BuildContext context, {
+  Quest? quest,
+  QuestStage stage = QuestStage.ready,
+  ValueChanged<Quest>? onAdded,
+}) async {
   final result = await showModalBottomSheet<QuestSheetResult>(
     context: context,
     isScrollControlled: true,
@@ -24,7 +32,7 @@ Future<void> showQuestSheet(BuildContext context, {Quest? quest}) async {
     sheetAnimationStyle: motionEnabled(context)
         ? null
         : AnimationStyle.noAnimation,
-    builder: (_) => QuestSheet(quest: quest),
+    builder: (_) => QuestSheet(quest: quest, stage: stage, onAdded: onAdded),
   );
   if (result == QuestSheetResult.delete && quest != null && context.mounted) {
     await deleteQuestWithUndo(context, quest);
@@ -32,10 +40,21 @@ Future<void> showQuestSheet(BuildContext context, {Quest? quest}) async {
 }
 
 class QuestSheet extends StatefulWidget {
-  const QuestSheet({super.key, this.quest});
+  const QuestSheet({
+    super.key,
+    this.quest,
+    this.stage = QuestStage.ready,
+    this.onAdded,
+  });
 
   /// Null = a new quest.
   final Quest? quest;
+
+  /// The board lane a new quest starts in (a new quest is never done).
+  final QuestStage stage;
+
+  /// Called with the new quest once it is saved.
+  final ValueChanged<Quest>? onAdded;
 
   @override
   State<QuestSheet> createState() => _QuestSheetState();
@@ -80,7 +99,15 @@ class _QuestSheetState extends State<QuestSheet> {
     final due = _daily ? null : _due;
     final quest = widget.quest;
     if (quest == null) {
-      await state.addQuest(text, recurrence: recurrence, dueDate: due);
+      final added = await state.addQuest(
+        text,
+        recurrence: recurrence,
+        dueDate: due,
+        stage: widget.stage == QuestStage.done
+            ? QuestStage.ready
+            : widget.stage,
+      );
+      widget.onAdded?.call(added);
     } else {
       await state.editQuest(
         quest,

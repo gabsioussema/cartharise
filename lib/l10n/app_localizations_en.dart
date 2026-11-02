@@ -1680,6 +1680,106 @@ class AppLocalizationsEn extends AppLocalizations {
   String get missionsQuestDelete => 'Delete';
 
   @override
+  String get missionsViewLabel => 'Show quests as';
+
+  @override
+  String get missionsViewList => 'List';
+
+  @override
+  String get missionsViewBoard => 'Board';
+
+  @override
+  String get missionsBoardHint =>
+      'Hold a card to drag it, or use its move button.';
+
+  @override
+  String get missionsBoardTodayFilter => 'Today';
+
+  @override
+  String get missionsBoardTodayFilterTooltip =>
+      'Only daily quests and those planned for today';
+
+  @override
+  String get missionsLaneLater => 'Later';
+
+  @override
+  String get missionsLaneReady => 'Ready';
+
+  @override
+  String get missionsLaneDoing => 'Doing';
+
+  @override
+  String get missionsLaneDone => 'Done';
+
+  @override
+  String missionsLaneSummary(String lane, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count quests',
+      one: '1 quest',
+      zero: 'no quests',
+    );
+    return '$lane, $_temp0';
+  }
+
+  @override
+  String get missionsLaneLaterEmpty => 'Park ideas here for another time.';
+
+  @override
+  String get missionsLaneReadyEmpty => 'Quests ready to start.';
+
+  @override
+  String get missionsLaneDoingEmpty => 'Move a quest here when you start it.';
+
+  @override
+  String get missionsLaneDoneEmpty => 'Finished quests land here.';
+
+  @override
+  String get missionsLaneTodayEmpty => 'Nothing here for today.';
+
+  @override
+  String get missionsLaneDoneFolded =>
+      'Folded away. Drop a card here to finish it.';
+
+  @override
+  String get missionsBoardDoingNote => 'Fewer in Doing can feel lighter.';
+
+  @override
+  String missionsBoardAddTo(String lane) {
+    return 'Add to $lane';
+  }
+
+  @override
+  String missionsBoardMoveTooltip(String title) {
+    return 'Move \'$title\' to…';
+  }
+
+  @override
+  String missionsBoardMoveToLane(String lane) {
+    return 'Move to $lane';
+  }
+
+  @override
+  String missionsBoardMoved(String title, String lane) {
+    return '\'$title\' moved to $lane';
+  }
+
+  @override
+  String missionsBoardDoneForToday(String title) {
+    return '\'$title\' done for today';
+  }
+
+  @override
+  String get missionsBoardDropHere => 'Drop to move here';
+
+  @override
+  String get missionsBoardHiddenByFilter => 'Added. The Today filter hides it.';
+
+  @override
+  String get missionsBoardShowAll => 'Show all';
+
+  @override
   String get missionsNewQuestTitle => 'New quest';
 
   @override
