@@ -202,9 +202,11 @@ add a language: [translations.md](translations.md).
   `start(tag)` → `Stream<DictationEvent>` (partial, final, level, error with a
   typed reason, ended), `stop()`, `cancel()`; text is shown for review before
   it is inserted. `ReadAloud` speaks only on a tap: `available(tag)`,
-  `speak(text, languageTag:)`, `stop()`, `speaking`. Until the platform
-  implementations land, the app wires `UnsupportedDictation` and
-  `UnavailableReadAloud` (Record or type instead; no Listen).
+  `speak(text, languageTag:)`, `stop()`, `speaking`. The app wires
+  `PlatformDictation` (`dictation_platform.dart`: a method + event channel to
+  Android's `createOnDeviceSpeechRecognizer` and iOS's
+  `requiresOnDeviceRecognition`; **Dictate** in `lib/ui/voice/`, see
+  `docs/features/voice.md`) and, until Listen lands, `UnavailableReadAloud`.
 * Contract tests: `test/evolve3_contracts_test.dart`.
 
 ## Tests

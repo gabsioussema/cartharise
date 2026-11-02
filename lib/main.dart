@@ -12,7 +12,7 @@ import 'data/data_store.dart';
 import 'reminders/reminder_scheduler.dart';
 import 'services/attachment_store.dart';
 import 'services/file_share.dart';
-import 'services/dictation.dart';
+import 'services/dictation_platform.dart';
 import 'services/media_picker.dart';
 import 'services/read_aloud.dart';
 import 'services/voice_player.dart';
@@ -53,9 +53,10 @@ Future<void> main() async {
       mediaPicker: SystemMediaPicker(),
       voiceRecorder: RecordVoiceRecorder(),
       voicePlayer: AudioVoicePlayer(),
-      // Until the platform implementations land: dictation says
-      // "unsupported" (Record or type instead), Listen is not offered.
-      dictation: const UnsupportedDictation(),
+      // Dictation: the phone's on-device recognizer only (Android 12+,
+      // iOS); otherwise it says why, and offers Record or typing instead.
+      dictation: PlatformDictation(),
+      // Until the platform implementation lands, Listen is not offered.
       readAloud: const UnavailableReadAloud(),
     ),
   );

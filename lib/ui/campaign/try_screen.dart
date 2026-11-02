@@ -10,6 +10,7 @@ import '../compass/autosave.dart';
 import '../compass/formatting.dart';
 import '../nav.dart';
 import '../theme/cartha_theme.dart';
+import '../voice/dictate_button.dart';
 import '../widgets/widgets.dart';
 import 'campaign_copy.dart';
 import 'campaign_kit.dart';
@@ -221,7 +222,12 @@ class _TryScreenState extends State<TryScreen> {
           ),
           onChanged: _noteChanged,
         ),
-        const SizedBox(height: 16),
+        DictateButton(
+          key: const ValueKey('try-note-dictate'),
+          controller: _note,
+          onInserted: _noteChanged,
+        ),
+        const SizedBox(height: 8),
         PrimaryButton(
           key: const ValueKey('try-done'),
           label: l.campaignTryDone,

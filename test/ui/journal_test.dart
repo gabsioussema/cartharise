@@ -114,6 +114,19 @@ Future<void> _section(WidgetTester tester, String label) async {
 }
 
 Future<void> _tap(WidgetTester tester, Finder finder) async {
+  // Lists build lazily: a control below the fold (e.g. Save under the three
+  // review fields and their Dictate links) is scrolled to first.
+  if (finder.evaluate().isEmpty) {
+    await tester.scrollUntilVisible(
+      finder,
+      200,
+      scrollable: find
+          .byWidgetPredicate(
+            (w) => w is Scrollable && w.axisDirection == AxisDirection.down,
+          )
+          .first,
+    );
+  }
   await tester.ensureVisible(finder);
   await tester.pump();
   await tester.tap(finder);

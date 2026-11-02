@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../voice/dictate_button.dart';
+
 /// Debounced autosave for the Compass + Missions text fields (PLAN.md §5):
 /// saves the text exactly as typed ~600 ms after the last keystroke, on
 /// [flush] (focus lost, day switched, sheet opened), when the app leaves the
@@ -108,6 +110,7 @@ class AutosaveTextField extends StatefulWidget {
     this.semanticLabel,
     this.textCapitalization = TextCapitalization.sentences,
     this.style,
+    this.dictation = false,
   });
 
   /// The stored text.
@@ -128,6 +131,10 @@ class AutosaveTextField extends StatefulWidget {
   final String? semanticLabel;
   final TextCapitalization textCapitalization;
   final TextStyle? style;
+
+  /// Offer **Dictate** under the field (step 3): the reviewed text goes in
+  /// at the cursor and is autosaved like typing.
+  final bool dictation;
 
   @override
   State<AutosaveTextField> createState() => _AutosaveTextFieldState();
@@ -185,6 +192,25 @@ class _AutosaveTextFieldState extends State<AutosaveTextField> {
       },
     );
     final label = widget.semanticLabel;
-    return label == null ? field : Semantics(label: label, child: field);
+    final labelled = label == null
+        ? field
+        : Semantics(label: label, child: field);
+    if (!widget.dictation) return labelled;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        labelled,
+        DictateButton(
+          controller: _text.controller,
+          focusNode: _focus,
+          fieldLabel: label,
+          onInserted: (text) {
+            _autosave.changed(text);
+            widget.onChanged?.call(text);
+          },
+        ),
+      ],
+    );
   }
 }

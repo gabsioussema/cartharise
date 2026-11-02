@@ -2589,6 +2589,65 @@
       }
     }
   },
+  "voiceDictate": "Dictate",
+  "@voiceDictate": {
+    "description": "Small button under a text field: speak, then check the recognised text before it is added. Recognition happens on the phone only."
+  },
+  "voiceDictateInto": "Dictate: {field}",
+  "@voiceDictateInto": {
+    "description": "Screen-reader label of the Dictate button when a screen has several fields.",
+    "placeholders": {
+      "field": {
+        "type": "String"
+      }
+    }
+  },
+  "voiceDictateHint": "Speak, then check the text before it goes in.",
+  "@voiceDictateHint": {
+    "description": "Screen-reader hint of the Dictate button."
+  },
+  "voiceSheetTitle": "Dictate",
+  "voiceStarting": "Getting dictation ready…",
+  "voiceListening": "Listening",
+  "@voiceListening": {
+    "description": "Shown with a dot while the microphone listens (the word carries the state, not the colour)."
+  },
+  "voiceListeningStarted": "Listening. Tap Stop when you're done.",
+  "@voiceListeningStarted": {
+    "description": "Screen-reader announcement when dictation starts."
+  },
+  "voiceOnPhone": "Recognised on this phone. Nothing is sent.",
+  "voiceHeardLabel": "Heard so far",
+  "voiceSpeakNow": "Speak. Your words appear here.",
+  "voiceStop": "Stop",
+  "voiceCancel": "Cancel",
+  "voiceFinishing": "Finishing…",
+  "voiceReviewLabel": "Dictated text",
+  "voiceReviewHint": "Edit it if you like. It goes in only when you tap Insert.",
+  "voiceReviewReady": "Done listening. Check the text, then Insert.",
+  "@voiceReviewReady": {
+    "description": "Screen-reader announcement when the recognised text is ready for review."
+  },
+  "voiceStoppedEarly": "Dictation stopped early. Here's what was heard.",
+  "voiceInsert": "Insert",
+  "voiceDiscard": "Discard",
+  "voiceDiscardTitle": "Discard this text?",
+  "voiceDiscardBody": "It won't be added.",
+  "voiceKeep": "Keep",
+  "voiceInserted": "Text inserted.",
+  "@voiceInserted": {
+    "description": "Screen-reader announcement after the reviewed text was inserted into the field."
+  },
+  "voiceUnsupported": "Dictation in this language isn't available on this phone.",
+  "voiceNeedsModel": "To dictate, add this language for offline speech in your phone's settings.",
+  "voiceNoPermission": "Microphone or speech access is off. Allow it in Settings to dictate.",
+  "voiceTooOld": "Dictation needs a newer system version on this phone.",
+  "voiceNothingHeard": "Nothing was heard. Try again, or type instead.",
+  "voiceInterrupted": "Dictation stopped: a call or another app took the microphone.",
+  "voiceBusy": "Dictation is busy. Try again in a moment.",
+  "voiceFailed": "Dictation stopped. Try again, or type instead.",
+  "voiceRecordInstead": "Record instead",
+  "voiceTypeInstead": "Type instead",
   "youTitle": "You",
   "@youTitle": {
     "description": "You tab screen title (Cinzel, keep short)."
