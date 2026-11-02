@@ -70,7 +70,7 @@ class StrategistCard extends StatelessWidget {
             motto,
             key: const ValueKey('campaign-strategist-motto'),
             style: theme.textTheme.titleSmall?.copyWith(
-              fontStyle: FontStyle.italic,
+              fontStyle: CarthaFonts.of(context).italic,
             ),
           ),
         if (persona == null || hasMotto) const SizedBox(height: 6),

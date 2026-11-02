@@ -23,10 +23,15 @@ class CarthaFonts extends ThemeExtension<CarthaFonts> {
   static const String inter = 'Inter';
   static const String cinzel = 'Cinzel';
 
-  /// The bundled Arabic family (OFL), declared in pubspec.yaml by the
-  /// languages agent. Null until then: Arabic falls back to [inter], whose
-  /// missing Arabic letters the phone draws with its own Arabic font.
-  static const String? arabicFamily = null;
+  /// The bundled Arabic family: Noto Sans Arabic UI (notofonts/arabic,
+  /// SIL OFL 1.1, `assets/fonts/NotoSansArabicUI-*.ttf`, licence registered
+  /// in `lib/ui/you/font_licenses.dart`). The "UI" cut has Latin-compatible
+  /// vertical metrics, so Arabic lines are as tall as Inter's and mixed
+  /// Arabic/Latin lines share one baseline. Regular, SemiBold and Bold.
+  // Stays nullable (the contract's slot): null means "no bundled Arabic
+  // font" and Arabic falls back to Inter + the phone's own Arabic font.
+  // ignore: unnecessary_nullable_for_final_variable_declarations
+  static const String? arabicFamily = 'NotoSansArabicUI';
 
   /// English and French.
   static const CarthaFonts latin = CarthaFonts(text: inter, display: cinzel);
@@ -67,6 +72,18 @@ class CarthaFonts extends ThemeExtension<CarthaFonts> {
 
   /// [value] where added letter spacing suits the script, else 0.
   double spacing(double value) => letterSpacing ? value : 0;
+
+  /// Fallback families for characters [text] lacks: the Arabic family has
+  /// no Latin letters, quotes, "+", "/" or "…", so Latin words inside
+  /// Arabic text ("Cartharise", "XP", a name) are drawn in [inter], like
+  /// the rest of the app, instead of the phone's own Latin font. Null for
+  /// Latin languages (nothing to fall back to).
+  List<String>? get fallback => text == inter ? null : const [inter];
+
+  /// Italic where the script has one; upright for scripts whose letters
+  /// join (Arabic has no italic, and a slanted fake hurts legibility). Use
+  /// it for local emphasis such as "Not written yet".
+  FontStyle get italic => letterSpacing ? FontStyle.italic : FontStyle.normal;
 
   @override
   CarthaFonts copyWith({

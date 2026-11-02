@@ -113,7 +113,10 @@ class CampaignRouteMap extends StatelessWidget {
       child: LayoutBuilder(
         builder: (context, constraints) {
           final width = constraints.maxWidth;
-          final x = _RoutePainter.stopX(stop, total, width);
+          // The route reads in the language's direction: Carthage at the
+          // start edge, Italy at the end (right to left in Arabic).
+          final rtl = Directionality.of(context) == TextDirection.rtl;
+          final x = _RoutePainter.stopX(stop, total, width, rtl: rtl);
           final left = math.min(
             math.max(0.0, x - avatarSize / 2),
             math.max(0.0, width - avatarSize),
@@ -140,11 +143,12 @@ class CampaignRouteMap extends StatelessWidget {
                       road: p.heroBorder,
                       walked: p.heroAccent,
                       current: p.onHero,
+                      rtl: rtl,
                     ),
                   ),
                 ),
-                // The painter draws left to right, so the avatar is placed
-                // in the same (physical) coordinates.
+                // The painter works in physical coordinates (mirrored for
+                // right to left), so the avatar is placed in the same ones.
                 Positioned(
                   key: ValueKey('$id-avatar'),
                   left: left,
@@ -173,6 +177,7 @@ class _RoutePainter extends CustomPainter {
     required this.road,
     required this.walked,
     required this.current,
+    this.rtl = false,
   });
 
   final int stop;
@@ -182,19 +187,24 @@ class _RoutePainter extends CustomPainter {
   final Color walked;
   final Color current;
 
+  /// The road runs from the right edge to the left one (Arabic).
+  final bool rtl;
+
   /// Radius of a stop's dot.
   static const r = 6.0;
 
-  /// The horizontal centre of stop [i] of [count] on a road [width] wide.
-  static double stopX(int i, int count, double width) {
+  /// The horizontal centre of stop [i] of [count] on a road [width] wide,
+  /// counted from the start edge (the right one when [rtl]).
+  static double stopX(int i, int count, double width, {bool rtl = false}) {
     final step = (width - 2 * r - 4) / (count - 1);
-    return r + 2 + i * step;
+    final x = r + 2 + i * step;
+    return rtl ? width - x : x;
   }
 
   @override
   void paint(Canvas canvas, Size size) {
     final y = size.height / 2;
-    Offset at(int i) => Offset(stopX(i, count, size.width), y);
+    Offset at(int i) => Offset(stopX(i, count, size.width, rtl: rtl), y);
     final line = Paint()
       ..strokeWidth = 3
       ..strokeCap = StrokeCap.round;
@@ -225,7 +235,8 @@ class _RoutePainter extends CustomPainter {
       old.toward != toward ||
       old.road != road ||
       old.walked != walked ||
-      old.current != current;
+      old.current != current ||
+      old.rtl != rtl;
 }
 
 /// The XP rules, stated plainly (F-060).
@@ -375,7 +386,7 @@ class CampaignCallout extends StatelessWidget {
           text,
           style: theme.textTheme.bodyLarge?.copyWith(
             color: muted ? p.textSecondary : p.textPrimary,
-            fontStyle: muted ? FontStyle.italic : null,
+            fontStyle: muted ? CarthaFonts.of(context).italic : null,
           ),
         ),
       ),

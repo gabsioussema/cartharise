@@ -8,6 +8,7 @@ import '../../state/app_state.dart';
 import '../campaign/campaign_ops.dart';
 import '../compass/formatting.dart';
 import '../theme/cartha_theme.dart';
+import '../widgets/bidi.dart';
 import '../widgets/widgets.dart';
 import 'missions_logic.dart';
 import 'project_art.dart';
@@ -125,6 +126,7 @@ class QuestTile extends StatelessWidget {
                     children: [
                       Text(
                         quest.title,
+                        textDirection: textDirectionOf(quest.title),
                         style: theme.textTheme.bodyLarge?.copyWith(
                           color: done ? p.textSecondary : p.textPrimary,
                           decoration: done ? TextDecoration.lineThrough : null,

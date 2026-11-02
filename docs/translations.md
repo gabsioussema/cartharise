@@ -127,12 +127,23 @@ const ContentTranslation frenchTranslation = ContentTranslation(
   headline, **Inter** for the rest. For **Arabic** it is one Arabic family for every style
   (display and headline too, never Cinzel) with no added letter spacing, because spacing
   pulls joined letters apart.
-* `CarthaFonts.arabicFamily` is the slot for the bundled Arabic font (OFL). Declare that
-  font in `pubspec.yaml` and register its licence in `lib/ui/you/font_licenses.dart`.
-  While the slot is `null`, Arabic uses Inter, and the phone's own Arabic font draws the
-  letters.
+* `CarthaFonts.arabicFamily` is the bundled Arabic font: **Noto Sans Arabic UI**
+  (`assets/fonts/NotoSansArabicUI-{Regular,SemiBold,Bold}.ttf`, from
+  [notofonts](https://github.com/notofonts/notofonts.github.io), SIL OFL 1.1 in
+  `assets/fonts/NotoSansArabicUI-OFL.txt`, registered in `lib/ui/you/font_licenses.dart`).
+  The "UI" cut has Latin-compatible vertical metrics (1.07 + 0.29 em, close to Inter's
+  0.97 + 0.24), so an Arabic line is as tall as a Latin one and mixed lines share a
+  baseline; the plain Noto Sans Arabic (2.1 em tall) would double every line. Weight 500
+  falls back to Regular. If the slot were `null`, Arabic would use Inter and the phone's
+  own Arabic font.
+* The Arabic font has no Latin letters, quotes, `+`, `/` or `…`, so every Arabic text
+  style falls back to **Inter** (`CarthaFonts.fallback`): "Cartharise", "XP" and names
+  inside Arabic sentences look like the rest of the app.
 * In widgets, write a local `letterSpacing` as `CarthaFonts.of(context).spacing(1.2)`. It
-  becomes 0 for Arabic.
+  becomes 0 for Arabic. Write emphasis as `fontStyle: CarthaFonts.of(context).italic`:
+  Arabic has no italic, so it stays upright instead of a slanted fake.
+* Themes built inside a screen (`OnHeroTheme`, the boot error) take
+  `fonts: CarthaFonts.of(context)`, or hero cards would switch back to Inter and Cinzel.
 * Test right to left with `pumpCartha(data: onboardedData(settings: const AppSettings(language: AppLanguage.ar)))`.
   To test "Same as phone", set `tester.platformDispatcher.localesTestValue` before pumping.
 
@@ -154,4 +165,100 @@ const ContentTranslation frenchTranslation = ContentTranslation(
 |---|---|---|---|
 | English | source | source | n/a |
 | French | draft (see `--report`) | draft (`coverageFor`) | **not yet: required before release** |
-| Arabic | draft (see `--report`) | draft (`coverageFor`) | **not yet: required before release** |
+| Arabic | **draft**, 1189/1189 (100 %) | **draft**, every item (100 %) | **not yet: required before release** |
+
+## Arabic (draft: native review required)
+
+> **Draft.** Every Arabic string and content item was written as a first draft (Modern
+> Standard Arabic) and has **not** been reviewed by a native speaker. A native review,
+> ideally with someone who knows reflective or therapeutic writing, is required before
+> any release in Arabic. Pay special attention to the sensitive prompts (morning 04–11,
+> evening 01–03), the support and crisis texts (`you_ar.arb`, `reset_ar.arb`) and the
+> lessons' "A lens, not a verdict" notes.
+
+Coverage: `l10n_src/*_ar.arb` translate all 1189 keys (`make l10n-report`), and
+`lib/content/ar.dart` translates every lesson, prompt (with its softer wording), path day,
+experiment, notice and the credit notices (`coverageFor(AppLanguage.ar).complete`).
+`test/ui/rtl_test.dart` fails if either drops below 100 %.
+
+### How the Arabic is written
+
+* **Warm and plain**, short sentences, action first, the same calm as English. Nothing
+  promises a fixed life; no guilt, streaks, scores, points or diagnoses (the test
+  checks Arabic equivalents: سلسلة، فشل، كسول، نقاط، درجة، تشخيص، …).
+* **The reader's gender is never assumed.** Arabic marks gender on verbs and
+  adjectives, so the texts use forms that read the same for everyone:
+  * buttons and steps as verbal nouns: «حفظ», «إضافة مهمّة», «اختيار تاريخ»;
+  * "you can …" as «يمكنك» + a verbal noun: «يمكنك تخطّي أي سؤال»;
+  * the past tense, which is written the same for both: «ما الذي جرّبته؟»;
+  * the "-ك" suffix and a third-person verb: «ما الذي يهمّك؟», «ما الذي يزعجك؟»;
+  * nouns instead of "you want": «الحياة المنشودة», «المستقبل المرفوض»;
+  * "let's" for starting: «لنبدأ».
+  Examples in prompts alternate «قد يكتب أحدهم» and «قد تكتب إحداهن».
+* **Achievements** are medals named after a quality («وسام الملاحظة»), not a
+  gendered title ("The Observer").
+* **Plurals** use Arabic's six categories (`zero one two few many other`): «إجابتان»,
+  «3 إجابات», «11 إجابة». Where English interpolates a count without a plural, the
+  Arabic avoids number agreement: «الأسئلة الأساسية المُجاب عنها: 3 من 27».
+* **Digits** are Western (0–9) everywhere, dates included: `CarthaApp` calls
+  `useWesternDigits()` (`lib/app_locale.dart`), because the 'ar' date symbols would
+  otherwise print «٣ نوفمبر» next to «20 دقيقة».
+* **Punctuation**: «،» «؛» «؟», quotes «…» (‹…› inside). `.zip`, `.ics` and `+20 XP`
+  start with an invisible left-to-right mark (`\u200e`) so the dot and the plus stay in
+  front.
+* **Kept in Latin letters**: Cartharise, XP, Dan Koe (as in the credit line), X,
+  findahelpline.com, font names. The article's title, author and links stay English.
+
+### Glossary
+
+| English | Arabic |
+|---|---|
+| Today · Reset · Compass · Journal · You | اليوم · إعادة ضبط · البوصلة · اليوميات · أنت |
+| the reset · check-in | إعادة الضبط · وقفة |
+| morning · daytime · evening | الصباح · النهار · المساء |
+| anti-vision · vision | الرؤية المضادّة · الرؤية |
+| one-year mission · one-month project | مهمّة السنة · مشروع الشهر |
+| daily levers · boundaries (constraints) | الروافع اليومية · الحدود |
+| quest / task · milestone | مهمّة · محطة |
+| note · weekly review | ملاحظة · مراجعة أسبوعية |
+| the Awakening · lesson | اليقظة · درس |
+| softer wording | صياغة ألطف |
+| Campaign · Playground · Collection | الحملة · ساحة اللعب · التذكارات |
+| Notice · Try · Make it yours | انتباه · تجربة · على طريقتك |
+| XP · level · achievement · battle log | الخبرة (XP) · مستوى · إنجاز (وسام) · سجلّ المعارك |
+| avatar · motto | الصورة الرمزية · عبارتك |
+| Traveler (default name) | رحّالة |
+
+### Right to left
+
+* Layouts mirror through `Directionality` (`EdgeInsetsDirectional`,
+  `AlignmentDirectional`, `start`/`end`); the board's lanes, the lesson strip and the
+  tabs start at the right.
+* **Arrows and chevrons** mirror themselves: every directional Material icon the app
+  uses (`arrow_forward`, `arrow_back`, `chevron_right`, `redo`, `open_in_new`) has
+  `matchTextDirection` (tested).
+* **Hannibal's route** (`CampaignRouteMap`) reads right to left: Carthage at the right
+  edge, the walked line growing leftwards, the avatar above the current stop.
+* **Kept as drawn** (pictures of things, not reading order): the scenes, lesson
+  illustrations, glyphs, badges, the avatar and the emblem; the progress ring fills
+  clockwise from the top like a clock; the wordmark is Latin lettering.
+* **Swipes**: onboarding's swipe already follows the direction (swipe right = next in
+  Arabic). The board moves cards by drop target or the Move menu, not by direction.
+* **Eyebrows** (`toUpperCase` + letter spacing) get no spacing in Arabic, and
+  italic placeholders («لم يُكتب بعد») stay upright.
+* **The user's words keep their own direction** (`textDirectionOf`,
+  `lib/ui/widgets/bidi.dart`, first strong letter): quest titles (list, board, Today) and
+  journal rows. An English quest in the Arabic app reads "Read 10 pages of «Dune»"; an
+  Arabic note in the English app reads right to left. Text fields and the other places
+  that show the user's words still use the app's direction (see "Known gaps").
+
+### Known gaps (for review)
+
+* Text fields (answers, notes, the Compass) take the app's direction, not the typed
+  text's: English typed in the Arabic app is right-aligned and a final "." may show at
+  the start until the line has an Arabic letter.
+* The progress ring is not mirrored (a deliberate clock-wise choice; review with
+  native readers).
+* Strings added by other step-3 areas after this translation (language picker,
+  dictation, Listen) show in English until `_ar.arb` gets them; `make l10n-report`
+  lists them.

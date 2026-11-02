@@ -351,6 +351,7 @@ abstract final class CarthaTheme {
       colorScheme: scheme,
       useMaterial3: true,
       fontFamily: font,
+      fontFamilyFallback: fonts.fallback,
       scaffoldBackgroundColor: p.background,
       canvasColor: p.background,
       disabledColor: p.textDisabled,
@@ -365,6 +366,7 @@ abstract final class CarthaTheme {
       bodyColor: p.textPrimary,
       displayColor: p.textPrimary,
       fontFamily: font,
+      fontFamilyFallback: fonts.fallback,
     );
     // Cinzel only for display/headline (short brand-voice titles); the
     // language's own family for every style where Cinzel has no letters.
@@ -378,6 +380,7 @@ abstract final class CarthaTheme {
     const pill = StadiumBorder();
     final buttonText = TextStyle(
       fontFamily: font,
+      fontFamilyFallback: fonts.fallback,
       fontSize: 16,
       fontWeight: FontWeight.w600,
       letterSpacing: fonts.spacing(0.2),
@@ -441,6 +444,7 @@ abstract final class CarthaTheme {
         centerTitle: false,
         titleTextStyle: TextStyle(
           fontFamily: font,
+          fontFamilyFallback: fonts.fallback,
           fontSize: 18,
           fontWeight: FontWeight.w600,
           color: p.textPrimary,
@@ -542,6 +546,7 @@ abstract final class CarthaTheme {
         labelTextStyle: WidgetStateProperty.resolveWith(
           (states) => TextStyle(
             fontFamily: font,
+            fontFamilyFallback: fonts.fallback,
             fontSize: 12,
             fontWeight: states.contains(WidgetState.selected)
                 ? FontWeight.w600
@@ -639,6 +644,7 @@ abstract final class CarthaTheme {
         iconTheme: IconThemeData(color: p.accent, size: 18),
         labelStyle: TextStyle(
           fontFamily: font,
+          fontFamilyFallback: fonts.fallback,
           fontWeight: FontWeight.w500,
           color: WidgetStateColor.resolveWith(
             (s) => s.contains(WidgetState.disabled)
@@ -668,12 +674,14 @@ abstract final class CarthaTheme {
         surfaceTintColor: Colors.transparent,
         titleTextStyle: TextStyle(
           fontFamily: font,
+          fontFamilyFallback: fonts.fallback,
           fontSize: 20,
           fontWeight: FontWeight.w600,
           color: p.textPrimary,
         ),
         contentTextStyle: TextStyle(
           fontFamily: font,
+          fontFamilyFallback: fonts.fallback,
           fontSize: 15,
           height: 1.45,
           color: p.textPrimary,
@@ -684,7 +692,11 @@ abstract final class CarthaTheme {
       ),
       snackBarTheme: SnackBarThemeData(
         backgroundColor: p.inverseSurface,
-        contentTextStyle: TextStyle(fontFamily: font, color: p.textInverse),
+        contentTextStyle: TextStyle(
+          fontFamily: font,
+          fontFamilyFallback: fonts.fallback,
+          color: p.textInverse,
+        ),
         actionTextColor: p.isDark ? p.hero : p.heroAccent,
         closeIconColor: p.textInverse,
         behavior: SnackBarBehavior.floating,
@@ -697,6 +709,7 @@ abstract final class CarthaTheme {
         textColor: p.textPrimary,
         subtitleTextStyle: TextStyle(
           fontFamily: font,
+          fontFamilyFallback: fonts.fallback,
           fontSize: 13,
           color: p.textSecondary,
         ),
@@ -783,7 +796,11 @@ abstract final class CarthaTheme {
       popupMenuTheme: PopupMenuThemeData(
         color: p.dialog,
         surfaceTintColor: Colors.transparent,
-        textStyle: TextStyle(fontFamily: font, color: p.textPrimary),
+        textStyle: TextStyle(
+          fontFamily: font,
+          fontFamilyFallback: fonts.fallback,
+          color: p.textPrimary,
+        ),
       ),
       dropdownMenuTheme: DropdownMenuThemeData(
         menuStyle: MenuStyle(
@@ -796,7 +813,11 @@ abstract final class CarthaTheme {
           color: p.inverseSurface,
           borderRadius: BorderRadius.circular(8),
         ),
-        textStyle: TextStyle(fontFamily: font, color: p.textInverse),
+        textStyle: TextStyle(
+          fontFamily: font,
+          fontFamilyFallback: fonts.fallback,
+          color: p.textInverse,
+        ),
       ),
       datePickerTheme: DatePickerThemeData(
         backgroundColor: p.dialog,

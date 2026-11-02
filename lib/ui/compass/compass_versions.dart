@@ -234,7 +234,7 @@ class _VersionField extends StatelessWidget {
             l.compassVersionEmptyField,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: p.textSecondary,
-              fontStyle: FontStyle.italic,
+              fontStyle: CarthaFonts.of(context).italic,
             ),
           )
         else

@@ -1,3 +1,59 @@
 {
-  "@@locale": "ar"
+  "@@locale": "ar",
+
+  "appTitle": "Cartharise",
+  "appTagline": "إتقانٌ للذات. نهوضٌ بغاية.",
+  "appPromise": "فهمٌ للذات. اختيارٌ للطريق. نهوضٌ بغاية.",
+
+  "tabToday": "اليوم",
+  "tabReset": "إعادة ضبط",
+  "tabCompass": "البوصلة",
+  "tabJournal": "اليوميات",
+  "tabYou": "أنت",
+
+  "save": "حفظ",
+  "cancel": "إلغاء",
+  "delete": "حذف",
+  "skip": "تخطٍّ",
+  "back": "رجوع",
+  "next": "التالي",
+  "done": "تمّ",
+  "retry": "إعادة المحاولة",
+  "close": "إغلاق",
+  "edit": "تعديل",
+  "add": "إضافة",
+  "keepGoing": "متابعة",
+  "tryAgain": "المحاولة مجددًا",
+  "notNow": "ليس الآن",
+  "moreInfo": "مزيد من المعلومات",
+
+  "saveStatusSaving": "جارٍ الحفظ…",
+  "saveStatusSaved": "محفوظ على هذا الجهاز",
+  "saveStatusFailed": "تعذّر حفظ آخر تغيير.",
+  "saveFailedHelp": "كلماتك ما زالت هنا. يمكنك إعادة المحاولة أو تصدير نسخة.",
+  "saveExportCopy": "تصدير نسخة",
+
+  "bootLoading": "نجهّز مساحتك…",
+  "bootLoadErrorTitle": "تعذّر فتح بياناتك المحفوظة",
+  "bootLoadErrorBody": "لم يتمكّن Cartharise من قراءة ملفه. لم يُحذف شيء.",
+  "bootLoadErrorHint": "يمكنك المحاولة مجددًا. وإن تكرّر ذلك، فقد يفيد تحرير بعض المساحة.",
+  "bootStartFresh": "بداية جديدة مع الاحتفاظ بالملف غير المقروء",
+  "bootStartFreshConfirmTitle": "بداية جديدة؟",
+  "bootStartFreshConfirmBody": "يُنحّى الملف غير المقروء جانبًا ولا يُحذف. ويبدأ Cartharise فارغًا.",
+
+  "storageTransparency": "على هذا الهاتف فقط. بلا مزامنة، وخارج النسخ الاحتياطي للهاتف والسحابة، وبلا تشفير من Cartharise. حذف التطبيق أو بياناتك يمحوها.",
+
+  "storageErrorTitle": "مشكلة في التخزين",
+  "storageErrorBody": "يتعذّر الحفظ على هذا الهاتف الآن. تبقى كلماتك على الشاشة ما دامت مفتوحة.",
+
+  "linkOpenFailed": "تعذّر فتح الرابط. يمكنك زيارته بنفسك: {url}",
+  "shareFailed": "تعذّر فتح قائمة المشاركة على هذا الهاتف.",
+
+  "reminderChannelName": "تذكيرات الوقفات",
+  "reminderChannelDescription": "وقفات نهارية اختيارية من إعادة الضبط في Cartharise.",
+
+  "loaderLabel": "جارٍ التحميل",
+  "emblemLabel": "شعار Cartharise",
+  "progressLabel": "{value} بالمئة",
+  "selectedLabel": "محدَّد"
 }

@@ -308,7 +308,7 @@ class _StepBody extends StatelessWidget {
           l.todayNextEyebrow.toUpperCase(),
           style: theme.textTheme.labelMedium?.copyWith(
             color: p.heroAccent,
-            letterSpacing: 1.6,
+            letterSpacing: CarthaFonts.of(context).spacing(1.6),
             fontWeight: FontWeight.w600,
           ),
         ),

@@ -102,6 +102,7 @@ class _CarthaMaterialAppState extends State<_CarthaMaterialApp>
   @override
   void initState() {
     super.initState();
+    useWesternDigits();
     WidgetsBinding.instance.addObserver(this);
   }
 

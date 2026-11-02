@@ -218,7 +218,7 @@ class YouTab extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: theme.textTheme.labelSmall?.copyWith(
                       color: p.accent,
-                      letterSpacing: 1.6,
+                      letterSpacing: CarthaFonts.of(context).spacing(1.6),
                     ),
                   ),
                 ],

@@ -188,7 +188,7 @@ class Eyebrow extends StatelessWidget {
     text.toUpperCase(),
     style: Theme.of(context).textTheme.labelMedium?.copyWith(
       color: CarthaPalette.of(context).accent,
-      letterSpacing: 1.4,
+      letterSpacing: CarthaFonts.of(context).spacing(1.4),
       fontWeight: FontWeight.w600,
     ),
   );

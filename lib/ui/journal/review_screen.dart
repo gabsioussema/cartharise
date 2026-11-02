@@ -314,7 +314,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
               l.journalReviewNothingWritten,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: p.textSecondary,
-                fontStyle: FontStyle.italic,
+                fontStyle: CarthaFonts.of(context).italic,
               ),
             )
           : SelectableText(text, style: theme.textTheme.bodyLarge);

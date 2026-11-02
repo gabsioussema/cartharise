@@ -6,6 +6,7 @@ import '../../domain/app_data.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
 import '../theme/cartha_theme.dart';
+import '../widgets/bidi.dart';
 import '../widgets/widgets.dart';
 import 'missions_logic.dart';
 import 'quest_sheet.dart';
@@ -180,6 +181,7 @@ class _BoardCardState extends State<BoardCard> {
                     padding: const EdgeInsetsDirectional.only(end: 34),
                     child: Text(
                       quest.title,
+                      textDirection: textDirectionOf(quest.title),
                       style: theme.textTheme.bodyLarge?.copyWith(
                         color: done ? p.textSecondary : p.textPrimary,
                         decoration: done ? TextDecoration.lineThrough : null,
