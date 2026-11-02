@@ -13,625 +13,627 @@ class AppLocalizationsFr extends AppLocalizations {
   String get appTitle => 'Cartharise';
 
   @override
-  String get appTagline => 'Master Yourself. Rise With Purpose.';
+  String get appTagline => 'Maîtrisez-vous. Avancez avec un but.';
 
   @override
   String get appPromise =>
-      'Understand yourself. Choose your path. Rise with purpose.';
+      'Comprenez-vous. Choisissez votre chemin. Avancez avec un but.';
 
   @override
-  String get tabToday => 'Today';
+  String get tabToday => 'Aujourd’hui';
 
   @override
-  String get tabReset => 'Reset';
+  String get tabReset => 'Recentrage';
 
   @override
-  String get tabCompass => 'Compass';
+  String get tabCompass => 'Boussole';
 
   @override
   String get tabJournal => 'Journal';
 
   @override
-  String get tabYou => 'You';
+  String get tabYou => 'Vous';
 
   @override
-  String get save => 'Save';
+  String get save => 'Enregistrer';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => 'Annuler';
 
   @override
-  String get delete => 'Delete';
+  String get delete => 'Supprimer';
 
   @override
-  String get skip => 'Skip';
+  String get skip => 'Passer';
 
   @override
-  String get back => 'Back';
+  String get back => 'Retour';
 
   @override
-  String get next => 'Next';
+  String get next => 'Suivant';
 
   @override
-  String get done => 'Done';
+  String get done => 'Terminé';
 
   @override
-  String get retry => 'Retry';
+  String get retry => 'Réessayer';
 
   @override
-  String get close => 'Close';
+  String get close => 'Fermer';
 
   @override
-  String get edit => 'Edit';
+  String get edit => 'Modifier';
 
   @override
-  String get add => 'Add';
+  String get add => 'Ajouter';
 
   @override
-  String get keepGoing => 'Continue';
+  String get keepGoing => 'Continuer';
 
   @override
-  String get tryAgain => 'Try again';
+  String get tryAgain => 'Réessayer';
 
   @override
-  String get notNow => 'Not now';
+  String get notNow => 'Pas maintenant';
 
   @override
-  String get moreInfo => 'More information';
+  String get moreInfo => 'En savoir plus';
 
   @override
-  String get saveStatusSaving => 'Saving…';
+  String get saveStatusSaving => 'Enregistrement…';
 
   @override
-  String get saveStatusSaved => 'Saved on this device';
+  String get saveStatusSaved => 'Enregistré sur ce téléphone';
 
   @override
-  String get saveStatusFailed => 'Your last change couldn\'t be saved.';
+  String get saveStatusFailed => 'Dernière modification non enregistrée.';
 
   @override
   String get saveFailedHelp =>
-      'Your words are still here. Retry, or export a copy.';
+      'Vos mots sont toujours là. Réessayez, ou exportez une copie.';
 
   @override
-  String get saveExportCopy => 'Export a copy';
+  String get saveExportCopy => 'Exporter une copie';
 
   @override
-  String get bootLoading => 'Preparing your space…';
+  String get bootLoading => 'Préparation de votre espace…';
 
   @override
-  String get bootLoadErrorTitle => 'Your saved data couldn\'t be opened';
+  String get bootLoadErrorTitle => 'Vos données n’ont pas pu être ouvertes';
 
   @override
   String get bootLoadErrorBody =>
-      'Cartharise couldn\'t read its file. Nothing was deleted.';
+      'Cartharise n’a pas pu lire son fichier. Rien n’a été supprimé.';
 
   @override
   String get bootLoadErrorHint =>
-      'Try again. If it keeps failing, free up some storage.';
+      'Réessayez. Si le problème persiste, libérez de l’espace.';
 
   @override
-  String get bootStartFresh => 'Start fresh and keep the unreadable file';
+  String get bootStartFresh =>
+      'Repartir de zéro et garder le fichier illisible';
 
   @override
-  String get bootStartFreshConfirmTitle => 'Start fresh?';
+  String get bootStartFreshConfirmTitle => 'Repartir de zéro ?';
 
   @override
   String get bootStartFreshConfirmBody =>
-      'The unreadable file is set aside, not deleted. Cartharise starts empty.';
+      'Le fichier illisible est mis de côté, pas supprimé. Cartharise repart à vide.';
 
   @override
   String get storageTransparency =>
-      'Only on this phone. Not synced, not in phone or cloud backups, and not encrypted by Cartharise. Deleting the app or your data erases it.';
+      'Uniquement sur ce téléphone. Rien n’est synchronisé, copié dans les sauvegardes du téléphone ou du cloud, ni chiffré par Cartharise. Supprimer l’app ou vos données efface tout.';
 
   @override
-  String get storageErrorTitle => 'Storage problem';
+  String get storageErrorTitle => 'Problème de stockage';
 
   @override
   String get storageErrorBody =>
-      'Can\'t save on this phone right now. Your words stay on screen until you leave.';
+      'Impossible d’enregistrer sur ce téléphone pour l’instant. Vos mots restent à l’écran jusqu’à ce que vous quittiez.';
 
   @override
   String linkOpenFailed(String url) {
-    return 'Couldn\'t open the link. You can visit it yourself: $url';
+    return 'Le lien n’a pas pu s’ouvrir. Vous pouvez y aller vous-même : $url';
   }
 
   @override
-  String get shareFailed => 'Couldn\'t open the share sheet on this phone.';
+  String get shareFailed => 'Le partage n’a pas pu s’ouvrir sur ce téléphone.';
 
   @override
-  String get reminderChannelName => 'Check-in reminders';
+  String get reminderChannelName => 'Rappels des pauses';
 
   @override
   String get reminderChannelDescription =>
-      'Optional daytime check-ins from your Cartharise reset.';
+      'Pauses facultatives dans la journée, issues de votre recentrage Cartharise.';
 
   @override
-  String get loaderLabel => 'Loading';
+  String get loaderLabel => 'Chargement';
 
   @override
-  String get emblemLabel => 'Cartharise emblem';
+  String get emblemLabel => 'Emblème de Cartharise';
 
   @override
   String progressLabel(int value) {
-    return '$value percent';
+    return '$value pour cent';
   }
 
   @override
-  String get selectedLabel => 'Selected';
+  String get selectedLabel => 'Sélectionné';
 
   @override
-  String get awakeningTitle => 'The Awakening';
+  String get awakeningTitle => 'L’Éveil';
 
   @override
   String get awakeningSubtitle =>
-      'Seven ideas behind the reset. Optional, any order.';
+      'Sept idées derrière le recentrage. Facultatif, dans l’ordre de votre choix.';
 
   @override
-  String get awakeningStripTitle => 'Learn the ideas first (optional)';
+  String get awakeningStripTitle => 'Découvrir les idées d’abord (facultatif)';
 
   @override
-  String get awakeningSeeAll => 'See all lessons';
+  String get awakeningSeeAll => 'Voir toutes les leçons';
 
   @override
   String awakeningReadCount(int read, int total) {
-    return '$read of $total read';
+    return 'Lues : $read sur $total';
   }
 
   @override
   String awakeningLessonNumber(int n) {
-    return 'Lesson $n';
+    return 'Leçon $n';
   }
 
   @override
   String awakeningLessonOf(int n, int total) {
-    return 'Lesson $n of $total';
+    return 'Leçon $n sur $total';
   }
 
   @override
-  String get awakeningRead => 'Read';
+  String get awakeningRead => 'Lue';
 
   @override
-  String get awakeningNotRead => 'Not read yet';
+  String get awakeningNotRead => 'Pas encore lue';
 
   @override
-  String get awakeningExample => 'Example';
+  String get awakeningExample => 'Exemple';
 
   @override
-  String get awakeningNuance => 'A lens, not a verdict';
+  String get awakeningNuance => 'Un regard, pas un verdict';
 
   @override
-  String get awakeningCheckTitle => 'Check your understanding';
+  String get awakeningCheckTitle => 'Vérifier votre compréhension';
 
   @override
   String get awakeningCheckHint =>
-      'Pick the answer that fits best. Nothing is scored or saved.';
+      'Choisissez la réponse qui convient le mieux. Rien n’est noté ni enregistré.';
 
   @override
-  String get awakeningCheckRight => 'That\'s it.';
+  String get awakeningCheckRight => 'C’est bien ça.';
 
   @override
-  String get awakeningCheckNotQuite => 'Not quite, and that\'s fine.';
+  String get awakeningCheckNotQuite =>
+      'Pas tout à fait, et ce n’est pas grave.';
 
   @override
-  String get awakeningTryIt => 'Try it';
+  String get awakeningTryIt => 'Essayer';
 
   @override
   String get awakeningTryItBody =>
-      'Put this idea into practice with a reset question.';
+      'Mettez cette idée en pratique avec une question du recentrage.';
 
   @override
   String awakeningTryItPrompt(String title) {
-    return 'Try it: $title';
+    return 'Essayer : $title';
   }
 
   @override
-  String get awakeningPrevious => 'Previous lesson';
+  String get awakeningPrevious => 'Leçon précédente';
 
   @override
-  String get awakeningNext => 'Next lesson';
+  String get awakeningNext => 'Leçon suivante';
 
   @override
-  String get awakeningDone => 'Back to the lessons';
+  String get awakeningDone => 'Retour aux leçons';
 
   @override
   String awakeningSourceNote(String title, String author) {
-    return 'In Cartharise\'s words, from “$title” by $author. Independent app.';
+    return 'Avec les mots de Cartharise, d’après « $title » de $author. App indépendante.';
   }
 
   @override
-  String get awakeningSourceLink => 'About the source';
+  String get awakeningSourceLink => 'À propos de la source';
 
   @override
-  String get awakeningMissing => 'This lesson isn\'t available.';
+  String get awakeningMissing => 'Cette leçon n’est pas disponible.';
 
   @override
-  String get campaignSection => 'Campaign';
+  String get campaignSection => 'Campagne';
 
   @override
-  String get campaignSubtitle => 'Your direction, played as a game.';
+  String get campaignSubtitle => 'Votre direction, jouée comme un jeu.';
 
   @override
-  String get campaignStatusEyebrow => 'Your campaign';
+  String get campaignStatusEyebrow => 'Votre campagne';
 
   @override
   String campaignLevel(int level, int xp) {
-    return 'Level $level · $xp XP';
+    return 'Niveau $level · $xp XP';
   }
 
   @override
   String get campaignXpNote =>
-      'XP counts what you do, never your worth. Rest costs nothing.';
+      'Les XP comptent ce que vous faites, jamais votre valeur. Le repos ne coûte rien.';
 
   @override
-  String get campaignXpHow => 'How XP is earned';
+  String get campaignXpHow => 'Comment gagner des XP';
 
   @override
   String campaignXpRuleReflection(int xp) {
-    return '+$xp XP for each reset question you answer (once per question)';
+    return '+$xp XP par question du recentrage à laquelle vous répondez (une fois par question)';
   }
 
   @override
   String campaignXpRuleQuest(int xp, int max) {
-    return '+$xp XP for each quest you complete, counting up to $max a day';
+    return '+$xp XP par quête accomplie, jusqu’à $max par jour';
   }
 
   @override
   String campaignXpRulePath(int xp) {
-    return '+$xp XP for each day of the 30-day path you write';
+    return '+$xp XP par jour du parcours de 30 jours que vous écrivez';
   }
 
   @override
   String campaignXpRuleAttempt(int xp) {
-    return '+$xp XP for each day you record an attempt at your monthly project';
+    return '+$xp XP par jour où vous notez un essai pour votre projet du mois';
   }
 
   @override
   String campaignXpRuleReview(int xp) {
-    return '+$xp XP for each weekly review';
+    return '+$xp XP par bilan de la semaine';
   }
 
   @override
   String campaignXpRulesNote(int step) {
-    return 'XP ignores what you write and how you feel. Skipping and resting never cost XP. Every $step XP is a new level.';
+    return 'Les XP ignorent ce que vous écrivez et ce que vous ressentez. Passer ou vous reposer ne coûte jamais d’XP. Chaque tranche de $step XP donne un nouveau niveau.';
   }
 
   @override
-  String get campaignActOne => 'Act I · The one-day awakening';
+  String get campaignActOne => 'Acte I · L’éveil d’une journée';
 
   @override
   String campaignChaptersExplored(int count, int total) {
-    return '$count of $total chapters explored';
+    return 'Chapitres explorés : $count sur $total';
   }
 
   @override
   String campaignChapterNumber(int number) {
-    return 'Chapter $number';
+    return 'Chapitre $number';
   }
 
   @override
-  String get campaignChapterTerrain => 'See the terrain';
+  String get campaignChapterTerrain => 'Voir le terrain';
 
   @override
-  String get campaignChapterTerrainArea => 'Current reality';
+  String get campaignChapterTerrainArea => 'Réalité actuelle';
 
   @override
-  String get campaignChapterPattern => 'Find the pattern';
+  String get campaignChapterPattern => 'Trouver le schéma';
 
   @override
-  String get campaignChapterPatternArea => 'Anti-vision and identity';
+  String get campaignChapterPatternArea => 'Anti-vision et identité';
 
   @override
-  String get campaignChapterBanner => 'Raise your banner';
+  String get campaignChapterBanner => 'Lever votre bannière';
 
   @override
-  String get campaignChapterBannerArea => 'Future vision';
+  String get campaignChapterBannerArea => 'Vision d’avenir';
 
   @override
-  String get campaignChapterAutopilot => 'Break autopilot';
+  String get campaignChapterAutopilot => 'Sortir du pilote automatique';
 
   @override
-  String get campaignChapterAutopilotArea => 'Daytime check-ins';
+  String get campaignChapterAutopilotArea => 'Pauses de la journée';
 
   @override
-  String get campaignChapterPlan => 'Plan the campaign';
+  String get campaignChapterPlan => 'Planifier la campagne';
 
   @override
-  String get campaignChapterPlanArea => 'Evening synthesis';
+  String get campaignChapterPlanArea => 'Synthèse du soir';
 
   @override
   String campaignChapterReflections(String area, int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count reflections',
-      one: '1 reflection',
+      other: '$count réflexions',
+      one: '$count réflexion',
     );
     return '$area · $_temp0';
   }
 
   @override
   String campaignChapterDone(int done, int total) {
-    return '$done of $total written';
+    return 'Écrites : $done sur $total';
   }
 
   @override
-  String get campaignChapterExplored => 'Explored';
+  String get campaignChapterExplored => 'Exploré';
 
   @override
-  String get campaignChapterExplore => 'Explore';
+  String get campaignChapterExplore => 'Explorer';
 
   @override
   String campaignChapterExploreLabel(int number, String name) {
-    return 'Explore chapter $number, $name';
+    return 'Explorer le chapitre $number, $name';
   }
 
   @override
-  String get campaignMapTitle => 'The strategist\'s map';
+  String get campaignMapTitle => 'La carte du stratège';
 
   @override
-  String get campaignMapAntiVision => 'What\'s at stake · Anti-vision';
+  String get campaignMapAntiVision => 'L’enjeu · Anti-vision';
 
   @override
-  String get campaignMapVision => 'Win condition · Vision';
+  String get campaignMapVision => 'Condition de victoire · Vision';
 
   @override
-  String get campaignMapYear => 'Main campaign · One-year mission';
+  String get campaignMapYear => 'Campagne principale · Mission d’un an';
 
   @override
-  String get campaignMapMonth => 'Monthly boss · One-month project';
+  String get campaignMapMonth => 'Boss du mois · Projet du mois';
 
   @override
-  String get campaignMapLevers => 'Daily quests · Daily levers';
+  String get campaignMapLevers => 'Quêtes quotidiennes · Leviers quotidiens';
 
   @override
-  String get campaignMapBoundaries => 'Rules of engagement · Boundaries';
+  String get campaignMapBoundaries => 'Règles d’engagement · Limites';
 
   @override
   String get campaignMapBoundariesNote =>
-      'The game never rewards giving these up.';
+      'Le jeu ne récompense jamais le fait d’y renoncer.';
 
   @override
-  String get campaignMapEmpty => 'Not written yet.';
+  String get campaignMapEmpty => 'Pas encore écrit.';
 
   @override
-  String get campaignMapEdit => 'Build your strategy';
+  String get campaignMapEdit => 'Bâtir votre stratégie';
 
   @override
-  String get campaignMapQuests => 'Open daily quests';
+  String get campaignMapQuests => 'Ouvrir les quêtes quotidiennes';
 
   @override
-  String get campaignBossTitle => 'Monthly boss fight';
+  String get campaignBossTitle => 'Le boss du mois';
 
   @override
   String get campaignBossBody =>
-      'The boss is a project, never a person. Log what you try.';
+      'Le boss est un projet, jamais une personne. Notez ce que vous tentez.';
 
   @override
   String get campaignBossNoProject =>
-      'Set a one-month project in your Compass to see it here.';
+      'Choisissez un projet du mois dans votre Boussole pour le voir ici.';
 
   @override
-  String get campaignAttemptLabel => 'What did you actually try?';
+  String get campaignAttemptLabel => 'Qu’avez-vous vraiment tenté ?';
 
   @override
   String get campaignAttemptHint =>
-      'A focus block, a hard message, a first draft…';
+      'Un moment de concentration, un message difficile, un premier jet…';
 
   @override
   String get campaignAttemptRequired =>
-      'Write a few words about what you tried.';
+      'Écrivez quelques mots sur ce que vous avez tenté.';
 
   @override
-  String get campaignLearningLabel => 'What did you learn? (optional)';
+  String get campaignLearningLabel => 'Qu’avez-vous appris ? (facultatif)';
 
   @override
-  String get campaignLearningHint => 'What worked, what you\'d change.';
+  String get campaignLearningHint => 'Ce qui a marché, ce que vous changeriez.';
 
   @override
-  String get campaignRecord => 'Record this attempt';
+  String get campaignRecord => 'Noter cet essai';
 
   @override
-  String get campaignRecorded => 'Attempt recorded.';
+  String get campaignRecorded => 'Essai noté.';
 
   @override
   String campaignLogTitle(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Battle log · $count attempts',
-      one: 'Battle log · 1 attempt',
-      zero: 'Battle log',
+      other: 'Carnet de bataille · $count essais',
+      one: 'Carnet de bataille · $count essai',
+      zero: 'Carnet de bataille',
     );
     return '$_temp0';
   }
 
   @override
-  String get campaignLogEmpty => 'No attempts yet. Your first one can be tiny.';
+  String get campaignLogEmpty =>
+      'Pas encore d’essai. Le premier peut être minuscule.';
 
   @override
   String campaignLogLearned(String learning) {
-    return 'Learned: $learning';
+    return 'Appris : $learning';
   }
 
   @override
   String campaignLogEditLabel(String date) {
-    return 'Edit the attempt from $date';
+    return 'Modifier l’essai du $date';
   }
 
   @override
-  String get campaignAttemptEditTitle => 'Edit attempt';
+  String get campaignAttemptEditTitle => 'Modifier l’essai';
 
   @override
-  String get campaignAttemptSave => 'Save attempt';
+  String get campaignAttemptSave => 'Enregistrer l’essai';
 
   @override
-  String get campaignAttemptDelete => 'Delete attempt';
+  String get campaignAttemptDelete => 'Supprimer l’essai';
 
   @override
-  String get campaignAttemptDeleteTitle => 'Delete this attempt?';
+  String get campaignAttemptDeleteTitle => 'Supprimer cet essai ?';
 
   @override
-  String get campaignAttemptDeleteBody =>
-      'It will be removed. This can\'t be undone.';
+  String get campaignAttemptDeleteBody => 'Il sera retiré. C’est définitif.';
 
   @override
-  String get campaignAttemptDeleted => 'Attempt deleted';
+  String get campaignAttemptDeleted => 'Essai supprimé';
 
   @override
-  String get campaignAchievementsTitle => 'Achievements from the article';
+  String get campaignAchievementsTitle => 'Hauts faits inspirés de l’article';
 
   @override
   String get campaignAchievementsSubtitle =>
-      'Earned by reflecting, trying or doing. Never by what you write.';
+      'Obtenus en réfléchissant, en essayant ou en agissant. Jamais selon ce que vous écrivez.';
 
   @override
   String campaignAchievementsCount(int earned, int total) {
-    return '$earned of $total earned';
+    return 'Obtenus : $earned sur $total';
   }
 
   @override
-  String get campaignNotYet => 'Not yet';
+  String get campaignNotYet => 'Pas encore';
 
   @override
-  String get campaignAchievementObserver => 'The Observer';
+  String get campaignAchievementObserver => 'L’Observateur';
 
   @override
   String get campaignAchievementObserverBody =>
-      'Answer every present-reality question in one reset, or try one of its experiments';
+      'Répondez à toutes les questions sur la réalité actuelle en un recentrage, ou essayez une de ses expériences';
 
   @override
-  String get campaignAchievementPathfinder => 'The Pathfinder';
+  String get campaignAchievementPathfinder => 'L’Éclaireur';
 
   @override
   String get campaignAchievementPathfinderBody =>
-      'Answer every anti-vision and identity question in one reset, or try one of its experiments';
+      'Répondez à toutes les questions d’anti-vision et d’identité en un recentrage, ou essayez une de ses expériences';
 
   @override
-  String get campaignAchievementVisionary => 'The Visionary';
+  String get campaignAchievementVisionary => 'Le Visionnaire';
 
   @override
   String get campaignAchievementVisionaryBody =>
-      'Answer every future-vision question in one reset, or try one of its experiments';
+      'Répondez à toutes les questions de vision d’avenir en un recentrage, ou essayez une de ses expériences';
 
   @override
-  String get campaignAchievementWatchful => 'The Watchful';
+  String get campaignAchievementWatchful => 'Le Vigilant';
 
   @override
   String get campaignAchievementWatchfulBody =>
-      'Answer every daytime check-in in one reset, or try one of its experiments';
+      'Répondez à toutes les pauses de la journée en un recentrage, ou essayez une de ses expériences';
 
   @override
-  String get campaignAchievementStrategist => 'The Strategist';
+  String get campaignAchievementStrategist => 'Le Stratège';
 
   @override
   String get campaignAchievementStrategistBody =>
-      'Answer every evening-planning question in one reset, or try one of its experiments';
+      'Répondez à toutes les questions du plan du soir en un recentrage, ou essayez une de ses expériences';
 
   @override
-  String get campaignAchievementPractitioner => 'The Practitioner';
+  String get campaignAchievementPractitioner => 'Le Praticien';
 
   @override
   String get campaignAchievementPractitionerBody =>
-      'Complete a real-world quest';
+      'Accomplir une quête dans la vraie vie';
 
   @override
-  String get campaignAchievementChallenger => 'The Challenger';
+  String get campaignAchievementChallenger => 'Le Challenger';
 
   @override
   String get campaignAchievementChallengerBody =>
-      'Record a first attempt at your monthly project';
+      'Noter un premier essai pour votre projet du mois';
 
   @override
-  String get campaignActTwo => 'Act II · The 30-day becoming';
+  String get campaignActTwo => 'Acte II · Trente jours pour devenir';
 
   @override
   String get campaignActTwoBody =>
-      'A direction, not a deadline. Keep the small steps going.';
+      'Une direction, pas une échéance. Continuez les petits pas.';
 
   @override
-  String get campaignStatQuests => 'Quests completed';
+  String get campaignStatQuests => 'Quêtes accomplies';
 
   @override
-  String get campaignStatPath => '30-day notes written';
+  String get campaignStatPath => 'Notes du parcours écrites';
 
   @override
-  String get campaignStatAttempts => 'Attempts recorded';
+  String get campaignStatAttempts => 'Essais notés';
 
   @override
-  String get campaignContinuePath => 'Continue the 30-day path';
+  String get campaignContinuePath => 'Continuer le parcours de 30 jours';
 
   @override
-  String get campaignReadArticle => 'Read the article';
+  String get campaignReadArticle => 'Lire l’article';
 
   @override
   String get campaignNote =>
-      'XP, levels and achievements are Cartharise additions, not part of the article. Turn them off in You.';
+      'XP, niveaux et hauts faits sont des ajouts de Cartharise, pas de l’article. Désactivez-les dans Vous.';
 
   @override
-  String get campaignTodayOpen => 'Open the Campaign';
+  String get campaignTodayOpen => 'Ouvrir la Campagne';
 
   @override
-  String get campaignSettingTitle => 'The Campaign';
+  String get campaignSettingTitle => 'La Campagne';
 
   @override
   String get campaignSettingHint =>
-      'XP, levels and achievements. Your battle log is kept if you turn it off.';
+      'XP, niveaux et hauts faits. Votre carnet de bataille reste si vous la désactivez.';
 
   @override
   String campaignWaypoint(String place) {
     String _temp0 = intl.Intl.selectLogic(place, {
       'carthage': 'Carthage',
-      'newCarthage': 'New Carthage',
-      'ebro': 'the Ebro',
-      'pyrenees': 'the Pyrenees',
-      'rhone': 'the Rhône',
-      'alps': 'the Alps',
-      'italy': 'Italy',
-      'other': 'the road',
+      'newCarthage': 'Carthagène',
+      'ebro': 'Èbre',
+      'pyrenees': 'Pyrénées',
+      'rhone': 'Rhône',
+      'alps': 'Alpes',
+      'italy': 'Italie',
+      'other': 'Route',
     });
     return '$_temp0';
   }
 
   @override
   String campaignRouteHere(String place) {
-    return 'You\'re at $place';
+    return 'Étape actuelle : $place';
   }
 
   @override
   String campaignRouteNext(int xp, String place) {
-    return '$xp XP to $place';
+    return 'Prochaine étape : $place, dans $xp XP';
   }
 
   @override
-  String get campaignRouteEnd =>
-      'You\'ve crossed into Italy. The campaign goes on.';
+  String get campaignRouteEnd => 'Vous voici en Italie. La campagne continue.';
 
   @override
   String campaignRouteLabel(String place, int stop, int total) {
-    return 'Hannibal\'s route: $place, stop $stop of $total.';
+    return 'Route d’Hannibal : $place, étape $stop sur $total.';
   }
 
   @override
-  String get campaignBossStrength => 'Boss strength';
+  String get campaignBossStrength => 'Force du boss';
 
   @override
   String campaignBossMilestones(int done, int total) {
-    return '$done of $total milestones reached';
+    return 'Jalons atteints : $done sur $total';
   }
 
   @override
-  String get campaignBossBeaten => 'Every milestone reached. Boss beaten.';
+  String get campaignBossBeaten =>
+      'Tous les jalons sont atteints. Boss vaincu.';
 
   @override
   String get campaignBossNoMilestones =>
-      'Add milestones to your project to weaken the boss.';
+      'Ajoutez des jalons à votre projet pour affaiblir le boss.';
 
   @override
-  String get campaignBossOpenProject => 'Open project';
+  String get campaignBossOpenProject => 'Ouvrir le projet';
 
   @override
   String campaignNextAchievement(String name, String how) {
-    return 'Next: $name · $how';
+    return 'Ensuite : $name · $how';
   }
 
   @override
@@ -641,20 +643,20 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String campaignToastAchievement(String name) {
-    return 'Achievement earned: $name';
+    return 'Haut fait obtenu : $name';
   }
 
   @override
   String get campaignStrategistEmpty =>
-      'Create an avatar to walk the route with you.';
+      'Créez un avatar pour parcourir la route avec vous.';
 
   @override
   String campaignExtrasCount(int count, int total) {
-    return '$count of $total extras unlocked';
+    return 'Extras débloqués : $count sur $total';
   }
 
   @override
-  String get campaignExtrasAll => 'Every extra unlocked.';
+  String get campaignExtrasAll => 'Tous les extras sont débloqués.';
 
   @override
   String campaignQuestXp(int xp) {
@@ -663,39 +665,39 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String campaignQuestXpLabel(int xp) {
-    return 'Earns $xp XP when done';
+    return 'Rapporte $xp XP une fois faite';
   }
 
   @override
   String campaignXpRuleExperiment(int xp) {
-    return '+$xp XP for each new experiment you try (once each)';
+    return '+$xp XP par nouvelle expérience essayée (une fois chacune)';
   }
 
   @override
-  String get campaignNoticeTitle => 'Notice';
+  String get campaignNoticeTitle => 'Remarquer';
 
   @override
-  String get campaignNoticeLine => 'A question or idea to look at again.';
+  String get campaignNoticeLine => 'Une question ou une idée à revoir.';
 
   @override
-  String get campaignTryTitle => 'Try';
+  String get campaignTryTitle => 'Essayer';
 
   @override
-  String get campaignTryLine => 'A tiny experiment for real life.';
+  String get campaignTryLine => 'Une mini-expérience pour la vraie vie.';
 
   @override
-  String get campaignYoursTitle => 'Make it yours';
+  String get campaignYoursTitle => 'À votre image';
 
   @override
-  String get campaignYoursLine => 'Your avatar and motto.';
+  String get campaignYoursLine => 'Votre avatar et votre devise.';
 
   @override
   String campaignYoursPicks(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count reward picks to choose',
-      one: '1 reward pick to choose',
+      other: '$count récompenses à choisir',
+      one: '$count récompense à choisir',
     );
     return '$_temp0';
   }
@@ -704,465 +706,474 @@ class AppLocalizationsFr extends AppLocalizations {
   String get campaignLinkRoute => 'Route';
 
   @override
-  String get campaignLinkChapters => 'Chapters';
+  String get campaignLinkChapters => 'Chapitres';
 
   @override
-  String get campaignLinkBattleLog => 'Battle log';
+  String get campaignLinkBattleLog => 'Carnet de bataille';
 
   @override
-  String get campaignLinkBattleLogDraft => 'Battle log · draft kept';
+  String get campaignLinkBattleLogDraft => 'Carnet · brouillon gardé';
 
   @override
   String get campaignLinkCollection => 'Collection';
 
   @override
-  String get campaignRouteTitle => 'The route';
+  String get campaignRouteTitle => 'La route';
 
   @override
   String get campaignRouteSubtitle =>
-      'One stop per level. Rest never moves you back.';
+      'Une étape par niveau. Le repos ne vous fait jamais reculer.';
 
   @override
-  String get campaignRouteStops => 'Stops';
+  String get campaignRouteStops => 'Étapes';
 
   @override
-  String get campaignRouteStopHere => 'You\'re here';
+  String get campaignRouteStopHere => 'Vous êtes ici';
 
   @override
-  String get campaignRouteStopReached => 'Reached';
+  String get campaignRouteStopReached => 'Atteinte';
 
   @override
   String campaignRouteStopAhead(int xp) {
-    return '$xp XP to go';
+    return 'Encore $xp XP';
   }
 
   @override
-  String get campaignChaptersTitle => 'Chapters';
+  String get campaignChaptersTitle => 'Chapitres';
 
   @override
   String campaignChapterTried(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count experiments tried',
-      one: '1 experiment tried',
+      other: '$count expériences essayées',
+      one: '$count expérience essayée',
     );
     return '$_temp0';
   }
 
   @override
-  String get campaignChapterTry => 'Try one';
+  String get campaignChapterTry => 'En essayer une';
 
   @override
   String campaignChapterTryLabel(int number, String name) {
-    return 'Try an experiment from chapter $number, $name';
+    return 'Essayer une expérience du chapitre $number, $name';
   }
 
   @override
-  String get campaignBattleLogTitle => 'Battle log';
+  String get campaignBattleLogTitle => 'Carnet de bataille';
 
   @override
-  String get campaignAttemptDraftNote => 'Kept on this phone as you type.';
+  String get campaignAttemptDraftNote =>
+      'Gardé sur ce téléphone au fil de l’écriture.';
 
   @override
   String get campaignAttemptNotSaved =>
-      'Not saved on this phone yet. Your words are still here. Retry at the top.';
+      'Pas encore enregistré sur ce téléphone. Vos mots sont toujours là. Réessayez en haut.';
 
   @override
   String get campaignNotSavedYet =>
-      'Not saved on this phone yet. Retry at the top.';
+      'Pas encore enregistré sur ce téléphone. Réessayez en haut.';
 
   @override
   String get campaignCollectionTitle => 'Collection';
 
   @override
-  String get campaignCollectionSubtitle => 'What you tried, earned and chose.';
+  String get campaignCollectionSubtitle =>
+      'Ce que vous avez essayé, obtenu et choisi.';
 
   @override
   String campaignCollectionTried(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count experiments tried',
-      one: '1 experiment tried',
-      zero: 'Experiments tried',
+      other: '$count expériences essayées',
+      one: '$count expérience essayée',
+      zero: 'Expériences essayées',
     );
     return '$_temp0';
   }
 
   @override
   String get campaignCollectionTriedEmpty =>
-      'Nothing tried yet. Try has small experiments.';
+      'Rien d’essayé pour l’instant. Voyez Essayer.';
 
   @override
-  String get campaignTryOpen => 'Open Try';
+  String get campaignTryOpen => 'Ouvrir Essayer';
 
   @override
-  String get campaignExperimentUnknown => 'An experiment';
+  String get campaignExperimentUnknown => 'Une expérience';
 
   @override
   String campaignTriedOn(String date) {
-    return 'Tried $date';
+    return 'Essayée le $date';
   }
 
   @override
   String campaignTriedEditLabel(String date) {
-    return 'Edit the note from $date';
+    return 'Modifier la note du $date';
   }
 
   @override
-  String get campaignTriedSave => 'Save note';
+  String get campaignTriedSave => 'Enregistrer la note';
 
   @override
-  String get campaignTriedRemove => 'Remove this try';
+  String get campaignTriedRemove => 'Retirer cet essai';
 
   @override
-  String get campaignTriedRemoveTitle => 'Remove this try?';
+  String get campaignTriedRemoveTitle => 'Retirer cet essai ?';
 
   @override
   String get campaignTriedRemoveBody =>
-      'It leaves your Collection, with its note.';
+      'Il quitte votre Collection, avec sa note.';
 
   @override
-  String get campaignTriedRemoved => 'Try removed';
+  String get campaignTriedRemoved => 'Essai retiré';
 
   @override
-  String get campaignTriedUnsavedTitle => 'Save your change?';
+  String get campaignTriedUnsavedTitle => 'Enregistrer la modification ?';
 
   @override
-  String get campaignTriedUnsavedBody => 'The note was changed but not saved.';
+  String get campaignTriedUnsavedBody =>
+      'La note a été modifiée mais pas enregistrée.';
 
   @override
-  String get campaignTriedDiscard => 'Discard';
+  String get campaignTriedDiscard => 'Abandonner';
 
   @override
-  String get campaignEarnedByReflecting => 'Earned by reflecting';
+  String get campaignEarnedByReflecting => 'Obtenu en réfléchissant';
 
   @override
-  String get campaignEarnedByTrying => 'Earned by trying';
+  String get campaignEarnedByTrying => 'Obtenu en essayant';
 
   @override
   String campaignEarnedByTryingWhat(String experiment) {
-    return 'Earned by trying: $experiment';
+    return 'Obtenu en essayant : $experiment';
   }
 
   @override
-  String get campaignEarnedByDoing => 'Earned by doing';
+  String get campaignEarnedByDoing => 'Obtenu en agissant';
 
   @override
-  String get campaignCollectionExtras => 'Extras chosen';
+  String get campaignCollectionExtras => 'Extras choisis';
 
   @override
-  String get campaignCollectionExtrasEmpty => 'No extras chosen yet.';
+  String get campaignCollectionExtrasEmpty =>
+      'Aucun extra choisi pour l’instant.';
 
   @override
   String get campaignTryScreenSubtitle =>
-      'Small experiments. Nothing joins your tasks unless you add it.';
+      'De petites expériences. Rien ne rejoint vos tâches sans vous.';
 
   @override
   String campaignTryMinutes(int minutes) {
-    return 'About $minutes min';
+    return 'Environ $minutes min';
   }
 
   @override
   String campaignTryXpLabel(int xp) {
-    return 'Earns $xp XP the first time';
+    return 'Rapporte $xp XP la première fois';
   }
 
   @override
   String campaignTryStepLabel(int number, String step) {
-    return 'Step $number: $step';
+    return 'Étape $number : $step';
   }
 
   @override
-  String get campaignTryNoteLabel => 'A note (optional)';
+  String get campaignTryNoteLabel => 'Une note (facultatif)';
 
   @override
-  String get campaignTryNoteHint => 'How did it go? One line is plenty.';
+  String get campaignTryNoteHint =>
+      'Comment ça s’est passé ? Une ligne suffit.';
 
   @override
-  String get campaignTryDone => 'I tried it';
+  String get campaignTryDone => 'Je l’ai essayée';
 
   @override
-  String get campaignTryRecorded => 'Saved to your Collection.';
+  String get campaignTryRecorded => 'Ajoutée à votre Collection.';
 
   @override
-  String get campaignTryAddTask => 'Add to my tasks';
+  String get campaignTryAddTask => 'Ajouter à mes tâches';
 
   @override
-  String get campaignTryAdded => 'Added to your tasks.';
+  String get campaignTryAdded => 'Ajoutée à vos tâches.';
 
   @override
-  String get campaignTryAlreadyTask => 'Already in your tasks.';
+  String get campaignTryAlreadyTask => 'Déjà dans vos tâches.';
 
   @override
-  String get campaignTryOpenTasks => 'Open tasks';
+  String get campaignTryOpenTasks => 'Ouvrir les tâches';
 
   @override
-  String get campaignTryPrevious => 'Previous';
+  String get campaignTryPrevious => 'Précédente';
 
   @override
   String campaignTryPosition(int index, int total) {
-    return '$index of $total';
+    return '$index sur $total';
   }
 
   @override
-  String get campaignTryEmpty => 'No experiments here yet.';
+  String get campaignTryEmpty => 'Pas encore d’expérience ici.';
 
   @override
   String get campaignNoticeScreenSubtitle =>
-      'Pick one. Each opens a question or a lesson.';
+      'Choisissez-en une. Chacune ouvre une question ou une leçon.';
 
   @override
-  String get campaignNoticeKindPrompt => 'Reflection';
+  String get campaignNoticeKindPrompt => 'Réflexion';
 
   @override
-  String get campaignNoticeKindLesson => 'Lesson';
+  String get campaignNoticeKindLesson => 'Leçon';
 
   @override
   String campaignNoticeOpens(String title) {
-    return 'Opens: $title';
+    return 'Ouvre : $title';
   }
 
   @override
-  String get campaignNoticeWritten => 'Written';
+  String get campaignNoticeWritten => 'Écrite';
 
   @override
-  String get campaignNoticeRead => 'Read';
+  String get campaignNoticeRead => 'Lue';
 
   @override
-  String get campaignNoticeEmpty => 'Nothing to notice here yet.';
+  String get campaignNoticeEmpty => 'Rien à remarquer ici pour l’instant.';
 
   @override
   String get campaignYoursScreenSubtitle =>
-      'Your look and motto. Extras are cosmetic and yours to keep.';
+      'Votre allure et votre devise. Les extras sont décoratifs et restent à vous.';
 
   @override
-  String get campaignRewardCardTitle => 'Reward picks';
+  String get campaignRewardCardTitle => 'Récompenses à choisir';
 
   @override
-  String get campaignRewardTitle => 'Choose your reward';
+  String get campaignRewardTitle => 'Choisir votre récompense';
 
   @override
   String campaignRewardPicks(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count picks to spend. What you choose stays yours.',
-      one: '1 pick to spend. What you choose stays yours.',
+      other: '$count choix à faire. Ce que vous choisissez reste à vous.',
+      one: '$count choix à faire. Ce que vous choisissez reste à vous.',
     );
     return '$_temp0';
   }
 
   @override
   String campaignRewardSuggestedLine(String item) {
-    return 'Suggested: $item';
+    return 'Suggestion : $item';
   }
 
   @override
   String campaignRewardSuggested(String kind) {
-    return 'Suggested · $kind';
+    return 'Suggestion · $kind';
   }
 
   @override
   String campaignRewardChoose(String item) {
-    return 'Choose $item';
+    return 'Choisir : $item';
   }
 
   @override
   String campaignRewardChosen(String item) {
-    return '$item is yours to keep.';
+    return '$item : à vous pour de bon.';
   }
 
   @override
-  String get campaignRewardWear => 'Wear it';
+  String get campaignRewardWear => 'Le porter';
 
   @override
   String campaignRewardPreviewLabel(String item) {
-    return 'Your avatar wearing $item';
+    return 'Votre avatar avec : $item';
   }
 
   @override
-  String get campaignRewardNone => 'No pick to spend right now.';
+  String get campaignRewardNone => 'Aucun choix à faire pour l’instant.';
 
   @override
   String get campaignRewardGameOff =>
-      'With the Campaign off, every extra is already open.';
+      'Campagne désactivée : tous les extras sont déjà ouverts.';
 
   @override
-  String get campaignPlaygroundSection => 'Playground';
+  String get campaignPlaygroundSection => 'Terrain de jeu';
 
   @override
-  String get campaignPlaygroundSubtitle => 'Small things to notice and try.';
+  String get campaignPlaygroundSubtitle =>
+      'De petites choses à remarquer et à essayer.';
 
   @override
   String get campaignPlaygroundGameOff =>
-      'No XP or levels while the Campaign is off. Turn it on in You.';
+      'Ni XP ni niveaux tant que la Campagne est désactivée. Activez-la dans Vous.';
 
   @override
-  String get campaignInviteTitle => 'Play the Campaign?';
+  String get campaignInviteTitle => 'Jouer à la Campagne ?';
 
   @override
-  String get campaignInviteBody => 'XP and levels for what you do.';
+  String get campaignInviteBody => 'XP et niveaux pour ce que vous faites.';
 
   @override
-  String get campaignInvitePlay => 'Play';
+  String get campaignInvitePlay => 'Jouer';
 
   @override
   String get campaignInvitePlaying =>
-      'The Campaign is on. It lives in Compass.';
+      'La Campagne est activée. Elle se trouve dans Boussole.';
 
   @override
-  String get campaignInviteLater => 'You can turn it on in You.';
+  String get campaignInviteLater => 'Vous pourrez l’activer dans Vous.';
 
   @override
   String campaignToastPick(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count new picks for your avatar',
-      one: 'A new pick for your avatar',
+      other: '$count nouveaux choix pour votre avatar',
+      one: 'Un nouveau choix pour votre avatar',
     );
     return '$_temp0';
   }
 
   @override
-  String get campaignQuestFromTry => 'Experiment';
+  String get campaignQuestFromTry => 'Expérience';
 
   @override
-  String get compassTitle => 'Compass';
+  String get compassTitle => 'Boussole';
 
   @override
-  String get compassSubtitle => 'Your direction, in your own words.';
+  String get compassSubtitle => 'Votre direction, avec vos mots.';
 
   @override
-  String get compassMissionsSubtitle => 'Your direction, in action.';
+  String get compassMissionsSubtitle => 'Votre direction, en action.';
 
   @override
-  String get compassSectionCompass => 'Compass';
+  String get compassSectionCompass => 'Boussole';
 
   @override
   String get compassSectionMissions => 'Missions';
 
   @override
-  String get compassHeroEyebrow => 'My direction';
+  String get compassHeroEyebrow => 'Ma direction';
 
   @override
   String get compassHeroEmpty =>
-      'Six short answers that point your days. Write them, or start from your evening answers.';
+      'Six réponses courtes pour orienter vos journées. Écrivez-les, ou partez de vos réponses du soir.';
 
   @override
   String compassLastUpdated(String date) {
-    return 'Last updated $date';
+    return 'Mise à jour le $date';
   }
 
   @override
   String get compassImportOfferTitleEmpty =>
-      'Start from your evening reflection';
+      'Partir de votre réflexion du soir';
 
   @override
-  String get compassImportOfferTitle => 'Evening answers can fill empty fields';
+  String get compassImportOfferTitle =>
+      'Vos réponses du soir peuvent remplir les champs vides';
 
   @override
   String get compassImportOfferBody =>
-      'Bring your evening words into empty fields. Nothing changes until you confirm.';
+      'Reprenez vos mots du soir dans les champs vides. Rien ne change sans votre accord.';
 
   @override
-  String get compassImportAction => 'Use my evening reflections';
+  String get compassImportAction => 'Utiliser mes réflexions du soir';
 
   @override
-  String get compassEmptyTitle => 'Your Compass is empty';
+  String get compassEmptyTitle => 'Votre Boussole est vide';
 
   @override
   String get compassEmptyBody =>
-      'Write each part below, or answer the evening questions first.';
+      'Écrivez chaque partie ci-dessous, ou répondez d’abord aux questions du soir.';
 
   @override
-  String get compassEmptyAction => 'Go to the evening reflection';
+  String get compassEmptyAction => 'Aller à la réflexion du soir';
 
   @override
   String get compassFieldAntiVision => 'Anti-vision';
 
   @override
   String get compassFieldAntiVisionHelp =>
-      'What I refuse to let my life become.';
+      'Ce que je refuse que ma vie devienne.';
 
   @override
   String get compassFieldAntiVisionHint =>
-      'The life I don\'t want, in a sentence or two';
+      'La vie que je ne veux pas, en une ou deux phrases';
 
   @override
   String get compassFieldVision => 'Vision';
 
   @override
-  String get compassFieldVisionHelp => 'What I\'m building toward.';
+  String get compassFieldVisionHelp => 'Ce vers quoi je construis.';
 
   @override
-  String get compassFieldVisionHint => 'The life I want to grow into';
+  String get compassFieldVisionHint => 'La vie que je veux faire grandir';
 
   @override
-  String get compassFieldYearGoal => 'One-year mission';
+  String get compassFieldYearGoal => 'Mission d’un an';
 
   @override
   String get compassFieldYearGoalHelp =>
-      'The outcome that would matter most a year from now.';
+      'Le résultat qui compterait le plus dans un an.';
 
   @override
-  String get compassFieldYearGoalHint => 'By this time next year, I…';
+  String get compassFieldYearGoalHint => 'D’ici un an, je…';
 
   @override
-  String get compassFieldMonthProject => 'One-month project';
+  String get compassFieldMonthProject => 'Projet du mois';
 
   @override
   String get compassFieldMonthProjectHelp =>
-      'One project for the next four weeks.';
+      'Un projet pour les quatre semaines à venir.';
 
   @override
   String get compassFieldMonthProjectHint =>
-      'This month I will build or finish…';
+      'Ce mois-ci, je vais créer ou terminer…';
 
   @override
-  String get compassFieldDailyLevers => 'Daily levers';
+  String get compassFieldDailyLevers => 'Leviers quotidiens';
 
   @override
-  String get compassFieldDailyLeversHelp => '2–3 actions, one per line.';
+  String get compassFieldDailyLeversHelp => '2 ou 3 actions, une par ligne.';
 
   @override
-  String get compassFieldDailyLeversHint => 'Walk 20 minutes\nRead 10 pages';
+  String get compassFieldDailyLeversHint => 'Marcher 20 minutes\nLire 10 pages';
 
   @override
-  String get compassFieldConstraints => 'Boundaries';
+  String get compassFieldConstraints => 'Limites';
 
   @override
-  String get compassFieldConstraintsHelp => 'What I won\'t sacrifice.';
+  String get compassFieldConstraintsHelp => 'Ce que je ne sacrifierai pas.';
 
   @override
   String get compassFieldConstraintsHint =>
-      'Sleep, family dinners, one rest day…';
+      'Le sommeil, les dîners en famille, un jour de repos…';
 
   @override
-  String get compassConstraintsOwnWords => 'Only you write this.';
+  String get compassConstraintsOwnWords =>
+      'Personne d’autre que vous ne l’écrit.';
 
   @override
-  String get compassConstraintsChip => 'Written only by you';
+  String get compassConstraintsChip => 'Écrit uniquement par vous';
 
   @override
-  String get compassLeversToQuests => 'Turn into quests';
+  String get compassLeversToQuests => 'En faire des quêtes';
 
   @override
-  String get compassOpenProject => 'Open month project';
+  String get compassOpenProject => 'Ouvrir le projet du mois';
 
   @override
   String get compassVersionsTitle => 'Versions';
 
   @override
-  String get compassVersionsBody => 'Save a snapshot before big changes.';
+  String get compassVersionsBody =>
+      'Gardez une copie avant les grands changements.';
 
   @override
-  String get compassSaveVersion => 'Save a version';
+  String get compassSaveVersion => 'Garder une version';
 
   @override
-  String get compassVersionSaved => 'Version saved';
+  String get compassVersionSaved => 'Version gardée';
 
   @override
   String compassViewVersions(int count) {
@@ -1177,105 +1188,106 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get compassVersionsSubtitle =>
-      'Snapshots of your Compass, newest first.';
+      'Copies de votre Boussole, la plus récente en premier.';
 
   @override
-  String get compassVersionsEmptyTitle => 'No versions yet';
+  String get compassVersionsEmptyTitle => 'Pas encore de version';
 
   @override
   String get compassVersionsEmptyBody =>
-      'Save a version whenever you want a snapshot to look back on.';
+      'Gardez une version quand vous voulez une copie à relire plus tard.';
 
   @override
-  String get compassVersionReasonManual => 'Saved by you';
+  String get compassVersionReasonManual => 'Gardée par vous';
 
   @override
-  String get compassVersionReasonBeforeImport => 'Before an import';
+  String get compassVersionReasonBeforeImport => 'Avant un import';
 
   @override
-  String get compassVersionReasonBeforeRestore => 'Before a restore';
+  String get compassVersionReasonBeforeRestore => 'Avant une restauration';
 
   @override
   String get compassVersionTitle => 'Version';
 
   @override
-  String get compassVersionEmptyField => 'Empty in this version';
+  String get compassVersionEmptyField => 'Vide dans cette version';
 
   @override
-  String get compassVersionSameAsNow => 'Same as now';
+  String get compassVersionSameAsNow => 'Comme aujourd’hui';
 
   @override
-  String get compassVersionDiffers => 'Differs from now';
+  String get compassVersionDiffers => 'Différent d’aujourd’hui';
 
   @override
   String get compassVersionReadOnly =>
-      'Read-only. Restoring saves your current Compass first.';
+      'Lecture seule. Restaurer garde d’abord votre Boussole actuelle.';
 
   @override
-  String get compassRestoreAction => 'Restore this version';
+  String get compassRestoreAction => 'Restaurer cette version';
 
   @override
-  String get compassRestoreConfirmTitle => 'Restore this version?';
+  String get compassRestoreConfirmTitle => 'Restaurer cette version ?';
 
   @override
   String get compassRestoreConfirmBody =>
-      'This replaces your Compass. The current one is saved first.';
+      'Elle remplace votre Boussole. L’actuelle est gardée d’abord.';
 
   @override
-  String get compassRestoreConfirm => 'Restore';
+  String get compassRestoreConfirm => 'Restaurer';
 
   @override
-  String get compassRestored => 'Version restored. The previous one was saved.';
+  String get compassRestored =>
+      'Version restaurée. La précédente a été gardée.';
 
   @override
-  String get compassImportTitle => 'Use my evening reflections';
+  String get compassImportTitle => 'Utiliser mes réflexions du soir';
 
   @override
   String get compassImportBody =>
-      'Your evening answers, as written. Pick the empty fields to fill.';
+      'Vos réponses du soir, telles qu’écrites. Choisissez les champs vides à remplir.';
 
   @override
   String compassImportFrom(String prompt) {
-    return 'From: $prompt';
+    return 'D’après : $prompt';
   }
 
   @override
-  String get compassImportKeeps => 'Keeps your current text';
+  String get compassImportKeeps => 'Garde votre texte actuel';
 
   @override
-  String get compassImportNoAnswer => 'No evening answer yet';
+  String get compassImportNoAnswer => 'Pas encore de réponse du soir';
 
   @override
   String get compassImportConstraintsNote =>
-      'Boundaries are only written by you.';
+      'Les limites ne sont écrites que par vous.';
 
   @override
   String get compassImportSnapshotNote =>
-      'Your current Compass is saved as a version first.';
+      'Votre Boussole actuelle est d’abord gardée comme version.';
 
   @override
   String compassImportConfirm(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Fill $count fields',
-      one: 'Fill 1 field',
-      zero: 'Choose a field',
+      other: 'Remplir $count champs',
+      one: 'Remplir $count champ',
+      zero: 'Choisissez un champ',
     );
     return '$_temp0';
   }
 
   @override
   String get compassImportNothing =>
-      'Nothing to bring over yet. Answer the evening questions first.';
+      'Rien à reprendre pour l’instant. Répondez d’abord aux questions du soir.';
 
   @override
   String compassImportDone(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count Compass fields filled from your evening answers.',
-      one: '1 Compass field filled from your evening answers.',
+      other: '$count champs de la Boussole remplis avec vos réponses du soir.',
+      one: '$count champ de la Boussole rempli avec vos réponses du soir.',
     );
     return '$_temp0';
   }
@@ -1284,231 +1296,234 @@ class AppLocalizationsFr extends AppLocalizations {
   String get journalTitle => 'Journal';
 
   @override
-  String get journalSubtitle => 'Think, reflect and grow, at your own pace.';
+  String get journalSubtitle => 'Penser, réfléchir et grandir, à votre rythme.';
 
   @override
   String get journalSectionNotes => 'Notes';
 
   @override
-  String get journalSectionReviews => 'Reviews';
+  String get journalSectionReviews => 'Bilans';
 
   @override
-  String get journalSectionLookBack => 'Look back';
+  String get journalSectionLookBack => 'Regards';
 
   @override
   String journalDateTime(String date, String time) {
-    return '$date, $time';
+    return '$date à $time';
   }
 
   @override
-  String get journalNotesIntro => 'Free writing. Stays on this phone.';
+  String get journalNotesIntro => 'Écriture libre. Reste sur ce téléphone.';
 
   @override
-  String get journalNewNote => 'New note';
+  String get journalNewNote => 'Nouvelle note';
 
   @override
-  String get journalNotesEmptyTitle => 'No notes yet';
+  String get journalNotesEmptyTitle => 'Pas encore de note';
 
   @override
   String get journalNotesEmptyBody =>
-      'An idea, a worry, something you noticed.';
+      'Une idée, un souci, quelque chose que vous avez remarqué.';
 
   @override
-  String get journalUntitled => 'Untitled note';
+  String get journalUntitled => 'Note sans titre';
 
   @override
-  String get journalEditedBadge => 'Edited';
+  String get journalEditedBadge => 'Modifiée';
 
   @override
-  String get journalEntryNewTitle => 'New note';
+  String get journalEntryNewTitle => 'Nouvelle note';
 
   @override
   String get journalEntryTitle => 'Note';
 
   @override
-  String get journalEntryTitleField => 'Title (optional)';
+  String get journalEntryTitleField => 'Titre (facultatif)';
 
   @override
-  String get journalEntryBodyField => 'Your note';
+  String get journalEntryBodyField => 'Votre note';
 
   @override
-  String get journalEntryBodyHint => 'Write freely. It saves as you type.';
+  String get journalEntryBodyHint =>
+      'Écrivez librement. Tout s’enregistre seul.';
 
   @override
   String journalEntryWritten(String when) {
-    return 'Written $when';
+    return 'Écrite le $when';
   }
 
   @override
   String journalEntryEdited(String when) {
-    return 'Last edited $when';
+    return 'Dernière modification : $when';
   }
 
   @override
   String get journalEntryPrivacy =>
-      'Only on this phone. Never shown in notifications.';
+      'Uniquement sur ce téléphone. Jamais dans les notifications.';
 
   @override
-  String get journalEntryDelete => 'Delete note';
+  String get journalEntryDelete => 'Supprimer la note';
 
   @override
-  String get journalEntryDeleteTitle => 'Delete this note?';
+  String get journalEntryDeleteTitle => 'Supprimer cette note ?';
 
   @override
   String get journalEntryDeleteBody =>
-      'The note is removed from this phone. This can\'t be undone.';
+      'La note est retirée de ce téléphone. C’est définitif.';
 
   @override
-  String get journalEntryDeleted => 'Note deleted';
+  String get journalEntryDeleted => 'Note supprimée';
 
   @override
-  String get journalEntryMissingTitle => 'This note isn\'t here any more';
+  String get journalEntryMissingTitle => 'Cette note n’est plus là';
 
   @override
   String get journalEntryMissingBody =>
-      'It may have been deleted. Your other notes are unchanged.';
+      'Elle a peut-être été supprimée. Vos autres notes n’ont pas changé.';
 
   @override
   String get journalReviewsIntro =>
-      'Once a week: what went well, what got in the way, what to try next.';
+      'Une fois par semaine : ce qui a marché, ce qui a gêné, quoi essayer ensuite.';
 
   @override
-  String get journalReviewThisWeek => 'Review this week';
+  String get journalReviewThisWeek => 'Faire le bilan de la semaine';
 
   @override
-  String get journalOpenThisWeek => 'Open this week\'s review';
+  String get journalOpenThisWeek => 'Ouvrir le bilan de la semaine';
 
   @override
-  String get journalReviewsEmptyTitle => 'No weekly reviews yet';
+  String get journalReviewsEmptyTitle => 'Pas encore de bilan';
 
   @override
-  String get journalReviewsEmptyBody => 'A few minutes. No right way.';
+  String get journalReviewsEmptyBody => 'Quelques minutes, à votre façon.';
 
   @override
   String journalWeekOf(String date) {
-    return 'Week of $date';
+    return 'Semaine du $date';
   }
 
   @override
-  String get journalReviewTitle => 'Weekly review';
+  String get journalReviewTitle => 'Bilan de la semaine';
 
   @override
   String get journalReviewEditIntro =>
-      'Write as much as you like. It saves as you type.';
+      'Écrivez autant que vous voulez. Tout s’enregistre seul.';
 
   @override
-  String get journalReviewChangeWeek => 'Change week';
+  String get journalReviewChangeWeek => 'Changer de semaine';
 
   @override
-  String get journalReviewWins => 'Wins';
+  String get journalReviewWins => 'Réussites';
 
   @override
   String get journalReviewWinsHint =>
-      'What went well this week, however small?';
+      'Qu’est-ce qui a marché cette semaine, même un peu ?';
 
   @override
-  String get journalReviewFriction => 'Friction';
+  String get journalReviewFriction => 'Frictions';
 
   @override
   String get journalReviewFrictionHint =>
-      'What got in the way? Just notice it. No blame needed.';
+      'Qu’est-ce qui a gêné ? Remarquez-le, simplement. Sans reproche.';
 
   @override
-  String get journalReviewNext => 'Next experiment';
+  String get journalReviewNext => 'Prochaine expérience';
 
   @override
-  String get journalReviewNextHint => 'One small thing to try next week.';
+  String get journalReviewNextHint =>
+      'Une petite chose à essayer la semaine prochaine.';
 
   @override
-  String get journalReviewSave => 'Save review';
+  String get journalReviewSave => 'Enregistrer le bilan';
 
   @override
-  String get journalReviewSaved => 'Review saved';
+  String get journalReviewSaved => 'Bilan enregistré';
 
   @override
-  String get journalReviewEdit => 'Edit review';
+  String get journalReviewEdit => 'Modifier le bilan';
 
   @override
-  String get journalReviewDelete => 'Delete review';
+  String get journalReviewDelete => 'Supprimer le bilan';
 
   @override
-  String get journalReviewDeleteTitle => 'Delete this review?';
+  String get journalReviewDeleteTitle => 'Supprimer ce bilan ?';
 
   @override
   String journalReviewDeleteBody(String date) {
-    return 'The review for the week of $date will be removed. This can\'t be undone.';
+    return 'Le bilan de la semaine du $date sera retiré. C’est définitif.';
   }
 
   @override
-  String get journalReviewDeleted => 'Review deleted';
+  String get journalReviewDeleted => 'Bilan supprimé';
 
   @override
-  String get journalReviewNothingWritten => 'Nothing written';
+  String get journalReviewNothingWritten => 'Rien d’écrit';
 
   @override
   String journalReviewWritten(String when) {
-    return 'Saved $when';
+    return 'Enregistré le $when';
   }
 
   @override
-  String get journalReviewMissingTitle => 'This review isn\'t here any more';
+  String get journalReviewMissingTitle => 'Ce bilan n’est plus là';
 
   @override
   String get journalReviewMissingBody =>
-      'It may have been deleted. Your other reviews are unchanged.';
+      'Il a peut-être été supprimé. Vos autres bilans n’ont pas changé.';
 
   @override
-  String get journalLookBackIntro => 'See how your words have changed.';
+  String get journalLookBackIntro => 'Voyez comment vos mots ont évolué.';
 
   @override
-  String get journalCompareTitle => 'Compare your Compass';
+  String get journalCompareTitle => 'Comparer votre Boussole';
 
   @override
-  String get journalCompareBody => 'Choose two moments to place side by side.';
+  String get journalCompareBody =>
+      'Choisissez deux moments à mettre côte à côte.';
 
   @override
-  String get journalCompareFirst => 'First';
+  String get journalCompareFirst => 'Premier';
 
   @override
   String get journalCompareSecond => 'Second';
 
   @override
-  String get journalCompareNow => 'Your Compass now';
+  String get journalCompareNow => 'Votre Boussole aujourd’hui';
 
   @override
   String journalComparePick(String which) {
-    return 'Choose what to show as “$which”';
+    return 'Choisir ce qui s’affiche en « $which »';
   }
 
   @override
   String journalComparePickerLabel(String which, String current) {
-    return '$which: $current. Tap to change.';
+    return '$which : $current. Touchez pour changer.';
   }
 
   @override
-  String get journalCompareEmptyTitle => 'No saved versions yet';
+  String get journalCompareEmptyTitle => 'Pas encore de version gardée';
 
   @override
   String get journalCompareEmptyBody =>
-      'Save a Compass version to compare it here later.';
+      'Gardez une version de la Boussole pour la comparer ici plus tard.';
 
   @override
-  String get journalOpenCompass => 'Open Compass';
+  String get journalOpenCompass => 'Ouvrir la Boussole';
 
   @override
-  String get journalCompareSame => 'Same in both';
+  String get journalCompareSame => 'Identique des deux côtés';
 
   @override
-  String get journalCompareEmptyField => 'Empty';
+  String get journalCompareEmptyField => 'Vide';
 
   @override
-  String get journalVersionManual => 'saved by you';
+  String get journalVersionManual => 'gardée par vous';
 
   @override
-  String get journalVersionBeforeImport => 'before an import';
+  String get journalVersionBeforeImport => 'avant un import';
 
   @override
-  String get journalVersionBeforeRestore => 'before a restore';
+  String get journalVersionBeforeRestore => 'avant une restauration';
 
   @override
   String journalVersionLabel(String date, String reason) {
@@ -1516,24 +1531,24 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get journalPastResetsTitle => 'Earlier resets';
+  String get journalPastResetsTitle => 'Recentrages précédents';
 
   @override
   String get journalPastResetsBody =>
-      'Starting a new reset keeps the earlier one here to read.';
+      'Commencer un nouveau recentrage garde le précédent ici, à relire.';
 
   @override
   String get journalPastResetsEmpty =>
-      'No earlier resets yet. Starting a new one keeps the old one here.';
+      'Pas encore de recentrage précédent. En commencer un nouveau garde l’ancien ici.';
 
   @override
   String journalResetStarted(String date) {
-    return 'Started $date';
+    return 'Commencé le $date';
   }
 
   @override
   String journalResetCompleted(String date) {
-    return 'Completed $date';
+    return 'Terminé le $date';
   }
 
   @override
@@ -1541,69 +1556,70 @@ class AppLocalizationsFr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count written answers',
-      one: '1 written answer',
-      zero: 'No written answers',
+      other: '$count réponses écrites',
+      one: '$count réponse écrite',
+      zero: 'Aucune réponse écrite',
     );
     return '$_temp0';
   }
 
   @override
-  String get journalPastResetTitle => 'Earlier reset';
+  String get journalPastResetTitle => 'Recentrage précédent';
 
   @override
   String get journalPastResetReadOnly =>
-      'Read-only. Your words are kept exactly as you wrote them.';
+      'Lecture seule. Vos mots sont gardés exactement comme vous les avez écrits.';
 
   @override
-  String get journalPastResetCompare => 'Show my current answers too';
+  String get journalPastResetCompare => 'Montrer aussi mes réponses actuelles';
 
   @override
-  String get journalPastResetThen => 'Then';
+  String get journalPastResetThen => 'Alors';
 
   @override
-  String get journalPastResetNow => 'Now';
+  String get journalPastResetNow => 'Aujourd’hui';
 
   @override
-  String get journalPastResetNoCurrent => 'No answer in your current reset';
+  String get journalPastResetNoCurrent =>
+      'Pas de réponse dans votre recentrage actuel';
 
   @override
-  String get journalPastResetSkipped => 'Skipped';
+  String get journalPastResetSkipped => 'Passée';
 
   @override
-  String get journalPastResetNone => 'This reset has no written answers.';
+  String get journalPastResetNone => 'Ce recentrage n’a pas de réponse écrite.';
 
   @override
-  String get journalPastResetOther => 'Other answers';
+  String get journalPastResetOther => 'Autres réponses';
 
   @override
-  String get journalPastResetMissingTitle => 'This reset isn\'t here any more';
+  String get journalPastResetMissingTitle => 'Ce recentrage n’est plus là';
 
   @override
-  String get journalPastResetUnfinished => 'Not finished';
+  String get journalPastResetUnfinished => 'Pas terminé';
 
   @override
   String journalPastResetLeftOpen(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count questions were left open.',
-      one: '1 question was left open.',
+      other: '$count questions sont restées ouvertes.',
+      one: '$count question est restée ouverte.',
     );
     return '$_temp0';
   }
 
   @override
-  String get journalPhaseMorning => 'Morning';
+  String get journalPhaseMorning => 'Matin';
 
   @override
-  String get journalPhaseDaytime => 'Daytime';
+  String get journalPhaseDaytime => 'Journée';
 
   @override
   String get journalPhaseBonus => 'Bonus';
 
   @override
-  String get journalPhaseEvening => 'Evening';
+  String get journalPhaseEvening => 'Soir';
 
   @override
   String get listenAction => 'Écouter';
@@ -1644,245 +1660,250 @@ class AppLocalizationsFr extends AppLocalizations {
       'Impossible de lire ce texte à voix haute. Réessayez.';
 
   @override
-  String get mediaAddPhoto => 'Add photo';
+  String get mediaAddPhoto => 'Ajouter une photo';
 
   @override
-  String get mediaRecord => 'Record';
+  String get mediaRecord => 'Enregistrer';
 
   @override
-  String get mediaRecordLabel => 'Record a voice note';
+  String get mediaRecordLabel => 'Enregistrer une note vocale';
 
   @override
-  String get mediaPhotoSourceTitle => 'Add a photo';
+  String get mediaPhotoSourceTitle => 'Ajouter une photo';
 
   @override
-  String get mediaTakePhoto => 'Take a photo';
+  String get mediaTakePhoto => 'Prendre une photo';
 
   @override
-  String get mediaChoosePhoto => 'Choose from your photos';
+  String get mediaChoosePhoto => 'Choisir dans vos photos';
 
   @override
-  String get mediaPhotoAdded => 'Photo added.';
+  String get mediaPhotoAdded => 'Photo ajoutée.';
 
   @override
-  String get mediaNotSavedYet => 'Added, but not saved on this phone yet.';
+  String get mediaNotSavedYet =>
+      'Ajouté, mais pas encore enregistré sur ce téléphone.';
 
   @override
   String mediaPhotoLabel(String date) {
-    return 'Photo, added $date';
+    return 'Photo ajoutée le $date';
   }
 
   @override
-  String get mediaPhotoOpenHint => 'Opens full screen';
+  String get mediaPhotoOpenHint => 'S’ouvre en plein écran';
 
   @override
-  String get mediaPhotoMissing => 'Missing';
+  String get mediaPhotoMissing => 'Absente';
 
   @override
   String get mediaPhotoMissingLabel =>
-      'This photo isn\'t on this phone any more.';
+      'Cette photo n’est plus sur ce téléphone.';
 
   @override
   String get mediaPhotoTitle => 'Photo';
 
   @override
   String mediaPhotoAddedOn(String date) {
-    return 'Added $date';
+    return 'Ajoutée le $date';
   }
 
   @override
-  String get mediaPhotoRemove => 'Remove photo';
+  String get mediaPhotoRemove => 'Retirer la photo';
 
   @override
-  String get mediaPhotoRemoveTitle => 'Remove this photo?';
+  String get mediaPhotoRemoveTitle => 'Retirer cette photo ?';
 
   @override
   String get mediaPhotoRemoveBody =>
-      'It\'s deleted from this phone. This can\'t be undone.';
+      'Elle est supprimée de ce téléphone. C’est définitif.';
 
   @override
-  String get mediaRemove => 'Remove';
+  String get mediaRemove => 'Retirer';
 
   @override
-  String get mediaPhotoRemoved => 'Photo removed.';
+  String get mediaPhotoRemoved => 'Photo retirée.';
 
   @override
   String get mediaRemovedNotSaved =>
-      'Removed, but not saved on this phone yet.';
+      'Retiré ici, mais pas encore enregistré sur ce téléphone.';
 
   @override
   String get mediaCameraDenied =>
-      'Camera access is off. Choose from your photos, or allow the camera in Settings.';
+      'L’accès à l’appareil photo est coupé. Choisissez dans vos photos, ou autorisez-le dans les Réglages.';
 
   @override
   String get mediaPhotosDenied =>
-      'Photo access is off. Allow it in Settings, or write instead.';
+      'L’accès aux photos est coupé. Autorisez-le dans les Réglages, ou écrivez plutôt.';
 
   @override
   String get mediaCameraUnavailable =>
-      'No camera here. Choose from your photos instead.';
+      'Pas d’appareil photo ici. Choisissez plutôt dans vos photos.';
 
   @override
   String get mediaPhotosUnavailable =>
-      'Photos can\'t be opened here. You can write instead.';
+      'Les photos ne peuvent pas s’ouvrir ici. Vous pouvez écrire à la place.';
 
   @override
-  String get mediaPickFailed => 'Couldn\'t open photos. Try again.';
+  String get mediaPickFailed => 'Les photos n’ont pas pu s’ouvrir. Réessayez.';
 
   @override
   String get mediaPhotoUnreadable =>
-      'That photo couldn\'t be read. Nothing was added.';
+      'Cette photo n’a pas pu être lue. Rien n’a été ajouté.';
 
   @override
   String get mediaPhotoTooLarge =>
-      'That photo is over 50 MB. Choose a smaller one.';
+      'Cette photo dépasse 50 Mo. Choisissez-en une plus petite.';
 
   @override
   String get mediaWriteFailed =>
-      'Couldn\'t save it on this phone. Storage may be full. Nothing was added.';
+      'Impossible de l’enregistrer sur ce téléphone. Le stockage est peut-être plein. Rien n’a été ajouté.';
 
   @override
   String get mediaEntryGone =>
-      'This entry isn\'t here any more. Nothing was added.';
+      'Cet élément n’est plus là. Rien n’a été ajouté.';
 
   @override
-  String get mediaRecoveredPhoto => 'A photo you took wasn\'t added yet.';
+  String get mediaRecoveredPhoto =>
+      'Une photo prise n’a pas encore été ajoutée.';
 
   @override
   String get mediaRecoveredRecording =>
-      'A recording was cut off when the app closed. It may be incomplete.';
+      'Un enregistrement a été coupé à la fermeture de l’app. Il est peut-être incomplet.';
 
   @override
-  String get mediaRecoveredKeep => 'Keep in a new note';
+  String get mediaRecoveredKeep => 'Garder dans une nouvelle note';
 
   @override
-  String get mediaRecoveredDiscard => 'Discard';
+  String get mediaRecoveredDiscard => 'Abandonner';
 
   @override
-  String get mediaRecoveredDiscardTitle => 'Discard it?';
+  String get mediaRecoveredDiscardTitle => 'L’abandonner ?';
 
   @override
-  String get mediaRecoveredDiscardBody => 'It\'s deleted from this phone.';
+  String get mediaRecoveredDiscardBody => 'Il est supprimé de ce téléphone.';
 
   @override
-  String get mediaRecoveredKept => 'Kept in a new note in your Journal.';
+  String get mediaRecoveredKept =>
+      'Gardé dans une nouvelle note de votre Journal.';
 
   @override
-  String get mediaDismiss => 'Dismiss';
+  String get mediaDismiss => 'Fermer';
 
   @override
-  String get mediaRecorderTitle => 'Voice note';
+  String get mediaRecorderTitle => 'Note vocale';
 
   @override
-  String get mediaRecorderStarting => 'Getting the microphone ready…';
+  String get mediaRecorderStarting => 'Préparation du micro…';
 
   @override
-  String get mediaRecorderRecording => 'Recording';
+  String get mediaRecorderRecording => 'Enregistrement';
 
   @override
-  String get mediaRecorderStop => 'Stop and save';
+  String get mediaRecorderStop => 'Arrêter et garder';
 
   @override
-  String get mediaRecorderDiscard => 'Discard';
+  String get mediaRecorderDiscard => 'Abandonner';
 
   @override
-  String get mediaRecorderDiscardTitle => 'Discard this recording?';
+  String get mediaRecorderDiscardTitle => 'Abandonner cet enregistrement ?';
 
   @override
-  String get mediaRecorderDiscardBody => 'What you recorded is deleted.';
+  String get mediaRecorderDiscardBody =>
+      'Ce que vous avez enregistré est supprimé.';
 
   @override
-  String get mediaRecorderSaving => 'Saving…';
+  String get mediaRecorderSaving => 'Enregistrement…';
 
   @override
   String get mediaRecorderStarted =>
-      'Recording. Tap Stop and save when you\'re done.';
+      'Enregistrement. Touchez Arrêter et garder à la fin.';
 
   @override
-  String get mediaRecorderSaved => 'Voice note saved.';
+  String get mediaRecorderSaved => 'Note vocale enregistrée.';
 
   @override
   String mediaRecorderInterrupted(String time) {
-    return 'Interrupted. The $time recorded before it is saved.';
+    return 'Interrompu. Ce qui a été enregistré avant ($time) est gardé.';
   }
 
   @override
-  String get mediaRecorderAgain => 'Record again';
+  String get mediaRecorderAgain => 'Enregistrer à nouveau';
 
   @override
   String get mediaMicDenied =>
-      'Microphone access is off. Allow it in Settings, or write instead.';
+      'L’accès au micro est coupé. Autorisez-le dans les Réglages, ou écrivez plutôt.';
 
   @override
   String get mediaMicUnavailable =>
-      'Recording isn\'t available on this phone. You can write instead.';
+      'L’enregistrement n’est pas disponible sur ce téléphone. Vous pouvez écrire à la place.';
 
   @override
   String get mediaRecordFailed =>
-      'The recording couldn\'t start. Try again, or write instead.';
+      'L’enregistrement n’a pas pu démarrer. Réessayez, ou écrivez plutôt.';
 
   @override
   String get mediaNothingRecorded =>
-      'Nothing was recorded. Try again, or write instead.';
+      'Rien n’a été enregistré. Réessayez, ou écrivez plutôt.';
 
   @override
   String get mediaRecordStorageFailed =>
-      'Couldn\'t save the recording. Storage may be full.';
+      'L’enregistrement n’a pas pu être gardé. Le stockage est peut-être plein.';
 
   @override
-  String get mediaWriteInstead => 'Write instead';
+  String get mediaWriteInstead => 'Écrire plutôt';
 
   @override
-  String get mediaVoiceNote => 'Voice note';
+  String get mediaVoiceNote => 'Note vocale';
 
   @override
-  String get mediaPartial => 'Partial';
+  String get mediaPartial => 'Partielle';
 
   @override
-  String get mediaPlay => 'Play voice note';
+  String get mediaPlay => 'Écouter la note vocale';
 
   @override
-  String get mediaPause => 'Pause voice note';
+  String get mediaPause => 'Mettre en pause la note vocale';
 
   @override
   String mediaPositionOf(String position, String length) {
-    return '$position of $length';
+    return '$position sur $length';
   }
 
   @override
   String get mediaVoiceMissing =>
-      'This recording isn\'t on this phone any more.';
+      'Cet enregistrement n’est plus sur ce téléphone.';
 
   @override
-  String get mediaPlayFailed => 'This recording can\'t be played.';
+  String get mediaPlayFailed => 'Cet enregistrement ne peut pas être lu.';
 
   @override
-  String get mediaVoiceRemove => 'Remove voice note';
+  String get mediaVoiceRemove => 'Retirer la note vocale';
 
   @override
-  String get mediaVoiceRemoveTitle => 'Remove this voice note?';
+  String get mediaVoiceRemoveTitle => 'Retirer cette note vocale ?';
 
   @override
   String get mediaVoiceRemoveBody =>
-      'The recording is deleted from this phone. This can\'t be undone.';
+      'L’enregistrement est supprimé de ce téléphone. C’est définitif.';
 
   @override
-  String get mediaVoiceRemoved => 'Voice note removed.';
+  String get mediaVoiceRemoved => 'Note vocale retirée.';
 
   @override
-  String get mediaTranscriptAdd => 'Type what you said';
+  String get mediaTranscriptAdd => 'Écrire ce que vous avez dit';
 
   @override
-  String get mediaTranscriptEdit => 'Edit your words';
+  String get mediaTranscriptEdit => 'Modifier vos mots';
 
   @override
-  String get mediaTranscriptTitle => 'Your words for this recording';
+  String get mediaTranscriptTitle => 'Vos mots pour cet enregistrement';
 
   @override
-  String get mediaTranscriptLabel => 'What you said (optional)';
+  String get mediaTranscriptLabel => 'Ce que vous avez dit (facultatif)';
 
   @override
-  String get mediaTranscriptSaved => 'Your words are saved with the recording.';
+  String get mediaTranscriptSaved =>
+      'Vos mots sont gardés avec l’enregistrement.';
 
   @override
   String mediaMinutes(int count) {
@@ -1890,7 +1911,7 @@ class AppLocalizationsFr extends AppLocalizations {
       count,
       locale: localeName,
       other: '$count minutes',
-      one: '1 minute',
+      one: '$count minute',
     );
     return '$_temp0';
   }
@@ -1900,67 +1921,69 @@ class AppLocalizationsFr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count seconds',
-      one: '1 second',
+      other: '$count secondes',
+      one: '$count seconde',
     );
     return '$_temp0';
   }
 
   @override
-  String get mediaPinnedTitle => 'Pinned memory';
+  String get mediaPinnedTitle => 'Souvenir épinglé';
 
   @override
   String mediaPinnedFromNote(String date) {
-    return 'From a note · $date';
+    return 'D’une note · $date';
   }
 
   @override
   String mediaPinnedFromTry(String date) {
-    return 'From an experiment · $date';
+    return 'D’une expérience · $date';
   }
 
   @override
   String mediaPinnedFromAttempt(String date) {
-    return 'From an attempt · $date';
+    return 'D’un essai · $date';
   }
 
   @override
-  String get mediaPinnedOpen => 'Open where it\'s from';
+  String get mediaPinnedOpen => 'Ouvrir l’original';
 
   @override
-  String get mediaPinnedPhoto => 'Pinned photo';
+  String get mediaPinnedPhoto => 'Photo épinglée';
 
   @override
-  String get mediaPinPhoto => 'Pin as memory';
+  String get mediaPinPhoto => 'Épingler en souvenir';
 
   @override
-  String get mediaUnpin => 'Unpin';
+  String get mediaUnpin => 'Désépingler';
 
   @override
-  String get mediaPinned => 'Pinned to the top of your Journal.';
+  String get mediaPinned => 'Épinglé en haut de votre Journal.';
 
   @override
-  String get mediaPinnedNotSaved => 'Pinned, but not saved on this phone yet.';
+  String get mediaPinnedNotSaved =>
+      'Épinglé, mais pas encore enregistré sur ce téléphone.';
 
   @override
-  String get mediaUnpinned => 'Unpinned. Nothing else changed.';
+  String get mediaUnpinned => 'Désépinglé. Rien d’autre n’a changé.';
 
   @override
   String get mediaUnpinnedNotSaved =>
-      'Unpinned, but not saved on this phone yet.';
+      'Désépinglé, mais pas encore enregistré sur ce téléphone.';
 
   @override
-  String get mediaPinWords => 'Pin';
+  String get mediaPinWords => 'Épingler';
 
   @override
-  String get mediaPinWordsTooltip => 'Pin selected words';
+  String get mediaPinWordsTooltip => 'Épingler les mots sélectionnés';
 
   @override
-  String get mediaPinSelectFirst => 'Select some words first, then tap Pin.';
+  String get mediaPinSelectFirst =>
+      'Sélectionnez des mots, puis touchez Épingler.';
 
   @override
   String get mediaPinNotFound =>
-      'Those words couldn\'t be pinned. Select them again.';
+      'Ces mots n’ont pas pu être épinglés. Sélectionnez-les à nouveau.';
 
   @override
   String mediaCountPhotos(int count) {
@@ -1968,7 +1991,7 @@ class AppLocalizationsFr extends AppLocalizations {
       count,
       locale: localeName,
       other: '$count photos',
-      one: '1 photo',
+      one: '$count photo',
     );
     return '$_temp0';
   }
@@ -1978,311 +2001,316 @@ class AppLocalizationsFr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count voice notes',
-      one: '1 voice note',
+      other: '$count notes vocales',
+      one: '$count note vocale',
     );
     return '$_temp0';
   }
 
   @override
   String mediaAnd(String first, String second) {
-    return '$first and $second';
+    return '$first et $second';
   }
 
   @override
-  String get mediaNoteVoiceOnly => 'Voice note';
+  String get mediaNoteVoiceOnly => 'Note vocale';
 
   @override
-  String get mediaNotePhotoOnly => 'Photo note';
+  String get mediaNotePhotoOnly => 'Note photo';
 
   @override
   String get mediaNoteDeleteBody =>
-      'The note, its photos and its recordings are removed from this phone. This can\'t be undone.';
+      'La note, ses photos et ses enregistrements sont retirés de ce téléphone. C’est définitif.';
 
   @override
-  String get mediaTodayRecordSaved => 'Voice note saved in your Journal.';
+  String get mediaTodayRecordSaved =>
+      'Note vocale enregistrée dans votre Journal.';
 
   @override
   String get mediaTodayRecordNotSaved =>
-      'Recorded, but not saved yet. Retry at the top.';
+      'Note vocale prise, mais pas encore enregistrée. Réessayez en haut.';
 
   @override
-  String get mediaTodayOpen => 'Open';
+  String get mediaTodayOpen => 'Ouvrir';
 
   @override
   String get mediaDataNoFiles =>
-      'Includes your words and settings. No photos or recordings yet.';
+      'Comprend vos mots et réglages. Pas encore de photos ni d’enregistrements.';
 
   @override
   String mediaDataWithFiles(String files, String size) {
-    return 'Includes your words and settings, plus $files ($size).';
+    return 'Comprend vos mots et réglages, plus $files ($size).';
   }
 
   @override
   String get mediaDataTooLarge =>
-      'Photos and recordings are over 256 MB, too large to restore. Export saves your words only; remove some for a full backup.';
+      'Photos et enregistrements dépassent 256 Mo, trop pour être restaurés. L’export ne garde que vos mots ; retirez-en pour une sauvegarde complète.';
 
   @override
-  String get mediaBackupTooLargeTitle => 'Too large to restore';
+  String get mediaBackupTooLargeTitle => 'Trop volumineux à restaurer';
 
   @override
   String get mediaBackupTooLargeBody =>
-      'Your photos and recordings are over 256 MB, more than a backup can bring back. Export your words and settings only?';
+      'Vos photos et enregistrements dépassent 256 Mo, plus qu’une sauvegarde ne peut restaurer. Exporter seulement vos mots et réglages ?';
 
   @override
-  String get mediaBackupWordsOnly => 'Export words only';
+  String get mediaBackupWordsOnly => 'Exporter les mots seulement';
 
   @override
   String get mediaBackupWordsShared =>
-      'Words and settings shared. Photos and recordings aren\'t in it.';
+      'Mots et réglages partagés. Les photos et enregistrements n’y sont pas.';
 
   @override
   String get mediaDataImportFormats =>
-      'Takes a .zip backup, or an older .json one.';
+      'Accepte une sauvegarde .zip, ou une plus ancienne en .json.';
 
   @override
   String mediaSizeKb(String size) {
-    return '$size KB';
+    return '$size Ko';
   }
 
   @override
   String mediaSizeMb(String size) {
-    return '$size MB';
+    return '$size Mo';
   }
 
   @override
   String mediaSizeGb(String size) {
-    return '$size GB';
+    return '$size Go';
   }
 
   @override
   String get missionsIntro =>
-      'Small steps toward your Compass. Rest counts too.';
+      'De petits pas vers votre Boussole. Le repos compte aussi.';
 
   @override
-  String get missionsToday => 'Today';
+  String get missionsToday => 'Aujourd’hui';
 
   @override
-  String get missionsTodayEmpty => 'Nothing planned. Add a quest, or rest.';
+  String get missionsTodayEmpty =>
+      'Rien de prévu. Ajoutez une quête, ou reposez-vous.';
 
   @override
-  String get missionsLater => 'Anytime & upcoming';
+  String get missionsLater => 'Sans date et à venir';
 
   @override
   String get missionsLaterEmpty =>
-      'Quests without a date, or planned for later, appear here.';
+      'Les quêtes sans date, ou prévues plus tard, apparaissent ici.';
 
   @override
   String missionsDone(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Done ($count)',
-      zero: 'Done',
+      other: 'Faites ($count)',
+      zero: 'Faites',
     );
     return '$_temp0';
   }
 
   @override
-  String get missionsAddQuest => 'Add a quest';
+  String get missionsAddQuest => 'Ajouter une quête';
 
   @override
   String missionsQuestMarkDone(String title) {
-    return 'Mark \'$title\' done';
+    return 'Marquer « $title » comme faite';
   }
 
   @override
   String missionsQuestOptions(String title) {
-    return 'Options for \'$title\'';
+    return 'Options pour « $title »';
   }
 
   @override
-  String get missionsQuestDaily => 'Every day';
+  String get missionsQuestDaily => 'Chaque jour';
 
   @override
   String missionsQuestDue(String date) {
-    return 'Planned for $date';
+    return 'Prévue le $date';
   }
 
   @override
-  String get missionsQuestDoneToday => 'Done today';
+  String get missionsQuestDoneToday => 'Faite aujourd’hui';
 
   @override
   String missionsQuestDoneOn(String date) {
-    return 'Done $date';
+    return 'Faite le $date';
   }
 
   @override
   String missionsQuestMovedToDone(String title) {
-    return '\'$title\' moved to Done';
+    return '« $title » passée dans Faites';
   }
 
   @override
-  String get missionsUndo => 'Undo';
+  String get missionsUndo => 'Annuler';
 
   @override
-  String get missionsQuestDeleted => 'Quest deleted';
+  String get missionsQuestDeleted => 'Quête supprimée';
 
   @override
-  String get missionsQuestEdit => 'Edit';
+  String get missionsQuestEdit => 'Modifier';
 
   @override
-  String get missionsQuestDelete => 'Delete';
+  String get missionsQuestDelete => 'Supprimer';
 
   @override
-  String get missionsViewLabel => 'Show quests as';
+  String get missionsViewLabel => 'Afficher les quêtes en';
 
   @override
-  String get missionsViewList => 'List';
+  String get missionsViewList => 'Liste';
 
   @override
-  String get missionsViewBoard => 'Board';
+  String get missionsViewBoard => 'Tableau';
 
   @override
   String get missionsBoardHint =>
-      'Hold a card to drag it, or use its move button.';
+      'Maintenez une carte pour la déplacer, ou utilisez son bouton.';
 
   @override
-  String get missionsBoardTodayFilter => 'Today';
+  String get missionsBoardTodayFilter => 'Aujourd’hui';
 
   @override
   String get missionsBoardTodayFilterTooltip =>
-      'Only daily quests and those planned for today';
+      'Seulement les quêtes quotidiennes et celles prévues aujourd’hui';
 
   @override
-  String get missionsLaneLater => 'Later';
+  String get missionsLaneLater => 'Plus tard';
 
   @override
-  String get missionsLaneReady => 'Ready';
+  String get missionsLaneReady => 'Prêtes';
 
   @override
-  String get missionsLaneDoing => 'Doing';
+  String get missionsLaneDoing => 'En cours';
 
   @override
-  String get missionsLaneDone => 'Done';
+  String get missionsLaneDone => 'Faites';
 
   @override
   String missionsLaneSummary(String lane, int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count quests',
-      one: '1 quest',
-      zero: 'no quests',
+      other: '$count quêtes',
+      one: '$count quête',
+      zero: 'aucune quête',
     );
     return '$lane, $_temp0';
   }
 
   @override
-  String get missionsLaneLaterEmpty => 'Park ideas here for another time.';
+  String get missionsLaneLaterEmpty =>
+      'Rangez ici les idées pour une autre fois.';
 
   @override
-  String get missionsLaneReadyEmpty => 'Quests ready to start.';
+  String get missionsLaneReadyEmpty => 'Les quêtes prêtes à commencer.';
 
   @override
-  String get missionsLaneDoingEmpty => 'Move a quest here when you start it.';
+  String get missionsLaneDoingEmpty =>
+      'Placez ici une quête quand vous la commencez.';
 
   @override
-  String get missionsLaneDoneEmpty => 'Finished quests land here.';
+  String get missionsLaneDoneEmpty => 'Les quêtes terminées arrivent ici.';
 
   @override
-  String get missionsLaneTodayEmpty => 'Nothing here for today.';
+  String get missionsLaneTodayEmpty => 'Rien ici pour aujourd’hui.';
 
   @override
   String get missionsLaneDoneFolded =>
-      'Folded away. Drop a card here to finish it.';
+      'Repliée. Déposez une carte ici pour la terminer.';
 
   @override
-  String get missionsBoardDoingNote => 'Fewer in Doing can feel lighter.';
+  String get missionsBoardDoingNote => 'Moins en cours, c’est plus léger.';
 
   @override
   String missionsBoardAddTo(String lane) {
-    return 'Add to $lane';
+    return 'Ajouter à $lane';
   }
 
   @override
   String missionsBoardMoveTooltip(String title) {
-    return 'Move \'$title\' to…';
+    return 'Déplacer « $title » vers…';
   }
 
   @override
   String missionsBoardMoveToLane(String lane) {
-    return 'Move to $lane';
+    return 'Déplacer vers $lane';
   }
 
   @override
   String missionsBoardMoved(String title, String lane) {
-    return '\'$title\' moved to $lane';
+    return '« $title » déplacée vers $lane';
   }
 
   @override
   String missionsBoardDoneForToday(String title) {
-    return '\'$title\' done for today';
+    return '« $title » faite pour aujourd’hui';
   }
 
   @override
-  String get missionsBoardDropHere => 'Drop to move here';
+  String get missionsBoardDropHere => 'Déposer ici pour déplacer';
 
   @override
-  String get missionsBoardHiddenByFilter => 'Added. The Today filter hides it.';
+  String get missionsBoardHiddenByFilter =>
+      'Ajoutée. Le filtre Aujourd’hui la masque.';
 
   @override
-  String get missionsBoardShowAll => 'Show all';
+  String get missionsBoardShowAll => 'Tout afficher';
 
   @override
-  String get missionsNewQuestTitle => 'New quest';
+  String get missionsNewQuestTitle => 'Nouvelle quête';
 
   @override
-  String get missionsEditQuestTitle => 'Edit quest';
+  String get missionsEditQuestTitle => 'Modifier la quête';
 
   @override
-  String get missionsQuestTitleLabel => 'What will you do?';
+  String get missionsQuestTitleLabel => 'Que ferez-vous ?';
 
   @override
-  String get missionsQuestTitleHint => 'Walk 20 minutes';
+  String get missionsQuestTitleHint => 'Marcher 20 minutes';
 
   @override
-  String get missionsQuestTitleRequired => 'Give the quest a few words.';
+  String get missionsQuestTitleRequired => 'Donnez quelques mots à la quête.';
 
   @override
-  String get missionsQuestRepeat => 'Repeat every day';
+  String get missionsQuestRepeat => 'Répéter chaque jour';
 
   @override
-  String get missionsQuestRepeatHelp => 'Shows in Today every day.';
+  String get missionsQuestRepeatHelp => 'Chaque jour dans Aujourd’hui.';
 
   @override
-  String get missionsQuestDueLabel => 'Date (optional)';
+  String get missionsQuestDueLabel => 'Date (facultatif)';
 
   @override
-  String get missionsQuestNoDate => 'Anytime';
+  String get missionsQuestNoDate => 'Sans date';
 
   @override
-  String get missionsQuestChooseDate => 'Choose a date';
+  String get missionsQuestChooseDate => 'Choisir une date';
 
   @override
-  String get missionsQuestClearDate => 'Remove date';
+  String get missionsQuestClearDate => 'Retirer la date';
 
   @override
-  String get missionsQuestSave => 'Save quest';
+  String get missionsQuestSave => 'Enregistrer la quête';
 
   @override
-  String get missionsQuestDeleteAction => 'Delete quest';
+  String get missionsQuestDeleteAction => 'Supprimer la quête';
 
   @override
-  String get missionsLeversTitle => 'Turn your daily levers into quests';
+  String get missionsLeversTitle => 'Faire de vos leviers des quêtes';
 
   @override
   String get missionsLeversBody =>
-      'From your Compass. Edit, then add the ones you want.';
+      'Tirés de votre Boussole. Modifiez, puis ajoutez ceux que vous voulez.';
 
   @override
   String missionsLeversInclude(String title) {
-    return 'Include \'$title\'';
+    return 'Inclure « $title »';
   }
 
   @override
   String missionsLeversDraftLabel(int index) {
-    return 'Quest $index';
+    return 'Quête $index';
   }
 
   @override
@@ -2290,9 +2318,9 @@ class AppLocalizationsFr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Add $count daily quests',
-      one: 'Add 1 daily quest',
-      zero: 'Choose at least one',
+      other: 'Ajouter $count quêtes quotidiennes',
+      one: 'Ajouter $count quête quotidienne',
+      zero: 'Choisissez-en au moins une',
     );
     return '$_temp0';
   }
@@ -2302,442 +2330,447 @@ class AppLocalizationsFr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count daily quests added.',
-      one: '1 daily quest added.',
-      zero: 'Nothing new to add. Those quests already exist.',
+      other: '$count quêtes quotidiennes ajoutées.',
+      one: '$count quête quotidienne ajoutée.',
+      zero: 'Rien de nouveau à ajouter. Ces quêtes existent déjà.',
     );
     return '$_temp0';
   }
 
   @override
-  String get missionsLeversNotNow => 'Not now';
+  String get missionsLeversNotNow => 'Pas maintenant';
 
   @override
-  String get missionsProjectTitle => 'Month project';
+  String get missionsProjectTitle => 'Projet du mois';
 
   @override
   String get missionsProjectEmpty =>
-      'Plan one project for the next four weeks.';
+      'Prévoyez un projet pour les quatre semaines à venir.';
 
   @override
   String missionsProjectFromCompass(String title) {
-    return 'From your Compass: $title';
+    return 'D’après votre Boussole : $title';
   }
 
   @override
-  String get missionsProjectUntitled => 'Untitled project';
+  String get missionsProjectUntitled => 'Projet sans titre';
 
   @override
   String missionsProjectMilestones(int done, int total) {
-    return '$done of $total milestones done';
+    return 'Jalons franchis : $done sur $total';
   }
 
   @override
-  String get missionsStatusPlanned => 'Planned';
+  String get missionsStatusPlanned => 'Prévu';
 
   @override
-  String get missionsStatusActive => 'Active';
+  String get missionsStatusActive => 'En cours';
 
   @override
-  String get missionsStatusPaused => 'Paused';
+  String get missionsStatusPaused => 'En pause';
 
   @override
-  String get missionsStatusDone => 'Done';
+  String get missionsStatusDone => 'Terminé';
 
   @override
   String get missionsProjectScreenSubtitle =>
-      'One project, a few milestones, and a look back.';
+      'Un projet, quelques jalons, et un regard en arrière.';
 
   @override
-  String get missionsProjectTitleLabel => 'Project';
+  String get missionsProjectTitleLabel => 'Projet';
 
   @override
   String get missionsProjectTitleHint =>
-      'What will you build or finish this month?';
+      'Que voulez-vous créer ou terminer ce mois-ci ?';
 
   @override
-  String get missionsProjectLinked => 'Linked to your Compass';
+  String get missionsProjectLinked => 'Relié à votre Boussole';
 
   @override
   String missionsProjectOfferUpdate(String title) {
-    return 'Your Compass says: $title. Update it to match?';
+    return 'Votre Boussole indique : $title. La mettre à jour ?';
   }
 
   @override
   String get missionsProjectOfferAdd =>
-      'Add this as the one-month project in your Compass?';
+      'En faire le projet du mois de votre Boussole ?';
 
   @override
-  String get missionsProjectUpdateCompass => 'Update Compass';
+  String get missionsProjectUpdateCompass => 'Mettre à jour la Boussole';
 
   @override
-  String get missionsProjectAddCompass => 'Add to Compass';
+  String get missionsProjectAddCompass => 'Ajouter à la Boussole';
 
   @override
-  String get missionsProjectKeep => 'Keep as is';
+  String get missionsProjectKeep => 'Laisser tel quel';
 
   @override
-  String get missionsProjectCompassUpdated => 'Compass updated';
+  String get missionsProjectCompassUpdated => 'Boussole mise à jour';
 
   @override
-  String get missionsProjectStatus => 'Status';
+  String get missionsProjectStatus => 'État';
 
   @override
-  String get missionsMilestones => 'Milestones';
+  String get missionsMilestones => 'Jalons';
 
   @override
   String get missionsMilestonesEmpty =>
-      'Break the project into a few steps someone could see.';
+      'Découpez le projet en quelques étapes visibles.';
 
   @override
-  String get missionsMilestoneAdd => 'Add a milestone';
+  String get missionsMilestoneAdd => 'Ajouter un jalon';
 
   @override
-  String get missionsMilestoneNew => 'New milestone';
+  String get missionsMilestoneNew => 'Nouveau jalon';
 
   @override
-  String get missionsMilestoneRename => 'Rename milestone';
+  String get missionsMilestoneRename => 'Renommer le jalon';
 
   @override
   String missionsMilestoneMarkDone(String title) {
-    return 'Mark milestone \'$title\' done';
+    return 'Marquer le jalon « $title » comme franchi';
   }
 
   @override
   String missionsMilestoneRenameLabel(String title) {
-    return 'Rename \'$title\'';
+    return 'Renommer « $title »';
   }
 
   @override
   String missionsMilestoneDeleteLabel(String title) {
-    return 'Delete \'$title\'';
+    return 'Supprimer « $title »';
   }
 
   @override
-  String get missionsMilestoneDeleted => 'Milestone deleted';
+  String get missionsMilestoneDeleted => 'Jalon supprimé';
 
   @override
-  String get missionsRetro => 'Looking back';
+  String get missionsRetro => 'Regard en arrière';
 
   @override
   String get missionsRetroHelp =>
-      'What worked, what you learned, what you\'d change.';
+      'Ce qui a marché, ce que vous avez appris, ce que vous changeriez.';
 
   @override
-  String get missionsRetroHint => 'Your notes';
+  String get missionsRetroHint => 'Vos notes';
 
   @override
-  String get missionsProjectClear => 'Delete this project';
+  String get missionsProjectClear => 'Supprimer ce projet';
 
   @override
-  String get missionsProjectClearTitle => 'Delete this project?';
+  String get missionsProjectClearTitle => 'Supprimer ce projet ?';
 
   @override
   String get missionsProjectClearBody =>
-      'Its title, milestones and notes go for good. Your Compass, tasks and attempts stay.';
+      'Son titre, ses jalons et ses notes disparaissent. Votre Boussole, vos tâches et vos essais restent.';
 
   @override
-  String get missionsProjectClearConfirm => 'Delete';
+  String get missionsProjectClearConfirm => 'Supprimer';
 
   @override
-  String get missionsPathTitle => '30-day path';
+  String get missionsPathTitle => 'Parcours de 30 jours';
 
   @override
-  String get missionsPathIntro => 'Any day is open — go at your own pace.';
+  String get missionsPathIntro =>
+      'Chaque jour est ouvert : allez à votre rythme.';
 
   @override
   String missionsPathWrittenCount(int count) {
-    return '$count of 30 written';
+    return 'Jours écrits : $count sur 30';
   }
 
   @override
-  String get missionsStageObserve => 'Observe';
+  String get missionsStageObserve => 'Observer';
 
   @override
-  String get missionsStageExperiment => 'Experiment';
+  String get missionsStageExperiment => 'Expérimenter';
 
   @override
-  String get missionsStageBuild => 'Build';
+  String get missionsStageBuild => 'Construire';
 
   @override
-  String get missionsStageAdjust => 'Adjust';
+  String get missionsStageAdjust => 'Ajuster';
 
   @override
   String get missionsStageObserveHelp =>
-      'Notice what happens, without judging it.';
+      'Remarquez ce qui se passe, sans juger.';
 
   @override
   String get missionsStageExperimentHelp =>
-      'Try small changes and see what helps.';
+      'Essayez de petits changements et voyez ce qui aide.';
 
   @override
-  String get missionsStageBuildHelp => 'Keep what helps and make it easier.';
+  String get missionsStageBuildHelp =>
+      'Gardez ce qui aide et rendez-le plus facile.';
 
   @override
-  String get missionsStageAdjustHelp => 'Look back and adjust your direction.';
+  String get missionsStageAdjustHelp =>
+      'Regardez en arrière et ajustez votre direction.';
 
   @override
   String missionsStageDays(int from, int to) {
-    return 'Days $from–$to';
+    return 'Jours $from à $to';
   }
 
   @override
   String missionsDayLabel(int day) {
-    return 'Day $day';
+    return 'Jour $day';
   }
 
   @override
-  String get missionsDayWritten => 'Written';
+  String get missionsDayWritten => 'Écrit';
 
   @override
   String missionsDayStage(int day, String stage) {
-    return 'Day $day · $stage';
+    return 'Jour $day · $stage';
   }
 
   @override
   String missionsDayAnswerLabel(int day) {
-    return 'Your note for day $day';
+    return 'Votre note du jour $day';
   }
 
   @override
-  String get missionsDayAnswerHint => 'Write as much or as little as you like.';
+  String get missionsDayAnswerHint =>
+      'Écrivez autant ou aussi peu que vous voulez.';
 
   @override
   String missionsDayPrevious(int day) {
-    return 'Day $day';
+    return 'Jour $day';
   }
 
   @override
   String missionsDayNext(int day) {
-    return 'Day $day';
+    return 'Jour $day';
   }
 
   @override
   String missionsDayPreviousLabel(int day) {
-    return 'Previous: day $day';
+    return 'Précédent : jour $day';
   }
 
   @override
   String missionsDayNextLabel(int day) {
-    return 'Next: day $day';
+    return 'Suivant : jour $day';
   }
 
   @override
-  String get missionsDayMissing => 'This day isn\'t available.';
+  String get missionsDayMissing => 'Ce jour n’est pas disponible.';
 
   @override
   String get onboardingBrandIntro =>
-      'One honest day of reflection. Then small steps.';
+      'Une journée de réflexion honnête. Puis de petits pas.';
 
   @override
-  String get onboardingBegin => 'Begin';
+  String get onboardingBegin => 'Commencer';
 
   @override
-  String get onboardingNext => 'Next';
+  String get onboardingNext => 'Suivant';
 
   @override
-  String get onboardingStart => 'Start';
+  String get onboardingStart => 'C’est parti';
 
   @override
   String onboardingStepCounter(int current, int total) {
-    return 'Step $current of $total';
+    return 'Étape $current sur $total';
   }
 
   @override
-  String get onboardingLimitsTitle => 'Before you start';
+  String get onboardingLimitsTitle => 'Avant de commencer';
 
   @override
-  String get onboardingLimitsIntro => 'A few honest words.';
+  String get onboardingLimitsIntro => 'Quelques mots honnêtes.';
 
   @override
-  String get onboardingLimitsClarityTitle => 'One day can bring clarity';
+  String get onboardingLimitsClarityTitle => 'Une journée peut éclairer';
 
   @override
   String get onboardingLimitsClarityBody =>
-      'See where you stand and what you want.';
+      'Voyez où vous en êtes et ce que vous voulez.';
 
   @override
   String get onboardingLimitsNoGuaranteeTitle =>
-      'It won\'t fix your life overnight';
+      'Pas de miracle du jour au lendemain';
 
   @override
   String get onboardingLimitsNoGuaranteeBody =>
-      'Change comes from small steps, week by week.';
+      'Le changement vient de petits pas, semaine après semaine.';
 
   @override
-  String get onboardingLimitsNotTherapyTitle => 'Not therapy';
+  String get onboardingLimitsNotTherapyTitle => 'Pas une thérapie';
 
   @override
   String get onboardingLimitsNotTherapyBody =>
-      'No diagnosis. For help, see You › Support.';
+      'Aucun diagnostic. Pour de l’aide : Vous › Aide.';
 
   @override
-  String get onboardingLimitsControlTitle => 'You stay in control';
+  String get onboardingLimitsControlTitle => 'Vous gardez la main';
 
   @override
   String get onboardingLimitsControlBody =>
-      'Skip, soften or pause any question.';
+      'Passez, adoucissez ou suspendez chaque question.';
 
   @override
-  String get onboardingAdultConfirm => 'I\'m 18 or older';
+  String get onboardingAdultConfirm => 'J’ai 18 ans ou plus';
 
   @override
-  String get onboardingAdultConfirmHelp => 'Made for adults.';
+  String get onboardingAdultConfirmHelp => 'Conçu pour les adultes.';
 
   @override
   String get onboardingAdultRequired =>
-      'Confirm you\'re 18 or older to continue.';
+      'Confirmez avoir 18 ans ou plus pour continuer.';
 
   @override
-  String get onboardingCreditTitle => 'Inspired by';
+  String get onboardingCreditTitle => 'Inspiré par';
 
   @override
   String onboardingCreditByline(String author, String date) {
-    return 'by $author · $date';
+    return 'par $author · $date';
   }
 
   @override
-  String get onboardingCreditArticle => 'Read the original article';
+  String get onboardingCreditArticle => 'Lire l’article original';
 
   @override
   String get onboardingCreditNewsletter =>
-      'Read it in the author\'s newsletter';
+      'Le lire dans la newsletter de l’auteur';
 
   @override
-  String get onboardingCreditNoNeed => 'No need to read it first.';
+  String get onboardingCreditNoNeed => 'Inutile de le lire avant.';
 
   @override
-  String get onboardingPaceTitle => 'Choose your pace';
+  String get onboardingPaceTitle => 'Choisissez votre rythme';
 
   @override
-  String get onboardingPaceIntro => 'Change it anytime in You.';
+  String get onboardingPaceIntro => 'Modifiable à tout moment dans Vous.';
 
   @override
-  String get onboardingPaceOneDayTitle => 'One day';
+  String get onboardingPaceOneDayTitle => 'Une journée';
 
   @override
-  String get onboardingPaceOneDayBody =>
-      'Morning, daytime and evening in one day.';
+  String get onboardingPaceOneDayBody => 'Matin, journée et soir en un jour.';
 
   @override
-  String get onboardingPaceFlexibleTitle => 'Flexible';
+  String get onboardingPaceFlexibleTitle => 'Libre';
 
   @override
-  String get onboardingPaceFlexibleBody => 'Spread it out. Pick up anytime.';
+  String get onboardingPaceFlexibleBody =>
+      'Étalez-le. Reprenez quand vous voulez.';
 
   @override
-  String get onboardingPaceNoLock => 'Nothing locks or expires.';
+  String get onboardingPaceNoLock => 'Rien ne se verrouille ni n’expire.';
 
   @override
-  String get onboardingNameTitle => 'What should we call you?';
+  String get onboardingNameTitle => 'Comment vous appeler ?';
 
   @override
-  String get onboardingNameIntro => 'Optional. Stays on this phone.';
+  String get onboardingNameIntro => 'Facultatif. Reste sur ce téléphone.';
 
   @override
-  String get onboardingNameLabel => 'Name (optional)';
+  String get onboardingNameLabel => 'Prénom (facultatif)';
 
   @override
   String get onboardingNameHelp =>
-      'Leave it empty and we\'ll call you Traveler.';
+      'Sans prénom, nous dirons « âme voyageuse ».';
 
   @override
-  String get onboardingPrivacyTitle => 'Your words stay yours';
+  String get onboardingPrivacyTitle => 'Vos mots restent à vous';
 
   @override
-  String get onboardingPrivacyStorageHeading => 'Where your writing lives';
+  String get onboardingPrivacyStorageHeading => 'Où vivent vos écrits';
 
   @override
-  String get onboardingPrivacyNoAccount => 'No account, ads or analytics.';
+  String get onboardingPrivacyNoAccount =>
+      'Ni compte, ni publicité, ni statistiques.';
 
   @override
   String get onboardingPrivacyControl =>
-      'Export or delete anytime in You › Your data.';
+      'Exportez ou supprimez tout dans Vous › Vos données.';
 
   @override
-  String get personaFeatureTitle => 'Your strategist';
+  String get personaFeatureTitle => 'Votre stratège';
 
   @override
-  String get personaAvatarLabel => 'Your avatar';
+  String get personaAvatarLabel => 'Votre avatar';
 
   @override
-  String get personaNoAvatar => 'No avatar yet';
+  String get personaNoAvatar => 'Pas encore d’avatar';
 
   @override
-  String get personaCreate => 'Create your avatar';
+  String get personaCreate => 'Créer votre avatar';
 
   @override
-  String get personaEdit => 'Edit your avatar';
+  String get personaEdit => 'Modifier votre avatar';
 
   @override
   String get personaSilhouette => 'Silhouette';
 
   @override
-  String get personaLocked => 'Locked';
+  String get personaLocked => 'Verrouillé';
 
   @override
-  String get personaUnlockWithPick => 'Choose it with a reward pick';
+  String get personaUnlockWithPick => 'À choisir avec une récompense';
 
   @override
   String personaNextPickStop(String place) {
-    return 'Next pick at $place';
+    return 'Prochain choix à l’étape : $place';
   }
 
   @override
   String personaNextPickAchievement(String achievement) {
-    return 'Next pick: earn $achievement';
+    return 'Prochain choix : obtenir $achievement';
   }
 
   @override
-  String get personaCategorySkin => 'Skin';
+  String get personaCategorySkin => 'Peau';
 
   @override
-  String get personaCategoryFace => 'Face';
+  String get personaCategoryFace => 'Visage';
 
   @override
-  String get personaCategoryHair => 'Hair';
+  String get personaCategoryHair => 'Cheveux';
 
   @override
-  String get personaCategoryHairColor => 'Hair colour';
+  String get personaCategoryHairColor => 'Couleur des cheveux';
 
   @override
-  String get personaCategoryFacialHair => 'Facial hair';
+  String get personaCategoryFacialHair => 'Pilosité faciale';
 
   @override
-  String get personaCategoryEyewear => 'Glasses';
+  String get personaCategoryEyewear => 'Lunettes';
 
   @override
-  String get personaCategoryMark => 'Marks';
+  String get personaCategoryMark => 'Signes';
 
   @override
   String get personaCategoryExpression => 'Expression';
 
   @override
-  String get personaCategoryHeadwear => 'Headwear';
+  String get personaCategoryHeadwear => 'Couvre-chef';
 
   @override
-  String get personaCategoryGarment => 'Clothing';
+  String get personaCategoryGarment => 'Vêtement';
 
   @override
-  String get personaCategoryGarmentColor => 'Colour';
+  String get personaCategoryGarmentColor => 'Couleur';
 
   @override
-  String get personaCategoryAccessory => 'Carry';
+  String get personaCategoryAccessory => 'À porter';
 
   @override
-  String get personaCategorySigil => 'Banner';
+  String get personaCategorySigil => 'Bannière';
 
   @override
   String personaSkinTone(String value) {
     String _temp0 = intl.Intl.selectLogic(value, {
-      'sand': 'Sand',
-      'honey': 'Honey',
-      'clay': 'Clay',
-      'copper': 'Copper',
-      'chestnut': 'Chestnut',
-      'walnut': 'Walnut',
-      'umber': 'Umber',
-      'ebony': 'Ebony',
+      'sand': 'Sable',
+      'honey': 'Miel',
+      'clay': 'Argile',
+      'copper': 'Cuivre',
+      'chestnut': 'Châtaigne',
+      'walnut': 'Noyer',
+      'umber': 'Terre d’ombre',
+      'ebony': 'Ébène',
       'other': '—',
     });
     return '$_temp0';
@@ -2746,10 +2779,10 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String personaFace(String value) {
     String _temp0 = intl.Intl.selectLogic(value, {
-      'oval': 'Oval',
-      'round': 'Round',
-      'square': 'Square',
-      'long': 'Long',
+      'oval': 'Ovale',
+      'round': 'Rond',
+      'square': 'Carré',
+      'long': 'Allongé',
       'other': '—',
     });
     return '$_temp0';
@@ -2758,18 +2791,18 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String personaHair(String value) {
     String _temp0 = intl.Intl.selectLogic(value, {
-      'bald': 'Bald',
-      'buzz': 'Buzz cut',
-      'short': 'Short',
-      'wavy': 'Wavy',
-      'curly': 'Curly',
-      'coily': 'Coily',
+      'bald': 'Rasé',
+      'buzz': 'Très court',
+      'short': 'Court',
+      'wavy': 'Ondulé',
+      'curly': 'Bouclé',
+      'coily': 'Frisé serré',
       'afro': 'Afro',
-      'locs': 'Locs',
-      'braids': 'Braids',
-      'bun': 'Bun',
+      'locs': 'Locks',
+      'braids': 'Tresses',
+      'bun': 'Chignon',
       'long': 'Long',
-      'ponytail': 'Ponytail',
+      'ponytail': 'Queue-de-cheval',
       'other': '—',
     });
     return '$_temp0';
@@ -2778,14 +2811,14 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String personaHairColor(String value) {
     String _temp0 = intl.Intl.selectLogic(value, {
-      'black': 'Black',
-      'darkBrown': 'Dark brown',
-      'brown': 'Brown',
+      'black': 'Noir',
+      'darkBrown': 'Brun foncé',
+      'brown': 'Brun',
       'auburn': 'Auburn',
-      'copper': 'Copper',
-      'blonde': 'Blonde',
-      'grey': 'Grey',
-      'white': 'White',
+      'copper': 'Cuivré',
+      'blonde': 'Blond',
+      'grey': 'Gris',
+      'white': 'Blanc',
       'other': '—',
     });
     return '$_temp0';
@@ -2794,11 +2827,11 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String personaFacialHair(String value) {
     String _temp0 = intl.Intl.selectLogic(value, {
-      'none': 'None',
-      'stubble': 'Stubble',
+      'none': 'Aucune',
+      'stubble': 'Barbe de trois jours',
       'moustache': 'Moustache',
-      'beard': 'Beard',
-      'fullBeard': 'Full beard',
+      'beard': 'Barbe',
+      'fullBeard': 'Barbe fournie',
       'other': '—',
     });
     return '$_temp0';
@@ -2807,9 +2840,9 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String personaEyewear(String value) {
     String _temp0 = intl.Intl.selectLogic(value, {
-      'none': 'None',
-      'round': 'Round glasses',
-      'square': 'Square glasses',
+      'none': 'Aucune',
+      'round': 'Lunettes rondes',
+      'square': 'Lunettes carrées',
       'other': '—',
     });
     return '$_temp0';
@@ -2818,9 +2851,9 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String personaMark(String value) {
     String _temp0 = intl.Intl.selectLogic(value, {
-      'none': 'None',
-      'freckles': 'Freckles',
-      'beautyMark': 'Beauty mark',
+      'none': 'Aucun',
+      'freckles': 'Taches de rousseur',
+      'beautyMark': 'Grain de beauté',
       'vitiligo': 'Vitiligo',
       'other': '—',
     });
@@ -2830,9 +2863,9 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String personaExpression(String value) {
     String _temp0 = intl.Intl.selectLogic(value, {
-      'calm': 'Calm',
-      'smile': 'Smile',
-      'focused': 'Focused',
+      'calm': 'Calme',
+      'smile': 'Sourire',
+      'focused': 'Concentration',
       'other': '—',
     });
     return '$_temp0';
@@ -2841,12 +2874,12 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String personaHeadwear(String value) {
     String _temp0 = intl.Intl.selectLogic(value, {
-      'none': 'None',
-      'headscarf': 'Headscarf',
+      'none': 'Aucun',
+      'headscarf': 'Foulard',
       'turban': 'Turban',
-      'hood': 'Hood',
-      'circlet': 'Circlet',
-      'laurel': 'Laurel wreath',
+      'hood': 'Capuche',
+      'circlet': 'Diadème',
+      'laurel': 'Couronne de laurier',
       'other': '—',
     });
     return '$_temp0';
@@ -2855,10 +2888,10 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String personaGarment(String value) {
     String _temp0 = intl.Intl.selectLogic(value, {
-      'tunic': 'Tunic',
-      'cloak': 'Cloak',
-      'robe': 'Robe',
-      'wrap': 'Wrap',
+      'tunic': 'Tunique',
+      'cloak': 'Cape',
+      'robe': 'Robe longue',
+      'wrap': 'Drapé',
       'other': '—',
     });
     return '$_temp0';
@@ -2867,13 +2900,13 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String personaGarmentColor(String value) {
     String _temp0 = intl.Intl.selectLogic(value, {
-      'forest': 'Forest',
+      'forest': 'Forêt',
       'olive': 'Olive',
-      'sand': 'Sand',
-      'ivory': 'Ivory',
-      'sage': 'Sage',
+      'sand': 'Sable',
+      'ivory': 'Ivoire',
+      'sage': 'Sauge',
       'indigo': 'Indigo',
-      'crimson': 'Crimson',
+      'crimson': 'Cramoisi',
       'bronze': 'Bronze',
       'other': '—',
     });
@@ -2883,11 +2916,11 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String personaAccessory(String value) {
     String _temp0 = intl.Intl.selectLogic(value, {
-      'none': 'None',
-      'satchel': 'Satchel',
-      'scroll': 'Scroll',
-      'compass': 'Compass',
-      'amulet': 'Amulet of Tanit',
+      'none': 'Aucun',
+      'satchel': 'Besace',
+      'scroll': 'Parchemin',
+      'compass': 'Boussole',
+      'amulet': 'Amulette de Tanit',
       'other': '—',
     });
     return '$_temp0';
@@ -2896,60 +2929,60 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String personaSigil(String value) {
     String _temp0 = intl.Intl.selectLogic(value, {
-      'none': 'None',
-      'elephant': 'Elephant',
-      'sun': 'Rising sun',
-      'path': 'Path',
-      'compass': 'Compass',
-      'star': 'North star',
-      'laurel': 'Laurel',
+      'none': 'Aucune',
+      'elephant': 'Éléphant',
+      'sun': 'Soleil levant',
+      'path': 'Chemin',
+      'compass': 'Boussole',
+      'star': 'Étoile polaire',
+      'laurel': 'Laurier',
       'other': '—',
     });
     return '$_temp0';
   }
 
   @override
-  String get personaBuilderSurprise => 'Surprise me';
+  String get personaBuilderSurprise => 'Surprenez-moi';
 
   @override
-  String get personaBuilderSurprised => 'New look. Not saved yet.';
+  String get personaBuilderSurprised => 'Nouvelle allure. Non enregistrée.';
 
   @override
-  String get personaBuilderUndo => 'Undo';
+  String get personaBuilderUndo => 'Annuler';
 
   @override
-  String get personaBuilderParts => 'Avatar parts';
+  String get personaBuilderParts => 'Parties de l’avatar';
 
   @override
   String personaBuilderPartLabel(String category, String value) {
-    return '$category: $value';
+    return '$category : $value';
   }
 
   @override
   String personaBuilderPreviewLabel(String parts) {
-    return 'Avatar preview. $parts';
+    return 'Aperçu de l’avatar. $parts';
   }
 
   @override
   String get personaBuilderLockedNote =>
-      'Locked extras open with reward picks.';
+      'Les extras verrouillés s’ouvrent avec des récompenses.';
 
   @override
-  String get personaBuilderKept => 'Yours to keep';
+  String get personaBuilderKept => 'À vous pour de bon';
 
   @override
   String get personaBuilderHiddenSilhouette =>
-      'Pick a skin tone to see the face and colours.';
+      'Choisissez une couleur de peau pour voir le visage et les couleurs.';
 
   @override
   String get personaBuilderHiddenHeadwear =>
-      'Hair is hidden under your headwear.';
+      'Les cheveux sont cachés sous votre couvre-chef.';
 
   @override
-  String get personaBuilderMottoLabel => 'Motto (optional)';
+  String get personaBuilderMottoLabel => 'Devise (facultatif)';
 
   @override
-  String get personaBuilderMottoHint => 'A few words of your own';
+  String get personaBuilderMottoHint => 'Quelques mots à vous';
 
   @override
   String personaBuilderMottoCount(int count, int max) {
@@ -2958,245 +2991,248 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get personaBuilderMottoTooLong =>
-      'A little too long. Shorten it to save.';
+      'Un peu trop longue. Raccourcissez-la pour enregistrer.';
 
   @override
   String personaBuilderMottoQuoted(String motto) {
-    return '“$motto”';
+    return '« $motto »';
   }
 
   @override
-  String get personaBuilderSaved => 'Avatar saved.';
+  String get personaBuilderSaved => 'Avatar enregistré.';
 
   @override
   String get personaBuilderNotSaved =>
-      'Not saved on this phone yet. Retry at the top, or export a copy.';
+      'Pas encore enregistré sur ce téléphone. Réessayez en haut, ou exportez une copie.';
 
   @override
-  String get personaBuilderRemove => 'Remove avatar';
+  String get personaBuilderRemove => 'Retirer l’avatar';
 
   @override
-  String get personaBuilderRemoveTitle => 'Remove your avatar?';
+  String get personaBuilderRemoveTitle => 'Retirer votre avatar ?';
 
   @override
   String get personaBuilderRemoveBody =>
-      'Your profile shows the emblem again. Make a new one anytime.';
+      'Votre profil affiche à nouveau l’emblème. Créez-en un autre quand vous voulez.';
 
   @override
-  String get personaBuilderRemoveAction => 'Remove';
+  String get personaBuilderRemoveAction => 'Retirer';
 
   @override
-  String get personaBuilderRemoved => 'Avatar removed.';
+  String get personaBuilderRemoved => 'Avatar retiré.';
 
   @override
   String get personaBuilderRemovedNotSaved =>
-      'Removed here, but not saved on this phone yet. Retry at the top.';
+      'Retiré ici, mais pas encore enregistré sur ce téléphone. Réessayez en haut.';
 
   @override
-  String get personaBuilderLeaveTitle => 'Leave without saving?';
+  String get personaBuilderLeaveTitle => 'Partir sans enregistrer ?';
 
   @override
-  String get personaBuilderLeaveBody => 'Your avatar changes won\'t be kept.';
+  String get personaBuilderLeaveBody =>
+      'Les changements de l’avatar ne seront pas gardés.';
 
   @override
-  String get personaBuilderLeaveAction => 'Leave';
+  String get personaBuilderLeaveAction => 'Partir';
 
   @override
-  String get personaBuilderKeepEditing => 'Keep editing';
+  String get personaBuilderKeepEditing => 'Continuer à modifier';
 
   @override
   String get personaBuilderProfileHint =>
-      'Name and avatar are optional and stay on this phone.';
+      'Le prénom et l’avatar sont facultatifs et restent sur ce téléphone.';
 
   @override
-  String get projectsPictureTitle => 'Picture';
+  String get projectsPictureTitle => 'Image';
 
   @override
   String get projectsPictureEmpty =>
-      'A painted scene or a photo. It shows on this project\'s tasks.';
+      'Une scène peinte ou une photo. Elle s’affiche sur les tâches du projet.';
 
   @override
-  String get projectsPictureChoose => 'Choose a picture';
+  String get projectsPictureChoose => 'Choisir une image';
 
   @override
-  String get projectsPictureChange => 'Change picture';
+  String get projectsPictureChange => 'Changer d’image';
 
   @override
-  String get projectsPictureRemove => 'Remove picture';
+  String get projectsPictureRemove => 'Retirer l’image';
 
   @override
-  String get projectsPictureRemoved => 'Picture removed';
+  String get projectsPictureRemoved => 'Image retirée';
 
   @override
-  String get projectsPhotoRemoveTitle => 'Remove the photo?';
+  String get projectsPhotoRemoveTitle => 'Retirer la photo ?';
 
   @override
   String get projectsPhotoRemoveBody =>
-      'It\'s deleted from the app. Photos in your gallery aren\'t touched.';
+      'Elle est supprimée de l’app. Les photos de votre galerie ne sont pas touchées.';
 
   @override
-  String get projectsPhotoRemoveConfirm => 'Remove photo';
+  String get projectsPhotoRemoveConfirm => 'Retirer la photo';
 
   @override
   String get projectsClearBodyPhoto =>
-      'Its title, milestones, notes and photo go for good. Your Compass, tasks and attempts stay.';
+      'Son titre, ses jalons, ses notes et sa photo disparaissent. Votre Boussole, vos tâches et vos essais restent.';
 
   @override
-  String get projectsDeleteFinishInstead => 'Finish and keep instead';
+  String get projectsDeleteFinishInstead => 'Plutôt terminer et garder';
 
   @override
-  String get projectsDeletedCurrent => 'Project deleted';
+  String get projectsDeletedCurrent => 'Projet supprimé';
 
   @override
   String projectsPictureLabel(String name) {
-    return 'Project picture: $name';
+    return 'Image du projet : $name';
   }
 
   @override
-  String get projectsPhotoName => 'your photo';
+  String get projectsPhotoName => 'votre photo';
 
   @override
-  String get projectsPhotoMissing => 'Photo not found on this phone';
+  String get projectsPhotoMissing => 'Photo introuvable sur ce téléphone';
 
   @override
-  String get projectsArtSheetTitle => 'Project picture';
+  String get projectsArtSheetTitle => 'Image du projet';
 
   @override
-  String get projectsArtScenes => 'Painted scenes';
+  String get projectsArtScenes => 'Scènes peintes';
 
   @override
-  String get projectsArtPhoto => 'Your photo';
+  String get projectsArtPhoto => 'Votre photo';
 
   @override
-  String get projectsArtPhotoNote => 'Photos stay on this phone.';
+  String get projectsArtPhotoNote => 'Les photos restent sur ce téléphone.';
 
   @override
-  String get projectsArtChoosePhoto => 'Choose a photo';
+  String get projectsArtChoosePhoto => 'Choisir une photo';
 
   @override
-  String get projectsArtTakePhoto => 'Take a photo';
+  String get projectsArtTakePhoto => 'Prendre une photo';
 
   @override
-  String get projectsArtAdding => 'Adding the photo…';
+  String get projectsArtAdding => 'Ajout de la photo…';
 
   @override
-  String get projectsArtSelected => 'Selected';
+  String get projectsArtSelected => 'Sélectionnée';
 
   @override
   String get projectsArtReplacesPhoto =>
-      'Choosing another picture deletes your photo from the app.';
+      'Choisir une autre image supprime votre photo de l’app.';
 
   @override
-  String get projectsArtSunrise => 'Sunrise';
+  String get projectsArtSunrise => 'Lever du soleil';
 
   @override
-  String get projectsArtPath => 'Winding road';
+  String get projectsArtPath => 'Route sinueuse';
 
   @override
-  String get projectsArtCompass => 'Compass hill';
+  String get projectsArtCompass => 'Colline à la boussole';
 
   @override
-  String get projectsArtSteps => 'Stone steps';
+  String get projectsArtSteps => 'Marches de pierre';
 
   @override
-  String get projectsArtDawnRuins => 'Ruins at dawn';
+  String get projectsArtDawnRuins => 'Ruines à l’aube';
 
   @override
-  String get projectsArtRoots => 'Deep roots';
+  String get projectsArtRoots => 'Racines profondes';
 
   @override
-  String get projectsArtCitadel => 'Hill town';
+  String get projectsArtCitadel => 'Village perché';
 
   @override
-  String get projectsArtSailing => 'Sailing';
+  String get projectsArtSailing => 'En mer';
 
   @override
-  String get projectsArtRoute => 'Summit route';
+  String get projectsArtRoute => 'Route du sommet';
 
   @override
   String get projectsPhotoDeniedCamera =>
-      'Camera access is off. Allow it in Settings, or choose a photo or a painted scene.';
+      'L’accès à l’appareil photo est coupé. Autorisez-le dans les Réglages, ou choisissez une photo ou une scène peinte.';
 
   @override
   String get projectsPhotoDeniedLibrary =>
-      'Photo access is off. Allow it in Settings, or pick a painted scene.';
+      'L’accès aux photos est coupé. Autorisez-le dans les Réglages, ou choisissez une scène peinte.';
 
   @override
   String get projectsPhotoNoCamera =>
-      'No camera here. Choose a photo or a painted scene.';
+      'Pas d’appareil photo ici. Choisissez une photo ou une scène peinte.';
 
   @override
   String get projectsPhotoNoLibrary =>
-      'Photos aren\'t available here. Pick a painted scene.';
+      'Les photos ne sont pas disponibles ici. Choisissez une scène peinte.';
 
   @override
   String get projectsPhotoFailed =>
-      'Couldn\'t get the photo. Try again, or pick a painted scene.';
+      'La photo n’a pas pu être récupérée. Réessayez, ou choisissez une scène peinte.';
 
   @override
   String get projectsPhotoTooLarge =>
-      'That photo is too large to keep. Try another one.';
+      'Cette photo est trop lourde pour être gardée. Essayez-en une autre.';
 
   @override
   String get projectsPhotoNotKept =>
-      'Couldn\'t keep the photo on this phone. Check free space and try again.';
+      'La photo n’a pas pu être gardée sur ce téléphone. Vérifiez l’espace libre et réessayez.';
 
   @override
-  String get projectsNotSaved => 'Not saved yet. Use Retry on this page.';
+  String get projectsNotSaved =>
+      'Pas encore enregistré. Utilisez Réessayer sur cette page.';
 
   @override
-  String get projectsFinish => 'Finish this project';
+  String get projectsFinish => 'Terminer ce projet';
 
   @override
   String get projectsFinishSheetBody =>
-      'It moves to your history with its milestones, tasks and attempts.';
+      'Il rejoint votre historique avec ses jalons, ses tâches et ses essais.';
 
   @override
-  String get projectsFinishConfirm => 'Finish and keep';
+  String get projectsFinishConfirm => 'Terminer et garder';
 
   @override
-  String get projectsFinishedSnack => 'Kept in your project history.';
+  String get projectsFinishedSnack => 'Gardé dans l’historique de vos projets.';
 
   @override
-  String get projectsFinishedTitle => 'Finished and kept';
+  String get projectsFinishedTitle => 'Terminé et gardé';
 
   @override
   String projectsFinishedBody(String title) {
-    return '“$title” is in your project history.';
+    return '« $title » est dans l’historique de vos projets.';
   }
 
   @override
-  String get projectsPlanNext => 'Plan the next one';
+  String get projectsPlanNext => 'Prévoir le suivant';
 
   @override
-  String get projectsViewHistory => 'View history';
+  String get projectsViewHistory => 'Voir l’historique';
 
   @override
   String projectsHistoryLink(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Project history · $count',
-      one: 'Project history · 1',
+      other: 'Historique des projets · $count',
+      one: 'Historique des projets · $count',
     );
     return '$_temp0';
   }
 
   @override
-  String get projectsCardNext => 'Plan your next project.';
+  String get projectsCardNext => 'Prévoyez votre prochain projet.';
 
   @override
-  String get projectsHistoryTitle => 'Past projects';
+  String get projectsHistoryTitle => 'Projets passés';
 
   @override
-  String get projectsHistorySubtitle => 'What you built, month by month.';
+  String get projectsHistorySubtitle =>
+      'Ce que vous avez construit, mois après mois.';
 
   @override
-  String get projectsHistoryEmptyTitle => 'Nothing here yet';
+  String get projectsHistoryEmptyTitle => 'Rien ici pour l’instant';
 
   @override
   String get projectsHistoryEmptyBody =>
-      'Finish a month project to keep it here.';
+      'Terminez un projet du mois pour le garder ici.';
 
   @override
   String projectsMonths(String start, String end) {
@@ -3208,9 +3244,9 @@ class AppLocalizationsFr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count tasks',
-      one: '1 task',
-      zero: 'No tasks',
+      other: '$count tâches',
+      one: '$count tâche',
+      zero: 'Aucune tâche',
     );
     return '$_temp0';
   }
@@ -3220,82 +3256,82 @@ class AppLocalizationsFr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count attempts',
-      one: '1 attempt',
-      zero: 'No attempts',
+      other: '$count essais',
+      one: '$count essai',
+      zero: 'Aucun essai',
     );
     return '$_temp0';
   }
 
   @override
-  String get projectsNoMilestones => 'No milestones';
+  String get projectsNoMilestones => 'Aucun jalon';
 
   @override
-  String get projectsRetroEmpty => 'No notes written.';
+  String get projectsRetroEmpty => 'Aucune note écrite.';
 
   @override
-  String get projectsPastTitle => 'Past project';
+  String get projectsPastTitle => 'Projet passé';
 
   @override
   String projectsFinishedOn(String date) {
-    return 'Finished $date';
+    return 'Terminé le $date';
   }
 
   @override
-  String get projectsMilestoneDone => 'Done';
+  String get projectsMilestoneDone => 'Franchi';
 
   @override
-  String get projectsMilestoneOpen => 'Open';
+  String get projectsMilestoneOpen => 'À faire';
 
   @override
-  String get projectsTasks => 'Tasks';
+  String get projectsTasks => 'Tâches';
 
   @override
-  String get projectsTasksEmpty => 'No tasks linked to it.';
+  String get projectsTasksEmpty => 'Aucune tâche reliée.';
 
   @override
-  String get projectsAttempts => 'Attempts';
+  String get projectsAttempts => 'Essais';
 
   @override
-  String get projectsAttemptsEmpty => 'No attempts linked to it.';
+  String get projectsAttemptsEmpty => 'Aucun essai relié.';
 
   @override
-  String get projectsTaskDone => 'Done';
+  String get projectsTaskDone => 'Faite';
 
   @override
-  String get projectsDelete => 'Remove from history';
+  String get projectsDelete => 'Retirer de l’historique';
 
   @override
-  String get projectsDeleteTitle => 'Remove this project?';
+  String get projectsDeleteTitle => 'Retirer ce projet ?';
 
   @override
   String get projectsDeleteBody =>
-      'Its title, milestones, notes and picture go. Its tasks and attempts stay.';
+      'Son titre, ses jalons, ses notes et son image disparaissent. Ses tâches et ses essais restent.';
 
   @override
-  String get projectsDeleteConfirm => 'Remove';
+  String get projectsDeleteConfirm => 'Retirer';
 
   @override
-  String get projectsDeleted => 'Project removed';
+  String get projectsDeleted => 'Projet retiré';
 
   @override
   String projectsTagLabel(String title) {
-    return 'Project: $title';
+    return 'Projet : $title';
   }
 
   @override
-  String get projectsQuestLink => 'Part of the month project';
+  String get projectsQuestLink => 'Fait partie du projet du mois';
 
   @override
-  String get projectsQuestLinkPast => 'Part of a finished project';
+  String get projectsQuestLinkPast => 'Fait partie d’un projet terminé';
 
   @override
   String projectsKeepsakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Projects finished',
-      one: 'Project finished',
+      other: 'Projets terminés',
+      one: 'Projet terminé',
     );
     return '$_temp0';
   }
@@ -3305,126 +3341,128 @@ class AppLocalizationsFr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count projects kept',
-      one: '1 project kept',
+      other: '$count projets gardés',
+      one: '$count projet gardé',
     );
     return '$_temp0';
   }
 
   @override
-  String get resetTitle => 'The Reset';
+  String get resetTitle => 'Le Recentrage';
 
   @override
-  String get resetSubtitle => 'One day: see where you are, choose where to go.';
+  String get resetSubtitle =>
+      'Une journée pour voir où vous en êtes et choisir où aller.';
 
   @override
-  String get resetPaceOneDayTitle => 'Your pace: one day';
+  String get resetPaceOneDayTitle => 'Votre rythme : une journée';
 
   @override
   String get resetPaceOneDayBody =>
-      'Morning, daytime, evening. Nothing locks if it takes longer.';
+      'Matin, journée, soir. Rien ne se verrouille si cela prend plus longtemps.';
 
   @override
-  String get resetPaceFlexibleTitle => 'Your pace: flexible';
+  String get resetPaceFlexibleTitle => 'Votre rythme : libre';
 
   @override
   String get resetPaceFlexibleBody =>
-      'Any order, any pace. Nothing locks or expires.';
+      'Tout ordre, tout rythme. Rien ne se verrouille ni n’expire.';
 
   @override
-  String get resetPaceChange => 'Change pace';
+  String get resetPaceChange => 'Changer de rythme';
 
   @override
-  String get resetProgressTitle => 'Your reset';
+  String get resetProgressTitle => 'Votre recentrage';
 
   @override
   String resetProgressCount(int answered, int total) {
-    return '$answered of $total core questions answered';
+    return 'Réponses : $answered sur $total questions principales';
   }
 
   @override
   String resetProgressNext(String title) {
-    return 'Next: $title';
+    return 'Ensuite : $title';
   }
 
   @override
-  String get resetBegin => 'Begin';
+  String get resetBegin => 'Commencer';
 
   @override
-  String get resetContinue => 'Continue';
+  String get resetContinue => 'Continuer';
 
   @override
   String get resetAllDoneBody =>
-      'Every core question is answered or skipped. You can still edit them.';
+      'Chaque question principale a une réponse ou a été passée. Vous pouvez encore les modifier.';
 
   @override
-  String get resetSeeCreated => 'See what you created';
+  String get resetSeeCreated => 'Voir ce que vous avez créé';
 
   @override
   String resetCompletedOn(String date) {
-    return 'Finished on $date. Answers stay editable.';
+    return 'Terminé le $date. Les réponses restent modifiables.';
   }
 
   @override
-  String get resetPhasesTitle => 'Your day';
+  String get resetPhasesTitle => 'Votre journée';
 
   @override
-  String get resetPhaseMorning => 'Morning';
+  String get resetPhaseMorning => 'Matin';
 
   @override
-  String get resetPhaseDaytime => 'Daytime';
+  String get resetPhaseDaytime => 'Journée';
 
   @override
-  String get resetPhaseBonus => 'Optional';
+  String get resetPhaseBonus => 'Facultatif';
 
   @override
-  String get resetPhaseEvening => 'Evening';
+  String get resetPhaseEvening => 'Soir';
 
   @override
-  String get resetSubflowMirror => 'The Mirror';
+  String get resetSubflowMirror => 'Le Miroir';
 
   @override
-  String get resetSubflowVision => 'The Vision';
+  String get resetSubflowVision => 'La Vision';
 
   @override
-  String get resetSubflowInterrupt => 'The Interrupt';
+  String get resetSubflowInterrupt => 'L’Interruption';
 
   @override
-  String get resetSubflowBreakthrough => 'The Breakthrough';
+  String get resetSubflowBreakthrough => 'La Percée';
 
   @override
-  String get resetMirrorBody => 'Current reality, possible futures, identity';
+  String get resetMirrorBody => 'Réalité actuelle, futurs possibles, identité';
 
   @override
   String get resetVisionBody =>
-      'A good ordinary day, who you want to be, one step';
+      'Une bonne journée ordinaire, qui devenir, un pas';
 
   @override
-  String get resetInterruptBody => 'Six short check-ins at moments in your day';
+  String get resetInterruptBody =>
+      'Six courtes pauses à différents moments de la journée';
 
   @override
-  String get resetBreakthroughBody => 'Insights, direction and a plan';
+  String get resetBreakthroughBody => 'Prises de conscience, direction et plan';
 
   @override
-  String get resetGroupCurrentReality => 'Current reality';
+  String get resetGroupCurrentReality => 'Réalité actuelle';
 
   @override
-  String get resetGroupAntiVision => 'A future you don\'t want';
+  String get resetGroupAntiVision => 'Un avenir dont vous ne voulez pas';
 
   @override
-  String get resetGroupIdentity => 'Identity';
+  String get resetGroupIdentity => 'Identité';
 
   @override
   String get resetGroupVision => 'Vision';
 
   @override
-  String get resetGroupInterrupt => 'Check-in';
+  String get resetGroupInterrupt => 'Pause';
 
   @override
   String get resetGroupContemplation => 'Contemplation';
 
   @override
-  String get resetGroupInsight => 'Insights';
+  String get resetGroupInsight => 'Prises de conscience';
 
   @override
   String get resetGroupDirection => 'Direction';
@@ -3434,16 +3472,16 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String resetCountAnswered(int answered, int total) {
-    return '$answered of $total answered';
+    return 'Réponses : $answered sur $total';
   }
 
   @override
   String resetCountAnsweredSkipped(int answered, int total, int skipped) {
-    return '$answered of $total answered, $skipped skipped';
+    return 'Réponses : $answered sur $total, $skipped passées';
   }
 
   @override
-  String get resetCountNotStarted => 'Not started yet';
+  String get resetCountNotStarted => 'Pas encore commencé';
 
   @override
   String resetRingLabel(int answered, int total) {
@@ -3452,182 +3490,184 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String resetOpenPhase(String phase) {
-    return 'Open the $phase questions';
+    return 'Ouvrir les questions : $phase';
   }
 
   @override
-  String get resetStateAnswered => 'Answered';
+  String get resetStateAnswered => 'Réponse écrite';
 
   @override
-  String get resetStateSkipped => 'Skipped';
+  String get resetStateSkipped => 'Passée';
 
   @override
-  String get resetStateOpen => 'Not answered yet';
+  String get resetStateOpen => 'Pas encore de réponse';
 
   @override
-  String get resetStateCurrent => 'You are here';
+  String get resetStateCurrent => 'Vous êtes ici';
 
   @override
   String resetCheckinTime(String time) {
-    return 'Check-in · $time';
+    return 'Pause · $time';
   }
 
   @override
-  String get resetOptionalTitle => 'Optional contemplations';
+  String get resetOptionalTitle => 'Contemplations facultatives';
 
   @override
-  String get resetOptionalBody => 'Three extra questions. Optional.';
+  String get resetOptionalBody => 'Trois questions en plus. Facultatif.';
 
   @override
-  String get resetOptionalChip => 'Optional';
+  String get resetOptionalChip => 'Facultatif';
 
   @override
-  String get resetPastTitle => 'Past resets';
+  String get resetPastTitle => 'Recentrages passés';
 
   @override
   String resetPastStarted(String date) {
-    return 'Started $date';
+    return 'Commencé le $date';
   }
 
   @override
   String resetPastFinished(String date) {
-    return 'Finished $date';
+    return 'Terminé le $date';
   }
 
   @override
-  String get resetPastUnfinished => 'Not finished';
+  String get resetPastUnfinished => 'Pas terminé';
 
   @override
   String resetPastAnswerCount(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count answers',
-      one: '1 answer',
-      zero: 'No answers',
+      other: '$count réponses',
+      one: '$count réponse',
+      zero: 'Aucune réponse',
     );
     return '$_temp0';
   }
 
   @override
-  String get resetNewTitle => 'Start a new reset';
+  String get resetNewTitle => 'Commencer un nouveau recentrage';
 
   @override
-  String get resetNewBody => 'Start fresh. This reset stays under Past resets.';
+  String get resetNewBody =>
+      'Repartez à neuf. Celui-ci reste dans Recentrages passés.';
 
   @override
-  String get resetNewConfirmTitle => 'Start a new reset?';
+  String get resetNewConfirmTitle => 'Commencer un nouveau recentrage ?';
 
   @override
   String get resetNewConfirmBody =>
-      'Your answers move to Past resets. Compass, quests and journal stay.';
+      'Vos réponses passent dans Recentrages passés. Boussole, quêtes et journal restent.';
 
   @override
-  String get resetNewConfirmAction => 'Start new reset';
+  String get resetNewConfirmAction => 'Nouveau recentrage';
 
   @override
   String get resetNewStarted =>
-      'New reset started. The earlier one is under Past resets.';
+      'Nouveau recentrage commencé. Le précédent est dans Recentrages passés.';
 
   @override
   String resetQuestionOf(int n, int total) {
-    return 'Question $n of $total';
+    return 'Question $n sur $total';
   }
 
   @override
-  String get resetPauseTooltip => 'Pause and return to the Reset';
+  String get resetPauseTooltip => 'Faire une pause et revenir au Recentrage';
 
   @override
-  String get resetJumpTooltip => 'Jump to a question';
+  String get resetJumpTooltip => 'Aller à une question';
 
   @override
-  String get resetJump => 'Jump';
+  String get resetJump => 'Aller à';
 
   @override
   String resetJumpTitle(String phase) {
-    return '$phase questions';
+    return 'Questions : $phase';
   }
 
   @override
-  String get resetSofter => 'Softer wording';
+  String get resetSofter => 'Version plus douce';
 
   @override
-  String get resetSofterHint => 'The same question, asked more gently.';
+  String get resetSofterHint => 'La même question, posée plus doucement.';
 
   @override
-  String get resetHelpLink => 'What does this mean?';
+  String get resetHelpLink => 'Qu’est-ce que cela veut dire ?';
 
   @override
-  String get resetExampleTitle => 'Example — not a right answer';
+  String get resetExampleTitle => 'Exemple, pas une bonne réponse';
 
   @override
-  String get resetAnswerLabel => 'Your answer';
+  String get resetAnswerLabel => 'Votre réponse';
 
   @override
-  String get resetAnswerHint => 'Write as much or as little as you like.';
+  String get resetAnswerHint => 'Écrivez autant ou aussi peu que vous voulez.';
 
   @override
-  String get resetSkippedNote => 'Skipped. Come back anytime, or leave it.';
+  String get resetSkippedNote =>
+      'Passée. Revenez quand vous voulez, ou laissez-la.';
 
   @override
-  String get resetSaveContinue => 'Save & continue';
+  String get resetSaveContinue => 'Enregistrer et continuer';
 
   @override
-  String get resetSaveFinish => 'Save & finish';
+  String get resetSaveFinish => 'Enregistrer et terminer';
 
   @override
-  String get resetSkip => 'Skip for now';
+  String get resetSkip => 'Passer pour l’instant';
 
   @override
   String get resetPause => 'Pause';
 
   @override
-  String get resetHeavyLink => 'Feeling heavy?';
+  String get resetHeavyLink => 'C’est lourd ?';
 
   @override
-  String get resetHeavyTitle => 'This can be a lot';
+  String get resetHeavyTitle => 'Cela peut faire beaucoup';
 
   @override
   String get resetHeavyBody =>
-      'Go as deep as you like: soften, skip or stop. Your words are saved.';
+      'Allez aussi loin que vous voulez : adoucissez, passez ou arrêtez. Vos mots sont enregistrés.';
 
   @override
-  String get resetHeavySofter => 'Switch to softer wording';
+  String get resetHeavySofter => 'Passer à la version plus douce';
 
   @override
-  String get resetHeavySkip => 'Skip this question';
+  String get resetHeavySkip => 'Passer cette question';
 
   @override
-  String get resetHeavyPause => 'Take a pause';
+  String get resetHeavyPause => 'Faire une pause';
 
   @override
-  String get resetHeavySupport => 'Support and safety';
+  String get resetHeavySupport => 'Aide et sécurité';
 
   @override
   String get resetHeavyCrisis =>
-      'Cartharise isn\'t therapy. If you feel unsafe, contact emergency services or a crisis line now.';
+      'Cartharise n’est pas une thérapie. Si vous ne vous sentez pas en sécurité, contactez maintenant les urgences ou une ligne d’écoute.';
 
   @override
-  String get resetPromptMissing => 'This question isn\'t available.';
+  String get resetPromptMissing => 'Cette question n’est pas disponible.';
 
   @override
-  String get resetCompleteTitle => 'Reset complete';
+  String get resetCompleteTitle => 'Recentrage terminé';
 
   @override
   String get resetCompleteLead =>
-      'One day can bring clarity; the rest is practice.';
+      'Une journée peut éclairer ; le reste, c’est de la pratique.';
 
   @override
-  String get resetCompleteCreatedTitle => 'What you created';
+  String get resetCompleteCreatedTitle => 'Ce que vous avez créé';
 
   @override
   String resetCompleteAnswers(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count answers written',
-      one: '1 answer written',
-      zero: 'No answers written',
+      other: '$count réponses écrites',
+      one: '$count réponse écrite',
+      zero: 'Aucune réponse écrite',
     );
     return '$_temp0';
   }
@@ -3637,40 +3677,40 @@ class AppLocalizationsFr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count questions skipped',
-      one: '1 question skipped',
+      other: '$count questions passées',
+      one: '$count question passée',
     );
     return '$_temp0';
   }
 
   @override
   String resetCompletePhaseLine(String phase, int answered, int total) {
-    return '$phase: $answered of $total answered';
+    return '$phase · réponses : $answered sur $total';
   }
 
   @override
-  String get resetCompleteVisionTitle => 'Your vision, in your words';
+  String get resetCompleteVisionTitle => 'Votre vision, avec vos mots';
 
   @override
   String resetCompleteOpen(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count core questions are still open.',
-      one: '1 core question is still open.',
+      other: '$count questions principales restent ouvertes.',
+      one: '$count question principale reste ouverte.',
     );
     return '$_temp0';
   }
 
   @override
   String get resetCompleteCompassBody =>
-      'Your evening answers can start your Life Compass. You choose; nothing is overwritten.';
+      'Vos réponses du soir peuvent lancer votre Boussole de vie. Vous choisissez ; rien n’est écrasé.';
 
   @override
-  String get resetCompleteBuildCompass => 'Build your Compass';
+  String get resetCompleteBuildCompass => 'Construire votre Boussole';
 
   @override
-  String get resetCompleteLater => 'Later';
+  String get resetCompleteLater => 'Plus tard';
 
   @override
   String sceneryRouteScene(String place) {
@@ -3729,201 +3769,204 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String todayGreetingMorning(String name) {
-    return 'Good morning, $name.';
+    return 'Bonjour, $name.';
   }
 
   @override
   String todayGreetingAfternoon(String name) {
-    return 'Good afternoon, $name.';
+    return 'Bon après-midi, $name.';
   }
 
   @override
   String todayGreetingEvening(String name) {
-    return 'Good evening, $name.';
+    return 'Bonsoir, $name.';
   }
 
   @override
-  String get todayDefaultName => 'Traveler';
+  String get todayDefaultName => 'âme voyageuse';
 
   @override
-  String get todaySubtitle => 'Clarity today. Progress tomorrow.';
+  String get todaySubtitle => 'La clarté aujourd’hui. Le progrès demain.';
 
   @override
-  String get todayNextEyebrow => 'Your next step';
+  String get todayNextEyebrow => 'Votre prochaine étape';
 
   @override
-  String get todayNextStartTitle => 'Begin the morning reflection';
+  String get todayNextStartTitle => 'Commencer la réflexion du matin';
 
   @override
   String todayNextStartBody(int count) {
-    return '$count short questions. Skip any, pause anytime.';
+    return '$count courtes questions. Passez ou faites une pause à tout moment.';
   }
 
   @override
   String get todayNextStartHint =>
-      'Morning, daytime, evening: one day, at your own pace.';
+      'Matin, journée, soir : un jour, à votre rythme.';
 
   @override
-  String get todayNextStartAction => 'Begin';
+  String get todayNextStartAction => 'Commencer';
 
   @override
   String todayNextLessonsAction(int count) {
-    return 'Learn the $count ideas (optional)';
+    return 'Découvrir les $count idées (facultatif)';
   }
 
   @override
   String todayNextResumeTitle(String phase) {
     String _temp0 = intl.Intl.selectLogic(phase, {
-      'morning': 'Continue the morning reflection',
-      'daytime': 'Continue the daytime check-ins',
-      'evening': 'Continue the evening reflection',
-      'other': 'Continue your reset',
+      'morning': 'Reprendre la réflexion du matin',
+      'daytime': 'Reprendre les pauses de la journée',
+      'evening': 'Reprendre la réflexion du soir',
+      'other': 'Reprendre votre recentrage',
     });
     return '$_temp0';
   }
 
   @override
   String todayNextResumeBody(String title) {
-    return 'Next: $title';
+    return 'Ensuite : $title';
   }
 
   @override
   String todayNextResumePosition(String phase, int ordinal, int total) {
     String _temp0 = intl.Intl.selectLogic(phase, {
-      'morning': 'Morning',
-      'daytime': 'Daytime',
-      'evening': 'Evening',
-      'other': 'Reset',
+      'morning': 'Matin',
+      'daytime': 'Journée',
+      'evening': 'Soir',
+      'other': 'Recentrage',
     });
-    return '$_temp0 · question $ordinal of $total';
+    return '$_temp0 · question $ordinal sur $total';
   }
 
   @override
-  String get todayNextResumeAction => 'Continue';
+  String get todayNextResumeAction => 'Reprendre';
 
   @override
-  String get todayNextQuestBody => 'One of today\'s quests.';
+  String get todayNextQuestBody => 'Une des quêtes du jour.';
 
   @override
-  String get todayNextQuestAction => 'Mark done';
+  String get todayNextQuestAction => 'Marquer comme faite';
 
   @override
-  String get todayNextQuestOption => 'Do one of today\'s quests';
+  String get todayNextQuestOption => 'Faire une quête du jour';
 
   @override
-  String get todayNextCompassTitle => 'Build your Compass';
+  String get todayNextCompassTitle => 'Construire votre Boussole';
 
   @override
   String get todayNextCompassImportBody =>
-      'Your evening answers can fill your Compass. You choose.';
+      'Vos réponses du soir peuvent remplir votre Boussole. Vous choisissez.';
 
   @override
   String get todayNextCompassManualBody =>
-      'Write your vision, a month project and daily levers.';
+      'Écrivez votre vision, un projet du mois et vos leviers quotidiens.';
 
   @override
-  String get todayNextCompassImportAction => 'Review your answers';
+  String get todayNextCompassImportAction => 'Revoir vos réponses';
 
   @override
-  String get todayNextLeversTitle => 'Turn your levers into quests';
+  String get todayNextLeversTitle => 'Faire de vos leviers des quêtes';
 
   @override
-  String get todayNextLeversBody => 'Turn your daily levers into small quests.';
+  String get todayNextLeversBody =>
+      'Vos leviers quotidiens, en petites quêtes.';
 
   @override
-  String get todayNextLeversAction => 'Choose quests';
+  String get todayNextLeversAction => 'Choisir des quêtes';
 
   @override
-  String get todayNextProjectTitle => 'Work on your project';
+  String get todayNextProjectTitle => 'Avancer sur votre projet';
 
   @override
   String todayNextProjectNext(String milestone) {
-    return 'Next: $milestone';
+    return 'Ensuite : $milestone';
   }
 
   @override
-  String get todayNextProjectAction => 'Open the project';
+  String get todayNextProjectAction => 'Ouvrir le projet';
 
   @override
-  String get todayNextReviewTitle => 'Look back on your week';
+  String get todayNextReviewTitle => 'Regarder votre semaine';
 
   @override
-  String get todayNextReviewBody =>
-      'What went well, what got in the way, what\'s next.';
+  String get todayNextReviewBody => 'Ce qui a marché, ce qui a gêné, la suite.';
 
   @override
-  String get todayNextReviewAction => 'Start a weekly review';
+  String get todayNextReviewAction => 'Faire un bilan de la semaine';
 
   @override
-  String get todayNextJournalTitle => 'Write a note';
+  String get todayNextJournalTitle => 'Écrire une note';
 
   @override
-  String get todayNextJournalBody => 'A few lines about today.';
+  String get todayNextJournalBody => 'Quelques lignes sur aujourd’hui.';
 
   @override
-  String get todayNextJournalAction => 'New note';
+  String get todayNextJournalAction => 'Nouvelle note';
 
   @override
-  String get todayOpenCompass => 'Open Compass';
+  String get todayOpenCompass => 'Ouvrir la Boussole';
 
   @override
-  String get todayChooseOther => 'Choose something else';
+  String get todayChooseOther => 'Choisir autre chose';
 
   @override
-  String get todayChooseSteps => 'Other steps';
+  String get todayChooseSteps => 'Autres étapes';
 
   @override
-  String get todayPinTitle => 'Help me with';
+  String get todayPinTitle => 'Aidez-moi avec';
 
   @override
-  String get todayPinProject => 'My project';
+  String get todayPinProject => 'Mon projet';
 
   @override
-  String get todayPinReflection => 'Reflection';
+  String get todayPinReflection => 'La réflexion';
 
   @override
-  String get todayPinNotes => 'Notes';
+  String get todayPinNotes => 'Les notes';
 
   @override
-  String get todayPinAuto => 'Decide for me';
+  String get todayPinAuto => 'Choisir pour moi';
 
   @override
-  String get todayPinNoProject => 'No project yet. Today decides for now.';
+  String get todayPinNoProject =>
+      'Pas encore de projet. Aujourd’hui choisit pour l’instant.';
 
   @override
-  String get todayDoneTitle => 'Done. That can be enough for today.';
+  String get todayDoneTitle =>
+      'C’est fait. Cela peut suffire pour aujourd’hui.';
 
   @override
-  String get todayDoneMore => 'One more';
+  String get todayDoneMore => 'Encore une';
 
   @override
-  String get todayDoneMoreLabel => 'Show one more step';
+  String get todayDoneMoreLabel => 'Montrer une autre étape';
 
   @override
-  String get todayWriteHint => 'Write a few lines…';
+  String get todayWriteHint => 'Écrivez quelques lignes…';
 
   @override
-  String get todayWriteLabel => 'Write a new note';
+  String get todayWriteLabel => 'Écrire une nouvelle note';
 
   @override
-  String get todayFocusTitle => 'Today\'s focus';
+  String get todayFocusTitle => 'Au programme';
 
   @override
-  String get todayFocusEmptyTitle => 'No quests for today';
+  String get todayFocusEmptyTitle => 'Aucune quête aujourd’hui';
 
   @override
-  String get todayFocusEmptyBody => 'Add a small quest when you\'re ready.';
+  String get todayFocusEmptyBody =>
+      'Ajoutez une petite quête quand vous le souhaitez.';
 
   @override
   String get todayHintQuests =>
-      'Quests are small steps you choose. Adjust them each week.';
+      'Les quêtes sont de petits pas que vous choisissez. Ajustez-les chaque semaine.';
 
   @override
-  String get todayFocusAdd => 'Add a quest';
+  String get todayFocusAdd => 'Ajouter une quête';
 
   @override
   String todayFocusSeeAll(int count) {
-    return 'See all $count quests';
+    return 'Voir les $count quêtes';
   }
 
   @override
@@ -3931,43 +3974,43 @@ class AppLocalizationsFr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count more for anytime or later',
-      one: '1 more for anytime or later',
+      other: '$count autres, sans date ou pour plus tard',
+      one: '$count autre, sans date ou pour plus tard',
     );
     return '$_temp0';
   }
 
   @override
   String todayQuestMarkDone(String title) {
-    return 'Mark \'$title\' done';
+    return 'Marquer « $title » comme faite';
   }
 
   @override
-  String get todayQuestDaily => 'Every day';
+  String get todayQuestDaily => 'Chaque jour';
 
   @override
   String todayJourneyWritten(int answered, int total) {
-    return '$answered of $total reflections written';
+    return 'Réflexions écrites : $answered sur $total';
   }
 
   @override
-  String get todayJourneyOpenReset => 'Open the reset';
+  String get todayJourneyOpenReset => 'Ouvrir le recentrage';
 
   @override
   String todayPathDay(int day) {
-    return 'Day $day of 30';
+    return 'Jour $day sur 30';
   }
 
   @override
   String todayPathOpen(int day) {
-    return 'Open day $day';
+    return 'Ouvrir le jour $day';
   }
 
   @override
-  String get todayDirectionTitle => 'Your direction';
+  String get todayDirectionTitle => 'Votre direction';
 
   @override
-  String get todayDirectionSummary => 'Your vision and this month\'s project.';
+  String get todayDirectionSummary => 'Votre vision et le projet du mois.';
 
   @override
   String todayDirectionLabel(String title, String summary) {
@@ -3975,25 +4018,26 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get todayDirectionEmpty => 'Your Compass is empty.';
+  String get todayDirectionEmpty => 'Votre Boussole est vide.';
 
   @override
-  String get todayHintCompass => 'Your answers can become a Life Compass.';
+  String get todayHintCompass =>
+      'Vos réponses peuvent devenir une Boussole de vie.';
 
   @override
   String get todayDirectionVision => 'Vision';
 
   @override
-  String get todayDirectionMonth => 'This month';
+  String get todayDirectionMonth => 'Ce mois-ci';
 
   @override
-  String get todayDirectionNoVision => 'No vision written yet.';
+  String get todayDirectionNoVision => 'Pas encore de vision écrite.';
 
   @override
-  String get todayDirectionNoMonth => 'No month project yet.';
+  String get todayDirectionNoMonth => 'Pas encore de projet du mois.';
 
   @override
-  String get todayTileReset => 'Reset';
+  String get todayTileReset => 'Réflexion';
 
   @override
   String todayTileResetValue(int answered, int total) {
@@ -4001,45 +4045,45 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get todayTileResetStart => 'Start';
+  String get todayTileResetStart => 'Commencer';
 
   @override
-  String get todayTileResetDone => 'Done';
+  String get todayTileResetDone => 'Terminé';
 
   @override
-  String get todayTileResetDetail => 'reflections';
+  String get todayTileResetDetail => 'réponses';
 
   @override
-  String get todayTileCampaign => 'Campaign';
+  String get todayTileCampaign => 'Jeu';
 
   @override
   String todayTileCampaignValue(int level) {
-    return 'Level $level';
+    return 'Niveau $level';
   }
 
   @override
-  String get todayTilePath => '30-day path';
+  String get todayTilePath => 'Parcours 30 jours';
 
   @override
   String todayTilePathValue(int day) {
-    return 'Day $day';
+    return 'Jour $day';
   }
 
   @override
   String todayPathStageName(String stage) {
     String _temp0 = intl.Intl.selectLogic(stage, {
-      'observe': 'Observe',
-      'experiment': 'Experiment',
-      'build': 'Build',
-      'adjust': 'Adjust',
-      'other': 'Path',
+      'observe': 'Observer',
+      'experiment': 'Expérimenter',
+      'build': 'Construire',
+      'adjust': 'Ajuster',
+      'other': 'Parcours',
     });
     return '$_temp0';
   }
 
   @override
   String todayTileLabel(String title, String value, String detail) {
-    return '$title: $value. $detail';
+    return '$title : $value. $detail';
   }
 
   @override
@@ -4153,70 +4197,71 @@ class AppLocalizationsFr extends AppLocalizations {
   String get voiceTypeInstead => 'Type instead';
 
   @override
-  String get youTitle => 'You';
+  String get youTitle => 'Vous';
 
   @override
-  String get youSubtitle => 'Your space, your choices.';
+  String get youSubtitle => 'Votre espace, vos choix.';
 
   @override
-  String get youProfileEyebrow => 'Profile';
+  String get youProfileEyebrow => 'Profil';
 
   @override
-  String get youNoName => 'No name set';
+  String get youNoName => 'Aucun prénom';
 
   @override
-  String get youProfileBody => 'Optional, stays on this phone. Tap to change.';
+  String get youProfileBody =>
+      'Facultatif, reste sur ce téléphone. Touchez pour changer.';
 
   @override
-  String get youEditName => 'Edit name';
+  String get youEditName => 'Modifier le prénom';
 
   @override
-  String get youNameDialogTitle => 'Your name';
+  String get youNameDialogTitle => 'Votre prénom';
 
   @override
-  String get youNameHint => 'Optional';
+  String get youNameHint => 'Facultatif';
 
   @override
-  String get youPaceTitle => 'Pace';
+  String get youPaceTitle => 'Rythme';
 
   @override
-  String get youPaceOneDay => 'One day';
+  String get youPaceOneDay => 'Une journée';
 
   @override
-  String get youPaceFlexible => 'Flexible';
+  String get youPaceFlexible => 'Libre';
 
   @override
-  String get youPaceHint => 'Nothing locks. Change anytime.';
+  String get youPaceHint => 'Sans verrou. Modifiable à tout moment.';
 
   @override
-  String get youSectionCredit => 'Credit';
+  String get youSectionCredit => 'Source';
 
   @override
-  String get youSectionSettings => 'Settings';
+  String get youSectionSettings => 'Réglages';
 
   @override
-  String get youSectionCare => 'Care';
+  String get youSectionCare => 'Prendre soin';
 
   @override
-  String get youSectionAbout => 'About';
+  String get youSectionAbout => 'À propos';
 
   @override
   String get youInspiration => 'Inspiration';
 
   @override
-  String get youInspirationHint => 'The article behind Cartharise';
+  String get youInspirationHint => 'L’article derrière Cartharise';
 
   @override
-  String get youReminders => 'Reminders';
+  String get youReminders => 'Rappels';
 
   @override
-  String get youRemindersOn => 'On';
+  String get youRemindersOn => 'Activés';
 
   @override
-  String get youRemindersOff => 'Off';
+  String get youRemindersOff => 'Désactivés';
 
   @override
-  String get youAppearance => 'Appearance';
+  String get youAppearance => 'Apparence';
 
   @override
   String youAppearanceSummary(String theme, String mode) {
@@ -4224,16 +4269,16 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get youData => 'Your data';
+  String get youData => 'Vos données';
 
   @override
-  String get youDataHint => 'Export, restore or delete';
+  String get youDataHint => 'Exporter, restaurer ou supprimer';
 
   @override
-  String get youSupport => 'Support & safety';
+  String get youSupport => 'Aide et sécurité';
 
   @override
-  String get youSupportHint => 'Not therapy. Help if things feel heavy.';
+  String get youSupportHint => 'Pas une thérapie. De l’aide si c’est lourd.';
 
   @override
   String youVersion(String version, String build) {
@@ -4241,357 +4286,379 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get youAboutBody => 'Independent. Everything stays on this phone.';
+  String get youAboutBody => 'Indépendante. Tout reste sur ce téléphone.';
 
   @override
-  String get youLicences => 'Open-source licences';
+  String get youLicences => 'Licences open source';
 
   @override
   String get youLicencesHint =>
-      'Including the Inter and Cinzel fonts (SIL Open Font License)';
+      'Dont les polices Inter et Cinzel (SIL Open Font License)';
 
   @override
   String youLegalese(String title, String author) {
-    return 'Independent app inspired by “$title” by $author. Not affiliated with or endorsed by the author.';
+    return 'App indépendante inspirée de « $title » de $author. Ni affiliée à l’auteur, ni approuvée par lui.';
   }
 
   @override
-  String get youReplayWelcome => 'Replay the welcome';
+  String get youReplayWelcome => 'Revoir l’accueil';
 
   @override
   String get youReplayWelcomeHint =>
-      'See the introduction again. Nothing you\'ve written changes.';
+      'Revoir l’introduction. Rien de ce que vous avez écrit ne change.';
 
   @override
-  String get youReplayConfirmTitle => 'Replay the welcome?';
+  String get youReplayConfirmTitle => 'Revoir l’accueil ?';
 
   @override
   String get youReplayConfirmBody =>
-      'See the introduction again. Your writing and settings stay.';
+      'Revoir l’introduction. Vos écrits et vos réglages restent.';
 
   @override
-  String get youReplayConfirmAction => 'Show the welcome';
+  String get youReplayConfirmAction => 'Montrer l’accueil';
 
   @override
   String get youInspirationTitle => 'Inspiration';
 
   @override
-  String get youInspirationSubtitle => 'The work that inspired Cartharise';
+  String get youInspirationSubtitle => 'L’œuvre qui a inspiré Cartharise';
 
   @override
-  String get youInspirationEyebrow => 'Inspired by';
+  String get youInspirationEyebrow => 'Inspiré par';
 
   @override
   String youInspirationByline(String author) {
-    return 'by $author';
+    return 'par $author';
   }
 
   @override
   String youInspirationPublished(String date) {
-    return 'Published $date';
+    return 'Publié le $date';
   }
 
   @override
-  String get youInspirationReadArticle => 'Read the article on X';
+  String get youInspirationReadArticle => 'Lire l’article sur X';
 
   @override
-  String get youInspirationReadNewsletter => 'Read the newsletter version';
+  String get youInspirationReadNewsletter => 'Lire la version newsletter';
 
   @override
   String youInspirationLinkHint(String host) {
-    return 'Opens in your browser: $host';
+    return 'S’ouvre dans votre navigateur : $host';
   }
 
   @override
-  String get youInspirationIndependentTitle => 'An independent app';
+  String get youInspirationIndependentTitle => 'Une app indépendante';
 
   @override
-  String get youInspirationParaphraseTitle => 'In Cartharise\'s own words';
+  String get youInspirationParaphraseTitle => 'Avec les mots de Cartharise';
 
   @override
   String get youInspirationSplitTitle =>
-      'From the source, or added by Cartharise?';
+      'De la source, ou ajouté par Cartharise ?';
 
   @override
-  String get youInspirationFromSource => 'From the article, paraphrased';
+  String get youInspirationFromSource => 'Tiré de l’article, reformulé';
 
   @override
   String get youInspirationSource1 =>
-      'The seven central ideas behind the Awakening lessons';
+      'Les sept idées centrales des leçons de l’Éveil';
 
   @override
   String get youInspirationSource2 =>
-      'The morning, daytime and evening reset questions';
+      'Les questions du matin, de la journée et du soir';
 
   @override
-  String get youInspirationSource3 => 'The six parts of the Life Compass';
+  String get youInspirationSource3 => 'Les six parties de la Boussole de vie';
 
   @override
-  String get youInspirationSource4 => 'The six daytime check-in times';
+  String get youInspirationSource4 =>
+      'Les six horaires des pauses de la journée';
 
   @override
-  String get youInspirationAdded => 'Added by Cartharise';
+  String get youInspirationAdded => 'Ajouté par Cartharise';
 
   @override
-  String get youInspirationAdded1 => 'Examples, help texts and softer wording';
+  String get youInspirationAdded1 =>
+      'Les exemples, les aides et les versions plus douces';
 
   @override
   String get youInspirationAdded2 =>
-      'Quests, the Today view and the thirty-day path';
+      'Les quêtes, la vue Aujourd’hui et le parcours de trente jours';
 
   @override
   String get youInspirationAdded3 =>
-      'Journal notes, weekly reviews and Look back';
+      'Notes du journal, bilans de la semaine et regards en arrière';
 
   @override
-  String get youInspirationAdded4 => 'Reminders, calendar export and backups';
+  String get youInspirationAdded4 =>
+      'Rappels, export vers le calendrier et sauvegardes';
 
   @override
   String get youInspirationReadOriginal =>
-      'For the author\'s full reasoning, read the original.';
+      'Pour tout le raisonnement de l’auteur, lisez l’original.';
 
   @override
-  String get youRemindersTitle => 'Reminders';
+  String get youRemindersTitle => 'Rappels';
 
   @override
-  String get youRemindersSubtitle => 'Six optional check-ins during the day.';
+  String get youRemindersSubtitle => 'Six pauses facultatives dans la journée.';
 
   @override
-  String get youRemindersSwitch => 'Check-in notifications';
+  String get youRemindersSwitch => 'Notifications des pauses';
 
   @override
-  String get youRemindersSwitchOn => 'On, at the times below.';
+  String get youRemindersSwitchOn => 'Activées, aux heures ci-dessous.';
 
   @override
   String get youRemindersSwitchOff =>
-      'Off. Nothing is sent until you turn this on.';
+      'Désactivées. Rien n’est envoyé tant que vous ne les activez pas.';
 
   @override
   String get youRemindersPrivacy =>
-      'Notifications show the check-in title only, never your words.';
+      'Les notifications montrent seulement le titre de la pause, jamais vos mots.';
 
   @override
-  String get youRemindersDeniedTitle => 'Notifications aren\'t allowed';
+  String get youRemindersDeniedTitle =>
+      'Les notifications ne sont pas autorisées';
 
   @override
   String get youRemindersDeniedBody =>
-      'Notifications are blocked for Cartharise. Allow them in your phone settings, or add the check-ins to your calendar.';
+      'Les notifications sont bloquées pour Cartharise. Autorisez-les dans les réglages du téléphone, ou ajoutez les pauses à votre calendrier.';
 
   @override
-  String get youRemindersUnavailableTitle => 'Notifications aren\'t available';
+  String get youRemindersUnavailableTitle =>
+      'Les notifications ne sont pas disponibles';
 
   @override
   String get youRemindersUnavailableBody =>
-      'This phone can\'t show notifications. Add the check-ins to your calendar instead.';
+      'Ce téléphone ne peut pas afficher de notifications. Ajoutez plutôt les pauses à votre calendrier.';
 
   @override
   String get youRemindersScheduleFailed =>
-      'Couldn\'t schedule the notifications. Try again, or use your calendar.';
+      'Les notifications n’ont pas pu être programmées. Réessayez, ou utilisez votre calendrier.';
 
   @override
-  String get youRemindersCalendarInstead => 'Add to your calendar instead';
+  String get youRemindersCalendarInstead => 'Les ajouter plutôt au calendrier';
 
   @override
-  String get youRemindersTimesTitle => 'Check-in times';
+  String get youRemindersTimesTitle => 'Horaires des pauses';
 
   @override
   String get youRemindersTimesBody =>
-      'Local time. Change any to suit your day.';
+      'Heure locale. Adaptez chacune à votre journée.';
 
   @override
   String youRemindersSourceDefault(String time) {
-    return 'Source default $time';
+    return 'Par défaut dans la source : $time';
   }
 
   @override
   String youRemindersUseDefault(String time) {
-    return 'Use $time';
+    return 'Utiliser $time';
   }
 
   @override
   String youRemindersChangeTime(String title, String time) {
-    return 'Change the time for $title, now $time';
+    return 'Changer l’heure de $title, actuellement $time';
   }
 
   @override
   String youRemindersRowLabel(String title, String time) {
-    return 'Check-in $title, $time';
+    return 'Pause $title, $time';
   }
 
   @override
-  String get youRemindersQuietTitle => 'Quiet hours';
+  String get youRemindersQuietTitle => 'Heures calmes';
 
   @override
   String get youRemindersQuietBody =>
-      'No check-in notifications between these times.';
+      'Aucune notification de pause entre ces heures.';
 
   @override
-  String get youRemindersQuietFrom => 'From';
+  String get youRemindersQuietFrom => 'De';
 
   @override
-  String get youRemindersQuietUntil => 'Until';
+  String get youRemindersQuietUntil => 'À';
 
   @override
-  String get youRemindersQuietNotSet => 'Not set';
+  String get youRemindersQuietNotSet => 'Non défini';
 
   @override
-  String get youRemindersQuietClear => 'Clear quiet hours';
+  String get youRemindersQuietClear => 'Effacer les heures calmes';
 
   @override
   String get youRemindersQuietIncomplete =>
-      'Set both times for quiet hours to apply.';
+      'Indiquez les deux heures pour activer les heures calmes.';
 
   @override
-  String get youRemindersCalendarTitle => 'Add to your calendar';
+  String get youRemindersCalendarTitle => 'Ajouter à votre calendrier';
 
   @override
   String get youRemindersCalendarBody =>
-      'A calendar file with your check-ins for 30 days. Titles only.';
+      'Un fichier calendrier avec vos pauses sur 30 jours. Titres seulement.';
 
   @override
-  String get youRemindersCalendarButton => 'Add to calendar (.ics)';
+  String get youRemindersCalendarButton => 'Ajouter au calendrier (.ics)';
 
   @override
   String get youRemindersCalendarNone =>
-      'Switch on at least one check-in to create the file.';
+      'Activez au moins une pause pour créer le fichier.';
 
   @override
-  String get youCalendarName => 'Cartharise check-ins';
+  String get youCalendarName => 'Pauses Cartharise';
 
   @override
   String youCalendarEventTitle(String title) {
-    return 'Cartharise check-in: $title';
+    return 'Pause Cartharise : $title';
   }
 
   @override
   String get youCalendarEventDescription =>
-      'A short daytime pause from your Cartharise reset. Open the app when it suits you; every check-in is optional.';
+      'Une courte pause dans la journée, issue de votre recentrage Cartharise. Ouvrez l’app quand cela vous convient ; chaque pause est facultative.';
 
   @override
   String get youRemindersCalendarShared =>
-      'Calendar file shared. Open it in your calendar app.';
+      'Fichier calendrier partagé. Ouvrez-le dans votre app de calendrier.';
 
   @override
-  String get youShareDismissed => 'Nothing was shared.';
+  String get youShareDismissed => 'Rien n’a été partagé.';
 
   @override
-  String get youAppearanceTitle => 'Appearance';
+  String get youAppearanceTitle => 'Apparence';
 
   @override
-  String get youAppearanceSubtitle => 'Colours, light or dark, and motion.';
+  String get youAppearanceSubtitle =>
+      'Langue, couleurs, clair ou sombre, et animations.';
 
   @override
-  String get youThemeTitle => 'Theme';
+  String get youLanguageTitle => 'Langue';
 
   @override
-  String get youThemeForest => 'Forest';
+  String get youLanguageSystem => 'Comme le téléphone';
 
   @override
-  String get youThemeOlive => 'Olive';
+  String youLanguageSystemNow(String language) {
+    return 'Actuellement : $language';
+  }
+
+  @override
+  String get youLanguageNote =>
+      'Les leçons et les questions changent aussi. Vos mots restent tels que vous les avez écrits.';
+
+  @override
+  String get youThemeTitle => 'Thème';
+
+  @override
+  String get youThemeForest => 'Forêt';
+
+  @override
+  String get youThemeOlive => 'Olivier';
 
   @override
   String get youThemeOasis => 'Oasis';
 
   @override
-  String get youThemeTyrian => 'Tyrian Rose';
+  String get youThemeTyrian => 'Rose de Tyr';
 
   @override
-  String get youThemeAlpine => 'Alpine';
+  String get youThemeAlpine => 'Alpes';
 
   @override
-  String get youThemeObsidian => 'Obsidian';
+  String get youThemeObsidian => 'Obsidienne';
 
   @override
   String get youThemeAboutForest =>
-      'Deep forest and bronze: the Cartharise original.';
+      'Forêt profonde et bronze : l’original de Cartharise.';
 
   @override
-  String get youThemeAboutOlive => 'The olive groves of the Punic countryside.';
+  String get youThemeAboutOlive => 'Les oliveraies de la campagne punique.';
 
   @override
   String get youThemeAboutOasis =>
-      'Palm green and date gold of the desert oases.';
+      'Le vert des palmiers et l’or des dattes des oasis du désert.';
 
   @override
   String get youThemeAboutTyrian =>
-      'The rose dye of Tyre, Carthage\'s mother city.';
+      'La teinture rose de Tyr, la cité mère de Carthage.';
 
   @override
   String get youThemeAboutAlpine =>
-      'Granite and snow, where Hannibal crossed the Alps.';
+      'Granit et neige, là où Hannibal a franchi les Alpes.';
 
   @override
   String get youThemeAboutObsidian =>
-      'Volcanic black glass and gold. True black when dark.';
+      'Verre volcanique noir et or. Vrai noir en mode sombre.';
 
   @override
-  String get youModeTitle => 'Light or dark';
+  String get youModeTitle => 'Clair ou sombre';
 
   @override
-  String get youModeSystem => 'System';
+  String get youModeSystem => 'Système';
 
   @override
-  String get youModeLight => 'Light';
+  String get youModeLight => 'Clair';
 
   @override
-  String get youModeDark => 'Dark';
+  String get youModeDark => 'Sombre';
 
   @override
-  String get youMotion => 'Interface motion';
+  String get youMotion => 'Animations de l’interface';
 
   @override
   String get youMotionHint =>
-      'Screen transitions and the animated emblem. Off when your phone reduces motion.';
+      'Transitions d’écran et emblème animé. Coupées quand votre téléphone réduit les animations.';
 
   @override
-  String get youDataTitle => 'Your data';
+  String get youDataTitle => 'Vos données';
 
   @override
-  String get youDataSubtitle => 'Everything you write stays on this phone.';
+  String get youDataSubtitle =>
+      'Tout ce que vous écrivez reste sur ce téléphone.';
 
   @override
-  String get youDataWhereTitle => 'Where your data lives';
+  String get youDataWhereTitle => 'Où vivent vos données';
 
   @override
-  String get youDataExportTitle => 'Export a backup';
+  String get youDataExportTitle => 'Exporter une sauvegarde';
 
   @override
   String get youDataExportBody =>
-      'Saves everything, photos and recordings too, as one .zip file. It isn\'t encrypted, so keep it private.';
+      'Enregistre tout, photos et enregistrements compris, dans un seul fichier .zip. Il n’est pas chiffré : gardez-le en lieu sûr.';
 
   @override
-  String get youDataExportButton => 'Export backup';
+  String get youDataExportButton => 'Exporter la sauvegarde';
 
   @override
-  String get youDataExported => 'Backup shared.';
+  String get youDataExported => 'Sauvegarde partagée.';
 
   @override
   String get youDataExportedPartial =>
-      'Backup shared, but some photos or recordings couldn\'t be read and aren\'t in it.';
+      'Sauvegarde partagée, mais certaines photos ou certains enregistrements n’ont pas pu être lus et n’y sont pas.';
 
   @override
-  String get youDataImportTitle => 'Restore a backup';
+  String get youDataImportTitle => 'Restaurer une sauvegarde';
 
   @override
   String get youDataImportBody =>
-      'Replaces everything with a backup. You\'ll confirm first.';
+      'Remplace tout par une sauvegarde. Vous confirmerez d’abord.';
 
   @override
-  String get youDataImportButton => 'Choose a backup file';
+  String get youDataImportButton => 'Choisir un fichier de sauvegarde';
 
   @override
-  String get youDataImportConfirmTitle => 'Restore this backup?';
+  String get youDataImportConfirmTitle => 'Restaurer cette sauvegarde ?';
 
   @override
   String youDataImportConfirmBody(String date) {
-    return 'Replace everything on this phone with the backup from $date?';
+    return 'Remplacer tout ce qui est sur ce téléphone par cette sauvegarde ($date) ?';
   }
 
   @override
-  String get youDataImportConfirmAction => 'Replace';
+  String get youDataImportConfirmAction => 'Remplacer';
 
   @override
-  String get youDataImportUnknownDate => 'an unknown date';
+  String get youDataImportUnknownDate => 'date inconnue';
 
   @override
   String youDataImportMissing(int count) {
@@ -4599,143 +4666,146 @@ class AppLocalizationsFr extends AppLocalizations {
       count,
       locale: localeName,
       other:
-          '$count photos or recordings it names are missing. Their entries are kept.',
-      one: 'One photo or recording it names is missing. Its entry is kept.',
+          '$count photos ou enregistrements cités sont absents. Leurs éléments sont gardés.',
+      one: 'Une photo ou un enregistrement cité est absent. Son élément est gardé.',
     );
     return '$_temp0';
   }
 
   @override
   String get youDataImportFilesFailed =>
-      'Its photos and recordings couldn\'t be saved on this phone.';
+      'Ses photos et enregistrements n’ont pas pu être gardés sur ce téléphone.';
 
   @override
-  String get youDataImported => 'Backup restored.';
+  String get youDataImported => 'Sauvegarde restaurée.';
 
   @override
   String get youDataImportedNotSaved =>
-      'Backup opened but not saved yet. Retry at the top, or export a copy.';
+      'Sauvegarde ouverte mais pas encore enregistrée. Réessayez en haut, ou exportez une copie.';
 
   @override
-  String get youDataImportFailedTitle => 'This file couldn\'t be used';
+  String get youDataImportFailedTitle => 'Ce fichier n’a pas pu être utilisé';
 
   @override
-  String get youDataImportUnchanged => 'Your current data was not changed.';
+  String get youDataImportUnchanged =>
+      'Vos données actuelles n’ont pas changé.';
 
   @override
-  String get youDataImportNotJson => 'It isn\'t a readable backup file.';
+  String get youDataImportNotJson =>
+      'Ce n’est pas un fichier de sauvegarde lisible.';
 
   @override
-  String get youDataImportNotBackup => 'It isn\'t a Cartharise backup.';
+  String get youDataImportNotBackup =>
+      'Ce n’est pas une sauvegarde Cartharise.';
 
   @override
   String get youDataImportUnsupported =>
-      'This backup format isn\'t supported by this version.';
+      'Ce format de sauvegarde n’est pas pris en charge par cette version.';
 
   @override
-  String get youDataImportDamaged => 'The backup is incomplete or damaged.';
+  String get youDataImportDamaged => 'La sauvegarde est incomplète ou abîmée.';
 
   @override
   String get youDataImportTooLarge =>
-      'The file is too large to be a Cartharise backup.';
+      'Le fichier est trop lourd pour être une sauvegarde Cartharise.';
 
   @override
-  String get youDataImportNotText => 'It isn\'t a text file.';
+  String get youDataImportNotText => 'Ce n’est pas un fichier texte.';
 
   @override
-  String get youDataImportOpenFailed => 'The file couldn\'t be opened.';
+  String get youDataImportOpenFailed => 'Le fichier n’a pas pu s’ouvrir.';
 
   @override
-  String get youDataDeleteTitle => 'Delete all data';
+  String get youDataDeleteTitle => 'Supprimer toutes les données';
 
   @override
   String get youDataDeleteBody =>
-      'Erases everything on this phone and cancels reminders. Export first to keep a copy.';
+      'Efface tout sur ce téléphone et annule les rappels. Exportez d’abord pour garder une copie.';
 
   @override
-  String get youDataDeleteButton => 'Delete all data';
+  String get youDataDeleteButton => 'Supprimer toutes les données';
 
   @override
-  String get youDataDeleteConfirm1Title => 'Delete all data?';
+  String get youDataDeleteConfirm1Title => 'Supprimer toutes les données ?';
 
   @override
   String get youDataDeleteConfirm1Body =>
-      'Answers, Compass, quests, notes, photos, recordings, reviews and settings will be erased.';
+      'Réponses, Boussole, quêtes, notes, photos, enregistrements, bilans et réglages seront effacés.';
 
   @override
-  String get youDataDeleteConfirm1Action => 'Continue';
+  String get youDataDeleteConfirm1Action => 'Continuer';
 
   @override
-  String get youDataDeleteConfirm2Title => 'This can\'t be undone';
+  String get youDataDeleteConfirm2Title => 'C’est définitif';
 
   @override
   String get youDataDeleteConfirm2Body =>
-      'There\'s no other copy. Only an exported backup can bring it back.';
+      'Il n’existe pas d’autre copie. Seule une sauvegarde exportée peut tout ramener.';
 
   @override
-  String get youDataDeleteConfirm2Action => 'Delete everything';
+  String get youDataDeleteConfirm2Action => 'Tout supprimer';
 
   @override
   String get youDataDeleteFailed =>
-      'Couldn\'t delete. Your writing is still here; try again.';
+      'La suppression n’a pas abouti. Vos écrits sont toujours là ; réessayez.';
 
   @override
   String get youDataDeleteCopiesLeft =>
-      'Deleted, but a temporary export copy couldn\'t be removed. Removing the app erases it.';
+      'Supprimé, mais une copie d’export temporaire n’a pas pu être retirée. Désinstaller l’app l’efface.';
 
   @override
   String get youDataDeleteFilesLeft =>
-      'Deleted, but some photos or recordings couldn\'t be removed yet. Opening the app again removes them.';
+      'Supprimé, mais certaines photos ou certains enregistrements n’ont pas encore pu être retirés. Rouvrir l’app les retire.';
 
   @override
-  String get youSupportTitle => 'Support & safety';
+  String get youSupportTitle => 'Aide et sécurité';
 
   @override
   String get youSupportSubtitle =>
-      'Reflection can stir things up. That\'s normal.';
+      'Réfléchir peut remuer des choses. C’est normal.';
 
   @override
-  String get youSupportNotTherapyTitle => 'Not therapy';
+  String get youSupportNotTherapyTitle => 'Pas une thérapie';
 
   @override
   String get youSupportNotTherapyBody =>
-      'A self-reflection tool. Not therapy, counselling, medical advice or diagnosis.';
+      'Un outil de réflexion personnelle. Ni thérapie, ni accompagnement psychologique, ni avis médical, ni diagnostic.';
 
   @override
-  String get youSupportHeavyTitle => 'If a question feels heavy';
+  String get youSupportHeavyTitle => 'Si une question pèse';
 
   @override
-  String get youSupportHeavy1 => 'Skip it. Every question is optional.';
+  String get youSupportHeavy1 => 'Passez-la. Chaque question est facultative.';
 
   @override
   String get youSupportHeavy2 =>
-      'Switch to the softer wording where it\'s offered.';
+      'Choisissez la version plus douce quand elle existe.';
 
   @override
   String get youSupportHeavy3 =>
-      'Pause and come back another day. Your words are kept.';
+      'Faites une pause et revenez un autre jour. Vos mots sont gardés.';
 
   @override
-  String get youSupportHeavy4 => 'Talk it through with someone you trust.';
+  String get youSupportHeavy4 => 'Parlez-en à une personne de confiance.';
 
   @override
-  String get youSupportCrisisTitle => 'If you\'re in crisis';
+  String get youSupportCrisisTitle => 'En cas de crise';
 
   @override
   String get youSupportCrisisBody =>
-      'In danger or thinking of harming yourself? Contact emergency services now, or a crisis line in your country.';
+      'En danger, ou envie de vous faire du mal ? Contactez tout de suite les urgences, ou une ligne d’écoute de votre pays.';
 
   @override
-  String get youSupportFindHelpline => 'Find a helpline';
+  String get youSupportFindHelpline => 'Trouver une ligne d’écoute';
 
   @override
   String get youSupportHelplineHint =>
-      'Opens findahelpline.com, helplines by country.';
+      'Ouvre findahelpline.com, des lignes d’écoute par pays.';
 
   @override
-  String get youSupportOngoingTitle => 'Ongoing support';
+  String get youSupportOngoingTitle => 'Un soutien dans la durée';
 
   @override
   String get youSupportOngoingBody =>
-      'If hard feelings last, a doctor or counsellor can help.';
+      'Si les sentiments difficiles durent, un médecin ou un psychologue peut aider.';
 }

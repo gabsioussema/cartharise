@@ -1,3 +1,46 @@
 {
-  "@@locale": "fr"
+  "@@locale": "fr",
+  "onboardingBrandIntro": "Une journée de réflexion honnête. Puis de petits pas.",
+  "onboardingBegin": "Commencer",
+  "onboardingNext": "Suivant",
+  "onboardingStart": "C’est parti",
+  "onboardingStepCounter": "Étape {current} sur {total}",
+
+  "onboardingLimitsTitle": "Avant de commencer",
+  "onboardingLimitsIntro": "Quelques mots honnêtes.",
+  "onboardingLimitsClarityTitle": "Une journée peut éclairer",
+  "onboardingLimitsClarityBody": "Voyez où vous en êtes et ce que vous voulez.",
+  "onboardingLimitsNoGuaranteeTitle": "Pas de miracle du jour au lendemain",
+  "onboardingLimitsNoGuaranteeBody": "Le changement vient de petits pas, semaine après semaine.",
+  "onboardingLimitsNotTherapyTitle": "Pas une thérapie",
+  "onboardingLimitsNotTherapyBody": "Aucun diagnostic. Pour de l’aide : Vous › Aide.",
+  "onboardingLimitsControlTitle": "Vous gardez la main",
+  "onboardingLimitsControlBody": "Passez, adoucissez ou suspendez chaque question.",
+  "onboardingAdultConfirm": "J’ai 18 ans ou plus",
+  "onboardingAdultConfirmHelp": "Conçu pour les adultes.",
+  "onboardingAdultRequired": "Confirmez avoir 18 ans ou plus pour continuer.",
+
+  "onboardingCreditTitle": "Inspiré par",
+  "onboardingCreditByline": "par {author} · {date}",
+  "onboardingCreditArticle": "Lire l’article original",
+  "onboardingCreditNewsletter": "Le lire dans la newsletter de l’auteur",
+  "onboardingCreditNoNeed": "Inutile de le lire avant.",
+
+  "onboardingPaceTitle": "Choisissez votre rythme",
+  "onboardingPaceIntro": "Modifiable à tout moment dans Vous.",
+  "onboardingPaceOneDayTitle": "Une journée",
+  "onboardingPaceOneDayBody": "Matin, journée et soir en un jour.",
+  "onboardingPaceFlexibleTitle": "Libre",
+  "onboardingPaceFlexibleBody": "Étalez-le. Reprenez quand vous voulez.",
+  "onboardingPaceNoLock": "Rien ne se verrouille ni n’expire.",
+
+  "onboardingNameTitle": "Comment vous appeler ?",
+  "onboardingNameIntro": "Facultatif. Reste sur ce téléphone.",
+  "onboardingNameLabel": "Prénom (facultatif)",
+  "onboardingNameHelp": "Sans prénom, nous dirons « âme voyageuse ».",
+
+  "onboardingPrivacyTitle": "Vos mots restent à vous",
+  "onboardingPrivacyStorageHeading": "Où vivent vos écrits",
+  "onboardingPrivacyNoAccount": "Ni compte, ni publicité, ni statistiques.",
+  "onboardingPrivacyControl": "Exportez ou supprimez tout dans Vous › Vos données."
 }

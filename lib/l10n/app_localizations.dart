@@ -7093,8 +7093,32 @@ abstract class AppLocalizations {
   /// No description provided for @youAppearanceSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Colours, light or dark, and motion.'**
+  /// **'Language, colours, light or dark, and motion.'**
   String get youAppearanceSubtitle;
+
+  /// You › Appearance: heading of the language choice (each language is listed by its own name, e.g. Français, العربية).
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get youLanguageTitle;
+
+  /// Language option that follows the phone's preferred languages.
+  ///
+  /// In en, this message translates to:
+  /// **'Same as phone'**
+  String get youLanguageSystem;
+
+  /// Under 'Same as phone': the language it resolves to, by its own name (English, Français, العربية).
+  ///
+  /// In en, this message translates to:
+  /// **'Now: {language}'**
+  String youLanguageSystemNow(String language);
+
+  /// No description provided for @youLanguageNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Lessons and questions change too. Your own words stay as you wrote them.'**
+  String get youLanguageNote;
 
   /// No description provided for @youThemeTitle.
   ///
