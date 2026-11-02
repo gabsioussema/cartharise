@@ -84,11 +84,11 @@ class _CompassViewState extends State<CompassView> {
             const SizedBox(height: 16),
           ] else if (compass.isEmpty) ...[
             SectionCard(
-              icon: Icons.explore_outlined,
-              title: l.compassEmptyTitle,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  GlyphTitle(CarthaGlyph.direction, l.compassEmptyTitle),
+                  const SizedBox(height: 12),
                   Text(l.compassEmptyBody),
                   const SizedBox(height: 8),
                   TextLinkButton(
@@ -187,9 +187,7 @@ class _DirectionHero extends StatelessWidget {
     final updated = compass.updatedAt;
     return HeroCard(
       eyebrow: l.compassHeroEyebrow,
-      trailing: const ExcludeSemantics(
-        child: Icon(Icons.explore_outlined, size: 28),
-      ),
+      trailing: GlyphIcon(CarthaGlyph.direction, size: 32, color: p.heroAccent),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

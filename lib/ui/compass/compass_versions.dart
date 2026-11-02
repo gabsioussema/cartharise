@@ -226,28 +226,38 @@ class _VersionField extends StatelessWidget {
     final p = CarthaPalette.of(context);
     final theme = Theme.of(context);
     final copy = CompassFieldCopy.of(l, field);
+    final body = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (text.trim().isEmpty)
+          Text(
+            l.compassVersionEmptyField,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: p.textSecondary,
+              fontStyle: FontStyle.italic,
+            ),
+          )
+        else
+          SelectableText(text, style: theme.textTheme.bodyLarge),
+        const SizedBox(height: 10),
+        ChipTag(
+          label: same ? l.compassVersionSameAsNow : l.compassVersionDiffers,
+          icon: same ? Icons.check : Icons.compare_arrows,
+          tone: same ? ChipTone.neutral : ChipTone.accent,
+        ),
+      ],
+    );
+    final glyph = copy.glyph;
+    if (glyph == null) {
+      return SectionCard(icon: copy.icon, title: copy.title, child: body);
+    }
     return SectionCard(
-      icon: copy.icon,
-      title: copy.title,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          if (text.trim().isEmpty)
-            Text(
-              l.compassVersionEmptyField,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: p.textSecondary,
-                fontStyle: FontStyle.italic,
-              ),
-            )
-          else
-            SelectableText(text, style: theme.textTheme.bodyLarge),
-          const SizedBox(height: 10),
-          ChipTag(
-            label: same ? l.compassVersionSameAsNow : l.compassVersionDiffers,
-            icon: same ? Icons.check : Icons.compare_arrows,
-            tone: same ? ChipTone.neutral : ChipTone.accent,
-          ),
+          GlyphTitle(glyph, copy.title),
+          const SizedBox(height: 12),
+          body,
         ],
       ),
     );

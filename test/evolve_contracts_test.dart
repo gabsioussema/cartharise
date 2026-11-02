@@ -870,9 +870,42 @@ void main() {
           find.byKey(const ValueKey('achievement-badge-observer')),
           findsNWidgets(2),
         );
-        // Earned or not shows by shape too, never colour alone.
-        expect(find.byIcon(Icons.military_tech), findsNWidgets(7));
-        expect(find.byIcon(Icons.military_tech_outlined), findsNWidgets(7));
+        // Earned or not shows by shape too, never colour alone: the earned
+        // badge has ribbon tails and a filled medallion, the other a dashed
+        // empty slot (painted by visual-system; was a Material medal stub).
+        RenderObject badgeArt(int i) => tester.renderObject(
+          find
+              .descendant(
+                of: find.byKey(const ValueKey('achievement-badge-observer')),
+                matching: find.byType(CustomPaint),
+              )
+              .at(i),
+        );
+        expect(
+          badgeArt(0),
+          paints
+            ..path()
+            ..path()
+            ..circle()
+            ..circle(),
+        );
+        expect(badgeArt(0), isNot(paints..arc()));
+        expect(
+          badgeArt(1),
+          paints
+            ..circle()
+            ..arc()
+            ..arc(),
+        );
+        expect(
+          badgeArt(1),
+          isNot(
+            paints
+              ..path()
+              ..path()
+              ..circle(),
+          ),
+        );
         // The invitation placeholder renders nothing.
         expect(tester.getSize(find.byType(CampaignInviteCard)).height, 0);
         semantics.dispose();

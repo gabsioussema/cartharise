@@ -163,7 +163,7 @@ class _NoteCard extends StatelessWidget {
       padding: const EdgeInsetsDirectional.fromSTEB(16, 14, 12, 14),
       child: Row(
         children: [
-          Icon(Icons.edit_note, color: p.accent),
+          const GlyphIcon(CarthaGlyph.reflection),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -221,7 +221,7 @@ class _ReviewCard extends StatelessWidget {
       padding: const EdgeInsetsDirectional.fromSTEB(16, 14, 12, 14),
       child: Row(
         children: [
-          Icon(Icons.event_note_outlined, color: p.accent),
+          const GlyphIcon(CarthaGlyph.reflection),
           const SizedBox(width: 12),
           Expanded(
             child: Column(

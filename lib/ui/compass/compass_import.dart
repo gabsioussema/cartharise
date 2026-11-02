@@ -95,12 +95,12 @@ class _CompassImportSheetState extends State<CompassImportSheet> {
         if (r.importable && _selected.contains(r.field)) r.field,
     };
     final anyAnswer = rows.any((r) => r.hasAnswer);
-    Widget note(IconData icon, String text) => Padding(
+    Widget note(Widget icon, String text) => Padding(
       padding: const EdgeInsetsDirectional.only(top: 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 18, color: p.accent),
+          icon,
           const SizedBox(width: 8),
           Expanded(child: Text(text, style: theme.textTheme.bodySmall)),
         ],
@@ -144,9 +144,19 @@ class _CompassImportSheetState extends State<CompassImportSheet> {
             ),
             const Divider(),
           ],
-          if (!anyAnswer) note(Icons.info_outline, l.compassImportNothing),
-          note(Icons.shield_outlined, l.compassImportConstraintsNote),
-          note(Icons.history, l.compassImportSnapshotNote),
+          if (!anyAnswer)
+            note(
+              Icon(Icons.info_outline, size: 18, color: p.accent),
+              l.compassImportNothing,
+            ),
+          note(
+            const GlyphIcon(CarthaGlyph.boundaries, size: 18),
+            l.compassImportConstraintsNote,
+          ),
+          note(
+            Icon(Icons.history, size: 18, color: p.accent),
+            l.compassImportSnapshotNote,
+          ),
           const SizedBox(height: 20),
           PrimaryButton(
             label: l.compassImportConfirm(chosen.length),

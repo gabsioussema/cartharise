@@ -1,7 +1,6 @@
 /// The visual system's glyphs and art (recognition over recall: one stable
-/// cue per idea, always next to a word). These are placeholders drawn with
-/// Material icons so every screen runs; the painted brand versions replace
-/// the bodies without changing the API. Colours come from palette tokens.
+/// cue per idea, always next to a word). Painted in the brand line style of
+/// `EmblemGeometry` (see `art/`), colours from palette tokens only.
 library;
 
 import 'package:flutter/material.dart';
@@ -9,11 +8,20 @@ import 'package:flutter/material.dart';
 import '../../domain/campaign.dart';
 import '../../domain/content.dart' show CarthaGlyph;
 import '../theme/cartha_theme.dart';
+import 'art/badge_art.dart';
+import 'art/glyph_art.dart';
+import 'art/lesson_art.dart';
 
 export '../../domain/content.dart' show CarthaGlyph;
+export 'art/lesson_art.dart' show LessonScene;
 
-/// One idea's glyph ([CarthaGlyph]). Decorative unless [semanticLabel] is
-/// given; [color] defaults to the palette's accent (bronze).
+/// One idea's glyph ([CarthaGlyph]): notice = a mirror, direction = a compass
+/// and the north star, experiment = a seedling, boundaries = a shelter,
+/// reflection = a lantern on a notebook, progress = a path to a landmark.
+///
+/// Always shown next to the word it stands for. Decorative unless
+/// [semanticLabel] is given; [color] defaults to the palette's accent
+/// (bronze) — pass `heroAccent` on hero surfaces.
 class GlyphIcon extends StatelessWidget {
   const GlyphIcon(
     this.glyph, {
@@ -28,7 +36,8 @@ class GlyphIcon extends StatelessWidget {
   final Color? color;
   final String? semanticLabel;
 
-  /// The placeholder icon for [glyph].
+  /// The nearest Material icon for [glyph], where only an [IconData] fits
+  /// (e.g. a navigation bar).
   static IconData placeholderFor(CarthaGlyph glyph) => switch (glyph) {
     CarthaGlyph.notice => Icons.visibility_outlined,
     CarthaGlyph.direction => Icons.explore_outlined,
@@ -40,19 +49,65 @@ class GlyphIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final icon = Icon(
-      placeholderFor(glyph),
-      size: size,
-      color: color ?? CarthaPalette.of(context).accent,
-      semanticLabel: semanticLabel,
+    final paint = CustomPaint(
+      size: Size.square(size),
+      painter: GlyphPainter(
+        glyph: glyph,
+        color: color ?? CarthaPalette.of(context).accent,
+      ),
     );
-    return semanticLabel == null ? ExcludeSemantics(child: icon) : icon;
+    final label = semanticLabel;
+    if (label == null) return ExcludeSemantics(child: paint);
+    return Semantics(
+      image: true,
+      label: label,
+      child: ExcludeSemantics(child: paint),
+    );
   }
 }
 
+/// A heading row with a glyph: the glyph, then [title] (Inter `titleMedium`,
+/// announced as a header), then an optional [trailing] widget. The same
+/// layout as a `SectionCard` title, for cards whose idea has a glyph.
+class GlyphTitle extends StatelessWidget {
+  const GlyphTitle(
+    this.glyph,
+    this.title, {
+    super.key,
+    this.trailing,
+    this.style,
+  });
+
+  final CarthaGlyph glyph;
+  final String title;
+  final Widget? trailing;
+
+  /// Defaults to `titleMedium`.
+  final TextStyle? style;
+
+  @override
+  Widget build(BuildContext context) => Row(
+    children: [
+      GlyphIcon(glyph, size: 24),
+      const SizedBox(width: 12),
+      Expanded(
+        child: Semantics(
+          header: true,
+          child: Text(
+            title,
+            style: style ?? Theme.of(context).textTheme.titleMedium,
+          ),
+        ),
+      ),
+      ?trailing,
+    ],
+  );
+}
+
 /// The illustration of lesson [lessonId] (`lesson.01` … `lesson.07`), one
-/// memorable scene each, on lesson cards and lesson screens. Decorative
-/// (the lesson's title says what it is). Takes the width it is given.
+/// memorable scene each ([LessonScene]), on lesson cards and lesson screens.
+/// Decorative (the lesson's title says what it is). Takes the width it is
+/// given; the subject stays centred at any width.
 class LessonIllustration extends StatelessWidget {
   const LessonIllustration(this.lessonId, {super.key, this.height = 120});
 
@@ -66,17 +121,15 @@ class LessonIllustration extends StatelessWidget {
       child: SizedBox(
         key: ValueKey('lesson-illustration-$lessonId'),
         height: height,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: p.raised,
-            borderRadius: BorderRadius.circular(CarthaTheme.radiusSmall),
-            border: Border.all(color: p.border),
-          ),
-          child: Center(
-            child: Icon(
-              Icons.auto_stories_outlined,
-              size: height * 0.4,
-              color: p.accent,
+        width: double.infinity,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(CarthaTheme.radiusSmall),
+          child: RepaintBoundary(
+            child: CustomPaint(
+              painter: LessonArtPainter(
+                scene: LessonScene.of(lessonId),
+                palette: p,
+              ),
             ),
           ),
         ),
@@ -85,9 +138,11 @@ class LessonIllustration extends StatelessWidget {
   }
 }
 
-/// The badge of [achievement], each distinct in the painted version.
-/// [earned] or not shows by shape as well as colour; decorative (the tile
-/// next to it says "Earned" / "Not yet" in words).
+/// The badge of [achievement]: seven distinct symbols (an eye, a signpost,
+/// a rising sun, an owl, a map, an anvil, a summit flag) on a medallion.
+/// Earned: a filled medallion with ribbons; not yet: an empty dashed slot
+/// with the symbol in outline — the shape differs, not only the colour.
+/// Decorative (the tile next to it says "Earned" / "Not yet" in words).
 class AchievementBadge extends StatelessWidget {
   const AchievementBadge(
     this.achievement, {
@@ -101,18 +156,17 @@ class AchievementBadge extends StatelessWidget {
   final double size;
 
   @override
-  Widget build(BuildContext context) {
-    final p = CarthaPalette.of(context);
-    return ExcludeSemantics(
-      child: SizedBox.square(
-        key: ValueKey('achievement-badge-${achievement.name}'),
-        dimension: size,
-        child: Icon(
-          earned ? Icons.military_tech : Icons.military_tech_outlined,
-          size: size,
-          color: earned ? p.accent : p.textSecondary,
+  Widget build(BuildContext context) => ExcludeSemantics(
+    child: SizedBox.square(
+      key: ValueKey('achievement-badge-${achievement.name}'),
+      dimension: size,
+      child: CustomPaint(
+        painter: AchievementBadgePainter(
+          achievement: achievement,
+          earned: earned,
+          palette: CarthaPalette.of(context),
         ),
       ),
-    );
-  }
+    ),
+  );
 }

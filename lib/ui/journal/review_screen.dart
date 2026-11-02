@@ -249,6 +249,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
     return AreaListView(
       children: [
         ScreenHeader(
+          leading: const GlyphIcon(CarthaGlyph.reflection, size: 32),
           title: l.journalReviewTitle,
           subtitle: l.journalReviewEditIntro,
           padding: const EdgeInsetsDirectional.fromSTEB(0, 8, 0, 16),
@@ -302,35 +303,56 @@ class _ReviewScreenState extends State<ReviewScreen> {
     final l = AppLocalizations.of(context);
     final p = CarthaPalette.of(context);
     final theme = Theme.of(context);
-    Widget part(IconData icon, String title, String text) => Padding(
-      padding: const EdgeInsetsDirectional.only(bottom: 16),
-      child: SectionCard(
-        icon: icon,
-        title: title,
-        child: text.trim().isEmpty
-            ? Text(
-                l.journalReviewNothingWritten,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: p.textSecondary,
-                  fontStyle: FontStyle.italic,
+    Widget part(
+      String title,
+      String text, {
+      IconData? icon,
+      CarthaGlyph? glyph,
+    }) {
+      final body = text.trim().isEmpty
+          ? Text(
+              l.journalReviewNothingWritten,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: p.textSecondary,
+                fontStyle: FontStyle.italic,
+              ),
+            )
+          : SelectableText(text, style: theme.textTheme.bodyLarge);
+      return Padding(
+        padding: const EdgeInsetsDirectional.only(bottom: 16),
+        child: glyph == null
+            ? SectionCard(icon: icon, title: title, child: body)
+            : SectionCard(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    GlyphTitle(glyph, title),
+                    const SizedBox(height: 12),
+                    body,
+                  ],
                 ),
-              )
-            : SelectableText(text, style: theme.textTheme.bodyLarge),
-      ),
-    );
+              ),
+      );
+    }
+
     return AreaListView(
       children: [
         ScreenHeader(
+          leading: const GlyphIcon(CarthaGlyph.reflection, size: 32),
           title: l.journalReviewTitle,
           subtitle: l.journalWeekOf(formatDateKey(context, review.weekStart)),
           padding: const EdgeInsetsDirectional.fromSTEB(0, 8, 0, 16),
         ),
-        part(Icons.wb_sunny_outlined, l.journalReviewWins, review.wins),
-        part(Icons.terrain_outlined, l.journalReviewFriction, review.friction),
+        part(l.journalReviewWins, review.wins, icon: Icons.wb_sunny_outlined),
         part(
-          Icons.science_outlined,
+          l.journalReviewFriction,
+          review.friction,
+          icon: Icons.terrain_outlined,
+        ),
+        part(
           l.journalReviewNext,
           review.nextExperiment,
+          glyph: CarthaGlyph.experiment,
         ),
         Text(
           l.journalReviewWritten(formatDayTime(context, review.createdAt)),

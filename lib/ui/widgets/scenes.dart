@@ -35,6 +35,13 @@ enum SceneKind {
 /// Default proportions of a scene (width / height).
 const double kSceneAspectRatio = 4 / 3;
 
+/// Proportions of the compact scene (Today's next action): shorter, same art.
+const double kCompactSceneAspectRatio = 3;
+
+/// The frame a compact scene is composed in: the art is laid out at this
+/// width / height and its band of interest is shown (see [BrandScene.compact]).
+const double kSceneFrameAspectRatio = 2;
+
 /// One brand scene. Prefer the named wrappers ([SunriseScene], [PathScene],
 /// [CompassScene], [StepsScene], [DawnRuinsScene]).
 ///
@@ -48,7 +55,21 @@ class BrandScene extends StatefulWidget {
     this.aspectRatio = kSceneAspectRatio,
     this.semanticLabel,
     this.animate = true,
+    this.compact = false,
   });
+
+  /// The shorter variant (Today's next action): the same art composed at
+  /// [kSceneFrameAspectRatio] and cropped to its band of interest, so the sun,
+  /// the ruins or the stair stay in view at [kCompactSceneAspectRatio]. With
+  /// another [aspectRatio] (or `null` to fill the parent) the same framing
+  /// applies to that box.
+  const BrandScene.compact({
+    super.key,
+    required this.kind,
+    this.aspectRatio = kCompactSceneAspectRatio,
+    this.semanticLabel,
+    this.animate = true,
+  }) : compact = true;
 
   final SceneKind kind;
   final double? aspectRatio;
@@ -56,6 +77,9 @@ class BrandScene extends StatefulWidget {
 
   /// False paints the finished scene straight away (e.g. thumbnails).
   final bool animate;
+
+  /// Frames the art for a short, wide box (see [BrandScene.compact]).
+  final bool compact;
 
   /// How long the one-shot rise takes.
   static const riseDuration = Duration(milliseconds: 1600);
@@ -106,6 +130,7 @@ class _BrandSceneState extends State<BrandScene>
           kind: widget.kind,
           palette: CarthaPalette.of(context),
           progress: _controller,
+          compact: widget.compact,
         ),
         child: const SizedBox.expand(),
       ),
@@ -136,19 +161,30 @@ class SunriseScene extends StatelessWidget {
     this.aspectRatio = kSceneAspectRatio,
     this.semanticLabel,
     this.animate = true,
+    this.compact = false,
   });
 
+  /// Ignored when [compact] (see [BrandScene.compact]).
   final double? aspectRatio;
   final String? semanticLabel;
   final bool animate;
 
+  /// The shorter variant, at [kCompactSceneAspectRatio].
+  final bool compact;
+
   @override
-  Widget build(BuildContext context) => BrandScene(
-    kind: SceneKind.sunrise,
-    aspectRatio: aspectRatio,
-    semanticLabel: semanticLabel,
-    animate: animate,
-  );
+  Widget build(BuildContext context) => compact
+      ? BrandScene.compact(
+          kind: SceneKind.sunrise,
+          semanticLabel: semanticLabel,
+          animate: animate,
+        )
+      : BrandScene(
+          kind: SceneKind.sunrise,
+          aspectRatio: aspectRatio,
+          semanticLabel: semanticLabel,
+          animate: animate,
+        );
 }
 
 /// A winding road toward a low sun ("Reset your life").
@@ -158,19 +194,30 @@ class PathScene extends StatelessWidget {
     this.aspectRatio = kSceneAspectRatio,
     this.semanticLabel,
     this.animate = true,
+    this.compact = false,
   });
 
+  /// Ignored when [compact] (see [BrandScene.compact]).
   final double? aspectRatio;
   final String? semanticLabel;
   final bool animate;
 
+  /// The shorter variant, at [kCompactSceneAspectRatio].
+  final bool compact;
+
   @override
-  Widget build(BuildContext context) => BrandScene(
-    kind: SceneKind.path,
-    aspectRatio: aspectRatio,
-    semanticLabel: semanticLabel,
-    animate: animate,
-  );
+  Widget build(BuildContext context) => compact
+      ? BrandScene.compact(
+          kind: SceneKind.path,
+          semanticLabel: semanticLabel,
+          animate: animate,
+        )
+      : BrandScene(
+          kind: SceneKind.path,
+          aspectRatio: aspectRatio,
+          semanticLabel: semanticLabel,
+          animate: animate,
+        );
 }
 
 /// A compass star over a hilltop signpost ("Choose a direction").
@@ -180,19 +227,30 @@ class CompassScene extends StatelessWidget {
     this.aspectRatio = kSceneAspectRatio,
     this.semanticLabel,
     this.animate = true,
+    this.compact = false,
   });
 
+  /// Ignored when [compact] (see [BrandScene.compact]).
   final double? aspectRatio;
   final String? semanticLabel;
   final bool animate;
 
+  /// The shorter variant, at [kCompactSceneAspectRatio].
+  final bool compact;
+
   @override
-  Widget build(BuildContext context) => BrandScene(
-    kind: SceneKind.compass,
-    aspectRatio: aspectRatio,
-    semanticLabel: semanticLabel,
-    animate: animate,
-  );
+  Widget build(BuildContext context) => compact
+      ? BrandScene.compact(
+          kind: SceneKind.compass,
+          semanticLabel: semanticLabel,
+          animate: animate,
+        )
+      : BrandScene(
+          kind: SceneKind.compass,
+          aspectRatio: aspectRatio,
+          semanticLabel: semanticLabel,
+          animate: animate,
+        );
 }
 
 /// Stone steps ascending toward light ("Improve step by step").
@@ -202,19 +260,30 @@ class StepsScene extends StatelessWidget {
     this.aspectRatio = kSceneAspectRatio,
     this.semanticLabel,
     this.animate = true,
+    this.compact = false,
   });
 
+  /// Ignored when [compact] (see [BrandScene.compact]).
   final double? aspectRatio;
   final String? semanticLabel;
   final bool animate;
 
+  /// The shorter variant, at [kCompactSceneAspectRatio].
+  final bool compact;
+
   @override
-  Widget build(BuildContext context) => BrandScene(
-    kind: SceneKind.steps,
-    aspectRatio: aspectRatio,
-    semanticLabel: semanticLabel,
-    animate: animate,
-  );
+  Widget build(BuildContext context) => compact
+      ? BrandScene.compact(
+          kind: SceneKind.steps,
+          semanticLabel: semanticLabel,
+          animate: animate,
+        )
+      : BrandScene(
+          kind: SceneKind.steps,
+          aspectRatio: aspectRatio,
+          semanticLabel: semanticLabel,
+          animate: animate,
+        );
 }
 
 /// A Carthaginian arch and colonnade silhouette at dawn, with the sea line
@@ -225,19 +294,30 @@ class DawnRuinsScene extends StatelessWidget {
     this.aspectRatio = kSceneAspectRatio,
     this.semanticLabel,
     this.animate = true,
+    this.compact = false,
   });
 
+  /// Ignored when [compact] (see [BrandScene.compact]).
   final double? aspectRatio;
   final String? semanticLabel;
   final bool animate;
 
+  /// The shorter variant, at [kCompactSceneAspectRatio].
+  final bool compact;
+
   @override
-  Widget build(BuildContext context) => BrandScene(
-    kind: SceneKind.dawnRuins,
-    aspectRatio: aspectRatio,
-    semanticLabel: semanticLabel,
-    animate: animate,
-  );
+  Widget build(BuildContext context) => compact
+      ? BrandScene.compact(
+          kind: SceneKind.dawnRuins,
+          semanticLabel: semanticLabel,
+          animate: animate,
+        )
+      : BrandScene(
+          kind: SceneKind.dawnRuins,
+          aspectRatio: aspectRatio,
+          semanticLabel: semanticLabel,
+          animate: animate,
+        );
 }
 
 /// Gives [child] the dark variant of the current brand theme, for content
@@ -302,11 +382,33 @@ class ScenePainter extends CustomPainter {
     required this.kind,
     required this.palette,
     required this.progress,
+    this.compact = false,
   }) : super(repaint: progress);
 
   final SceneKind kind;
   final CarthaPalette palette;
   final Animation<double> progress;
+
+  /// Compose at [kSceneFrameAspectRatio] and show the band of interest.
+  final bool compact;
+
+  /// Where a compact scene's visible band sits in the composed frame
+  /// (0 keeps the top, 1 keeps the bottom).
+  static double focusOf(SceneKind kind) => switch (kind) {
+    SceneKind.sunrise => 0.5,
+    SceneKind.path => 0.62,
+    SceneKind.compass => 0.08,
+    SceneKind.steps => 0.3,
+    SceneKind.dawnRuins => 0.62,
+  };
+
+  /// The size the art is composed at for a box of [size].
+  static Size frameFor(Size size, {required bool compact}) => compact
+      ? Size(
+          size.width,
+          math.max(size.height, size.width / kSceneFrameAspectRatio),
+        )
+      : size;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -314,7 +416,11 @@ class ScenePainter extends CustomPainter {
     final t = Curves.easeOutCubic.transform(progress.value.clamp(0.0, 1.0));
     canvas.save();
     canvas.clipRect(Offset.zero & size);
-    final s = _Sketch(canvas, size, ScenePalette.of(palette), t);
+    final frame = frameFor(size, compact: compact);
+    if (frame.height > size.height) {
+      canvas.translate(0, -(frame.height - size.height) * focusOf(kind));
+    }
+    final s = _Sketch(canvas, frame, ScenePalette.of(palette), t);
     switch (kind) {
       case SceneKind.sunrise:
         s.sunrise();
@@ -333,6 +439,7 @@ class ScenePainter extends CustomPainter {
   @override
   bool shouldRepaint(ScenePainter old) =>
       old.kind != kind ||
+      old.compact != compact ||
       old.palette.hero != palette.hero ||
       old.palette.heroRaised != palette.heroRaised ||
       old.palette.heroAccent != palette.heroAccent ||
@@ -342,9 +449,11 @@ class ScenePainter extends CustomPainter {
 
 double _lerp(double a, double b, double t) => a + (b - a) * t;
 
-/// Drawing helpers in a normalised space (x, y in 0–1 of the size).
-class _Sketch {
-  _Sketch(this.canvas, this.size, this.c, this.t);
+/// Drawing helpers for brand scenes in a normalised space (x, y in 0–1 of
+/// the size), shared by [ScenePainter] and the lesson illustrations: soft
+/// sky, sun, ridges and haze in [ScenePalette] colours only.
+class SceneSketch {
+  SceneSketch(this.canvas, this.size, this.c, this.t);
 
   final Canvas canvas;
   final Size size;
@@ -439,6 +548,24 @@ class _Sketch {
       );
     }
   }
+
+  /// Draws [path] as dashes of [dash] with [gap] between them.
+  void dashed(Path path, Paint paint, {required double dash, double? gap}) {
+    final space = gap ?? dash;
+    for (final metric in path.computeMetrics()) {
+      for (var d = 0.0; d < metric.length; d += dash + space) {
+        canvas.drawPath(
+          metric.extractPath(d, math.min(d + dash, metric.length)),
+          paint,
+        );
+      }
+    }
+  }
+}
+
+/// The five brand scenes.
+class _Sketch extends SceneSketch {
+  _Sketch(super.canvas, super.size, super.c, super.t);
 
   // ── Scenes ──────────────────────────────────────────────────────────────
 

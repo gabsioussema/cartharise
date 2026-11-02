@@ -34,8 +34,9 @@ class LessonReadTag extends StatelessWidget {
   }
 }
 
-/// One Awakening lesson as a tappable card. [compact] (the Reset strip)
-/// leaves out the summary.
+/// One Awakening lesson as a tappable card, its illustration on top.
+/// [compact] (the Reset strip) shows a shorter illustration and leaves out
+/// the summary.
 class LessonCard extends StatelessWidget {
   const LessonCard({
     super.key,
@@ -81,19 +82,32 @@ class LessonCard extends StatelessWidget {
     );
     return SectionCard(
       onTap: onTap,
-      padding: const EdgeInsetsDirectional.all(16),
-      child: compact
-          ? text
-          : Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(child: text),
-                const SizedBox(width: 8),
-                ExcludeSemantics(
-                  child: Icon(Icons.chevron_right, color: p.textSecondary),
-                ),
-              ],
-            ),
+      padding: const EdgeInsetsDirectional.all(12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          LessonIllustration(lesson.id, height: compact ? 72 : 96),
+          Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(4, 12, 4, 4),
+            child: compact
+                ? text
+                : Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(child: text),
+                      const SizedBox(width: 8),
+                      ExcludeSemantics(
+                        child: Icon(
+                          Icons.chevron_right,
+                          color: p.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -115,7 +129,13 @@ class LessonStrip extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        SectionTitle(l.awakeningStripTitle),
+        Row(
+          children: [
+            const GlyphIcon(CarthaGlyph.notice),
+            const SizedBox(width: 10),
+            Expanded(child: SectionTitle(l.awakeningStripTitle)),
+          ],
+        ),
         Text(
           l.awakeningReadCount(readCount, lessons.length),
           style: Theme.of(context).textTheme.bodyMedium
