@@ -55,7 +55,7 @@ dialogs), 16 (inputs), pill buttons. Flat, thin borders.
 | `confirmDialog(destructive:)`, `askText` | dialogs (askText returns text as typed). |
 | `CarthaPageMotion`, `motionEnabled(context)` | short fade/rise on page change; off with reduce-motion or Settings › Motion. |
 | `ScreenHeader(title, subtitle)` | Cinzel title + Inter subtitle, header semantics. |
-| `ChipTag(label, icon, tone)` | small non-interactive label. |
+| `ChipTag(label, icon \| glyph, tone)` | small non-interactive label; `glyph` (a `CarthaGlyph`) paints the visual system's cue instead of a Material icon (e.g. the seedling on an "Experiment" quest). |
 | `openExternalLink(context, uri)` | url_launcher (external app); honest snackbar with the address on failure. |
 | `DestructiveButton` | outlined pill in the error colour for irreversible actions (Delete all data); always paired with a confirm. |
 | `StorageTransparencyText` | where the data lives, from ARB (`storageTransparency`): only on this phone, private app folder, not encrypted by Cartharise, not synced, not in phone or cloud backups. Onboarding privacy page and You › Your data. |

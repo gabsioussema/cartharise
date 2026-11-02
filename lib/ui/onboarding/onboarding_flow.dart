@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../../domain/app_data.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
+import '../nav.dart';
 import '../theme/cartha_theme.dart';
 import '../widgets/widgets.dart';
 import 'onboarding_steps.dart';
@@ -77,7 +78,14 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
   Future<void> _finish() async {
     if (!_adult || _finishing) return;
     setState(() => _finishing = true);
-    await context.read<AppState>().completeOnboarding(
+    final state = context.read<AppState>();
+    // A new user (first launch, or after "Delete all data") lands on Today,
+    // where the next action and the invitation are — not on whichever tab
+    // was open before. A replayed welcome returns to where it was opened.
+    if (state.data.profile == null) {
+      ShellController.maybeOf(context)?.select(AppTab.today);
+    }
+    await state.completeOnboarding(
       displayName: _name.text,
       pace: _pace,
       adultConfirmed: true,

@@ -23,6 +23,10 @@ Future<void> showCompassImport(BuildContext context) async {
     context: context,
     isScrollControlled: true,
     useSafeArea: true,
+    // Reduced motion (device or Settings › Motion): no slide.
+    sheetAnimationStyle: motionEnabled(context)
+        ? null
+        : AnimationStyle.noAnimation,
     builder: (_) => const CompassImportSheet(),
   );
   if (filled == null || filled == 0) return;

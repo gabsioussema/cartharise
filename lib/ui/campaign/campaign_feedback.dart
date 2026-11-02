@@ -10,7 +10,7 @@ import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
 import '../persona/persona_ops.dart';
 import '../theme/cartha_theme.dart';
-import '../widgets/motion.dart';
+import '../widgets/widgets.dart';
 import 'campaign_copy.dart';
 import 'campaign_ops.dart';
 
@@ -20,9 +20,11 @@ import 'campaign_ops.dart';
 /// avatar" when an action earns a reward pick that can be spent. Only for
 /// an action: never while typing an answer (reflection XP, a chapter it
 /// completes, its achievement, a route stop and the pick it gives all stay
-/// quiet; the Campaign shows them), never for a restore (large jumps, or
-/// more achievements or picks at once than one action can earn, are
-/// ignored), never with the game layer off, never for spending a pick.
+/// quiet; the Campaign shows them), never for a restore or any other
+/// wholesale swap of the data (`AppState.dataGeneration` changes: it starts
+/// over, whatever the size; large jumps, or more achievements or picks at
+/// once than one action can earn, are ignored too), never with the game
+/// layer off, never for spending a pick.
 /// Extras never open by themselves (the user chooses them with picks), so
 /// no extra is announced as new. Shown at the top for about two seconds and
 /// announced to screen readers.
@@ -56,6 +58,10 @@ class _CampaignFeedbackState extends State<CampaignFeedback> {
   AppState? _state;
   int _actionXp = 0;
 
+  /// [AppState.dataGeneration] at the last rebase: a new one means the data
+  /// was replaced (a restore), not changed by an action.
+  int? _generation;
+
   /// Achievements seen this session: earning one again (a quest unticked,
   /// then ticked) is not a new moment.
   Set<Achievement> _earned = const {};
@@ -82,16 +88,25 @@ class _CampaignFeedbackState extends State<CampaignFeedback> {
     final state = _state;
     if (state == null || !state.loaded) return;
     final c = state.campaign;
+    _generation = state.dataGeneration;
     _actionXp = c.xpFromActions;
     _earned = c.earned;
     _picks = rewardPicksEarned(c);
+    // Anything waiting belonged to the data that was replaced.
+    _settle?.cancel();
+    _pendingXp = 0;
+    _pendingAchievements.clear();
+    _pendingPicks = 0;
   }
 
   void _onChange() {
     final state = _state;
     if (state == null || !state.loaded || !mounted) return;
-    // "Delete all data": start over, nothing to celebrate.
-    if (state.data.profile == null) return _rebase();
+    // A restore, a fresh start or "Delete all data": start over, nothing
+    // to celebrate.
+    if (state.dataGeneration != _generation || state.data.profile == null) {
+      return _rebase();
+    }
     final c = state.campaign;
     final gained = c.xpFromActions - _actionXp;
     final newly = c.earned.difference(_earned);
@@ -138,6 +153,7 @@ class _CampaignFeedbackState extends State<CampaignFeedback> {
         l.campaignToastAchievement(achievementName(l, a)),
       if (_pendingPicks > 0) l.campaignToastPick(_pendingPicks),
     ];
+    final badge = _pendingAchievements.firstOrNull;
     _pendingXp = 0;
     _pendingAchievements.clear();
     _pendingPicks = 0;
@@ -146,7 +162,7 @@ class _CampaignFeedbackState extends State<CampaignFeedback> {
     _remove();
     final animate = motionEnabled(context);
     _entry = OverlayEntry(
-      builder: (_) => _Toast(lines: lines, animate: animate),
+      builder: (_) => _Toast(lines: lines, badge: badge, animate: animate),
     );
     overlay.insert(_entry!);
     SemanticsService.sendAnnouncement(
@@ -175,12 +191,17 @@ class _CampaignFeedbackState extends State<CampaignFeedback> {
   Widget build(BuildContext context) => widget.child;
 }
 
-/// The moment itself: a hero pill at the top, fading in unless motion is off.
+/// The moment itself: a hero pill at the top, fading in unless motion is
+/// off. It leads with the achievement's own badge when one is announced,
+/// else the Campaign's progress glyph.
 class _Toast extends StatelessWidget {
-  const _Toast({required this.lines, required this.animate});
+  const _Toast({required this.lines, required this.animate, this.badge});
 
   final List<String> lines;
   final bool animate;
+
+  /// The achievement announced, if any.
+  final Achievement? badge;
 
   @override
   Widget build(BuildContext context) {
@@ -196,7 +217,15 @@ class _Toast extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.auto_awesome, size: 18, color: p.heroAccent),
+            OnHeroTheme(
+              child: badge == null
+                  ? GlyphIcon(
+                      CarthaGlyph.progress,
+                      size: 20,
+                      color: p.heroAccent,
+                    )
+                  : AchievementBadge(badge!, earned: true, size: 26),
+            ),
             const SizedBox(width: 8),
             Flexible(
               child: Text(

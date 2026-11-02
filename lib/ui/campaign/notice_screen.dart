@@ -83,49 +83,58 @@ class NoticeCard extends StatelessWidget {
         ? AppNav.openLesson(context, lessonId)
         : AppNav.openPrompt(context, promptId!);
 
+    final kindLine = Wrap(
+      spacing: 8,
+      runSpacing: 6,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        Text(
+          kind.toUpperCase(),
+          style: theme.textTheme.labelMedium?.copyWith(
+            color: p.accent,
+            letterSpacing: 1.4,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        if (status != null)
+          ChipTag(label: status, icon: Icons.check, tone: ChipTone.success),
+      ],
+    );
     return SectionCard(
       onTap: open,
       padding: const EdgeInsetsDirectional.all(14),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          if (lessonId != null)
-            LessonIllustration(lessonId, height: 96)
-          else
-            ExcludeSemantics(
-              child: Container(
-                height: 96,
-                decoration: BoxDecoration(
-                  color: p.raised,
-                  borderRadius: BorderRadius.circular(CarthaTheme.radiusSmall),
-                  border: Border.all(color: p.border),
+          if (lessonId != null) ...[
+            LessonIllustration(lessonId, height: 96),
+            const SizedBox(height: 12),
+            kindLine,
+          ] else
+            // A question has no scene: its glyph sits in a small tile
+            // beside the kind, not alone in a large empty box.
+            Row(
+              children: [
+                ExcludeSemantics(
+                  child: Container(
+                    key: ValueKey('notice-glyph-${notice.id}'),
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      color: p.raised,
+                      borderRadius: BorderRadius.circular(
+                        CarthaTheme.radiusSmall,
+                      ),
+                      border: Border.all(color: p.border),
+                    ),
+                    alignment: Alignment.center,
+                    child: GlyphIcon(notice.glyph, size: 28),
+                  ),
                 ),
-                alignment: Alignment.center,
-                child: GlyphIcon(notice.glyph, size: 44),
-              ),
+                const SizedBox(width: 12),
+                Expanded(child: kindLine),
+              ],
             ),
-          const SizedBox(height: 12),
-          Wrap(
-            spacing: 8,
-            runSpacing: 6,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: [
-              Text(
-                kind.toUpperCase(),
-                style: theme.textTheme.labelMedium?.copyWith(
-                  color: p.accent,
-                  letterSpacing: 1.4,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              if (status != null)
-                ChipTag(
-                  label: status,
-                  icon: Icons.check,
-                  tone: ChipTone.success,
-                ),
-            ],
-          ),
           const SizedBox(height: 6),
           Text(notice.title, style: theme.textTheme.titleMedium),
           if (opens != null) ...[

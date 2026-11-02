@@ -482,7 +482,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get campaignAchievementsSubtitle =>
-      'Earned by doing, never by what you write.';
+      'Earned by reflecting, trying or doing. Never by what you write.';
 
   @override
   String campaignAchievementsCount(int earned, int total) {
@@ -497,48 +497,49 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get campaignAchievementObserverBody =>
-      'Wrote all four present-reality reflections';
+      'Answer every present-reality question in one reset, or try one of its experiments';
 
   @override
   String get campaignAchievementPathfinder => 'The Pathfinder';
 
   @override
   String get campaignAchievementPathfinderBody =>
-      'Explored the anti-vision and identity questions';
+      'Answer every anti-vision and identity question in one reset, or try one of its experiments';
 
   @override
   String get campaignAchievementVisionary => 'The Visionary';
 
   @override
-  String get campaignAchievementVisionaryBody => 'Described a possible future';
+  String get campaignAchievementVisionaryBody =>
+      'Answer every future-vision question in one reset, or try one of its experiments';
 
   @override
   String get campaignAchievementWatchful => 'The Watchful';
 
   @override
   String get campaignAchievementWatchfulBody =>
-      'Answered all six daytime check-ins';
+      'Answer every daytime check-in in one reset, or try one of its experiments';
 
   @override
   String get campaignAchievementStrategist => 'The Strategist';
 
   @override
   String get campaignAchievementStrategistBody =>
-      'Completed the evening planning';
+      'Answer every evening-planning question in one reset, or try one of its experiments';
 
   @override
   String get campaignAchievementPractitioner => 'The Practitioner';
 
   @override
   String get campaignAchievementPractitionerBody =>
-      'Completed a real-world quest';
+      'Complete a real-world quest';
 
   @override
   String get campaignAchievementChallenger => 'The Challenger';
 
   @override
   String get campaignAchievementChallengerBody =>
-      'Recorded a first attempt at your monthly project';
+      'Record a first attempt at your monthly project';
 
   @override
   String get campaignActTwo => 'Act II · The 30-day becoming';
@@ -826,14 +827,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get campaignTriedRemoved => 'Try removed';
 
   @override
-  String get campaignAchievementsRoutes =>
-      'A chapter\'s badge: answer its questions in one reset, or try one of its experiments.';
+  String get campaignTriedUnsavedTitle => 'Save your change?';
+
+  @override
+  String get campaignTriedUnsavedBody => 'The note was changed but not saved.';
+
+  @override
+  String get campaignTriedDiscard => 'Discard';
 
   @override
   String get campaignEarnedByReflecting => 'Earned by reflecting';
 
   @override
   String get campaignEarnedByTrying => 'Earned by trying';
+
+  @override
+  String campaignEarnedByTryingWhat(String experiment) {
+    return 'Earned by trying: $experiment';
+  }
 
   @override
   String get campaignEarnedByDoing => 'Earned by doing';
@@ -977,6 +988,16 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get campaignRewardGameOff =>
       'With the Campaign off, every extra is already open.';
+
+  @override
+  String get campaignPlaygroundSection => 'Playground';
+
+  @override
+  String get campaignPlaygroundSubtitle => 'Small things to notice and try.';
+
+  @override
+  String get campaignPlaygroundGameOff =>
+      'No XP or levels while the Campaign is off. Turn it on in You.';
 
   @override
   String get campaignInviteTitle => 'Play the Campaign?';

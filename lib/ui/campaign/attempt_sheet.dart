@@ -18,6 +18,10 @@ Future<void> showAttemptSheet(
     context: context,
     isScrollControlled: true,
     useSafeArea: true,
+    // Reduced motion (device or Settings › Motion): no slide.
+    sheetAnimationStyle: motionEnabled(context)
+        ? null
+        : AnimationStyle.noAnimation,
     builder: (_) => AttemptSheet(entry: entry),
   );
   if (result != _AttemptSheetResult.delete || !context.mounted) return;

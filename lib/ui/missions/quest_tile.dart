@@ -156,9 +156,7 @@ class QuestTile extends StatelessWidget {
                               ChipTag(
                                 key: ValueKey('quest-source-${quest.id}'),
                                 label: l.campaignQuestFromTry,
-                                icon: GlyphIcon.placeholderFor(
-                                  CarthaGlyph.experiment,
-                                ),
+                                glyph: CarthaGlyph.experiment,
                               ),
                             if (daily)
                               ChipTag(

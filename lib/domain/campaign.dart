@@ -105,6 +105,7 @@ class CampaignProgress {
     required this.pathDaysWritten,
     required this.attempts,
     this.earnedBy = const {},
+    this.earnedByExperiment = const {},
     this.xpFromActions = 0,
     this.experimentsTried = 0,
     this.milestones = 0,
@@ -127,6 +128,11 @@ class CampaignProgress {
   /// Every achievement earned, with the route that earned it, in the
   /// article's order.
   final Map<Achievement, EarnedRoute> earnedBy;
+
+  /// For each chapter achievement earned by [EarnedRoute.trying], the id of
+  /// the experiment that earned it (the chapter's first one tried), so the
+  /// app can name it.
+  final Map<Achievement, String> earnedByExperiment;
 
   /// Every completed quest (a daily quest counts once per day).
   final int questsCompleted;
@@ -181,12 +187,17 @@ CampaignProgress campaignProgress(AppData data, ContentLibrary content) {
   final current = data.currentJourney;
 
   // Experiments: each distinct one once, ever (repeating one adds nothing).
-  final tried = <String>{for (final e in data.experimentLog) e.experimentId};
+  // The log is newest first, so walking it backwards meets each chapter's
+  // first try first.
+  final tried = <String>{};
   final triedPerChapter = <CampaignChapter, int>{};
-  for (final id in tried) {
-    final chapter = content.experiment(id)?.chapter;
+  final firstTried = <CampaignChapter, String>{};
+  for (final e in data.experimentLog.reversed) {
+    if (!tried.add(e.experimentId)) continue;
+    final chapter = content.experiment(e.experimentId)?.chapter;
     if (chapter != null) {
       triedPerChapter[chapter] = (triedPerChapter[chapter] ?? 0) + 1;
+      firstTried[chapter] ??= e.experimentId;
     }
   }
 
@@ -269,9 +280,15 @@ CampaignProgress campaignProgress(AppData data, ContentLibrary content) {
   };
 
   final earnedBy = <Achievement, EarnedRoute>{};
+  final earnedByExperiment = <Achievement, String>{};
   for (final a in Achievement.values) {
     final route = routeOf(a);
-    if (route != null) earnedBy[a] = route;
+    if (route == null) continue;
+    earnedBy[a] = route;
+    final experiment = firstTried[a.chapter];
+    if (route == EarnedRoute.trying && experiment != null) {
+      earnedByExperiment[a] = experiment;
+    }
   }
 
   final milestones = data.project?.milestones ?? const [];
@@ -280,6 +297,7 @@ CampaignProgress campaignProgress(AppData data, ContentLibrary content) {
     xpFromActions: xpFromActions,
     chapters: chapters,
     earnedBy: earnedBy,
+    earnedByExperiment: earnedByExperiment,
     questsCompleted: questsCompleted,
     pathDaysWritten: pathDays,
     attempts: data.campaignLog.length,

@@ -22,6 +22,7 @@ import 'package:cartharise/ui/today/next_action.dart';
 import 'package:cartharise/ui/today/next_step.dart';
 import 'package:cartharise/ui/today/today_model.dart';
 import 'package:cartharise/ui/today/today_tab.dart';
+import 'package:cartharise/ui/widgets/glyphs.dart';
 import 'package:cartharise/ui/widgets/scenes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -949,6 +950,50 @@ void main() {
       expect(opened.reset, isFalse);
       expect(opened.compass, isFalse);
       expect(opened.quests, isTrue);
+
+      // Every quest deleted again: the quests hint stays gone (shown once).
+      final emptiedAgain = FirstUseHints.of(
+        onboardedData(
+          settings: const AppSettings(hintsSeen: {FirstUseHint.quests}),
+        ),
+      );
+      expect(emptiedAgain.quests, isFalse);
+    });
+
+    test('adding or deleting a quest marks the quests hint seen, for good '
+        '(and the mark is saved)', () async {
+      for (final (name, act) in <(String, Future<void> Function(AppState))>[
+        ('added', (s) => s.addQuest('Walk')),
+        ('from levers', (s) => s.addQuestsFromLevers(['Write'])),
+        (
+          'deleted (an older file with quests)',
+          (s) => s.deleteQuest('old'),
+        ),
+      ]) {
+        final store = MemoryDataStore(
+          onboardedData().copyWith(
+            quests: [Quest(id: 'old', title: 'Old', createdAt: _at)],
+          ),
+        );
+        final state = AppState(
+          store: store,
+          content: fakeContent,
+          reminders: FakeReminderScheduler(),
+          clock: () => _at,
+        );
+        await state.load();
+        await act(state);
+        for (final id in [...state.data.quests.map((q) => q.id)]) {
+          await state.deleteQuest(id);
+        }
+        expect(state.data.quests, isEmpty, reason: name);
+        expect(FirstUseHints.of(state.data).quests, isFalse, reason: name);
+        expect(
+          store.saved!.settings.hintsSeen,
+          {FirstUseHint.quests},
+          reason: name,
+        );
+      }
     });
   });
 
@@ -1081,6 +1126,28 @@ void main() {
         expect(prompt.promptId, 'morning.01');
       },
     );
+
+    testWidgets('"Do one of today\'s quests" shows the direction glyph, '
+        'not the Campaign\'s progress path', (tester) async {
+      await _pumpToday(
+        tester,
+        data: _openQuestsData().copyWith(
+          settings: const AppSettings(todayPin: TodayPin.notes),
+        ),
+      );
+      await tester.tap(find.byKey(const ValueKey('today-choose-other')));
+      await pumpFrames(tester);
+      final option = find.byKey(const ValueKey('today-option-quest'));
+      expect(option, findsOneWidget);
+      expect(
+        tester
+            .widget<GlyphIcon>(
+              find.descendant(of: option, matching: find.byType(GlyphIcon)),
+            )
+            .glyph,
+        CarthaGlyph.direction,
+      );
+    });
 
     testWidgets('hints are gone once the feature was used', (tester) async {
       await _pumpToday(tester, data: inProgressData());

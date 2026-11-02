@@ -20,9 +20,11 @@ import 'experiment_entry_sheet.dart';
 import 'make_it_yours_screen.dart';
 import 'try_screen.dart';
 
-/// Keepsakes: the experiments tried (each with its note exactly as typed),
-/// the achievements with their badges and how each was earned (by
-/// reflecting, by trying or by doing), and the avatar extras chosen.
+/// Keepsakes: the experiments tried (each experiment once, with every try
+/// and its note exactly as typed), the achievements with their badges and
+/// how each was earned (by reflecting, by trying — naming the experiment —
+/// or by doing), and the avatar extras chosen. With the Campaign off there
+/// are no achievements to show: what was tried stays.
 class CollectionScreen extends StatelessWidget {
   const CollectionScreen({super.key});
 
@@ -33,7 +35,8 @@ class CollectionScreen extends StatelessWidget {
     final theme = Theme.of(context);
     final state = context.watch<AppState>();
     final progress = state.campaign;
-    final log = state.experimentLog;
+    final game = state.gameEnabled;
+    final groups = groupTries(state.experimentLog);
     final secondary = theme.textTheme.bodyMedium?.copyWith(
       color: p.textSecondary,
     );
@@ -42,13 +45,19 @@ class CollectionScreen extends StatelessWidget {
       ...wornBy(state.persona?.avatar),
     };
     final next = progress.nextAchievement;
+    String? experimentTitle(Achievement a) {
+      final id = progress.earnedByExperiment[a];
+      return id == null ? null : state.content.experiment(id)?.title;
+    }
+
     return CampaignScreen(
       title: l.campaignCollectionTitle,
       subtitle: l.campaignCollectionSubtitle,
       children: [
         // ── Experiments tried ──────────────────────────────────────────
-        AreaSectionLabel(l.campaignCollectionTried(progress.experimentsTried)),
-        if (log.isEmpty)
+        // One row per experiment, so the count matches the rows.
+        AreaSectionLabel(l.campaignCollectionTried(groups.length)),
+        if (groups.isEmpty)
           SectionCard(
             key: const ValueKey('collection-tried-empty'),
             child: Column(
@@ -59,7 +68,7 @@ class CollectionScreen extends StatelessWidget {
                 TextLinkButton(
                   key: const ValueKey('collection-open-try'),
                   label: l.campaignTryOpen,
-                  icon: GlyphIcon.placeholderFor(CarthaGlyph.experiment),
+                  trailingIcon: Icons.arrow_forward,
                   onPressed: () =>
                       pushCampaignScreen(context, const TryScreen()),
                 ),
@@ -67,52 +76,53 @@ class CollectionScreen extends StatelessWidget {
             ),
           )
         else
-          for (final entry in log)
-            _TriedRow(
-              key: ValueKey('collection-tried-${entry.id}'),
-              entry: entry,
+          for (final tries in groups)
+            _TriedGroup(
+              key: ValueKey('collection-experiment-${tries.first.experimentId}'),
+              tries: tries,
             ),
 
-        // ── Achievements ───────────────────────────────────────────────
-        AreaSectionLabel(l.campaignAchievementsTitle),
-        Text(
-          l.campaignAchievementsCount(
-            progress.earned.length,
-            Achievement.values.length,
-          ),
-          style: theme.textTheme.labelLarge,
-        ),
-        const SizedBox(height: 4),
-        Text(l.campaignAchievementsSubtitle, style: secondary),
-        const SizedBox(height: 2),
-        Text(l.campaignAchievementsRoutes, style: secondary),
-        if (next != null) ...[
-          const SizedBox(height: 4),
+        // ── Achievements (the game layer only) ─────────────────────────
+        if (game) ...[
+          AreaSectionLabel(l.campaignAchievementsTitle),
           Text(
-            l.campaignNextAchievement(
-              achievementName(l, next),
-              achievementBody(l, next),
+            l.campaignAchievementsCount(
+              progress.earned.length,
+              Achievement.values.length,
             ),
-            key: const ValueKey('campaign-next-achievement'),
-            style: secondary,
+            style: theme.textTheme.labelLarge,
+          ),
+          const SizedBox(height: 4),
+          Text(l.campaignAchievementsSubtitle, style: secondary),
+          if (next != null) ...[
+            const SizedBox(height: 4),
+            Text(
+              l.campaignNextAchievement(
+                achievementName(l, next),
+                achievementBody(l, next),
+              ),
+              key: const ValueKey('campaign-next-achievement'),
+              style: secondary,
+            ),
+          ],
+          const SizedBox(height: 12),
+          CampaignGrid(
+            minWidth: 170,
+            children: [
+              for (final a in Achievement.values)
+                _AchievementTile(
+                  key: ValueKey('collection-achievement-${a.name}'),
+                  achievement: a,
+                  route: progress.earnedBy[a],
+                  experiment: experimentTitle(a),
+                ),
+            ],
           ),
         ],
-        const SizedBox(height: 12),
-        CampaignGrid(
-          minWidth: 170,
-          children: [
-            for (final a in Achievement.values)
-              _AchievementTile(
-                key: ValueKey('collection-achievement-${a.name}'),
-                achievement: a,
-                route: progress.earnedBy[a],
-              ),
-          ],
-        ),
 
         // ── Extras chosen ──────────────────────────────────────────────
         AreaSectionLabel(l.campaignCollectionExtras),
-        if (!state.gameEnabled)
+        if (!game)
           Text(l.campaignRewardGameOff, style: secondary)
         else if (owned.isEmpty)
           Text(l.campaignCollectionExtrasEmpty, style: secondary)
@@ -147,12 +157,24 @@ class CollectionScreen extends StatelessWidget {
   }
 }
 
-/// One try: the experiment, its note exactly as typed, and the day. Tapping
-/// it opens a sheet to correct the note or remove the try.
-class _TriedRow extends StatelessWidget {
-  const _TriedRow({super.key, required this.entry});
+/// [log] (newest first) grouped by experiment: one list per experiment,
+/// its tries newest first, the most recently tried experiment first.
+List<List<ExperimentEntry>> groupTries(List<ExperimentEntry> log) {
+  final groups = <String, List<ExperimentEntry>>{};
+  for (final e in log) {
+    (groups[e.experimentId] ??= []).add(e);
+  }
+  return groups.values.toList();
+}
 
-  final ExperimentEntry entry;
+/// One experiment and every try of it: its title once, then each try's day
+/// and note exactly as typed. Tapping a try opens a sheet to correct its
+/// note or remove it.
+class _TriedGroup extends StatelessWidget {
+  const _TriedGroup({super.key, required this.tries});
+
+  /// The tries of one experiment, newest first (never empty).
+  final List<ExperimentEntry> tries;
 
   @override
   Widget build(BuildContext context) {
@@ -161,9 +183,8 @@ class _TriedRow extends StatelessWidget {
     final theme = Theme.of(context);
     final state = context.read<AppState>();
     final title =
-        state.content.experiment(entry.experimentId)?.title ??
+        state.content.experiment(tries.first.experimentId)?.title ??
         l.campaignExperimentUnknown;
-    final date = formatDayKey(context, entry.day);
     return Padding(
       padding: const EdgeInsetsDirectional.only(bottom: 8),
       child: Material(
@@ -172,27 +193,34 @@ class _TriedRow extends StatelessWidget {
           borderRadius: BorderRadius.circular(CarthaTheme.radiusSmall),
         ),
         clipBehavior: Clip.antiAlias,
-        child: ListTile(
-          onTap: () => showExperimentEntrySheet(context, entry, title: title),
-          contentPadding: const EdgeInsetsDirectional.fromSTEB(14, 6, 8, 6),
-          leading: const GlyphIcon(CarthaGlyph.experiment),
-          title: Text(title, style: theme.textTheme.bodyLarge),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        child: Padding(
+          padding: const EdgeInsetsDirectional.only(top: 12, bottom: 4),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              if (entry.note.trim().isNotEmpty) ...[
-                const SizedBox(height: 4),
-                // The note exactly as typed.
-                Text(entry.note, style: theme.textTheme.bodyMedium),
-              ],
-              const SizedBox(height: 4),
-              Text(l.campaignTriedOn(date), style: theme.textTheme.bodySmall),
+              Padding(
+                padding: const EdgeInsetsDirectional.symmetric(horizontal: 14),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const GlyphIcon(CarthaGlyph.experiment),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Semantics(
+                        header: true,
+                        child: Text(title, style: theme.textTheme.bodyLarge),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              for (final entry in tries)
+                _TryRow(
+                  key: ValueKey('collection-tried-${entry.id}'),
+                  entry: entry,
+                  title: title,
+                ),
             ],
-          ),
-          trailing: Icon(
-            Icons.edit_outlined,
-            color: p.textSecondary,
-            semanticLabel: l.campaignTriedEditLabel(date),
           ),
         ),
       ),
@@ -200,19 +228,84 @@ class _TriedRow extends StatelessWidget {
   }
 }
 
-/// An achievement: its badge, name, what it asks, and — earned or not, in
-/// words and by the badge's shape, never colour alone — how it was earned.
+/// One try: its note exactly as typed and the day; opens the edit sheet.
+class _TryRow extends StatelessWidget {
+  const _TryRow({super.key, required this.entry, required this.title});
+
+  final ExperimentEntry entry;
+
+  /// The experiment's title (for the sheet).
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final p = CarthaPalette.of(context);
+    final theme = Theme.of(context);
+    final date = formatDayKey(context, entry.day);
+    return InkWell(
+      onTap: () => showExperimentEntrySheet(context, entry, title: title),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 48),
+        child: Padding(
+          // Lined up under the title, past the glyph.
+          padding: const EdgeInsetsDirectional.fromSTEB(50, 4, 8, 4),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (entry.note.trim().isNotEmpty) ...[
+                      // The note exactly as typed.
+                      Text(entry.note, style: theme.textTheme.bodyMedium),
+                      const SizedBox(height: 2),
+                    ],
+                    Text(
+                      l.campaignTriedOn(date),
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: p.textSecondary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              Padding(
+                padding: const EdgeInsetsDirectional.all(4),
+                child: Icon(
+                  Icons.edit_outlined,
+                  color: p.textSecondary,
+                  semanticLabel: l.campaignTriedEditLabel(date),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// An achievement: its badge, name, what it asks (present tense, never a
+/// claim), and — earned or not, in words and by the badge's shape, never
+/// colour alone — how it was earned, naming the experiment that earned it
+/// by trying.
 class _AchievementTile extends StatelessWidget {
   const _AchievementTile({
     super.key,
     required this.achievement,
     required this.route,
+    this.experiment,
   });
 
   final Achievement achievement;
 
   /// How it was earned; null when not yet.
   final EarnedRoute? route;
+
+  /// The title of the experiment that earned it by trying, when known.
+  final String? experiment;
 
   @override
   Widget build(BuildContext context) {
@@ -222,7 +315,9 @@ class _AchievementTile extends StatelessWidget {
     final earned = route != null;
     final name = achievementName(l, achievement);
     final body = achievementBody(l, achievement);
-    final status = route == null ? l.campaignNotYet : earnedByLabel(l, route!);
+    final status = route == null
+        ? l.campaignNotYet
+        : earnedByLabel(l, route!, experiment: experiment);
     return Semantics(
       container: true,
       label: [name, body, status].join('. '),

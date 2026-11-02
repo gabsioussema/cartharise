@@ -98,7 +98,9 @@ sheet.
 "Other steps": every step that makes sense now (`stepOptions`: the app's
 order with the project before the note), except the one on the card. Each is
 one row with its glyph and title; a tap closes the sheet and starts it (a
-quest row, "Do one of today's quests", opens Missions). Then **Help me
+quest row, "Do one of today's quests", opens Missions; its glyph is the
+direction — quests are small steps towards it — never the Campaign's
+progress path). Then **Help me
 with**: four radio rows (announced as a checked/unchecked group, the choice
 also shown by its mark); a tap saves `settings.todayPin` with
 `updateSettings` and closes the sheet. Dismissing changes nothing. The sheet
@@ -132,14 +134,18 @@ since the last visit; after any absence Today simply shows the next action
 
 ## First-use hints (replace the old welcome carousel)
 
-`FirstUseHints.of(AppData)` (`today_model.dart`) — derived, nothing extra is
-stored; each shows only until the feature is first used, so it never comes
-back once used:
+`FirstUseHints.of(AppData)` (`today_model.dart`) — each shows only until the
+feature is first used, so it doesn't come back once used. The reset and
+Compass hints are derived from their history; the quests hint also checks
+`AppSettings.hintsSeen` (`FirstUseHint.quests`), set when a quest is added
+(by hand, from levers or from Try) or deleted, so deleting every quest
+doesn't bring it back (audit fix A8). `hintsSeen` is in the backup (older
+files: none; unknown names dropped) and cleared by "Delete all data":
 
 | Hint | Where | Shown while |
 |---|---|---|
 | "Morning, daytime, evening: one day, at your own pace." | start card (detail line) | no reset was ever begun (no answer, skip, opened prompt or completion in any journey) |
-| "Quests are small steps you choose. Adjust them each week." (bulb) | Today's focus, instead of "Add a small quest when you're ready." | no quest exists |
+| "Quests are small steps you choose. Adjust them each week." (bulb) | Today's focus, instead of "Add a small quest when you're ready." | no quest exists and none ever did (`hintsSeen`) |
 | "Your answers can become a Life Compass." (bulb) | Your direction's one line | the Compass is empty and no Compass version was ever saved |
 
 ## Behaviour rules
@@ -193,7 +199,9 @@ back once used:
   answer); the project from the saved project or the Compass draft, not
   when finished; the pin and pace read from storage; reading never writes.
 - Model: part of day boundaries; path day; `JourneySummary`; first-use hints
-  (fresh, used, opened prompt / saved Compass version count as use).
+  (fresh, used, opened prompt / saved Compass version count as use; the
+  quests hint stays gone once a quest was added — by hand, from levers — or
+  deleted, even with every quest deleted, and the mark is saved).
 - Widgets (real app via `pumpCartha`): greetings; the avatar; section order;
   first day with the three hints and the compact scene; hints gone once
   used; "Mark done" → saved → "Done…" → "One more" → the next quest;
@@ -205,7 +213,7 @@ back once used:
   opens a new note (and saves nothing); the invitation below the next action
   only while unanswered; Build your Compass sheet; levers → Missions; note
   and Friday review; the sheet's other steps (order, start one; a quest row
-  opens Missions); "Help me with" (radio semantics, saved pin, card follows,
+  opens Missions, with the direction glyph); "Help me with" (radio semantics, saved pin, card follows,
   back to auto); dismissing changes nothing; pinned project and pinned notes;
   long absence without counts; failed save with Retry; no
   streak/score/guilt words in any state nor in the ARB fragments; scene

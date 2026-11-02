@@ -20,8 +20,11 @@ Requirements: F-001, F-002, F-003, F-004, F-043 (summary), D-11 (18+).
 Pages 2–5 show "Step n of 5" and a Back button.
 
 Start → `AppState.completeOnboarding(displayName, pace, adultConfirmed: true,
-askAboutGame: true)` → `BootScreen` swaps to `RootShell` (Today) → `onDone`
-(if given).
+askAboutGame: true)` → `BootScreen` swaps to `RootShell` → `onDone` (if
+given). A new user (first launch, or after "Delete all data" from You) lands
+on **Today** — the shell's tab is set to Today before the swap, so the next
+action and the invitation are the first thing seen, not the tab left open
+before (audit fix A9). A replayed welcome returns to where it was opened.
 
 ## The Campaign for new users
 
@@ -107,8 +110,10 @@ system owns `scenes.dart`).
   otherwise; every page at 320×568 @200 %, 390×844, 1024×1366 @130 % in dark
   and light without overflow.
 - `test/ui/shell_test.dart` › "onboarding leads into the app" and the
-  journeys (`journeys_test.dart`, `persona_journey_test.dart`) drive the real
-  flow (Begin → 18+ → Next ×3 → Start).
+  journeys (`journeys_test.dart`, `persona_journey_test.dart`,
+  `evolve_journey_test.dart`) drive the real flow (Begin → 18+ → Next ×3 →
+  Start); `evolve_journey_test.dart` also deletes all data from You and checks
+  the new welcome lands on Today with the invitation.
 - `test/screenshots/onboarding_today_screenshots_test.dart` (tag
   `screenshots`, skipped by default): every page and all five scenes, dark and
   light → `test/screenshots/out/1x_*.png`, `23_scenes_*.png`

@@ -19,6 +19,7 @@ import 'package:cartharise/ui/campaign/reward_sheet.dart';
 import 'package:cartharise/ui/campaign/try_screen.dart';
 import 'package:cartharise/ui/compass/compass_tab.dart';
 import 'package:cartharise/ui/missions/project_screen.dart';
+import 'package:cartharise/ui/nav.dart';
 import 'package:cartharise/ui/onboarding/onboarding_flow.dart';
 import 'package:cartharise/ui/onboarding/onboarding_steps.dart';
 import 'package:cartharise/ui/persona/avatar_view.dart';
@@ -244,6 +245,27 @@ void main() {
         findsNothing,
       );
 
+      // The Playground stays open without the game: Notice, Try and the
+      // Collection, with no XP, levels or achievements.
+      await _tap(
+        tester,
+        find.descendant(
+          of: find.byType(PillTabs<CompassSection>),
+          matching: find.text('Playground'),
+        ),
+      );
+      expect(find.byType(PlaygroundView), findsOneWidget);
+      expect(_key('campaign-status'), findsNothing);
+      expect(_key('campaign-open-notice'), findsOneWidget);
+      await _tap(tester, _key('campaign-open-try'));
+      expect(find.byType(TryScreen), findsOneWidget);
+      expect(_key('try-xp'), findsNothing, reason: 'no XP with the game off');
+      await _back(tester);
+      await _tap(tester, _key('campaign-link-collection'));
+      expect(find.byType(CollectionScreen), findsOneWidget);
+      expect(find.byType(AchievementBadge), findsNothing);
+      await _back(tester);
+
       // You › The Campaign: off, and switching it on works.
       await _openTab(tester, 'You');
       final toggle = _key('you-campaign');
@@ -407,8 +429,13 @@ void main() {
       findsOneWidget,
     );
     final observer = _key('collection-achievement-observer');
+    // Changed by design (A1): the experiment that earned it is named.
+    final title = _content.experiment('try.terrain.01')!.title;
     expect(
-      find.descendant(of: observer, matching: find.text('Earned by trying')),
+      find.descendant(
+        of: observer,
+        matching: find.text('Earned by trying: $title'),
+      ),
       findsOneWidget,
     );
     final badge = tester.widget<AchievementBadge>(
@@ -522,6 +549,14 @@ void main() {
     expect(h.store.saved!.attemptDraft!.attempt, _attempt);
     await _waitOutSnackBars(tester);
 
+    // Leaving and coming back while Retry still waits: the words are where
+    // they were typed, and the attempt is listed once.
+    await _back(tester);
+    await _tap(tester, _key('campaign-link-log'));
+    expect(_fieldText(tester, 'campaign-attempt'), _attempt);
+    expect(_fieldText(tester, 'campaign-learning'), _learning);
+    expect(h.state.data.campaignLog, hasLength(1));
+
     // Retry once the phone can save: recorded now, the draft is gone.
     h.store.failWrites = false;
     await _tap(tester, find.text('Retry').first);
@@ -556,6 +591,7 @@ void main() {
       attemptDraft: () =>
           AttemptDraft(attempt: _attempt, learning: _learning, updatedAt: _t),
       experimentLog: [experiment],
+      tryNoteDrafts: {'try.terrain.01': _note},
       avatarUnlocked: {Unlockable.accessoryCompass},
       quests: [
         Quest(
@@ -585,6 +621,7 @@ void main() {
     expect(exported.attemptDraft!.attempt, _attempt);
     expect(exported.attemptDraft!.learning, _learning);
     expect(exported.experimentLog.single.note, _note);
+    expect(exported.tryNoteDrafts, {'try.terrain.01': _note});
     expect(exported.avatarUnlocked, {Unlockable.accessoryCompass});
     expect(exported.quests.single.source, QuestSource.experiment);
     await _waitOutSnackBars(tester);
@@ -598,6 +635,7 @@ void main() {
     expect(h.store.raw, isNull);
     expect(h.state.data.attemptDraft, isNull);
     expect(h.state.data.experimentLog, isEmpty);
+    expect(h.state.data.tryNoteDrafts, isEmpty);
     expect(h.state.data.avatarUnlocked, isEmpty);
     expect(h.state.data.quests, isEmpty);
 
@@ -612,8 +650,10 @@ void main() {
     expect(h.state.settings.game, isFalse);
     expect(h.state.settings.gameInvited, isFalse);
     expect(h.state.settings.todayPin, TodayPin.auto);
-    await _openTab(tester, 'Today');
-    expect(_key('today-invite'), findsOneWidget);
+    // Deleted from You, the new user still lands on Today, with the
+    // invitation (not on the You tab left open before).
+    expect(h.shell.tab, AppTab.today);
+    expect(_in<TodayTab>(_key('today-invite')), findsOneWidget);
 
     // Restore: every new field comes back, and the question is answered.
     await _openTab(tester, 'You');
@@ -630,9 +670,15 @@ void main() {
       expect(restored.attemptDraft!.learning, _learning);
       expect(restored.experimentLog.single.note, _note);
       expect(restored.experimentLog.single.experimentId, 'try.plan.01');
+      expect(restored.tryNoteDrafts, {'try.terrain.01': _note});
       expect(restored.avatarUnlocked, {Unlockable.accessoryCompass});
       expect(restored.quests.single.source, QuestSource.experiment);
     }
+    // A restore is not a moment, however small (a try, its achievement
+    // and its pick came back with it).
+    await tester.pump(CampaignFeedback.settle);
+    await tester.pump();
+    expect(_key('campaign-toast'), findsNothing);
     await _back(tester);
     await _openTab(tester, 'Today');
     expect(_key('today-invite'), findsNothing);

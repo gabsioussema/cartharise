@@ -5,6 +5,10 @@ of the article ("life as a game") made playable. It is the third section of the
 **Compass** tab (**Compass | Missions | Campaign**), with a small card on Today.
 Since evolve step 1 it is a compact hub with the **Playground** (Notice, Try,
 Make it yours) and keepsakes (the Collection); see `docs/plans/evolve.md`.
+With the game layer off (every new user until "Play", anyone after "Not
+now") the third pill reads **Playground** and keeps Notice, Try, Make it
+yours and the Collection open, without XP, levels, the route or
+achievements (below).
 Requirements: F-058–F-064 and §13 "The Campaign" of
 `Cartharise_Game_Requirements.html`; the browser prototype is
 `Cartharise_Game.html` (`campaign()` view).
@@ -33,7 +37,7 @@ a readable-width list with the bottom inset).
 
 **The hub** (`campaign_view.dart`), top to bottom:
 
-1. `SaveIndicator`, then the **invitation** while it is unanswered (below).
+1. `SaveIndicator`.
 2. **Status** (forest hero): "Level n · x XP" and **Hannibal's route** — one
    stop per level (Carthage, New Carthage, the Ebro, the Pyrenees, the Rhône,
    the Alps, Italy; places, never labels for the person), the road walked so
@@ -44,19 +48,30 @@ a readable-width list with the bottom inset).
    the Pyrenees" (from Italy on "The campaign goes on") and **How XP is
    earned** (the rules dialog, which opens with "XP counts what you do, never
    your worth. Rest costs nothing.").
-3. Three **invitations**, each a card with a glyph (`GlyphIcon`), a word and
-   one line, the whole card opening its page: **Notice** (notice glyph) "A
-   question or idea to look at again." · **Try** (experiment glyph) "A tiny
-   experiment for real life." · **Make it yours** (progress glyph) "Your
-   avatar and motto." — or "2 reward picks to choose" while picks are left.
-   One column on phones, up to three on tablets.
+3. Three **invitations** (`PlaygroundInvitations`), each a card with its cue,
+   a word and one line, the whole card opening its page: **Notice** (notice
+   glyph) "A question or idea to look at again." · **Try** (experiment glyph)
+   "A tiny experiment for real life." · **Make it yours** (the user's own
+   avatar, the emblem until one exists — not the Campaign's progress glyph)
+   "Your avatar and motto." — or "2 reward picks to choose" while picks are
+   left. One column on phones, up to three on tablets.
 4. Small links: **Route** · **Chapters** · **Battle log** (reads "Battle log ·
    draft kept" while an attempt draft is saved) · **Collection**.
 5. The honest note: XP, levels and achievements are Cartharise additions.
 
+**The Playground with the game off** (`PlaygroundView`, audit fix A3): the
+pill reads **Playground**, "Small things to notice and try.", then the
+**invitation** while it is unanswered, the same three invitations and a
+**Collection** link; once the invitation is answered, "No XP or levels while
+the Campaign is off. Turn it on in You." No status, route, chapters or
+battle log. Try shows no "+10 XP", the Collection shows what was tried and
+no achievements, Make it yours says every extra is open. **Play** turns the
+section into the hub in place.
+
 **Notice** (`notice_screen.dart`): illustrated cards from
-`ContentLibrary.notices` — a lesson's `LessonIllustration`, or the notice's
-glyph on a raised panel — with what it opens ("REFLECTION" / "LESSON",
+`ContentLibrary.notices` — a lesson's `LessonIllustration`, or, for a
+question, the notice's glyph in a small 44 dp tile beside its kind (no large
+empty panel) — with what it opens ("REFLECTION" / "LESSON",
 "Opens: Quiet dissatisfaction"), its short title, and "Written" (the question
 has an answer in any reset) or "Read" (`lessonsRead`) in words. The card opens
 the prompt (`AppNav.openPrompt`) or the lesson (`AppNav.openLesson`); nothing
@@ -67,8 +82,13 @@ title, "About n min", "+10 XP" (read "Earns 10 XP the first time"; only while
 the game is on and the experiment was never tried), "Tried <date>" once tried,
 and its numbered steps (read "Step 1: …"). It starts at the first experiment
 not tried yet (or at a chapter's, from **Chapters › Try one**).
-**Previous** / **Next** go round the list ("3 of 15"); a typed note waits for
-its experiment while browsing.
+**Previous** / **Next** go round the list ("3 of 15"). **The note is kept**
+(audit fix A6): each experiment's note autosaves as a draft
+(`AppData.tryNoteDrafts`, `saveTryNoteDraft`, exactly as typed) 600 ms after
+the last keystroke, when switching experiments, when the page closes and
+when the app goes to the background; it comes back when the experiment is
+shown again, even after a restart. A blank note is no draft; **I tried it**
+removes the draft in the same change.
 * **I tried it** → `tryExperiment(id, note:)` for today, the optional note
   exactly as typed → "Saved to your Collection." The try never makes a task.
 * **Add to my tasks** → `addExperimentToTasks(id)`: explicit only; one
@@ -146,24 +166,40 @@ first; tapping one opens a sheet to correct it or **Delete attempt**
   Retry at the top.", keeps the words in the form and scrolls to the
   `SaveIndicator`; a Retry that works there clears the form and then says
   "Attempt recorded.". Recording the same words again after a failure writes
-  again instead of adding a second attempt.
+  again instead of adding a second attempt. Leaving the page while Retry
+  still waits and opening it again shows the same words (kept with the
+  `AppState` for the session, since recording removed the draft; audit fix
+  A7).
 
 **Collection** (`collection_screen.dart`, keepsakes):
-* **Experiments tried** — each try with its experiment, its note exactly as
-  typed and "Tried <date>"; tapping one opens a sheet to correct the note or
-  **Remove this try** (asks first; `experiment_entry_sheet.dart`). An
+* **Experiments tried** — "n experiments tried" and one card per experiment
+  (most recently tried first): its title once, then each try with its note
+  exactly as typed and "Tried <date>" (so the count matches the cards; audit
+  fix A10). Tapping a try opens a sheet to correct the note or **Remove this
+  try** (asks first; `experiment_entry_sheet.dart`); closing the sheet with a
+  changed note that wasn't saved (swipe, back, a tap outside) asks **Save
+  your change?** — **Save note** or **Discard** (audit fix A6). An
   experiment a newer version added shows as "An experiment". Nothing yet → a
   way into Try.
-* **Achievements from the article** (F-062) — "n of 7 earned", "Earned by
-  doing, never by what you write.", how a chapter's badge is earned (answer
-  its questions in one reset, or try one of its experiments) and "Next: …".
-  Seven tiles with their `AchievementBadge` (earned or not shows by shape),
-  name, what it asks and, in words with an icon, **Earned by reflecting** /
-  **Earned by trying** / **Earned by doing** (`CampaignProgress.earnedBy`) or
-  **Not yet**; each tile is read out as one phrase.
+* **Achievements from the article** (F-062; game on only) — "n of 7
+  earned", "Earned by reflecting, trying or doing. Never by what you write."
+  and "Next: …". Seven tiles with their `AchievementBadge` (earned or not
+  shows by shape), name, **what it asks in the present tense** (e.g. "Answer
+  every daytime check-in in one reset, or try one of its experiments";
+  never a past-tense claim, since a chapter's badge can be earned either
+  way — audit fix A1) and, in words with an icon, **Earned by reflecting** /
+  **Earned by trying: Leave your phone in another room** (the experiment
+  that earned it, `CampaignProgress.earnedByExperiment`) / **Earned by
+  doing** (`CampaignProgress.earnedBy`) or **Not yet**; each tile is read
+  out as one phrase.
 * **Extras chosen** — the extras the user keeps or wears, as named chips (or
   "No extras chosen yet."; with the game off, every extra is open) and a link
   to Make it yours.
+
+Every bottom sheet here (Choose your reward, a try's note, an attempt, a
+quest) opens without sliding when Settings › Motion or the device's reduce
+motion is on (`sheetAnimationStyle: AnimationStyle.noAnimation`; audit fix
+A5).
 
 **Today** shows a Campaign tile (level, XP, bar → Campaign) while the game
 layer is on.
@@ -240,7 +276,8 @@ the user's settings). `AppSettings.gameInvited` defaults to true and loads
 as true from older files, so existing users never see it.
 
 `CampaignInviteCard` (`lib/ui/campaign/campaign_invite.dart`) is shown by
-Today and the Campaign hub while `CampaignInviteOps.campaignInvitePending`:
+Today and the Playground (the Compass tab's third section with the game off)
+while `CampaignInviteOps.campaignInvitePending`:
 a card with the progress glyph, **Play the Campaign?**, "XP and levels for
 what you do." and **Play** / **Not now**. Both answer it for good
 (`answerCampaignInvite(play:)`): Play turns the game on ("The Campaign is on.
@@ -271,8 +308,10 @@ A calm pill at the top for about two seconds, announced to screen readers:
 first try of an experiment, "Achievement earned: …", and **"A new pick for
 your avatar"** ("2 new picks…") when the action earned a reward pick that can
 be spent. Changes within 0.7 s become one moment ("+20 XP · A new pick for
-your avatar"). Extras never open by themselves (progress gives picks, the
-user chooses), so no extra is announced as new.
+your avatar"). The pill leads with the achievement's own `AchievementBadge`
+when one is announced, else the progress glyph. Extras never open by
+themselves (progress gives picks, the user chooses), so no extra is
+announced as new.
 
 Only an action is a moment: action XP, or the two action achievements (The
 Practitioner, The Challenger). Never while typing an answer: reflection and
@@ -282,10 +321,13 @@ give. These are not saved up for later either; the hub, Make it yours and
 the Collection show them. Never twice: an achievement seen this session
 isn't announced again, and picks count only above the most seen this
 session. A pick is said only while `picksLeft > 0` (a pick that merely
-covers extras already kept is nothing new to spend). Never for a bulk change
-such as a restored backup (more than 60 XP, or 3+ achievements or reward
-picks at once), never with the game layer off, never for spending a pick; no
-fade with reduced motion.
+covers extras already kept is nothing new to spend). Never when the data is
+replaced wholesale — a load, a restored backup of any size, a fresh start
+after a load error, "Delete all data": `AppState.dataGeneration` changes and
+the moments start over from the new data (audit fix A2); a bulk jump (more
+than 60 XP, or 3+ achievements or reward picks at once) is ignored too.
+Never with the game layer off, never for spending a pick; no fade with
+reduced motion.
 
 ## XP rules (`lib/domain/campaign.dart`, F-060)
 
@@ -312,6 +354,8 @@ earned achievement to an `EarnedRoute`: a chapter's achievement is
 `reflecting` (every chapter question *answered* — not skipped — in one reset)
 or `trying` (any of that chapter's experiments tried; reflecting is named
 when both are true); The Practitioner and The Challenger are `doing`.
+`CampaignProgress.earnedByExperiment` names, for each achievement earned by
+trying, the experiment that earned it (the chapter's first one tried).
 `earned` is its key set; `Achievement.chapter` / `Achievement.ofChapter` map
 between chapters and their achievements, and `ChapterProgress.tried` counts
 the chapter's distinct experiments tried. An experiment id the content
@@ -320,10 +364,12 @@ achievement.
 
 ## Turning it off (F-060)
 
-You › Settings › **The Campaign** (switch). Off hides the Campaign pill and
-the Today card (`AppNav.openCampaign` then shows the Compass); the battle
-log, the experiment log and the kept extras stay saved, exported and deleted
-with everything else. Either choice there also answers the invitation.
+You › Settings › **The Campaign** (switch). Off hides the hub, its XP,
+levels, route and achievements and the Today card; the Compass tab's third
+pill becomes **Playground** (`AppNav.openCampaign` then shows it). The
+battle log, the experiment log and the kept extras stay saved, exported and
+deleted with everything else. Either choice there also answers the
+invitation.
 
 ## Data
 
@@ -338,6 +384,12 @@ with everything else. Either choice there also answers the invitation.
   null; nothing written when unchanged) and removed by `recordAttempt` in the
   same change.
 * `AppData.experimentLog` (above) and `QuestSource.experiment` (appended).
+* `AppData.tryNoteDrafts`: `Map<String, String>` experiment id → the Try
+  note not sent yet, exactly as typed (`tryNoteDraft`, `saveTryNoteDraft`;
+  blank → removed; nothing written when unchanged; `tryExperiment` removes
+  it in the same change). Older files have none.
+* `AppState.dataGeneration`: changes whenever the data is replaced wholesale
+  (load, restore, fresh start, delete all), never for an action.
 * `AppData.campaignLog`: `BattleLogEntry {id, day (yyyy-MM-dd), attempt,
   learning, createdAt, editedAt?}`, newest first. Attempt and learning are
   stored exactly as typed; a blank attempt is refused. Older data and backups
@@ -346,8 +398,8 @@ with everything else. Either choice there also answers the invitation.
   `gameEnabled`, `setGameEnabled` (also answers the invitation),
   `monthlyBoss`, `attemptDraft`, `saveAttemptDraft`, `recordAttempt`,
   `editAttempt`, `deleteAttempt`, `experimentLog`, `hasTried`,
-  `tryExperiment`, `editExperimentEntry`, `deleteExperimentEntry`,
-  `addExperimentToTasks`; `PersonaOps` — `picksEarned`, `picksLeft`,
+  `tryExperiment`, `tryNoteDraft`, `saveTryNoteDraft`,
+  `editExperimentEntry`, `deleteExperimentEntry`, `addExperimentToTasks`; `PersonaOps` — `picksEarned`, `picksLeft`,
   `rewardChoices`, `suggestedPick`, `chooseReward`; `CampaignInviteOps` —
   `campaignInvitePending`, `answerCampaignInvite`; all on `AppState.mutate`.
 * Every new field is in the JSON backup and cleared by "Delete all data";
@@ -359,7 +411,7 @@ with everything else. Either choice there also answers the invitation.
 | File | What |
 |---|---|
 | `lib/domain/campaign.dart` | chapters, achievements, XP rules, `campaignProgress()` (pure Dart) |
-| `lib/ui/campaign/campaign_view.dart` | the hub: status, the three invitations (`CampaignInvitation`), the links |
+| `lib/ui/campaign/campaign_view.dart` | the hub: status, the three invitations (`PlaygroundInvitations`, `CampaignInvitation`), the links; `PlaygroundView` (game off) |
 | `lib/ui/campaign/campaign_pages.dart` | `CampaignPage`, `campaignPageScreen`, `pushCampaignScreen`, `openTryFor` |
 | `lib/ui/campaign/campaign_kit.dart` | `CampaignScreen`, `CampaignRouteMap`, `showXpRules`, `CampaignGrid`, `CampaignStat`, `CampaignCallout`, `CampaignStatusLine`, `place` |
 | `lib/ui/campaign/notice_screen.dart` | Notice (`NoticeCard`) |
@@ -370,7 +422,7 @@ with everything else. Either choice there also answers the invitation.
 | `lib/ui/campaign/chapters_screen.dart` | Act I's chapters |
 | `lib/ui/campaign/battle_log_screen.dart` | the boss, the attempt form (draft autosave, honest recording), the log |
 | `lib/ui/campaign/collection_screen.dart` | experiments tried, achievements and how earned, extras chosen |
-| `lib/ui/campaign/experiment_entry_sheet.dart` | correct a try's note / remove the try |
+| `lib/ui/campaign/experiment_entry_sheet.dart` | correct a try's note / remove the try; asks before dropping a changed note |
 | `lib/ui/campaign/attempt_sheet.dart` | correct / delete an attempt |
 | `lib/ui/campaign/campaign_copy.dart` | chapter and achievement names, `earnedByLabel` |
 | `lib/ui/campaign/campaign_feedback.dart` | the "+XP" / achievement / new-pick moments |
@@ -401,8 +453,11 @@ with everything else. Either choice there also answers the invitation.
   reward picks (earned, left, suggested first, choose and its refusals,
   nothing kept ever taken away, game off opens everything, `mutate` / `load`
   no longer opening extras, a locked extra cannot be worn), backup / "Delete
-  all data" with every new field, and the glyph / art / invitation in dark and
-  light.
+  all data" with every new field, the glyph / art / invitation in dark and
+  light, and the audit fixes: Try note drafts (round trip, per experiment,
+  cleared by a try and by "Delete all data"), `hintsSeen`, `dataGeneration`
+  and `earnedByExperiment` (the first experiment tried in the chapter; none
+  when reflecting earned it).
 * `test/ui/campaign_test.dart` — the hub (status with real numbers, the
   three invitations, the four links, nothing long on it; each opens its page;
   the XP rules dialog with experiments; no judgement copy on the hub and every
@@ -415,9 +470,11 @@ with everything else. Either choice there also answers the invitation.
   kept" on the hub; a failed save never says "recorded", keeps the words, Retry
   then clears; the same words again write again rather than a second attempt),
   moments (+20 / +10 XP, achievements and the new-pick line; not from typing;
-  not twice; not for a pick that only covers kept extras; not for a restore;
-  not with the game off), the Today card and the off switch (which also
-  answers the invitation), Make it yours (emblem / avatar on the route and in
+  not twice; not for a pick that only covers kept extras; not for a restore,
+  however small; the badge leading an announced achievement; not with the
+  game off), the Today card and the off switch (which also answers the
+  invitation; with it off the section is the Playground), one cue per
+  invitation (mirror, seedling, the user's avatar), Make it yours (emblem / avatar on the route and in
   the card, motto as typed, counts, picks and the suggestion, next pick,
   "Every extra unlocked." only when true), the quest chips and the
   "Experiment" label, and the size matrix in dark and light for the hub (also
@@ -434,15 +491,23 @@ with everything else. Either choice there also answers the invitation.
   save), the builder's lock text with a pick left, the Collection (notes as
   typed, unknown experiments, badges and how earned, extras chosen, editing
   and removing a try), the invitation (Play, Not now, nothing once answered, a
-  failed save, on the hub), `AppNav.openCampaignPage` for every page, and the
-  guidelines (tap size, labels, contrast) plus the size matrix in dark and
-  light for Try, Notice, Make it yours, the Collection, the invitation, the
-  reward sheet (its confirm button reachable at 320 dp and 200 % text), the
+  failed save, on the Playground then the hub after Play),
+  `AppNav.openCampaignPage` for every page; the audit fixes: a try's note
+  autosaved per experiment (restart, switch, try clears it, blank removes
+  it), a changed note never dropped when its sheet closes (Save note /
+  Discard), an achievement earned by trying naming its experiment and making
+  no claim about answers, present-tense "what it asks" for every
+  achievement, repeat tries grouped under one experiment, the Collection
+  without achievements when the game is off, every sheet without a slide
+  under reduced motion; and the guidelines (tap size, labels, contrast) plus
+  the size matrix in dark and light for Try, Notice, Make it yours, the
+  Collection, the Playground (game off, with and without the invitation),
+  the invitation, the reward sheet (its confirm button reachable at 320 dp and 200 % text), the
   Battle log, Route and Chapters.
 * `test/ui/a11y_test.dart` — the hub in dark and light against the tap size,
   label and contrast guidelines.
 * `test/ui/persona_journey_test.dart` — the avatar on the hub's route and in
   Make it yours.
 * `test/screenshots/campaign_screenshots_test.dart` — the hub, the
-  invitation, every page and the reward sheet, dark and light
-  (`make screenshots`).
+  invitation, every page, the reward sheet, the Playground with the game off
+  and a moment with its badge, dark and light (`make screenshots`).

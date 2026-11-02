@@ -404,4 +404,19 @@ void main() {
       }
     });
   });
+
+  group('Playground notices', () {
+    test('a reset question shows a reflection cue, never the shelter '
+        '(boundaries are constraints and planning)', () {
+      for (final n in c.notices) {
+        if (n.promptId == null) continue;
+        expect(n.glyph, isNot(CarthaGlyph.boundaries), reason: n.id);
+      }
+      // "What you are putting off right now" is something to notice.
+      expect(
+        c.notices.firstWhere((n) => n.id == 'notice.04').glyph,
+        CarthaGlyph.notice,
+      );
+    });
+  });
 }

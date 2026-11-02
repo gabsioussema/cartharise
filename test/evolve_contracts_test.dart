@@ -353,6 +353,117 @@ void main() {
     }
   });
 
+  group('"Try" note drafts (audit fix A6)', () {
+    test('round-trip exactly as typed; older data has none; junk refused', () {
+      final data = AppData(
+        tryNoteDrafts: {'try.terrain.01': '  Half a note 🌱\n', 'x': 'y'},
+      );
+      expect(_roundTrip(data).tryNoteDrafts, {
+        'try.terrain.01': '  Half a note 🌱\n',
+        'x': 'y',
+      });
+      final older = _json(AppData.empty, (j) => j.remove('tryNoteDrafts'));
+      expect(AppData.fromJson(older).tryNoteDrafts, isEmpty);
+      final junk = _json(
+        AppData.empty,
+        (j) => j['tryNoteDrafts'] = {'try.terrain.01': 3},
+      );
+      expect(() => AppData.fromJson(junk), throwsFormatException);
+    });
+
+    test('saved per experiment exactly as typed; blank removes; nothing '
+        'written when unchanged; the try clears it in the same change', () async {
+      final store = MemoryDataStore(AppData.empty);
+      final state = await _loaded(null, store);
+      await state.saveTryNoteDraft('try.terrain.01', ' Went ');
+      await state.saveTryNoteDraft('try.plan.01', 'Other');
+      expect(state.tryNoteDraft('try.terrain.01'), ' Went ');
+      expect(store.saved!.tryNoteDrafts, {
+        'try.terrain.01': ' Went ',
+        'try.plan.01': 'Other',
+      });
+      final writes = store.writes;
+      await state.saveTryNoteDraft('try.terrain.01', ' Went ');
+      await state.saveTryNoteDraft('try.pattern.01', '  ');
+      expect(store.writes, writes);
+
+      final seen = <(int, bool)>[];
+      void listen() => seen.add((
+        state.experimentLog.length,
+        state.data.tryNoteDrafts.containsKey('try.terrain.01'),
+      ));
+      state.addListener(listen);
+      await state.tryExperiment('try.terrain.01', note: ' Went ');
+      state.removeListener(listen);
+      expect(store.writes, writes + 1, reason: 'one write');
+      expect(seen, everyElement((1, false)));
+      expect(store.saved!.tryNoteDrafts, {'try.plan.01': 'Other'});
+
+      await state.saveTryNoteDraft('try.plan.01', '\n');
+      expect(state.data.tryNoteDrafts, isEmpty);
+      expect(state.tryNoteDraft('try.plan.01'), '');
+    });
+
+    test('"Delete all data" clears them', () async {
+      final store = MemoryDataStore(
+        const AppData(tryNoteDrafts: {'try.terrain.01': 'x'}),
+      );
+      final state = await _loaded(null, store);
+      await state.deleteAllData();
+      expect(state.data.tryNoteDrafts, isEmpty);
+      expect(store.raw, isNull);
+    });
+  });
+
+  group('first-use hints seen (audit fix A8)', () {
+    test('round-trip; older files have none; unknown names dropped', () {
+      const settings = AppSettings(hintsSeen: {FirstUseHint.quests});
+      expect(
+        _roundTrip(const AppData(settings: settings)).settings.hintsSeen,
+        {FirstUseHint.quests},
+      );
+      final older = _json(
+        AppData.empty,
+        (j) => (j['settings']! as Map<String, Object?>).remove('hintsSeen'),
+      );
+      expect(AppData.fromJson(older).settings.hintsSeen, isEmpty);
+      final newer = _json(
+        AppData.empty,
+        (j) => (j['settings']! as Map<String, Object?>)['hintsSeen'] = [
+          'quests',
+          'fromANewerVersion',
+        ],
+      );
+      expect(AppData.fromJson(newer).settings.hintsSeen, {
+        FirstUseHint.quests,
+      });
+      expect(
+        settings.copyWith(theme: AppTheme.olive).hintsSeen,
+        {FirstUseHint.quests},
+      );
+    });
+  });
+
+  group('data replaced wholesale (audit fix A2)', () {
+    test('a load, a restore, a fresh start and "Delete all data" each '
+        'change dataGeneration; an action does not', () async {
+      final store = MemoryDataStore(AppData.empty);
+      final state = await _loaded(null, store);
+      final loaded = state.dataGeneration;
+      await state.addQuest('Walk');
+      expect(state.dataGeneration, loaded, reason: 'an action');
+      await state.importBackup(encodeBackup(state.data, _t));
+      final restored = state.dataGeneration;
+      expect(restored, isNot(loaded));
+      await state.deleteAllData();
+      expect(state.dataGeneration, isNot(restored));
+      final deleted = state.dataGeneration;
+      // A failed restore changes nothing.
+      await expectLater(state.importBackup('{'), throwsFormatException);
+      expect(state.dataGeneration, deleted);
+    });
+  });
+
   group('the experiment log', () {
     test('round-trips exactly as typed; older data has none; junk refused', () {
       final data = AppData(
@@ -531,6 +642,8 @@ void main() {
         fakeContent,
       );
       expect(p.earnedBy, {Achievement.pathfinder: EarnedRoute.trying});
+      // The app can name the experiment that earned it.
+      expect(p.earnedByExperiment, {Achievement.pathfinder: 'try.pattern.02'});
       expect(p.earned, {Achievement.pathfinder});
       expect(p.chapters[1].explored, isFalse, reason: 'nothing answered');
     });
@@ -553,6 +666,22 @@ void main() {
         fakeContent,
       );
       expect(both.earnedBy[Achievement.observer], EarnedRoute.reflecting);
+      // Reflecting earned it: no experiment is credited.
+      expect(both.earnedByExperiment, isEmpty);
+      // Tried twice in a chapter: the first one tried earned it (the log
+      // is newest first).
+      final twice = campaignProgress(
+        AppData(
+          experimentLog: [
+            _tried('b', 'try.terrain.02'),
+            _tried('a', 'try.terrain.01', day: '2026-11-01'),
+          ],
+        ),
+        fakeContent,
+      );
+      expect(twice.earnedByExperiment, {
+        Achievement.observer: 'try.terrain.01',
+      });
       // Answered is answered; skipped stays honestly distinct.
       final skipped = campaignProgress(
         AppData(

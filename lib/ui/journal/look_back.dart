@@ -59,6 +59,10 @@ class _LookBackSectionState extends State<LookBackSection> {
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
+      // Reduced motion (device or Settings › Motion): no slide.
+      sheetAnimationStyle: motionEnabled(context)
+          ? null
+          : AnimationStyle.noAnimation,
       builder: (sheetContext) {
         final p = CarthaPalette.of(sheetContext);
         final choices = [_now, for (var i = 0; i < history.length; i++) i];

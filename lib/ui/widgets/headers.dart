@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../theme/cartha_theme.dart';
+import 'glyphs.dart';
 
 /// A screen's title block: Cinzel title (short!) + Inter subtitle, like the
 /// board's "Good morning, Traveler. / Clarity today. Progress tomorrow."
@@ -66,11 +67,16 @@ class ChipTag extends StatelessWidget {
     super.key,
     required this.label,
     this.icon,
+    this.glyph,
     this.tone = ChipTone.neutral,
-  });
+  }) : assert(icon == null || glyph == null, 'An icon or a glyph, not both');
 
   final String label;
   final IconData? icon;
+
+  /// A painted glyph instead of [icon], for a label that names one of the
+  /// visual system's ideas (e.g. an experiment's seedling).
+  final CarthaGlyph? glyph;
   final ChipTone tone;
 
   @override
@@ -94,7 +100,10 @@ class ChipTag extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (icon != null) ...[
+          if (glyph != null) ...[
+            GlyphIcon(glyph!, size: 16, color: fg),
+            const SizedBox(width: 4),
+          ] else if (icon != null) ...[
             Icon(icon, size: 14, color: fg),
             const SizedBox(width: 4),
           ],

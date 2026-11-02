@@ -30,6 +30,9 @@ String achievementName(AppLocalizations l, Achievement a) => switch (a) {
   Achievement.challenger => l.campaignAchievementChallenger,
 };
 
+/// What an achievement asks, in the present tense ("Answer every … or try
+/// one of its experiments"): never a claim about what the user did, since a
+/// chapter's badge can be earned either way; [earnedByLabel] says how.
 String achievementBody(AppLocalizations l, Achievement a) => switch (a) {
   Achievement.observer => l.campaignAchievementObserverBody,
   Achievement.pathfinder => l.campaignAchievementPathfinderBody,
@@ -40,9 +43,17 @@ String achievementBody(AppLocalizations l, Achievement a) => switch (a) {
   Achievement.challenger => l.campaignAchievementChallengerBody,
 };
 
-/// How an achievement was earned, e.g. "Earned by trying".
-String earnedByLabel(AppLocalizations l, EarnedRoute route) => switch (route) {
+/// How an achievement was earned, e.g. "Earned by trying: Leave your
+/// phone in another room" — naming the experiment when it is known.
+String earnedByLabel(
+  AppLocalizations l,
+  EarnedRoute route, {
+  String? experiment,
+}) => switch (route) {
   EarnedRoute.reflecting => l.campaignEarnedByReflecting,
-  EarnedRoute.trying => l.campaignEarnedByTrying,
+  EarnedRoute.trying =>
+    experiment == null || experiment.trim().isEmpty
+        ? l.campaignEarnedByTrying
+        : l.campaignEarnedByTryingWhat(experiment),
   EarnedRoute.doing => l.campaignEarnedByDoing,
 };

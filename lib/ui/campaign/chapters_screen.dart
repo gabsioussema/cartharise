@@ -103,7 +103,7 @@ class _ChapterCard extends StatelessWidget {
                 ChipTag(
                   key: ValueKey('campaign-chapter-tried-$number'),
                   label: l.campaignChapterTried(progress.tried),
-                  icon: GlyphIcon.placeholderFor(CarthaGlyph.experiment),
+                  glyph: CarthaGlyph.experiment,
                   tone: ChipTone.accent,
                 ),
             ],

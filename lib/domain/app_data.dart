@@ -38,6 +38,12 @@ enum CompassVersionReason { manual, beforeImport, beforeRestore }
 /// an unknown name loads as [auto].
 enum TodayPin { auto, project, reflection, notes }
 
+/// One-line first-use hints that, once their feature has been used, never
+/// come back — even if what they introduced is emptied again (every quest
+/// deleted). Stored by name: append, never rename; unknown names are
+/// dropped.
+enum FirstUseHint { quests }
+
 // ── JSON helpers ────────────────────────────────────────────────────────────
 
 Map<String, Object?> _map(Object? v, String what) {
@@ -195,6 +201,7 @@ class AppSettings {
     this.game = true,
     this.gameInvited = true,
     this.todayPin = TodayPin.auto,
+    this.hintsSeen = const {},
   });
 
   final AppearanceMode appearance;
@@ -224,6 +231,9 @@ class AppSettings {
   /// What Today's next action leans towards.
   final TodayPin todayPin;
 
+  /// First-use hints whose feature was used: they are not shown again.
+  final Set<FirstUseHint> hintsSeen;
+
   AppSettings copyWith({
     AppearanceMode? appearance,
     AppTheme? theme,
@@ -234,6 +244,7 @@ class AppSettings {
     bool? game,
     bool? gameInvited,
     TodayPin? todayPin,
+    Set<FirstUseHint>? hintsSeen,
   }) => AppSettings(
     appearance: appearance ?? this.appearance,
     theme: theme ?? this.theme,
@@ -244,6 +255,7 @@ class AppSettings {
     game: game ?? this.game,
     gameInvited: gameInvited ?? this.gameInvited,
     todayPin: todayPin ?? this.todayPin,
+    hintsSeen: hintsSeen ?? this.hintsSeen,
   );
 
   Map<String, Object?> toJson() => {
@@ -256,6 +268,10 @@ class AppSettings {
     'game': game,
     'gameInvited': gameInvited,
     'todayPin': todayPin.name,
+    'hintsSeen': [
+      for (final h in FirstUseHint.values)
+        if (hintsSeen.contains(h)) h.name,
+    ],
   };
 
   factory AppSettings.fromJson(Object? json) {
@@ -265,6 +281,13 @@ class AppSettings {
     final quietEnd = _optStr(j, 'quietEnd');
     if (quietStart != null) parseClock(quietStart);
     if (quietEnd != null) parseClock(quietEnd);
+    // Older files have none; names from a newer version are dropped.
+    final hintsSeen = <FirstUseHint>{};
+    for (final h in _list(j['hintsSeen'], 'hintsSeen')) {
+      for (final known in FirstUseHint.values) {
+        if (known.name == h) hintsSeen.add(known);
+      }
+    }
     return AppSettings(
       appearance: _enum(
         AppearanceMode.values,
@@ -280,6 +303,7 @@ class AppSettings {
       game: _bool(j, 'game', fallback: true),
       gameInvited: _bool(j, 'gameInvited', fallback: true),
       todayPin: _lenientEnum(TodayPin.values, j, 'todayPin', TodayPin.auto),
+      hintsSeen: hintsSeen,
     );
   }
 }
@@ -972,6 +996,7 @@ class AppData {
     this.avatarUnlocked = const {},
     this.attemptDraft,
     this.experimentLog = const [],
+    this.tryNoteDrafts = const {},
   });
 
   /// Null until onboarding creates it.
@@ -1022,6 +1047,10 @@ class AppData {
   /// Playground experiments tried, newest first.
   final List<ExperimentEntry> experimentLog;
 
+  /// The Playground "Try" note typed but not sent yet, per experiment id,
+  /// exactly as typed (a blank note is no draft).
+  final Map<String, String> tryNoteDrafts;
+
   static const empty = AppData();
 
   Journey? get currentJourney {
@@ -1050,6 +1079,7 @@ class AppData {
     Set<Unlockable>? avatarUnlocked,
     AttemptDraft? Function()? attemptDraft,
     List<ExperimentEntry>? experimentLog,
+    Map<String, String>? tryNoteDrafts,
   }) => AppData(
     profile: profile != null ? profile() : this.profile,
     settings: settings ?? this.settings,
@@ -1071,6 +1101,7 @@ class AppData {
     avatarUnlocked: avatarUnlocked ?? this.avatarUnlocked,
     attemptDraft: attemptDraft != null ? attemptDraft() : this.attemptDraft,
     experimentLog: experimentLog ?? this.experimentLog,
+    tryNoteDrafts: tryNoteDrafts ?? this.tryNoteDrafts,
   );
 
   Map<String, Object?> toJson() => {
@@ -1096,6 +1127,10 @@ class AppData {
     ],
     'attemptDraft': attemptDraft?.toJson(),
     'experimentLog': [for (final e in experimentLog) e.toJson()],
+    'tryNoteDrafts': {
+      for (final id in tryNoteDrafts.keys.toList()..sort())
+        id: tryNoteDrafts[id],
+    },
   };
 
   factory AppData.fromJson(Object? json) {
@@ -1122,6 +1157,15 @@ class AppData {
       if (u is! String) throw const FormatException('Bad avatar extra');
       for (final known in Unlockable.values) {
         if (known.name == u) unlocked.add(known);
+      }
+    }
+    // Older files have no drafts.
+    final tryNoteDrafts = <String, String>{};
+    if (j['tryNoteDrafts'] != null) {
+      for (final MapEntry(:key, :value)
+          in _map(j['tryNoteDrafts'], 'tryNoteDrafts').entries) {
+        if (value is! String) throw const FormatException('Bad note draft');
+        tryNoteDrafts[key] = value;
       }
     }
     return AppData(
@@ -1171,6 +1215,7 @@ class AppData {
         for (final e in _list(j['experimentLog'], 'experimentLog'))
           ExperimentEntry.fromJson(e),
       ],
+      tryNoteDrafts: tryNoteDrafts,
     );
   }
 }

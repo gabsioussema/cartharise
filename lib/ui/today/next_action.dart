@@ -160,7 +160,9 @@ class _StepView {
       case NextStepKind.quest:
         final quest = step.quest!;
         return _StepView(
-          glyph: CarthaGlyph.progress,
+          // Quests are small steps towards the direction (the Compass's
+          // daily levers); the path glyph belongs to the Campaign.
+          glyph: CarthaGlyph.direction,
           // The user's own words, as typed.
           title: quest.title,
           body: l.todayNextQuestBody,

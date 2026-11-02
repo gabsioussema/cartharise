@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cartharise/domain/app_data.dart';
+import 'package:cartharise/domain/backup.dart';
 import 'package:cartharise/domain/campaign.dart';
 import 'package:cartharise/domain/persona.dart';
 import 'package:cartharise/l10n/app_localizations_en.dart';
@@ -20,6 +21,7 @@ import 'package:cartharise/ui/persona/avatar_view.dart';
 import 'package:cartharise/ui/persona/persona_builder.dart';
 import 'package:cartharise/ui/persona/persona_ops.dart';
 import 'package:cartharise/ui/reset/guided_prompt_screen.dart';
+import 'package:cartharise/ui/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -205,6 +207,29 @@ void main() {
       await _pumpCampaign(tester, data: onboardedData());
       expect(find.text('Your avatar and motto.'), findsOneWidget);
       expect(find.textContaining('reward pick'), findsNothing);
+    });
+
+    testWidgets('one cue per idea: the mirror, the seedling and the user\'s '
+        'own avatar (not the Campaign\'s progress path)', (tester) async {
+      await _pumpCampaign(tester);
+      GlyphIcon? glyphIn(String key) {
+        final found = find.descendant(
+          of: find.byKey(ValueKey(key)),
+          matching: find.byType(GlyphIcon),
+        );
+        return found.evaluate().isEmpty ? null : tester.widget(found);
+      }
+
+      expect(glyphIn('campaign-open-notice')?.glyph, CarthaGlyph.notice);
+      expect(glyphIn('campaign-open-try')?.glyph, CarthaGlyph.experiment);
+      expect(glyphIn('campaign-open-yours'), isNull);
+      expect(
+        find.descendant(
+          of: find.byKey(const ValueKey('campaign-open-yours')),
+          matching: find.byType(AvatarView),
+        ),
+        findsOneWidget,
+      );
     });
 
     testWidgets('each invitation and link opens its own page', (tester) async {
@@ -752,6 +777,72 @@ void main() {
       expect(find.byKey(const ValueKey('campaign-toast')), findsNothing);
     });
 
+    testWidgets('quiet for a small restored backup (no size threshold '
+        'needed: a restore is never a moment)', (tester) async {
+      final h = await pumpCartha(
+        tester,
+        data: _data(withAttempt: false).copyWith(quests: []),
+      );
+      // Two completed quests: +40 XP, the Practitioner and its pick — what
+      // one action could earn, yet a restore all the same.
+      final backup = encodeBackup(
+        h.state.data.copyWith(
+          quests: [
+            for (final id in ['b1', 'b2'])
+              Quest(
+                id: id,
+                title: 'Restored $id',
+                createdAt: _t,
+                completedOn: const {'2026-11-02'},
+              ),
+          ],
+        ),
+        _t,
+      );
+      final generation = h.state.dataGeneration;
+      unawaited(h.state.importBackup(backup));
+      await tester.pump();
+      expect(h.state.dataGeneration, isNot(generation));
+      expect(h.state.campaign.earned, contains(Achievement.practitioner));
+      await tester.pump(CampaignFeedback.settle);
+      await tester.pump();
+      expect(find.byKey(const ValueKey('campaign-toast')), findsNothing);
+
+      // After the restore, a real action is a moment again.
+      await completeQuest(h, 'after');
+      await tester.pump(CampaignFeedback.settle);
+      await tester.pump();
+      expect(find.byKey(const ValueKey('campaign-toast')), findsOneWidget);
+      expect(find.textContaining('+20 XP'), findsOneWidget);
+      await tester.pump(CampaignFeedback.visible);
+    });
+
+    testWidgets('an announced achievement leads with its own badge', (
+      tester,
+    ) async {
+      final h = await pumpCartha(
+        tester,
+        data: _data(withAttempt: false).copyWith(quests: []),
+      );
+      await completeQuest(h, 'new');
+      await tester.pump(CampaignFeedback.settle);
+      await tester.pump();
+      final toast = find.byKey(const ValueKey('campaign-toast'));
+      expect(
+        tester
+            .widget<AchievementBadge>(
+              find.descendant(of: toast, matching: find.byType(AchievementBadge)),
+            )
+            .achievement,
+        Achievement.practitioner,
+      );
+      expect(
+        find.descendant(of: toast, matching: find.byIcon(Icons.auto_awesome)),
+        findsNothing,
+      );
+      await tester.pump(CampaignFeedback.visible);
+    });
+
     /// 80 XP from four October quest days (the Practitioner earned), on the
     /// game layer, no attempts.
     AppData nearNewCarthage({Persona? persona}) =>
@@ -1034,11 +1125,15 @@ void main() {
       );
       expect(find.byKey(const ValueKey('today-campaign')), findsNothing);
 
-      // A request for the Campaign shows the Compass instead.
+      // Changed by design (A3): a request for the Campaign shows the
+      // Playground — no XP, levels or route, and no "Campaign" anywhere.
       h.shell.compassSection.value = CompassSection.campaign;
       h.shell.select(AppTab.compass);
       await pumpFrames(tester);
       expect(find.byType(CampaignView), findsNothing);
+      expect(find.byType(PlaygroundView), findsOneWidget);
+      expect(find.byKey(const ValueKey('campaign-status')), findsNothing);
+      expect(find.textContaining(RegExp(r'\d+ XP|Level \d')), findsNothing);
       expect(find.text('Campaign'), findsNothing);
       expect(h.state.data.campaignLog, hasLength(1));
     });
@@ -1376,6 +1471,18 @@ void main() {
           matching: find.text('Experiment'),
         ),
         findsOneWidget,
+      );
+      // The same painted seedling as on Try, not a stand-in icon.
+      expect(
+        tester
+            .widget<GlyphIcon>(
+              find.descendant(
+                of: find.byKey(const ValueKey('quest-source-t')),
+                matching: find.byType(GlyphIcon),
+              ),
+            )
+            .glyph,
+        CarthaGlyph.experiment,
       );
     });
 

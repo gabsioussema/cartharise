@@ -1570,7 +1570,7 @@ const List<Notice> _notices = [
   ),
   Notice(
     id: 'notice.04',
-    glyph: CarthaGlyph.boundaries,
+    glyph: CarthaGlyph.notice,
     title: 'What you are putting off right now',
     promptId: 'daytime.01',
   ),

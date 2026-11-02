@@ -121,10 +121,33 @@ extension CampaignOps on AppState {
   bool hasTried(String experimentId) =>
       data.experimentLog.any((e) => e.experimentId == experimentId);
 
+  /// The unsent "Try" note for [experimentId] ('' when none).
+  String tryNoteDraft(String experimentId) =>
+      data.tryNoteDrafts[experimentId] ?? '';
+
+  /// Autosaves the "Try" note for [experimentId] exactly as typed (debounce
+  /// it in the UI). A blank note removes the draft; nothing is written when
+  /// nothing changed.
+  Future<void> saveTryNoteDraft(String experimentId, String note) {
+    final blank = note.trim().isEmpty;
+    final current = data.tryNoteDrafts[experimentId];
+    if (blank ? current == null : current == note) return Future.value();
+    return mutate(
+      (d) => d.copyWith(
+        tryNoteDrafts: {
+          for (final e in d.tryNoteDrafts.entries)
+            if (e.key != experimentId) e.key: e.value,
+          if (!blank) experimentId: note,
+        },
+      ),
+    );
+  }
+
   /// Records that the user tried [experimentId] today, with an optional
-  /// [note] stored exactly as typed. Trying it again adds another entry;
-  /// XP counts each experiment once ([kXpPerExperiment]). Throws
-  /// [ArgumentError] for an id the content does not have.
+  /// [note] stored exactly as typed; the experiment's note draft is removed
+  /// in the same change. Trying it again adds another entry; XP counts each
+  /// experiment once ([kXpPerExperiment]). Throws [ArgumentError] for an id
+  /// the content does not have.
   Future<ExperimentEntry> tryExperiment(
     String experimentId, {
     String note = '',
@@ -139,7 +162,17 @@ extension CampaignOps on AppState {
       note: note,
       createdAt: now(),
     );
-    await mutate((d) => d.copyWith(experimentLog: [entry, ...d.experimentLog]));
+    await mutate(
+      (d) => d.copyWith(
+        experimentLog: [entry, ...d.experimentLog],
+        tryNoteDrafts: d.tryNoteDrafts.containsKey(experimentId)
+            ? {
+                for (final e in d.tryNoteDrafts.entries)
+                  if (e.key != experimentId) e.key: e.value,
+              }
+            : null,
+      ),
+    );
     return entry;
   }
 

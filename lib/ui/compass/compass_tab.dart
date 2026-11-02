@@ -9,12 +9,15 @@ import '../nav.dart';
 import '../widgets/widgets.dart';
 import 'compass_view.dart';
 
-/// The sections of the Compass tab (PLAN.md §2): the Compass, Missions and,
-/// while the game layer is on, the Campaign.
+/// The sections of the Compass tab (PLAN.md §2): the Compass, Missions and
+/// the Campaign — the Playground's Notice, Try and Collection, with XP,
+/// levels and the route only while the game layer is on.
 enum CompassSection { compass, missions, campaign }
 
 /// The Compass tab: Cinzel header, then `PillTabs` Compass | Missions |
-/// Campaign (the last only while Settings › The Campaign is on).
+/// Campaign. With Settings › The Campaign off, the third pill reads
+/// "Playground" and shows the [PlaygroundView] (no XP, no levels), so the
+/// experiments and the Collection stay reachable for everyone.
 ///
 /// Inside the shell it follows `ShellController.compassSection`
 /// (`AppNav.openCompass` / `openMissions`) and keeps that notifier in sync
@@ -78,10 +81,7 @@ class _CompassTabState extends State<CompassTab> {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     final game = context.select<AppState, bool>((s) => s.settings.game);
-    // With the game layer off, a request for the Campaign shows the Compass.
-    final section = _section == CompassSection.campaign && !game
-        ? CompassSection.compass
-        : _section;
+    final section = _section;
     return Scaffold(
       appBar: _pushed ? AppBar() : null,
       body: SafeArea(
@@ -97,7 +97,8 @@ class _CompassTabState extends State<CompassTab> {
                 subtitle: switch (section) {
                   CompassSection.compass => l.compassSubtitle,
                   CompassSection.missions => l.compassMissionsSubtitle,
-                  CompassSection.campaign => l.campaignSubtitle,
+                  CompassSection.campaign =>
+                    game ? l.campaignSubtitle : l.campaignPlaygroundSubtitle,
                 },
               ),
               Padding(
@@ -112,11 +113,12 @@ class _CompassTabState extends State<CompassTab> {
                       value: CompassSection.missions,
                       label: l.compassSectionMissions,
                     ),
-                    if (game)
-                      PillTab(
-                        value: CompassSection.campaign,
-                        label: l.campaignSection,
-                      ),
+                    PillTab(
+                      value: CompassSection.campaign,
+                      label: game
+                          ? l.campaignSection
+                          : l.campaignPlaygroundSection,
+                    ),
                   ],
                   selected: section,
                   onChanged: _select,
@@ -133,6 +135,7 @@ class _CompassTabState extends State<CompassTab> {
                     onLeversHandled: (levers) =>
                         setState(() => _leversHandledFor = levers),
                   ),
+                  CompassSection.campaign when !game => const PlaygroundView(),
                   CompassSection.campaign => CampaignView(
                     onOpenCompass: () => _select(CompassSection.compass),
                     onOpenMissions: () => _select(CompassSection.missions),

@@ -21,9 +21,11 @@ DayPart dayPartAt(DateTime time) {
 
 /// One-line first-use hints that introduce a feature where it first shows
 /// up on Today; they replace the welcome carousel's pages (reset, direction,
-/// small steps). Each is derived from stored data — nothing extra is saved —
-/// and shows only until the feature is first used, so once used it never
-/// comes back.
+/// small steps). Each shows only until the feature is first used, so once
+/// used it doesn't come back: the reset and Compass hints are derived from
+/// their history (a begun reset, a saved Compass version); the quests hint
+/// also checks `AppSettings.hintsSeen` (set when a quest is added or
+/// deleted), since deleting every quest empties the list.
 @immutable
 class FirstUseHints {
   const FirstUseHints({
@@ -40,7 +42,9 @@ class FirstUseHints {
           j.completedAt == null,
     ),
     compass: data.compass.isEmpty && data.compassHistory.isEmpty,
-    quests: data.quests.isEmpty,
+    quests:
+        data.quests.isEmpty &&
+        !data.settings.hintsSeen.contains(FirstUseHint.quests),
   );
 
   /// No reset was ever begun: the start card says what the reset is.
@@ -50,7 +54,7 @@ class FirstUseHints {
   /// card says answers can become a Compass.
   final bool compass;
 
-  /// No quest exists yet: the quests card says what quests are.
+  /// No quest was ever added: the quests card says what quests are.
   final bool quests;
 }
 

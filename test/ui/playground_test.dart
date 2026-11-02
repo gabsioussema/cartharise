@@ -6,6 +6,7 @@ import 'package:cartharise/domain/campaign.dart';
 import 'package:cartharise/domain/persona.dart';
 import 'package:cartharise/l10n/app_localizations_en.dart';
 import 'package:cartharise/ui/awakening/lesson_screen.dart';
+import 'package:cartharise/ui/campaign/attempt_sheet.dart';
 import 'package:cartharise/ui/campaign/battle_log_screen.dart';
 import 'package:cartharise/ui/campaign/campaign_invite.dart';
 import 'package:cartharise/ui/campaign/campaign_ops.dart';
@@ -13,12 +14,14 @@ import 'package:cartharise/ui/campaign/campaign_pages.dart';
 import 'package:cartharise/ui/campaign/campaign_view.dart';
 import 'package:cartharise/ui/campaign/chapters_screen.dart';
 import 'package:cartharise/ui/campaign/collection_screen.dart';
+import 'package:cartharise/ui/campaign/experiment_entry_sheet.dart';
 import 'package:cartharise/ui/campaign/make_it_yours_screen.dart';
 import 'package:cartharise/ui/campaign/notice_screen.dart';
 import 'package:cartharise/ui/campaign/reward_sheet.dart';
 import 'package:cartharise/ui/campaign/route_screen.dart';
 import 'package:cartharise/ui/campaign/try_screen.dart';
 import 'package:cartharise/ui/compass/compass_tab.dart';
+import 'package:cartharise/ui/missions/quest_sheet.dart';
 import 'package:cartharise/ui/nav.dart';
 import 'package:cartharise/ui/persona/avatar_view.dart';
 import 'package:cartharise/ui/persona/builder_categories.dart';
@@ -188,6 +191,51 @@ void main() {
       );
     });
 
+    testWidgets('a typed note is kept on the phone as a draft: leaving or a '
+        'restart never drops it; trying clears it', (tester) async {
+      const note = '  Half a note, “kept” & <exact> 🌱 ';
+      final h = await pumpTry(tester);
+      await tester.enterText(_key('try-note'), note);
+      // Debounced autosave, exactly as typed.
+      await tester.pump(const Duration(seconds: 1));
+      await _settle(tester);
+      expect(h.state.data.tryNoteDrafts, {'try.terrain.01': note});
+      expect(h.store.saved!.tryNoteDrafts, {'try.terrain.01': note});
+
+      // Another experiment's note is its own draft; switching keeps both.
+      await _tap(tester, _key('try-next'));
+      await tester.enterText(_key('try-note'), 'Second');
+      await tester.pumpWidget(const SizedBox()); // leaving saves at once
+      await _settle(tester);
+      expect(h.store.saved!.tryNoteDrafts, {
+        'try.terrain.01': note,
+        'try.terrain.02': 'Second',
+      });
+
+      // A restart: the words come back where they were typed.
+      final again = await pumpTry(tester, data: h.store.saved);
+      expect(
+        tester.widget<TextField>(_key('try-note')).controller!.text,
+        note,
+      );
+      // "I tried it" moves the note into the try and clears its draft.
+      await _tap(tester, _key('try-done'));
+      await _settle(tester);
+      expect(again.state.experimentLog.single.note, note);
+      expect(again.state.data.tryNoteDrafts, {'try.terrain.02': 'Second'});
+      expect(again.store.saved!.tryNoteDrafts, {'try.terrain.02': 'Second'});
+      // Blank → no draft at all.
+      await _tap(tester, _key('try-next'));
+      expect(
+        tester.widget<TextField>(_key('try-note')).controller!.text,
+        'Second',
+      );
+      await tester.enterText(_key('try-note'), '   ');
+      await tester.pump(const Duration(seconds: 1));
+      await _settle(tester);
+      expect(again.state.data.tryNoteDrafts, isEmpty);
+    });
+
     testWidgets('starts at the first experiment not tried; or at a chapter', (
       tester,
     ) async {
@@ -352,6 +400,18 @@ void main() {
       expect(
         find.descendant(of: first, matching: find.byType(GlyphIcon)),
         findsOneWidget,
+      );
+      // A question's glyph sits in a small tile beside its kind, not alone
+      // in an empty box the size of a lesson scene.
+      final tile = tester.getSize(_key('notice-glyph-notice.01'));
+      expect(tile.height, lessThan(56));
+      expect(
+        tester.getCenter(_key('notice-glyph-notice.01')).dy,
+        moreOrLessEquals(
+          tester.getCenter(inCard(first, 'REFLECTION')).dy,
+          epsilon: 12,
+        ),
+        reason: 'beside the kind',
       );
 
       await _tap(tester, first);
@@ -639,14 +699,22 @@ void main() {
       await pumpCollection(tester);
       // Section labels are set in capitals.
       expect(find.text('2 EXPERIMENTS TRIED'), findsOneWidget);
-      final tried = _key('collection-tried-e2');
+      // Changed by design (A10): one row per experiment, each try inside.
+      final pattern = _key('collection-experiment-try.pattern.01');
       expect(
-        find.descendant(of: tried, matching: find.text('Try pattern 1')),
+        find.descendant(of: pattern, matching: find.text('Try pattern 1')),
         findsOneWidget,
       );
       expect(
         find.descendant(
-          of: tried,
+          of: pattern,
+          matching: _key('collection-tried-e2'),
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(
+          of: _key('collection-tried-e2'),
           matching: find.text('  Took the long way. '),
         ),
         findsOneWidget,
@@ -654,11 +722,55 @@ void main() {
       // An experiment from a newer version still shows, honestly named.
       expect(
         find.descendant(
-          of: _key('collection-tried-e1'),
+          of: _key('collection-experiment-try.nowhere.09'),
           matching: find.text('An experiment'),
         ),
         findsOneWidget,
       );
+    });
+
+    testWidgets('an experiment tried twice is one row with both tries, and '
+        'the count matches the rows', (tester) async {
+      final data = collected();
+      await pumpCollection(
+        tester,
+        data: data.copyWith(
+          experimentLog: [
+            ExperimentEntry(
+              id: 'e3',
+              experimentId: 'try.pattern.01',
+              day: '2026-11-04',
+              note: 'Again, shorter.',
+              createdAt: _t,
+            ),
+            ...data.experimentLog,
+          ],
+        ),
+      );
+      expect(find.text('2 EXPERIMENTS TRIED'), findsOneWidget);
+      expect(
+        find.byWidgetPredicate(
+          (w) =>
+              w.key is ValueKey<String> &&
+              (w.key! as ValueKey<String>).value.startsWith(
+                'collection-experiment-',
+              ),
+        ),
+        findsNWidgets(2),
+      );
+      final pattern = _key('collection-experiment-try.pattern.01');
+      expect(
+        find.descendant(of: pattern, matching: find.text('Try pattern 1')),
+        findsOneWidget,
+        reason: 'the title once',
+      );
+      for (final id in ['e3', 'e2']) {
+        expect(
+          find.descendant(of: pattern, matching: _key('collection-tried-$id')),
+          findsOneWidget,
+        );
+      }
+      expect(find.text('Again, shorter.'), findsOneWidget);
     });
 
     testWidgets('achievements with their badge and how each was earned', (
@@ -670,10 +782,14 @@ void main() {
       String label(Achievement a) =>
           tester.getSemantics(_key('collection-achievement-${a.name}')).label;
       expect(label(Achievement.observer), endsWith('Earned by reflecting'));
-      expect(label(Achievement.pathfinder), endsWith('Earned by trying'));
+      // Changed by design (A1): trying names the experiment that earned it.
+      expect(
+        label(Achievement.pathfinder),
+        endsWith('Earned by trying: Try pattern 1'),
+      );
       expect(label(Achievement.practitioner), endsWith('Earned by doing'));
       expect(label(Achievement.visionary), endsWith('Not yet'));
-      expect(find.text('Earned by trying'), findsOneWidget);
+      expect(find.text('Earned by trying: Try pattern 1'), findsOneWidget);
       final badges = {
         for (final b in tester.widgetList<AchievementBadge>(
           find.byType(AchievementBadge),
@@ -685,6 +801,63 @@ void main() {
       expect(badges[Achievement.pathfinder], isTrue);
       expect(badges[Achievement.visionary], isFalse);
       semantics.dispose();
+    });
+
+    testWidgets('a badge earned by trying makes no claim about answers', (
+      tester,
+    ) async {
+      final semantics = tester.ensureSemantics();
+      await pumpCollection(tester);
+      // The Pathfinder came from an experiment, not from its questions.
+      final tile = _key('collection-achievement-pathfinder');
+      final label = tester.getSemantics(tile).label;
+      final asks = _l.campaignAchievementPathfinderBody;
+      expect(label, contains(asks));
+      // What it asks, in the present tense — never a past-tense claim.
+      expect(asks, startsWith('Answer every'));
+      expect(asks, contains('or try one of its experiments'));
+      for (final claim in ['Answered', 'Wrote', 'Explored', 'Described']) {
+        expect(label, isNot(contains(claim)));
+      }
+      for (final a in Achievement.values) {
+        final body = switch (a) {
+          Achievement.observer => _l.campaignAchievementObserverBody,
+          Achievement.pathfinder => _l.campaignAchievementPathfinderBody,
+          Achievement.visionary => _l.campaignAchievementVisionaryBody,
+          Achievement.watchful => _l.campaignAchievementWatchfulBody,
+          Achievement.strategist => _l.campaignAchievementStrategistBody,
+          Achievement.practitioner => _l.campaignAchievementPractitionerBody,
+          Achievement.challenger => _l.campaignAchievementChallengerBody,
+        };
+        expect(
+          RegExp(r'^(Answer|Complete|Record) ').hasMatch(body),
+          isTrue,
+          reason: '${a.name}: "$body" says what it asks',
+        );
+      }
+      expect(
+        find.descendant(
+          of: tile,
+          matching: find.text('Earned by trying: Try pattern 1'),
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.text(
+          'Earned by reflecting, trying or doing. Never by what you write.',
+        ),
+        findsOneWidget,
+      );
+      semantics.dispose();
+    });
+
+    testWidgets('with the game off: what was tried, no achievements', (
+      tester,
+    ) async {
+      await pumpCollection(tester, data: collected(game: false));
+      expect(_key('collection-tried-e2'), findsOneWidget);
+      expect(find.byType(AchievementBadge), findsNothing);
+      expect(_key('collection-achievement-observer'), findsNothing);
     });
 
     testWidgets('extras chosen; with the game off, all open', (tester) async {
@@ -731,6 +904,42 @@ void main() {
       await _settle(tester);
       expect(h.state.experimentLog.map((e) => e.id), ['e1']);
       expect(find.text('Try removed'), findsOneWidget);
+    });
+
+    testWidgets('a changed note is never dropped silently: closing the '
+        'sheet asks to save or discard', (tester) async {
+      final h = await pumpCollection(tester);
+      ExperimentEntry e2() =>
+          h.state.experimentLog.firstWhere((e) => e.id == 'e2');
+
+      // Closed by a tap outside, then "Discard": nothing changes.
+      await _tap(tester, _key('collection-tried-e2'));
+      await tester.enterText(_key('tried-edit-note'), 'Changed my mind');
+      await tester.tapAt(const Offset(195, 20));
+      await _settle(tester);
+      expect(find.byType(ExperimentEntrySheet), findsNothing);
+      expect(find.text('Save your change?'), findsOneWidget);
+      await tester.tap(find.widgetWithText(TextButton, 'Discard'));
+      await _settle(tester);
+      expect(e2().note, '  Took the long way. ');
+      expect(e2().editedAt, isNull);
+
+      // Closed with back, then "Save note": saved exactly as typed.
+      await _tap(tester, _key('collection-tried-e2'));
+      await tester.enterText(_key('tried-edit-note'), ' Kept, as typed ');
+      await tester.binding.handlePopRoute();
+      await _settle(tester);
+      expect(find.text('Save your change?'), findsOneWidget);
+      await tester.tap(find.widgetWithText(FilledButton, 'Save note'));
+      await _settle(tester);
+      expect(e2().note, ' Kept, as typed ');
+      expect(h.store.saved!.experimentLog.first.note, ' Kept, as typed ');
+
+      // Closed without a change: no question.
+      await _tap(tester, _key('collection-tried-e2'));
+      await tester.binding.handlePopRoute();
+      await _settle(tester);
+      expect(find.text('Save your change?'), findsNothing);
     });
   });
 
@@ -807,22 +1016,117 @@ void main() {
       );
     });
 
-    testWidgets('the hub shows it while unanswered', (tester) async {
+    // Changed by design (A3): the invitation is answered before the game is
+    // on, so the section that shows it is the Playground (game off); Play
+    // turns that section into the Campaign hub.
+    testWidgets('the Playground shows it while unanswered; Play turns the '
+        'section into the Campaign', (tester) async {
       final h = await pumpCartha(
         tester,
-        data: onboardedData(settings: const AppSettings(gameInvited: false)),
+        data: onboardedData(
+          settings: const AppSettings(game: false, gameInvited: false),
+        ),
         shell: ShellController(initial: AppTab.compass)
           ..compassSection.value = CompassSection.campaign,
         size: const Size(390, 1400),
       );
-      expect(find.byType(CampaignView), findsOneWidget);
+      Finder pill(String label) => find.descendant(
+        of: find.byType(PillTabs<CompassSection>),
+        matching: find.text(label),
+      );
+      expect(find.byType(PlaygroundView), findsOneWidget);
+      expect(pill('Playground'), findsOneWidget);
       expect(_key('campaign-invite'), findsOneWidget);
       await _tap(tester, _key('campaign-invite-play'));
       await _settle(tester);
       expect(h.state.campaignInvitePending, isFalse);
       expect(_key('campaign-invite'), findsNothing);
       expect(find.byType(CampaignView), findsOneWidget);
+      expect(pill('Campaign'), findsOneWidget);
     });
+  });
+
+  group('reduced motion', () {
+    /// Opens a sheet from a button and returns how its route animates.
+    Future<AnimationStyle?> sheetStyle(
+      WidgetTester tester, {
+      required bool motion,
+      required AppData data,
+      required Future<void> Function(BuildContext) open,
+      required Type sheet,
+    }) async {
+      await pumpCartha(
+        tester,
+        data: data.copyWith(
+          settings: data.settings.copyWith(motion: motion),
+        ),
+        home: Scaffold(
+          body: Builder(
+            builder: (context) => Center(
+              child: TextButton(
+                key: const ValueKey('open-sheet'),
+                onPressed: () => open(context),
+                child: const Text('Open'),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(_key('open-sheet'));
+      await pumpFrames(tester);
+      final route = ModalRoute.of(tester.element(find.byType(sheet)));
+      return (route! as ModalBottomSheetRoute<Object?>).sheetAnimationStyle;
+    }
+
+    final entry = ExperimentEntry(
+      id: 'e1',
+      experimentId: 'try.pattern.01',
+      day: '2026-11-03',
+      createdAt: _t,
+    );
+    final attempt = BattleLogEntry(
+      id: 'a1',
+      day: '2026-11-03',
+      attempt: 'Wrote',
+      createdAt: _t,
+    );
+    final sheets = <(String, Type, Future<void> Function(BuildContext))>[
+      ('reward', RewardSheet, showRewardSheet),
+      (
+        'tried note',
+        ExperimentEntrySheet,
+        (c) => showExperimentEntrySheet(c, entry, title: 'Try'),
+      ),
+      ('attempt', AttemptSheet, (c) => showAttemptSheet(c, attempt)),
+      ('quest', QuestSheet, (c) => showQuestSheet(c)),
+    ];
+    for (final (name, type, open) in sheets) {
+      testWidgets('the $name sheet slides only while motion is on', (
+        tester,
+      ) async {
+        expect(
+          await sheetStyle(
+            tester,
+            motion: false,
+            data: _threePicks(),
+            open: open,
+            sheet: type,
+          ),
+          AnimationStyle.noAnimation,
+        );
+        await tester.pumpWidget(const SizedBox());
+        expect(
+          await sheetStyle(
+            tester,
+            motion: true,
+            data: _threePicks(),
+            open: open,
+            sheet: type,
+          ),
+          isNull,
+        );
+      });
+    }
   });
 
   group('guidelines and sizes', () {
@@ -836,6 +1140,13 @@ void main() {
         () => _threePicks(kept: {Unlockable.sigilStar}).copyWith(
           experimentLog: [
             ExperimentEntry(
+              id: 'e2',
+              experimentId: 'try.pattern.01',
+              day: '2026-11-04',
+              note: 'Tried it again, with a second long note that wraps.',
+              createdAt: _t,
+            ),
+            ExperimentEntry(
               id: 'e1',
               experimentId: 'try.pattern.01',
               day: '2026-11-03',
@@ -844,6 +1155,18 @@ void main() {
             ),
           ],
         ),
+      ),
+      (
+        'Playground (game off, invitation open)',
+        const CompassTab(initial: CompassSection.campaign),
+        () => _threePicks(game: false).copyWith(
+          settings: const AppSettings(game: false, gameInvited: false),
+        ),
+      ),
+      (
+        'Playground (game off)',
+        const CompassTab(initial: CompassSection.campaign),
+        () => _threePicks(game: false),
       ),
       (
         'Invitation',

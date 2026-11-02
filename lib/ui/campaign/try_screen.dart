@@ -6,6 +6,7 @@ import '../../domain/campaign.dart';
 import '../../domain/content.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
+import '../compass/autosave.dart';
 import '../compass/formatting.dart';
 import '../nav.dart';
 import '../theme/cartha_theme.dart';
@@ -18,10 +19,12 @@ import 'campaign_ops.dart';
 /// **Previous** / **Next** (round the list).
 ///
 /// **I tried it** records the try for today with an optional note, exactly
-/// as typed; it lands in the Collection. **Add to my tasks** is separate and
-/// explicit: it makes a quest only when tapped, and trying never adds one.
-/// A save that didn't reach the phone's storage is said so, with Retry on
-/// top.
+/// as typed; it lands in the Collection. The note is kept as a draft per
+/// experiment while it is typed (debounced, on leaving, when the app goes
+/// to the background), so leaving or a restart never drops it.
+/// **Add to my tasks** is separate and explicit: it makes a quest only when
+/// tapped, and trying never adds one. A save that didn't reach the phone's
+/// storage is said so, with Retry on top.
 class TryScreen extends StatefulWidget {
   const TryScreen({super.key, this.chapter, this.experimentId});
 
@@ -38,11 +41,12 @@ class TryScreen extends StatefulWidget {
 class _TryScreenState extends State<TryScreen> {
   late final AppState _state;
   late int _index;
-  final _note = TextEditingController();
+  late final TextEditingController _note;
+  late final Autosaver _draft;
   final _scroll = ScrollController();
 
-  /// Notes typed but not sent yet, per experiment (kept while browsing).
-  final _notes = <String, String>{};
+  /// The experiment whose note is waiting to be autosaved.
+  String? _draftFor;
   bool _busy = false;
 
   List<Experiment> get _experiments => _state.content.experiments;
@@ -52,13 +56,29 @@ class _TryScreenState extends State<TryScreen> {
     super.initState();
     _state = context.read<AppState>();
     _index = _startIndex();
+    final all = _experiments;
+    _note = TextEditingController(
+      text: all.isEmpty ? '' : _state.tryNoteDraft(all[_index].id),
+    );
+    _draft = Autosaver((text) async {
+      final id = _draftFor;
+      if (id != null) await _state.saveTryNoteDraft(id, text);
+    });
   }
 
   @override
   void dispose() {
+    _draft.dispose();
     _note.dispose();
     _scroll.dispose();
     super.dispose();
+  }
+
+  void _noteChanged(String text) {
+    final all = _experiments;
+    if (all.isEmpty) return;
+    _draftFor = all[_index.clamp(0, all.length - 1)].id;
+    _draft.changed(text);
   }
 
   int _startIndex() {
@@ -82,9 +102,10 @@ class _TryScreenState extends State<TryScreen> {
   void _go(int delta) {
     final all = _experiments;
     if (all.isEmpty) return;
-    _notes[all[_index].id] = _note.text;
+    // This experiment's note is kept before showing the next one's.
+    _draft.flush();
     setState(() => _index = (_index + delta) % all.length);
-    final text = _notes[all[_index].id] ?? '';
+    final text = _state.tryNoteDraft(all[_index].id);
     _note.value = TextEditingValue(
       text: text,
       selection: TextSelection.collapsed(offset: text.length),
@@ -100,6 +121,9 @@ class _TryScreenState extends State<TryScreen> {
   Future<void> _tried(Experiment experiment) async {
     final l = AppLocalizations.of(context);
     FocusManager.instance.primaryFocus?.unfocus();
+    // A waiting draft save goes first, so it can't bring the draft back
+    // after the try removed it.
+    _draft.flush();
     setState(() => _busy = true);
     try {
       await _state.tryExperiment(experiment.id, note: _note.text);
@@ -109,7 +133,6 @@ class _TryScreenState extends State<TryScreen> {
     if (!mounted) return;
     // The try (and its note) is in the Collection either way; only a write
     // that worked is called saved.
-    _notes.remove(experiment.id);
     _note.clear();
     if (_state.saveStatus == SaveStatus.failed) {
       _snack(l.campaignNotSavedYet);
@@ -196,6 +219,7 @@ class _TryScreenState extends State<TryScreen> {
             hintText: l.campaignTryNoteHint,
             hintMaxLines: 2,
           ),
+          onChanged: _noteChanged,
         ),
         const SizedBox(height: 16),
         PrimaryButton(

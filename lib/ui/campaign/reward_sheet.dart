@@ -63,6 +63,10 @@ Future<void> showRewardSheet(BuildContext context) async {
     context: context,
     isScrollControlled: true,
     useSafeArea: true,
+    // Reduced motion (device or Settings › Motion): no slide.
+    sheetAnimationStyle: motionEnabled(context)
+        ? null
+        : AnimationStyle.noAnimation,
     builder: (_) => const RewardSheet(),
   );
   if (chosen == null || !context.mounted) return;

@@ -157,14 +157,14 @@ Five tabs: **Today · Reset · Compass · Journal · You**.
 
 **Campaign: the article as a game (optional)**
 - 🎲 **Asked once:** new users start with the game off and see "Play the Campaign? XP and levels for what you do." with **Play** / **Not now**. You › The Campaign switches it any time
-- 🌱 **The Playground**, a compact hub under your status (avatar at its stop, level, XP to the next): **Notice** (illustrated cards that reopen a question or lesson), **Try** (15 tiny real-world experiments, one at a time, with **I tried it** and an optional note) and **Make it yours**. A try only becomes a task if you tap **Add to my tasks**
-- 🧳 **Collection (keepsakes):** the experiments you tried with your notes exactly as typed, the seven achievement badges (each its own symbol; earned ones say whether by reflecting, trying or doing) and the extras you chose
+- 🌱 **The Playground**, a compact hub under your status (avatar at its stop, level, XP to the next): **Notice** (illustrated cards that reopen a question or lesson), **Try** (15 tiny real-world experiments, one at a time, with **I tried it** and an optional note) and **Make it yours**. A try only becomes a task if you tap **Add to my tasks**. With the game off it stays open as Compass › **Playground** (no XP or levels), and a half-typed note is kept as a draft
+- 🧳 **Collection (keepsakes):** the experiments you tried with your notes exactly as typed, the seven achievement badges (each its own symbol; earned ones say whether by reflecting, trying — naming the experiment — or doing) and the extras you chose
 - 🎁 **Reward picks:** each route stop after Carthage and each achievement gives one pick. **Choose your reward** shows your own avatar wearing each extra, the suggested one first; nothing is spent until you confirm
 - ♜ Section VII of the article made playable: your vision is the **win condition**, the anti-vision is **what's at stake**, the one-year mission is the **main campaign**, the one-month project is your **boss fight**, daily levers are **quests** and your boundaries are the **rules of engagement**
 - 📜 **Act I:** five chapters built from the reset's exercises (4 · 7 · 3 · 6 · 7 questions), each opening its first open question
 - 🗺️ **Hannibal's route:** each level is the next stop from Carthage to Italy, with the XP to the next one
 - 🛡️ **Monthly boss fight:** the boss weakens as your project's milestones are reached; record what you tried and learned in a battle log you can correct or delete. The form keeps a draft as you type, and a failed save never says "recorded"
-- ✨ **Calm moments:** a short "+20 XP", "+10 XP" for a first try, "Achievement earned" or "A new pick for your avatar" when you complete a quest, an attempt or a try, never while you type
+- ✨ **Calm moments:** a short "+20 XP", "+10 XP" for a first try, "Achievement earned" or "A new pick for your avatar" when you complete a quest, an attempt or a try, never while you type and never for a restored backup
 - 🏷️ **XP previews:** open quests show a small "+20 XP" tag until today's quest XP is reached
 - 🏺 **13 avatar extras:** banners, garment colours, a circlet or laurel, a scroll, compass or amulet, chosen with reward picks. Purely cosmetic and kept for good once chosen, even if progress goes down; basic avatar identity is always free, and every extra is open with the game off
 - 🧑 **Your strategist:** your avatar stands at your stop on the route; Make it yours shows your motto, how many extras you have and the picks left

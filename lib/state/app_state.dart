@@ -52,6 +52,7 @@ class AppState extends ChangeNotifier {
   Object? _reminderError;
   Future<void> _writeQueue = Future.value();
   int _writeGeneration = 0;
+  int _dataGeneration = 0;
   Journey? _draftJourney;
 
   // ── Lifecycle & persistence ─────────────────────────────────────────────
@@ -72,6 +73,12 @@ class AppState extends ChangeNotifier {
   Object? get reminderError => _reminderError;
 
   AppData get data => _data;
+
+  /// Changes whenever [data] is replaced wholesale rather than changed by
+  /// one action: a load, a restored backup, a fresh start after a load
+  /// error, "Delete all data". Whatever celebrates a difference (Campaign
+  /// moments) starts over instead of treating the swap as progress.
+  int get dataGeneration => _dataGeneration;
   ContentLibrary get content => _content;
   AppSettings get settings => _data.settings;
   DateTime now() => _clock();
@@ -88,6 +95,7 @@ class AppState extends ChangeNotifier {
       // Loaded as saved: avatar extras already kept stay kept; progress
       // gives reward picks, it never adds extras by itself.
       _data = await _store.read() ?? AppData.empty;
+      _dataGeneration++;
       _loaded = true;
     } on Object catch (e) {
       _loadError = e;
@@ -107,6 +115,7 @@ class AppState extends ChangeNotifier {
   Future<String?> startFreshAfterLoadError() async {
     final kept = await _store.moveAside();
     _data = AppData.empty;
+    _dataGeneration++;
     _loadError = null;
     _loaded = true;
     notifyListeners();
@@ -556,9 +565,22 @@ class AppState extends ChangeNotifier {
       dueDate: dueDate,
       source: source,
     );
-    await mutate((d) => d.copyWith(quests: [...d.quests, quest]));
+    await mutate(
+      (d) => _questsIntroduced(d).copyWith(quests: [...d.quests, quest]),
+    );
     return quest;
   }
+
+  /// Marks the quests hint as seen: once a quest existed, "Quests are small
+  /// steps…" never returns, even after every quest is deleted.
+  static AppData _questsIntroduced(AppData d) =>
+      d.settings.hintsSeen.contains(FirstUseHint.quests)
+      ? d
+      : d.copyWith(
+          settings: d.settings.copyWith(
+            hintsSeen: {...d.settings.hintsSeen, FirstUseHint.quests},
+          ),
+        );
 
   Future<void> updateQuest(Quest quest) => mutate(
     (d) => d.copyWith(
@@ -590,8 +612,9 @@ class AppState extends ChangeNotifier {
     );
   }
 
+  /// Deletes a quest. A quest existed, so the quests hint stays seen.
   Future<void> deleteQuest(String id) => mutate(
-    (d) => d.copyWith(
+    (d) => _questsIntroduced(d).copyWith(
       quests: [
         for (final q in d.quests)
           if (q.id != id) q,
@@ -642,7 +665,9 @@ class AppState extends ChangeNotifier {
       );
     }
     if (added.isEmpty) return 0;
-    await mutate((d) => d.copyWith(quests: [...d.quests, ...added]));
+    await mutate(
+      (d) => _questsIntroduced(d).copyWith(quests: [...d.quests, ...added]),
+    );
     return added.length;
   }
 
@@ -890,6 +915,8 @@ class AppState extends ChangeNotifier {
     final incoming = decodeBackup(text);
     final remindersOn = settings.remindersEnabled;
     _draftJourney = null;
+    // A restore replaces everything: nothing in it is a new moment.
+    _dataGeneration++;
     await mutate(
       (_) => incoming.copyWith(
         settings: incoming.settings.copyWith(remindersEnabled: remindersOn),
@@ -909,6 +936,7 @@ class AppState extends ChangeNotifier {
     await _writeQueue;
     await _store.clear();
     _data = AppData.empty;
+    _dataGeneration++;
     _draftJourney = null;
     _saveStatus = SaveStatus.idle;
     _saveError = null;

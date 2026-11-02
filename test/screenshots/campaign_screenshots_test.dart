@@ -4,10 +4,13 @@
 @Tags(['screenshots'])
 library;
 
+import 'dart:async';
+
 import 'package:cartharise/content/en.dart';
 import 'package:cartharise/domain/app_data.dart';
 import 'package:cartharise/domain/persona.dart';
 import 'package:cartharise/ui/campaign/battle_log_screen.dart';
+import 'package:cartharise/ui/campaign/campaign_feedback.dart';
 import 'package:cartharise/ui/campaign/campaign_invite.dart';
 import 'package:cartharise/ui/campaign/chapters_screen.dart';
 import 'package:cartharise/ui/campaign/collection_screen.dart';
@@ -104,6 +107,13 @@ AppData _data() {
     ],
     experimentLog: [
       ExperimentEntry(
+        id: 'e3',
+        experimentId: 'try.autopilot.02',
+        day: '2026-11-03',
+        note: 'Easier the second time.',
+        createdAt: _at,
+      ),
+      ExperimentEntry(
         id: 'e2',
         experimentId: 'try.autopilot.02',
         day: '2026-11-02',
@@ -177,6 +187,46 @@ void main() {
         await shoot(tester, name, home, size: Size(390, height));
       });
     }
+
+    testWidgets('the Playground with the game off ($b)', (tester) async {
+      await shoot(
+        tester,
+        'campaign_11_playground',
+        const CompassTab(initial: CompassSection.campaign),
+        size: const Size(390, 1100),
+        data: _data().copyWith(
+          settings: const AppSettings(game: false, gameInvited: false),
+        ),
+      );
+    });
+
+    testWidgets('a moment with its badge ($b)', (tester) async {
+      final h = await pumpCartha(
+        tester,
+        data: _data().copyWith(quests: []),
+        brightness: brightness,
+        content: englishContent,
+        size: const Size(390, 400),
+      );
+      unawaited(
+        h.state.mutate(
+          (d) => d.copyWith(
+            quests: [
+              Quest(
+                id: 'q9',
+                title: 'Walk after lunch',
+                createdAt: _at,
+                completedOn: const {'2026-11-03'},
+              ),
+            ],
+          ),
+        ),
+      );
+      await tester.pump(CampaignFeedback.settle);
+      await pumpFrames(tester);
+      await captureScreenshot(tester, 'campaign_12_moment_$b');
+      await tester.pump(CampaignFeedback.visible);
+    });
 
     testWidgets('choose your reward ($b)', (tester) async {
       await pumpCartha(

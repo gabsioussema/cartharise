@@ -1,6 +1,6 @@
 # Plan: lighter days, the Playground, the board, voice and languages
 
-**Status:** step 1 done (contracts, Today + onboarding, the Playground, the visual system, integrated on `main`); next: step 2.
+**Status:** step 1 done (contracts, Today + onboarding, the Playground, the visual system, integrated on `main`; audit findings A1–A10 fixed); next: step 2.
 
 Source: an external product review (Nov 2026) of Cartharise. The owner chose to build
 **all three steps**, with these decisions:
@@ -126,6 +126,9 @@ label only), the experiments/notices content in `lib/content/en.dart`, `l10n_src
   `picksLeft > 0`, showing your avatar **wearing** each option (suggested one first).
 * **Collection (keepsakes)**: experiments tried, achievements (with `AchievementBadge` and how
   they were earned), extras chosen.
+* *(Audit fix A3)* With the game off — every new user until **Play** — the section's pill reads
+  **Playground**: the invitation, Notice · Try · Make it yours and the Collection, with no XP,
+  levels, route or achievements, so experiments stay open to everyone.
 * `CampaignInviteCard` body: "Play the Campaign? XP and levels for what you do." **Play** /
   **Not now** (both set `gameInvited`; Play sets `game: true`). Not now leaves You › The Campaign.
 * Trust fixes: the attempt form autosaves its draft (`saveAttemptDraft`, debounced like the

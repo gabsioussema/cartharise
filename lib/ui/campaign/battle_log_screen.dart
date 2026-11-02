@@ -22,7 +22,8 @@ import 'campaign_ops.dart';
 /// (debounced, on leaving, when the app goes to the background) and come
 /// back when the page opens again. "Attempt recorded." is said only once the
 /// attempt reached the phone's storage; a failed save says so, keeps the
-/// words in the form and points to Retry at the top.
+/// words in the form and points to Retry at the top — and while that save
+/// is still waiting, a form opened again shows the same words.
 class BattleLogScreen extends StatefulWidget {
   const BattleLogScreen({super.key});
 
@@ -33,6 +34,11 @@ class BattleLogScreen extends StatefulWidget {
 /// An attempt recorded in memory whose save failed, with the words it was
 /// recorded with.
 typedef _Unsaved = ({String id, String attempt, String learning});
+
+/// The last recorded attempt whose save failed, kept with the [AppState]
+/// for the session (recording removed the draft), so the form can get its
+/// words back after the page was left while Retry is still waiting.
+final _unsavedAttempts = Expando<_Unsaved>('unsaved attempt');
 
 class _BattleLogScreenState extends State<BattleLogScreen> {
   late final AppState _state;
@@ -51,8 +57,23 @@ class _BattleLogScreenState extends State<BattleLogScreen> {
     super.initState();
     _state = context.read<AppState>();
     final draft = _state.attemptDraft;
-    _attempt = TextEditingController(text: draft?.attempt ?? '');
-    _learning = TextEditingController(text: draft?.learning ?? '');
+    final kept = _unsavedAttempts[_state];
+    if (kept != null &&
+        (_state.saveStatus != SaveStatus.failed ||
+            !_state.data.campaignLog.any((e) => e.id == kept.id))) {
+      // Saved since (or gone): nothing is waiting any more.
+      _unsavedAttempts[_state] = null;
+    } else if (kept != null && draft == null) {
+      // Still waiting for Retry: the words are where they were typed.
+      _unsaved = kept;
+    }
+    final restored = draft == null ? _unsaved : null;
+    _attempt = TextEditingController(
+      text: draft?.attempt ?? restored?.attempt ?? '',
+    );
+    _learning = TextEditingController(
+      text: draft?.learning ?? restored?.learning ?? '',
+    );
     // Both fields are saved together; the text passed along only marks
     // that something is waiting.
     _draft = Autosaver((_) => _saveDraft());
@@ -87,6 +108,7 @@ class _BattleLogScreenState extends State<BattleLogScreen> {
     if (unsaved == null || !mounted || _busy) return;
     if (_state.saveStatus != SaveStatus.saved) return;
     _unsaved = null;
+    _unsavedAttempts[_state] = null;
     if (_attempt.text == unsaved.attempt &&
         _learning.text == unsaved.learning) {
       _clearForm();
@@ -129,6 +151,7 @@ class _BattleLogScreenState extends State<BattleLogScreen> {
       } else {
         final entry = await _state.recordAttempt(attempt, learning: learning);
         _unsaved = (id: entry.id, attempt: attempt, learning: learning);
+        _unsavedAttempts[_state] = _unsaved;
       }
     } finally {
       if (mounted) setState(() => _busy = false);
@@ -141,6 +164,7 @@ class _BattleLogScreenState extends State<BattleLogScreen> {
       return;
     }
     _unsaved = null;
+    _unsavedAttempts[_state] = null;
     _clearForm();
     _snack(l.campaignRecorded);
   }

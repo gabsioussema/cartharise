@@ -20,6 +20,10 @@ Future<void> showQuestSheet(BuildContext context, {Quest? quest}) async {
     context: context,
     isScrollControlled: true,
     useSafeArea: true,
+    // Reduced motion (device or Settings › Motion): no slide.
+    sheetAnimationStyle: motionEnabled(context)
+        ? null
+        : AnimationStyle.noAnimation,
     builder: (_) => QuestSheet(quest: quest),
   );
   if (result == QuestSheetResult.delete && quest != null && context.mounted) {

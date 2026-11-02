@@ -889,7 +889,7 @@ abstract class AppLocalizations {
   /// No description provided for @campaignAchievementsSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Earned by doing, never by what you write.'**
+  /// **'Earned by reflecting, trying or doing. Never by what you write.'**
   String get campaignAchievementsSubtitle;
 
   /// No description provided for @campaignAchievementsCount.
@@ -913,7 +913,7 @@ abstract class AppLocalizations {
   /// No description provided for @campaignAchievementObserverBody.
   ///
   /// In en, this message translates to:
-  /// **'Wrote all four present-reality reflections'**
+  /// **'Answer every present-reality question in one reset, or try one of its experiments'**
   String get campaignAchievementObserverBody;
 
   /// No description provided for @campaignAchievementPathfinder.
@@ -925,7 +925,7 @@ abstract class AppLocalizations {
   /// No description provided for @campaignAchievementPathfinderBody.
   ///
   /// In en, this message translates to:
-  /// **'Explored the anti-vision and identity questions'**
+  /// **'Answer every anti-vision and identity question in one reset, or try one of its experiments'**
   String get campaignAchievementPathfinderBody;
 
   /// No description provided for @campaignAchievementVisionary.
@@ -937,7 +937,7 @@ abstract class AppLocalizations {
   /// No description provided for @campaignAchievementVisionaryBody.
   ///
   /// In en, this message translates to:
-  /// **'Described a possible future'**
+  /// **'Answer every future-vision question in one reset, or try one of its experiments'**
   String get campaignAchievementVisionaryBody;
 
   /// No description provided for @campaignAchievementWatchful.
@@ -949,7 +949,7 @@ abstract class AppLocalizations {
   /// No description provided for @campaignAchievementWatchfulBody.
   ///
   /// In en, this message translates to:
-  /// **'Answered all six daytime check-ins'**
+  /// **'Answer every daytime check-in in one reset, or try one of its experiments'**
   String get campaignAchievementWatchfulBody;
 
   /// No description provided for @campaignAchievementStrategist.
@@ -961,7 +961,7 @@ abstract class AppLocalizations {
   /// No description provided for @campaignAchievementStrategistBody.
   ///
   /// In en, this message translates to:
-  /// **'Completed the evening planning'**
+  /// **'Answer every evening-planning question in one reset, or try one of its experiments'**
   String get campaignAchievementStrategistBody;
 
   /// No description provided for @campaignAchievementPractitioner.
@@ -973,7 +973,7 @@ abstract class AppLocalizations {
   /// No description provided for @campaignAchievementPractitionerBody.
   ///
   /// In en, this message translates to:
-  /// **'Completed a real-world quest'**
+  /// **'Complete a real-world quest'**
   String get campaignAchievementPractitionerBody;
 
   /// No description provided for @campaignAchievementChallenger.
@@ -985,7 +985,7 @@ abstract class AppLocalizations {
   /// No description provided for @campaignAchievementChallengerBody.
   ///
   /// In en, this message translates to:
-  /// **'Recorded a first attempt at your monthly project'**
+  /// **'Record a first attempt at your monthly project'**
   String get campaignAchievementChallengerBody;
 
   /// No description provided for @campaignActTwo.
@@ -1402,11 +1402,23 @@ abstract class AppLocalizations {
   /// **'Try removed'**
   String get campaignTriedRemoved;
 
-  /// No description provided for @campaignAchievementsRoutes.
+  /// No description provided for @campaignTriedUnsavedTitle.
   ///
   /// In en, this message translates to:
-  /// **'A chapter\'s badge: answer its questions in one reset, or try one of its experiments.'**
-  String get campaignAchievementsRoutes;
+  /// **'Save your change?'**
+  String get campaignTriedUnsavedTitle;
+
+  /// No description provided for @campaignTriedUnsavedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The note was changed but not saved.'**
+  String get campaignTriedUnsavedBody;
+
+  /// No description provided for @campaignTriedDiscard.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard'**
+  String get campaignTriedDiscard;
 
   /// No description provided for @campaignEarnedByReflecting.
   ///
@@ -1419,6 +1431,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Earned by trying'**
   String get campaignEarnedByTrying;
+
+  /// Under an achievement earned by a Playground experiment; {experiment} is its title.
+  ///
+  /// In en, this message translates to:
+  /// **'Earned by trying: {experiment}'**
+  String campaignEarnedByTryingWhat(String experiment);
 
   /// No description provided for @campaignEarnedByDoing.
   ///
@@ -1641,6 +1659,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'With the Campaign off, every extra is already open.'**
   String get campaignRewardGameOff;
+
+  /// The Compass tab's third pill while the Campaign game is off (Notice, Try, Collection without XP).
+  ///
+  /// In en, this message translates to:
+  /// **'Playground'**
+  String get campaignPlaygroundSection;
+
+  /// No description provided for @campaignPlaygroundSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Small things to notice and try.'**
+  String get campaignPlaygroundSubtitle;
+
+  /// No description provided for @campaignPlaygroundGameOff.
+  ///
+  /// In en, this message translates to:
+  /// **'No XP or levels while the Campaign is off. Turn it on in You.'**
+  String get campaignPlaygroundGameOff;
 
   /// No description provided for @campaignInviteTitle.
   ///
