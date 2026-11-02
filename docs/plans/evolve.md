@@ -1,6 +1,6 @@
 # Plan: lighter days, the Playground, the board, voice and languages
 
-**Status:** step 1 in progress — 1.0 done (contracts on `main`).
+**Status:** step 1 done (contracts, Today + onboarding, the Playground, the visual system, integrated on `main`); next: step 2.
 
 Source: an external product review (Nov 2026) of Cartharise. The owner chose to build
 **all three steps**, with these decisions:

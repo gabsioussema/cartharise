@@ -46,7 +46,7 @@ dialogs), 16 (inputs), pill buttons. Flat, thin borders.
 | `CarthaLoader(size, tile, startAt)` | Animated "charging" emblem — see below. |
 | `CarthaWordmark(layout, width, onHero)` | `horizontal` / `stacked` lockups and `lettering` (CARTHARISE + rule only) from the brand SVGs, re-tinted per theme (`BrandSvgColorMapper`), tagline in Inter. |
 | `PrimaryButton` / `SecondaryButton` / `TextLinkButton` | pill filled / outlined / accent text; `icon`, `trailingIcon`, `expand`, `busy` (a small `CarthaLoader` — the brand loader, still with reduced motion or Settings › Motion off — and taps ignored). Labels wrap at large text. |
-| `SectionCard` | card section with optional title/icon/trailing; tappable (announced as button). |
+| `SectionCard` | card section with optional title/icon (or `glyph`, a painted `CarthaGlyph`)/trailing; tappable (announced as button). |
 | `HeroCard` | forest hero surface in both modes; `eyebrow`, Cinzel `title`, `trailing`; text defaults to `onHero`. |
 | `ProgressRing(value, label, onHero)` | calm progress, labelled "n percent"; never a judgement. |
 | `PillTabs<T>` | segmented pills; selected = filled + bold + `selected` semantics; every segment ≥ 48 dp tall (Android tap-target guideline). |
@@ -118,16 +118,17 @@ stroke weight with mitred corners and flat ends, a few filled tapers). The
 weight is a little heavier at 16 px and lighter at 48 px, never under 1.2 px.
 Colour defaults to `accent`; pass `heroAccent` on hero surfaces. Decorative
 unless `semanticLabel` is given (then an image with that label).
-`GlyphTitle(glyph, title)` is a `SectionCard`-style heading row with a glyph.
+`GlyphTitle(glyph, title)` is a `SectionCard`-style heading row with a glyph;
+`SectionCard(glyph: …)` paints one in place of its icon.
 
 | Idea | Glyph | Where (Step 1) |
 |---|---|---|
-| Notice | an arched standing mirror | Awakening title, Reset strip title, "Lesson n of 7" |
-| Direction | a compass whose needle points to the north star | Compass hero ("My direction"), empty-Compass card |
-| Experiment | a seedling | weekly review "Next experiment" (Playground: agent B) |
+| Notice | an arched standing mirror | Awakening title, Reset strip title, "Lesson n of 7", the Playground's Notice card and page, Today's reflection steps |
+| Direction | a compass whose needle points to the north star | Compass hero ("My direction"), empty-Compass card, Today's direction card, Missions › Month project, the project screen |
+| Experiment | a seedling | weekly review "Next experiment", the Playground's Try card and page, tries in the Collection |
 | Boundaries | a shelter with a doorway | Compass › Boundaries field, its version view, the import note |
-| Reflection | a lantern on an open notebook | Journal note and review cards, Weekly review title |
-| Progress | a path narrowing to an obelisk | for the Campaign and milestones (agent B) |
+| Reflection | a lantern on an open notebook | Journal note and review cards, Weekly review title, Today's Write capture and note/review steps |
+| Progress | a path narrowing to an obelisk | the Campaign invitation, Make it yours, Route › Act II, the project's milestones, Today's quest step |
 
 **Lesson illustrations** — `LessonIllustration(lessonId, {height = 120})`,
 one scene per lesson (`LessonScene.of`: `lesson.01` roots under a tree,

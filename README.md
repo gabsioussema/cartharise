@@ -94,13 +94,18 @@ and credited, and the article itself is never reproduced (see [Credits](#credits
     <td align="center"><img src="docs/screenshots/you-light.png" width="220" alt="You, light"><br><sub>You · light</sub></td>
   </tr>
   <tr>
-    <td align="center"><img src="docs/screenshots/campaign-dark.png" width="220" alt="The Campaign"><br><sub>The Campaign</sub></td>
-    <td align="center"><img src="docs/screenshots/campaign-log-dark.png" width="220" alt="Battle log and achievements"><br><sub>Battle log & achievements</sub></td>
-    <td align="center"><img src="docs/screenshots/campaign-light.png" width="220" alt="The Campaign, light"><br><sub>The Campaign · light</sub></td>
+    <td align="center"><img src="docs/screenshots/campaign-dark.png" width="220" alt="The Campaign hub"><br><sub>The Campaign: Notice · Try · Make it yours</sub></td>
+    <td align="center"><img src="docs/screenshots/playground-try-dark.png" width="220" alt="Try: one tiny experiment"><br><sub>Try: one tiny experiment</sub></td>
+    <td align="center"><img src="docs/screenshots/collection-dark.png" width="220" alt="The Collection of keepsakes"><br><sub>Collection: keepsakes & badges</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/campaign-avatar-dark.png" width="220" alt="Make it yours: your strategist and reward picks"><br><sub>Make it yours</sub></td>
+    <td align="center"><img src="docs/screenshots/reward-dark.png" width="220" alt="Choose your reward, previewed on your avatar"><br><sub>Choose your reward</sub></td>
+    <td align="center"><img src="docs/screenshots/campaign-log-dark.png" width="220" alt="Battle log"><br><sub>Battle log</sub></td>
   </tr>
   <tr>
     <td align="center"><img src="docs/screenshots/avatar-builder-dark.png" width="220" alt="Edit your avatar"><br><sub>Your avatar</sub></td>
-    <td align="center"><img src="docs/screenshots/campaign-avatar-dark.png" width="220" alt="Your avatar on Hannibal's route"><br><sub>Your strategist on the route</sub></td>
+    <td align="center"><img src="docs/screenshots/campaign-light.png" width="220" alt="The Campaign, light"><br><sub>The Campaign · light</sub></td>
     <td align="center"><img src="docs/screenshots/you-avatar-light.png" width="220" alt="You, with your avatar, light"><br><sub>You · light</sub></td>
   </tr>
   <tr>
@@ -116,9 +121,16 @@ and credited, and the article itself is never reproduced (see [Credits](#credits
 
 Five tabs: **Today · Reset · Compass · Journal · You**.
 
-**Today: where you left off**
-- 🧭 **Your next step**, worked out from what you've actually done: start, resume, build your Compass, turn levers into quests, or reflect on your week
-- ✅ At a glance: three small tiles for your reset (3/27), your Campaign level and your 30-day path day, then today's quests and your direction
+**Welcome: five short pages**
+- 🐘 Brand and promise · the source credit, what this is and isn't (not therapy) and 18+ · your pace · your name (optional) · privacy and **Start**
+- Features are introduced the first time you meet them (one-line hints on Today), not in a carousel
+
+**Today: one useful thing, then an easy stop**
+- 🧭 **One next action**, worked out from what you've actually done: an open quest, start or resume the reset, build your Compass, turn levers into quests, a weekly review or a note, on a smaller dawn scene
+- 🔀 **Choose something else** lists the other steps that make sense now, plus **Help me with**: my project · reflection · notes · decide for me. Your choice is remembered
+- ✅ Once that kind of action is done today: **"Done. That can be enough for today."** with a quiet "One more". After a long absence there are no missed-day counts, just the next action
+- ✍️ **Write**: a quick capture that opens a new journal note
+- 📊 At a glance: three small tiles for your reset (3/27), your Campaign level and your 30-day path day, then today's quests; your direction stays collapsed until you open it
 - 🧑 Your avatar beside the greeting, once you've made one
 
 **Reset: the one‑day reset, one question at a time**
@@ -130,6 +142,7 @@ Five tabs: **Today · Reset · Compass · Journal · You**.
 
 **Awakening: the ideas behind it**
 - 📖 Seven short lessons in plain words, each with an example, *a lens, not a verdict*, a knowledge check that is never scored or saved, and "Try it" links into the matching questions
+- 🖼️ Each lesson has its own painted scene (roots under a tree, an iceberg, a walled town with an open gate, widening arches, a boat tacking to a lighthouse, a day's arc, a route to a summit), on its card and its page
 - Optional, in any order. You can start the reset without reading anything
 
 **Compass: your direction, in your own words**
@@ -143,15 +156,19 @@ Five tabs: **Today · Reset · Compass · Journal · You**.
 - 🗺️ An optional **30‑day path** in four stages (Observe · Experiment · Build · Adjust). Every day is open, go at your own pace
 
 **Campaign: the article as a game (optional)**
+- 🎲 **Asked once:** new users start with the game off and see "Play the Campaign? XP and levels for what you do." with **Play** / **Not now**. You › The Campaign switches it any time
+- 🌱 **The Playground**, a compact hub under your status (avatar at its stop, level, XP to the next): **Notice** (illustrated cards that reopen a question or lesson), **Try** (15 tiny real-world experiments, one at a time, with **I tried it** and an optional note) and **Make it yours**. A try only becomes a task if you tap **Add to my tasks**
+- 🧳 **Collection (keepsakes):** the experiments you tried with your notes exactly as typed, the seven achievement badges (each its own symbol; earned ones say whether by reflecting, trying or doing) and the extras you chose
+- 🎁 **Reward picks:** each route stop after Carthage and each achievement gives one pick. **Choose your reward** shows your own avatar wearing each extra, the suggested one first; nothing is spent until you confirm
 - ♜ Section VII of the article made playable: your vision is the **win condition**, the anti-vision is **what's at stake**, the one-year mission is the **main campaign**, the one-month project is your **boss fight**, daily levers are **quests** and your boundaries are the **rules of engagement**
 - 📜 **Act I:** five chapters built from the reset's exercises (4 · 7 · 3 · 6 · 7 questions), each opening its first open question
 - 🗺️ **Hannibal's route:** each level is the next stop from Carthage to Italy, with the XP to the next one
-- 🛡️ **Monthly boss fight:** the boss weakens as your project's milestones are reached; record what you tried and learned in a battle log you can correct or delete
-- ✨ **Calm moments:** a short "+20 XP", "Achievement earned" or "New for your avatar" when you complete a quest or an attempt, never while you type
+- 🛡️ **Monthly boss fight:** the boss weakens as your project's milestones are reached; record what you tried and learned in a battle log you can correct or delete. The form keeps a draft as you type, and a failed save never says "recorded"
+- ✨ **Calm moments:** a short "+20 XP", "+10 XP" for a first try, "Achievement earned" or "A new pick for your avatar" when you complete a quest, an attempt or a try, never while you type
 - 🏷️ **XP previews:** open quests show a small "+20 XP" tag until today's quest XP is reached
-- 🏺 **13 avatar extras:** banners, garment colours, a circlet or laurel, a scroll, compass or amulet open along the route and with achievements. Purely cosmetic and kept for good once earned, even if progress goes down; all open with the game off
-- 🧑 **Your strategist:** your avatar stands at your stop on the route, and a card shows your motto, how many extras you have and how to get the next one ("Next: Sage · Reach the Ebro")
-- 🏅 **XP, levels and seven achievements**, earned only by doing: answering a question, completing a quest, writing a 30-day note, recording an attempt, a weekly review. XP never looks at what you write, rest never costs anything, and one switch in You turns the whole layer off
+- 🏺 **13 avatar extras:** banners, garment colours, a circlet or laurel, a scroll, compass or amulet, chosen with reward picks. Purely cosmetic and kept for good once chosen, even if progress goes down; basic avatar identity is always free, and every extra is open with the game off
+- 🧑 **Your strategist:** your avatar stands at your stop on the route; Make it yours shows your motto, how many extras you have and the picks left
+- 🏅 **XP, levels and seven achievements**, earned only by doing: answering a question, completing a quest, trying an experiment, writing a 30-day note, recording an attempt, a weekly review. A chapter's achievement comes from answering its questions *or* trying one of its experiments. XP never looks at what you write, rest never costs anything, and one switch in You turns the whole layer off
 
 **Journal: write and look back**
 - 📝 Free notes, **weekly reviews** (wins, friction, next experiment)
@@ -184,7 +201,7 @@ flowchart LR
     M --> J
     C -.->|optional game layer| G["Campaign<br/>chapters · boss fight · XP"]
     M -.-> G
-    G -.->|extras| A["Your avatar<br/>You · Today · the route"]
+    G -.->|reward picks| A["Your avatar<br/>You · Today · the route"]
 ```
 
 The app is a single Flutter codebase. One `AppState` (a `ChangeNotifier`) holds an immutable
@@ -204,7 +221,7 @@ domain layer is pure Dart and unit‑tested. Details: [`docs/architecture.md`](d
 > **Your words are yours. Your pace is yours.**
 
 - **Every question can be skipped.** Most can be asked more gently, and *Feeling heavy?* always offers soften, skip, pause or support (with a link to a helpline directory)
-- **No streaks, countdowns or guilt.** Progress is counted in words, and nothing locks by time. The optional Campaign's XP counts participation only: it never drops, never judges what you write, and turns off in one tap
+- **No streaks, countdowns or guilt.** Progress is counted in words, and nothing locks by time. The optional Campaign is off until you say Play; its XP counts participation only: it never drops, never judges what you write, and turns off in one tap
 - **Your words are saved exactly as typed.** Nothing is rewritten, summarised or inferred
 - **No labels or diagnoses.** Lessons are lenses, not verdicts. Cartharise is not therapy, and says so
 - **Honest when something fails.** Failed saves, denied notification permission and bad backups are shown plainly, with a practical alternative
@@ -283,7 +300,7 @@ is generated).
 ```text
 lib/
 ├── domain/          content model, AppData (+ JSON), Campaign + persona rules, local dates, backup format (pure Dart)
-├── content/         ContentLibrary per language: lessons, questions, 30-day path, credit
+├── content/         ContentLibrary per language: lessons, questions, 30-day path, experiments, notices, credit
 ├── data/            DataStore: atomic JSON file · in-memory store for tests · backup exclusion
 ├── state/           AppState, the single ChangeNotifier
 ├── reminders/       reminder planning (pure) + notification scheduler
@@ -291,7 +308,7 @@ lib/
 ├── l10n/            generated AppLocalizations (from l10n_src/)
 └── ui/
     ├── theme/       Carthage Dusk palette, six themes, avatar colours, Cinzel/Inter type
-    ├── widgets/     shared kit: buttons, cards, headers, loader, scenes, pill tabs, save indicator…
+    ├── widgets/     shared kit: buttons, cards, headers, loader, scenes, glyphs, lesson art, badges, pill tabs, save indicator…
     ├── boot_screen.dart · root_shell.dart · nav.dart
     └── onboarding/ today/ reset/ awakening/ compass/ missions/ campaign/ persona/ journal/ you/
 l10n_src/            per-area string fragments → make l10n
@@ -309,8 +326,9 @@ tool/merge_arb.dart  merges the ARB fragments
 | [`docs/architecture.md`](docs/architecture.md) | Layers, data flow, persistence, reminders, loading sequence |
 | [`docs/features/`](docs/features) | One page per area: onboarding, today, reset, awakening, compass, missions, campaign, persona, journal, you |
 | [`docs/content-traceability.md`](docs/content-traceability.md) | Source segment → question → where it lives in the app |
-| [`docs/features/campaign.md`](docs/features/campaign.md) | The Campaign (game version): mapping, chapters, XP rules, battle log, avatar extras |
-| [`docs/features/persona.md`](docs/features/persona.md) · [`docs/plans/persona.md`](docs/plans/persona.md) | Your avatar: portrait, builder, unlock rules, and the plan with its audit fixes |
+| [`docs/features/campaign.md`](docs/features/campaign.md) | The Campaign (game version): the invitation, the Playground hub, mapping, chapters, XP rules, battle log, Collection, reward picks |
+| [`docs/plans/evolve.md`](docs/plans/evolve.md) | The evolve plan: lighter Today, the Playground, the board, voice and languages (three steps) |
+| [`docs/features/persona.md`](docs/features/persona.md) · [`docs/plans/persona.md`](docs/plans/persona.md) | Your avatar: portrait, builder, reward picks, and the plan with its audit fixes |
 | [`CLAUDE.md`](CLAUDE.md) | Project rules: privacy, emotional safety, UI base, strings |
 | [`Cartharise_Requirements.html`](Cartharise_Requirements.html) | Product requirements (F‑001…F‑057) |
 | [`Cartharise_Game_Requirements.html`](Cartharise_Game_Requirements.html) · [`Cartharise_Game.html`](Cartharise_Game.html) | Game version requirements (F‑058…F‑064) and its browser prototype |
@@ -342,7 +360,7 @@ failures, reminder planning (quiet hours across midnight, DST), the `.ics` forma
 
 - One widget test file per area, each run across a **size matrix**: 320×568 at 200 % text, 390×844, and 1024×1366 at 130 %, in dark and light
 - **Accessibility** checks (tap size, labels, text contrast) on 23 screens, plus a keyboard‑only pass
-- **End‑to‑end journeys** through the real app and content: onboarding → full reset → previewed Compass import → quests → journal → `.ics` → export, delete everything, restore; and create an avatar → You, the Campaign and Today show it → backup, delete, restore
+- **End‑to‑end journeys** through the real app and content: onboarding → full reset → previewed Compass import → quests → journal → `.ics` → export, delete everything, restore; create an avatar → You, the Campaign and Today show it → backup, delete, restore; the five-page welcome → the Campaign invitation (Play / Not now); a remembered Today pin → "Done. That can be enough for today."; Try → Add to my tasks → Collection → Choose your reward; an honest failed attempt save with its draft kept
 - Guard tests: no hard‑coded colours outside the theme, no streak or guilt copy, privacy settings pinned in the manifest
 
 Notifications, the share sheet and the file picker are tested with fakes. The real ones still need a

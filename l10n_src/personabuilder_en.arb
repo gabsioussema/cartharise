@@ -7,7 +7,7 @@
   "@personaBuilderPartLabel": {"description": "One part of the avatar preview's screen-reader description, e.g. 'Hair: Locs'.", "placeholders": {"category": {"type": "String"}, "value": {"type": "String"}}},
   "personaBuilderPreviewLabel": "Avatar preview. {parts}",
   "@personaBuilderPreviewLabel": {"description": "Screen-reader label of the large live preview; parts is a list of 'Category: value'.", "placeholders": {"parts": {"type": "String"}}},
-  "personaBuilderLockedNote": "Locked extras open along the Campaign.",
+  "personaBuilderLockedNote": "Locked extras open with reward picks.",
   "personaBuilderKept": "Yours to keep",
   "@personaBuilderKept": {"description": "Under an extra the saved avatar already wears but the user has not unlocked: it stays theirs for good, worn or not."},
   "personaBuilderHiddenSilhouette": "Pick a skin tone to see the face and colours.",

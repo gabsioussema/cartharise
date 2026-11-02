@@ -2361,7 +2361,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get personaBuilderLockedNote =>
-      'Locked extras open along the Campaign.';
+      'Locked extras open with reward picks.';
 
   @override
   String get personaBuilderKept => 'Yours to keep';

@@ -171,7 +171,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     SectionCard(
-                      icon: Icons.calendar_month_outlined,
+                      glyph: CarthaGlyph.direction,
                       title: l.missionsProjectTitleLabel,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -237,7 +237,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
                     ),
                     const SizedBox(height: 16),
                     SectionCard(
-                      icon: Icons.flag_outlined,
+                      glyph: CarthaGlyph.progress,
                       title: l.missionsMilestones,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,

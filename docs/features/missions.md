@@ -17,7 +17,8 @@ to tasks; complete, reopen, and delete a task").
    today) and open one-off quests planned for today or earlier. "Add a quest".
 3. **Anytime & upcoming**: open one-offs without a date, then planned ones by date.
 4. **Done (n)** — collapsed: finished one-offs, newest first; untick to reopen.
-5. **Month project** card → `ProjectScreen`.
+5. **Month project** card → `ProjectScreen` (the direction glyph by its title:
+   the project is the Compass's direction in practice).
 6. **30-day path**: "Any day is open — go at your own pace.", "n of 30 written",
    then Observe · Days 1–7 / Experiment · 8–15 / Build · 16–23 / Adjust · 24–30,
    each a grid of day cards (Day n, title, "Written" with a tick icon). Any card
@@ -45,7 +46,8 @@ to tasks; complete, reopen, and delete a task").
   Compass field is empty). The Compass is never changed without that tap.
 * Status chips Planned / Active / Paused / Done (tick + label, not colour alone).
 * Milestones: add (dialog), tick, rename (dialog), delete with Undo; "n of m
-  milestones done".
+  milestones done". The Project card carries the direction glyph and the
+  Milestones card the progress glyph (`SectionCard(glyph: …)`).
 * Looking back (retrospective): autosaved text.
 * Nothing is stored until the user changes something; "Start a new project"
   (destructive confirm) clears the project, never the Compass.

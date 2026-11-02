@@ -16,14 +16,16 @@ F-054 (gentle progress), F-031 (non-punitive), F-055 (honest save failure).
 2. **Save problem** (only when the last write failed): the shared
    `SaveIndicator` with Retry and Export a copy.
 3. **Your next step** — `NextActionCard` (`next_action.dart`): a forest
-   `HeroCard` with a **compact** `DawnRuinsScene` (aspect ratio 3:1,
-   `NextActionCard.sceneAspectRatio`; rises once, static with reduced
-   motion), eyebrow, title, one or two short lines, a bronze pill, an
+   `HeroCard` with the **compact** dawn scene (`DawnRuinsScene(compact:
+   true)`: the same art cropped to its band of interest at 3:1,
+   `NextActionCard.sceneAspectRatio = kCompactSceneAspectRatio`; rises once,
+   static with reduced motion), eyebrow, title, one or two short lines, a bronze pill, an
    optional secondary link and **Choose something else**. Once the chosen
    kind of action was done today it shows **"Done. That can be enough for
    today."** with a quiet **One more** instead (see below).
-4. **Campaign invitation** — `CampaignInviteCard` (body by the Campaign
-   area) while `AppSettings.gameInvited` is false, i.e. for a brand-new
+4. **Campaign invitation** — `CampaignInviteCard` ("Play the Campaign? XP
+   and levels for what you do." with **Play** / **Not now**, see
+   `campaign.md`) while `AppSettings.gameInvited` is false, i.e. for a brand-new
    profile until the user answers it once. Existing users never see it.
 5. **Write** — a quick capture ("Write a few lines…", read out as "Write a
    new note") that opens a new journal note (`AppNav.openJournalEntry`;

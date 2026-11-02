@@ -336,7 +336,7 @@ void main() {
       await _openBuilder(tester);
       await _tap(tester, _chip(BuilderCategory.sigil));
       expect(
-        find.text('Locked extras open along the Campaign.'),
+        find.text('Locked extras open with reward picks.'),
         findsOneWidget,
       );
       final star = _option(BuilderCategory.sigil, Sigil.star);
@@ -376,7 +376,7 @@ void main() {
       // Appearance is never locked.
       await _tap(tester, _chip(BuilderCategory.hair));
       expect(find.byIcon(Icons.lock_outline), findsNothing);
-      expect(find.text('Locked extras open along the Campaign.'), findsNothing);
+      expect(find.text('Locked extras open with reward picks.'), findsNothing);
     });
 
     testWidgets('with the game layer off, every extra is open', (tester) async {

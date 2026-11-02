@@ -1530,7 +1530,7 @@
       }
     }
   },
-  "personaBuilderLockedNote": "Locked extras open along the Campaign.",
+  "personaBuilderLockedNote": "Locked extras open with reward picks.",
   "personaBuilderKept": "Yours to keep",
   "@personaBuilderKept": {
     "description": "Under an extra the saved avatar already wears but the user has not unlocked: it stays theirs for good, worn or not."

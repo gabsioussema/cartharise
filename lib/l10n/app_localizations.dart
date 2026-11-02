@@ -3697,7 +3697,7 @@ abstract class AppLocalizations {
   /// No description provided for @personaBuilderLockedNote.
   ///
   /// In en, this message translates to:
-  /// **'Locked extras open along the Campaign.'**
+  /// **'Locked extras open with reward picks.'**
   String get personaBuilderLockedNote;
 
   /// Under an extra the saved avatar already wears but the user has not unlocked: it stays theirs for good, worn or not.

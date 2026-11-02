@@ -151,7 +151,7 @@ detail sheet and a 24–120 px size ladder, in dark and light) come from
   comes — "Next pick at New Carthage", or "Next pick: earn The Challenger"
   once every route stop is reached (`nextPickReason`). Any pick buys any
   extra, so every locked tile says the same. Categories with a locked choice
-  say "Locked extras open along the Campaign." With the game layer off
+  say "Locked extras open with reward picks." With the game layer off
   everything is open. An extra the saved avatar already wears but hasn't
   chosen (worn while the game layer was off) stays selected and usable,
   marked "Yours to keep" (`PersonaOps.canUse`): saving or removing the avatar

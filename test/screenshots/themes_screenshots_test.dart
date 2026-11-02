@@ -23,7 +23,13 @@ void main() {
           tester,
           brightness: b,
           theme: theme,
+          // Nothing done yet today, so the next action (and its pill in
+          // the theme's accent) shows rather than the done state.
           data: inProgressData().copyWith(
+            quests: [
+              for (final q in inProgressData().quests)
+                q.copyWith(completedOn: const {}),
+            ],
             persona: () => Persona(
               avatar: const Avatar(
                 skinTone: SkinTone.copper,

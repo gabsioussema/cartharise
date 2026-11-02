@@ -175,7 +175,7 @@ class _ProjectCard extends StatelessWidget {
     final fromCompass = state.compass.monthProject.trim();
     return SectionCard(
       key: const ValueKey('missions-project'),
-      icon: Icons.calendar_month_outlined,
+      glyph: CarthaGlyph.direction,
       title: l.missionsProjectTitle,
       trailing: Icon(Icons.chevron_right, color: p.textSecondary),
       onTap: () => AppNav.openProject(context),

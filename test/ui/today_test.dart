@@ -1132,6 +1132,11 @@ void main() {
         closeTo(NextActionCard.sceneAspectRatio, 0.01),
       );
       expect(size.height, lessThan(size.width / 2), reason: 'smaller than 2:1');
+      expect(
+        tester.widget<BrandScene>(find.byType(BrandScene)).compact,
+        isTrue,
+        reason: 'the compact variant crops the art instead of squashing it',
+      );
     });
 
     testWidgets('"Learn the 7 ideas" opens the lessons', (tester) async {

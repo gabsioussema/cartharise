@@ -286,13 +286,16 @@ Also write `docs/content-traceability.md`: source segment → prompt ids → Car
 - **Onboarding** (F-001–F-004, F-043 summary, D-11): promise + limits ("one day can create clarity; it
   can't guarantee a fixed life"), inspiration credit with links + independence, pace choice
   (one day / flexible — nothing is ever locked by time), optional name, 18+ confirm, privacy summary
-  ("stays on this phone"), not-therapy note. Board-style carousel: Understand yourself → Reset your
-  life → Choose a direction → Improve step by step, vector brand scenes (`ui/widgets/scenes.dart`:
-  rising sun, winding path, compass star, steps — tokens only, no photos), skippable.
+  ("stays on this phone"), not-therapy note. Since the evolve plan (`docs/plans/evolve.md`, Step 1)
+  these are **five pages**: brand + promise · credit + limits + 18+ · pace · name · privacy + Start;
+  the old board-style carousel is gone and features are introduced on first use (one-line hints on
+  Today). A new profile starts with the Campaign off and a one-time invitation.
 - **Today** (F-036, F-037, F-054): greeting (name optional), next best step derived from stored state
   only, today's quests with check/uncheck, vision & month project snippets, gentle progress
   ("Day n of 30" only if the user opened the path; reset progress ring), empty states for no compass /
-  no quests / unfinished reset.
+  no quests / unfinished reset. Since the evolve plan: one next action with "Choose something else"
+  and a remembered "Help me with" pin, a "Done. That can be enough for today." stop, a Write
+  capture, and the direction collapsed (`docs/features/today.md`).
 - **Reset & Awakening** (F-005–F-016, F-019–F-022, F-046, F-047): lessons list + lesson screen
   (explanation, example, nuance, knowledge check, "Try it" → prompt); phase hub with progress per
   phase; guided prompt screen = one question at a time: context, question (toggle softer wording),

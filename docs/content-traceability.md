@@ -80,6 +80,13 @@ Each lesson ends with a 3-option knowledge check. No score is kept.
   questions; the six editable reminders and quiet hours are Cartharise's implementation of that.
 - **Flexible pacing**: the article suggests one dedicated day. Cartharise also offers an open-ended
   pace and never locks a phase by time.
+- **Playground experiments** (`experiments`, `try.<chapter>.<n>`, evolve plan Step 1): 15 tiny,
+  safe, real-world tries, three per Campaign chapter (terrain, pattern, banner, autopilot, plan).
+  Original Cartharise text, written to sit beside the chapter's questions; none asks the user to
+  share personal details. Trying one is separate from tasks until the user taps "Add to my tasks".
+- **Playground notices** (`notices`, `notice.<n>`): 7 cards that only point at existing prompts or
+  lessons (`promptId` / `lessonId`); their titles are Cartharise's, the text they open is the
+  traced prompt or lesson above.
 
 ## Source-structure notes
 

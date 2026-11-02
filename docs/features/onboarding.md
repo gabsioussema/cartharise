@@ -65,8 +65,8 @@ until it is answered (Play / Not now, Campaign area). A **replayed** welcome
 `SunriseScene`, `PathScene`, `CompassScene`, `StepsScene`, `DawnRuinsScene`
 (each `{aspectRatio = 4/3, semanticLabel, animate}`; `aspectRatio: null` fills
 the parent), all built on `BrandScene(kind: SceneKind…)` and `ScenePainter`.
-Onboarding now uses only `DawnRuinsScene` (brand page); Today uses it in a
-compact 3:1 card. The other four stay available to every area (the visual
+Onboarding now uses only `DawnRuinsScene` (brand page); Today uses its
+compact variant (`compact: true`, 3:1, same art) in the next-action card. The other four stay available to every area (the visual
 system owns `scenes.dart`).
 
 - Vector `CustomPainter`s; colours derived only from palette tokens

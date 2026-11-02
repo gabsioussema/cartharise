@@ -7,6 +7,7 @@ import 'package:cartharise/domain/campaign.dart';
 import 'package:cartharise/ui/awakening/awakening_screen.dart';
 import 'package:cartharise/ui/awakening/lesson_card.dart';
 import 'package:cartharise/ui/awakening/lesson_screen.dart';
+import 'package:cartharise/ui/campaign/campaign_pages.dart';
 import 'package:cartharise/ui/compass/compass_import.dart';
 import 'package:cartharise/ui/compass/compass_tab.dart';
 import 'package:cartharise/ui/journal/journal_tab.dart';
@@ -726,6 +727,54 @@ void main() {
         ),
         findsOneWidget,
       );
+      _expectGlyphsWithWords(tester);
+    });
+
+    testWidgets('project context: direction on the project, the path on its '
+        'milestones and on the route (integration)', (tester) async {
+      Finder glyph(CarthaGlyph g) =>
+          find.byWidgetPredicate((w) => w is GlyphIcon && w.glyph == g);
+      Finder besideWord(Finder g, String word) => find.descendant(
+        of: find.ancestor(of: g, matching: find.byType(Row)).first,
+        matching: find.text(word),
+      );
+      final data = onboardedData().copyWith(
+        project: () => MonthProject(
+          title: 'Four short essays',
+          status: ProjectStatus.active,
+          updatedAt: DateTime(2026, 11, 2),
+          milestones: const [Milestone(id: 'm1', title: 'First draft')],
+        ),
+      );
+      await pumpCartha(
+        tester,
+        data: data,
+        home: const CompassTab(),
+        size: const Size(390, 4000),
+      );
+      await tester.tap(find.text('Missions'));
+      await pumpFrames(tester);
+      final project = find.descendant(
+        of: find.byKey(const ValueKey('missions-project')),
+        matching: glyph(CarthaGlyph.direction),
+      );
+      expect(project, findsOneWidget);
+      expect(besideWord(project, 'Month project'), findsOneWidget);
+      _expectGlyphsWithWords(tester);
+
+      await tester.tap(find.byKey(const ValueKey('missions-project')));
+      await pumpFrames(tester);
+      expect(glyph(CarthaGlyph.direction), findsOneWidget);
+      expect(besideWord(glyph(CarthaGlyph.progress), 'Milestones'), findsOne);
+      _expectGlyphsWithWords(tester);
+
+      await pumpCartha(
+        tester,
+        data: data,
+        home: campaignPageScreen(CampaignPage.route),
+        size: const Size(390, 4000),
+      );
+      expect(glyph(CarthaGlyph.progress), findsOneWidget);
       _expectGlyphsWithWords(tester);
     });
   });

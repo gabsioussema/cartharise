@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../theme/cartha_theme.dart';
+import 'glyphs.dart';
 
 /// A rounded card section (radius 22, thin border, flat). Tappable when
 /// [onTap] is set (then announced as a button).
@@ -10,17 +11,22 @@ class SectionCard extends StatelessWidget {
     required this.child,
     this.title,
     this.icon,
+    this.glyph,
     this.trailing,
     this.onTap,
     this.padding = const EdgeInsetsDirectional.all(20),
     this.semanticLabel,
-  });
+  }) : assert(icon == null || glyph == null, 'Pass an icon or a glyph');
 
   final Widget child;
 
   /// Optional heading row (Inter titleMedium).
   final String? title;
   final IconData? icon;
+
+  /// The visual system's glyph for the card's idea (direction, progress…),
+  /// painted in place of [icon], next to [title].
+  final CarthaGlyph? glyph;
   final Widget? trailing;
   final VoidCallback? onTap;
   final EdgeInsetsGeometry padding;
@@ -36,11 +42,17 @@ class SectionCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (title != null || icon != null || trailing != null) ...[
+          if (title != null ||
+              icon != null ||
+              glyph != null ||
+              trailing != null) ...[
             Row(
               children: [
                 if (icon != null) ...[
                   Icon(icon, color: p.accent, size: 22),
+                  const SizedBox(width: 12),
+                ] else if (glyph != null) ...[
+                  GlyphIcon(glyph!, size: 22),
                   const SizedBox(width: 12),
                 ],
                 if (title != null)

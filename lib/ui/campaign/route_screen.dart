@@ -104,7 +104,7 @@ class CampaignRouteScreen extends StatelessWidget {
         const SizedBox(height: 16),
         SectionCard(
           title: l.campaignActTwo,
-          icon: Icons.route_outlined,
+          glyph: CarthaGlyph.progress,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [

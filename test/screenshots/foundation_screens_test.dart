@@ -112,14 +112,15 @@ class _GalleryState extends State<_Gallery> {
             maxLines: 4,
           ),
           const SizedBox(height: 16),
-          Row(
+          // Six themes plus the emblem and loader: wraps on a phone.
+          Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
-              for (final t in AppTheme.values) ...[
+              for (final t in AppTheme.values)
                 ThemeSwatch(theme: t, selected: t == AppTheme.forest),
-                const SizedBox(width: 12),
-              ],
               const CarthaEmblem(size: 56),
-              const SizedBox(width: 12),
               const CarthaLoader(size: 56, tile: true, startAt: 0.75),
             ],
           ),

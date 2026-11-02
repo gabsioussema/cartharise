@@ -23,9 +23,10 @@ import 'today_model.dart';
 class NextActionCard extends StatefulWidget {
   const NextActionCard({super.key});
 
-  /// Width / height of the scene: shorter than a regular scene, so the
-  /// action stays near the top.
-  static const sceneAspectRatio = 3.0;
+  /// Width / height of the scene: the compact variant of the dawn scene
+  /// (same art, cropped to its band of interest), so the action stays near
+  /// the top.
+  static const sceneAspectRatio = kCompactSceneAspectRatio;
 
   @override
   State<NextActionCard> createState() => _NextActionCardState();
@@ -106,7 +107,7 @@ class _Scene extends StatelessWidget {
     final p = CarthaPalette.of(context);
     return Stack(
       children: [
-        const DawnRuinsScene(aspectRatio: NextActionCard.sceneAspectRatio),
+        const DawnRuinsScene(compact: true),
         Positioned.fill(
           child: IgnorePointer(
             child: DecoratedBox(
