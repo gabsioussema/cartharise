@@ -103,6 +103,9 @@ and credited, and the article itself is never reproduced (see [Credits](#credits
     <td align="center"><img src="docs/screenshots/campaign-avatar-dark.png" width="220" alt="Your avatar on Hannibal's route"><br><sub>Your strategist on the route</sub></td>
     <td align="center"><img src="docs/screenshots/you-avatar-light.png" width="220" alt="You, with your avatar, light"><br><sub>You · light</sub></td>
   </tr>
+  <tr>
+    <td colspan="3" align="center"><img src="docs/screenshots/themes.png" width="680" alt="Today in the six themes, dark and light"><br><sub>Six themes, dark and light: Forest · Olive · Oasis · Tyrian Rose · Alpine · Obsidian</sub></td>
+  </tr>
 </table>
 
 <sub>Rendered from the real widgets with <code>make screenshots</code>, then cropped to one phone screen. See <a href="#testing">Testing</a>.</sub>
@@ -158,7 +161,7 @@ Five tabs: **Today · Reset · Compass · Journal · You**.
 - 🧑 **Your avatar ("Your strategist"):** a live preview with 13 categories: skin tone, face, 12 hair styles (from straight to coily, afro, locs and braids) in 8 colours, facial hair, glasses, freckles, a beauty mark or vitiligo, expression, headwear (headscarf, turban, hood…), clothes and a banner, plus "Surprise me" and an optional motto. No gender choice and no default skin: it starts as a silhouette. It shows on You, beside Today's greeting and on Hannibal's route
 - 🙏 **Inspiration:** the article, its author and both links, and what is from the source vs added by Cartharise
 - 🔔 **Reminders:** opt‑in, six editable check‑in times, quiet hours, or **Add to calendar (.ics)** if you'd rather not get notifications
-- 🎨 **Appearance:** Forest or Olive theme · system / light / dark · motion on/off
+- 🎨 **Appearance:** six themes, each named for a piece of the story: **Forest**, **Olive**, **Oasis** (palm green and date gold), **Tyrian Rose** (the rose dye of Tyre, Carthage's mother city), **Alpine** (granite and snow of Hannibal's crossing) and **Obsidian** (black and gold, true black when dark) · system / light / dark · motion on/off
 - 💾 **Your data:** export or restore a JSON backup, or delete everything
 - 💚 **Support & safety:** what to do when a question feels heavy, and where to find help
 
@@ -213,7 +216,7 @@ domain layer is pure Dart and unit‑tested. Details: [`docs/architecture.md`](d
 
 | | Layer | What's used |
 |---|---|---|
-| <img src="https://cdn.simpleicons.org/flutter/02569B" width="22"> | App & UI | **Flutter 3.47**, Material 3, `provider`, "Carthage Dusk" role‑token palette (`CarthaPalette`), Forest & Olive themes |
+| <img src="https://cdn.simpleicons.org/flutter/02569B" width="22"> | App & UI | **Flutter 3.47**, Material 3, `provider`, "Carthage Dusk" role‑token palette (`CarthaPalette`), six themes, each light and dark |
 | <img src="https://cdn.simpleicons.org/dart/0175C2" width="22"> | Core logic | **Dart 3.13**: pure‑Dart domain, hand‑written JSON, `intl` + gen‑l10n from per‑area ARB fragments |
 | 🎨 | Brand & motion | `EmblemGeometry` (one source for the emblem, its SVGs and icons), the "charging" loader as a `CustomPainter`, `flutter_svg` lockups, vector brand scenes |
 | 🔔 | Reminders | `flutter_local_notifications` (inexact daily), `timezone` + `flutter_timezone`; pure `.ics` export |
@@ -287,7 +290,7 @@ lib/
 ├── services/        .ics export (pure) · share sheet / file picker
 ├── l10n/            generated AppLocalizations (from l10n_src/)
 └── ui/
-    ├── theme/       Carthage Dusk palette, Forest & Olive themes, avatar colours, Cinzel/Inter type
+    ├── theme/       Carthage Dusk palette, six themes, avatar colours, Cinzel/Inter type
     ├── widgets/     shared kit: buttons, cards, headers, loader, scenes, pill tabs, save indicator…
     ├── boot_screen.dart · root_shell.dart · nav.dart
     └── onboarding/ today/ reset/ awakening/ compass/ missions/ campaign/ persona/ journal/ you/

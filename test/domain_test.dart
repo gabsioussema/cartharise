@@ -136,6 +136,10 @@ void main() {
       expect(first.body, data.journeys.first.answers['morning.01']!.body);
       expect(back.quests.single.completedOn, {'2026-11-02', '2026-11-03'});
       expect(back.settings.theme, AppTheme.olive);
+      for (final theme in AppTheme.values) {
+        final s = AppSettings(theme: theme);
+        expect(AppSettings.fromJson(s.toJson()).theme, theme);
+      }
       expect(back.pathAnswers[3]!.body, 'day three');
       expect(back.lessonsRead, {'lesson.01', 'lesson.03'});
     });

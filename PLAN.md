@@ -73,8 +73,9 @@ cream `#FFFDF8`, green-grey `#687870`, mist `#B9C6B8`.
 | `success`, `error`, `onError`, `warning`, status containers | AA-checked | AA-checked |
 | `focus`, `selection`, `shadow`, `scrim` | | |
 
-Themes: **Forest** (default) and **Olive** (olive heroes/accents), each light + dark, plus
-System/Light/Dark. Contrast tested automatically: 4.5:1 text, 3:1 meaningful controls.
+Themes: **Forest** (default), **Olive**, **Oasis**, **Tyrian Rose**, **Alpine** and **Obsidian**
+(true black when dark), each light + dark, plus System/Light/Dark. Theme ids are stored: append,
+never rename. Contrast tested automatically: 4.5:1 text, 3:1 meaningful controls.
 
 Type: **Cinzel** (`assets/fonts/Cinzel-400/600/700.ttf`, OFL) for display/headline styles, the
 onboarding titles and section heroes only; **Inter** (bundled, OFL) for everything else, including

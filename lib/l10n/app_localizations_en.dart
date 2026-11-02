@@ -3115,6 +3115,41 @@ class AppLocalizationsEn extends AppLocalizations {
   String get youThemeOlive => 'Olive';
 
   @override
+  String get youThemeOasis => 'Oasis';
+
+  @override
+  String get youThemeTyrian => 'Tyrian Rose';
+
+  @override
+  String get youThemeAlpine => 'Alpine';
+
+  @override
+  String get youThemeObsidian => 'Obsidian';
+
+  @override
+  String get youThemeAboutForest =>
+      'Deep forest and bronze: the Cartharise original.';
+
+  @override
+  String get youThemeAboutOlive => 'The olive groves of the Punic countryside.';
+
+  @override
+  String get youThemeAboutOasis =>
+      'Palm green and date gold of the desert oases.';
+
+  @override
+  String get youThemeAboutTyrian =>
+      'The rose dye of Tyre, Carthage\'s mother city.';
+
+  @override
+  String get youThemeAboutAlpine =>
+      'Granite and snow, where Hannibal crossed the Alps.';
+
+  @override
+  String get youThemeAboutObsidian =>
+      'Volcanic black glass and gold. True black when dark.';
+
+  @override
   String get youModeTitle => 'Light or dark';
 
   @override

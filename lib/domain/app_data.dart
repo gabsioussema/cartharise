@@ -18,8 +18,9 @@ enum Pace { oneDay, flexible }
 
 enum AppearanceMode { system, light, dark }
 
-/// Brand themes. Every theme has a light and a dark variant.
-enum AppTheme { forest, olive }
+/// Brand themes. Every theme has a light and a dark variant. Names are
+/// stored in the data file: append new ones, never rename.
+enum AppTheme { forest, olive, oasis, tyrian, alpine, obsidian }
 
 enum QuestRecurrence { none, daily }
 

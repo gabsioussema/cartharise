@@ -12,6 +12,20 @@ import '../widgets/widgets.dart';
 String themeLabel(AppLocalizations l, AppTheme theme) => switch (theme) {
   AppTheme.forest => l.youThemeForest,
   AppTheme.olive => l.youThemeOlive,
+  AppTheme.oasis => l.youThemeOasis,
+  AppTheme.tyrian => l.youThemeTyrian,
+  AppTheme.alpine => l.youThemeAlpine,
+  AppTheme.obsidian => l.youThemeObsidian,
+};
+
+/// What a theme's name stands for, in one line.
+String themeMeaning(AppLocalizations l, AppTheme theme) => switch (theme) {
+  AppTheme.forest => l.youThemeAboutForest,
+  AppTheme.olive => l.youThemeAboutOlive,
+  AppTheme.oasis => l.youThemeAboutOasis,
+  AppTheme.tyrian => l.youThemeAboutTyrian,
+  AppTheme.alpine => l.youThemeAboutAlpine,
+  AppTheme.obsidian => l.youThemeAboutObsidian,
 };
 
 String appearanceLabel(AppLocalizations l, AppearanceMode mode) =>
@@ -21,9 +35,10 @@ String appearanceLabel(AppLocalizations l, AppearanceMode mode) =>
       AppearanceMode.dark => l.youModeDark,
     };
 
-/// You › Appearance: theme (Forest / Olive swatches), System / Light / Dark,
-/// and interface motion. Every change goes through `updateSettings` and
-/// applies at once.
+/// You › Appearance: theme swatches (Forest, Olive, Oasis, Tyrian Rose,
+/// Alpine, Obsidian) with one line on what the chosen name stands for,
+/// System / Light / Dark, and interface motion. Every change goes through
+/// `updateSettings` and applies at once.
 class AppearanceScreen extends StatelessWidget {
   const AppearanceScreen({super.key});
 
@@ -49,47 +64,66 @@ class AppearanceScreen extends StatelessWidget {
             SectionCard(
               icon: Icons.palette_outlined,
               title: l.youThemeTitle,
-              child: Wrap(
-                spacing: 16,
-                runSpacing: 12,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  for (final t in AppTheme.values)
-                    Semantics(
-                      button: true,
-                      selected: settings.theme == t,
-                      inMutuallyExclusiveGroup: true,
-                      label: themeLabel(l, t),
-                      excludeSemantics: true,
-                      child: InkWell(
-                        key: ValueKey('theme-${t.name}'),
-                        borderRadius: BorderRadius.circular(
-                          CarthaTheme.radiusSmall,
-                        ),
-                        onTap: () =>
-                            state.updateSettings(settings.copyWith(theme: t)),
-                        child: Padding(
-                          padding: const EdgeInsets.all(6),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              ThemeSwatch(
-                                theme: t,
-                                selected: settings.theme == t,
-                              ),
-                              const SizedBox(height: 6),
-                              Text(
-                                themeLabel(l, t),
-                                style: theme.textTheme.bodyMedium?.copyWith(
-                                  fontWeight: settings.theme == t
-                                      ? FontWeight.w700
-                                      : FontWeight.w500,
+                  Wrap(
+                    spacing: 12,
+                    runSpacing: 12,
+                    children: [
+                      for (final t in AppTheme.values)
+                        Semantics(
+                          button: true,
+                          selected: settings.theme == t,
+                          inMutuallyExclusiveGroup: true,
+                          label: themeLabel(l, t),
+                          excludeSemantics: true,
+                          child: InkWell(
+                            key: ValueKey('theme-${t.name}'),
+                            borderRadius: BorderRadius.circular(
+                              CarthaTheme.radiusSmall,
+                            ),
+                            onTap: () => state.updateSettings(
+                              settings.copyWith(theme: t),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(6),
+                              // Even columns, whatever each name's length.
+                              child: ConstrainedBox(
+                                constraints: const BoxConstraints(minWidth: 76),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    ThemeSwatch(
+                                      theme: t,
+                                      selected: settings.theme == t,
+                                    ),
+                                    const SizedBox(height: 6),
+                                    Text(
+                                      themeLabel(l, t),
+                                      style: theme.textTheme.bodyMedium
+                                          ?.copyWith(
+                                            fontWeight: settings.theme == t
+                                                ? FontWeight.w700
+                                                : FontWeight.w500,
+                                          ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
+                            ),
                           ),
                         ),
-                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    themeMeaning(l, settings.theme),
+                    key: const ValueKey('theme-meaning'),
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: p.textSecondary,
                     ),
+                  ),
                 ],
               ),
             ),

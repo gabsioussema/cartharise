@@ -4954,6 +4954,66 @@ abstract class AppLocalizations {
   /// **'Olive'**
   String get youThemeOlive;
 
+  /// No description provided for @youThemeOasis.
+  ///
+  /// In en, this message translates to:
+  /// **'Oasis'**
+  String get youThemeOasis;
+
+  /// No description provided for @youThemeTyrian.
+  ///
+  /// In en, this message translates to:
+  /// **'Tyrian Rose'**
+  String get youThemeTyrian;
+
+  /// No description provided for @youThemeAlpine.
+  ///
+  /// In en, this message translates to:
+  /// **'Alpine'**
+  String get youThemeAlpine;
+
+  /// No description provided for @youThemeObsidian.
+  ///
+  /// In en, this message translates to:
+  /// **'Obsidian'**
+  String get youThemeObsidian;
+
+  /// No description provided for @youThemeAboutForest.
+  ///
+  /// In en, this message translates to:
+  /// **'Deep forest and bronze: the Cartharise original.'**
+  String get youThemeAboutForest;
+
+  /// No description provided for @youThemeAboutOlive.
+  ///
+  /// In en, this message translates to:
+  /// **'The olive groves of the Punic countryside.'**
+  String get youThemeAboutOlive;
+
+  /// No description provided for @youThemeAboutOasis.
+  ///
+  /// In en, this message translates to:
+  /// **'Palm green and date gold of the desert oases.'**
+  String get youThemeAboutOasis;
+
+  /// No description provided for @youThemeAboutTyrian.
+  ///
+  /// In en, this message translates to:
+  /// **'The rose dye of Tyre, Carthage\'s mother city.'**
+  String get youThemeAboutTyrian;
+
+  /// No description provided for @youThemeAboutAlpine.
+  ///
+  /// In en, this message translates to:
+  /// **'Granite and snow, where Hannibal crossed the Alps.'**
+  String get youThemeAboutAlpine;
+
+  /// No description provided for @youThemeAboutObsidian.
+  ///
+  /// In en, this message translates to:
+  /// **'Volcanic black glass and gold. True black when dark.'**
+  String get youThemeAboutObsidian;
+
   /// No description provided for @youModeTitle.
   ///
   /// In en, this message translates to:

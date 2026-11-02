@@ -32,8 +32,22 @@ and the share sheet / file picker when the user asks for them.
   "Source default 13:30" hint and "Use 13:30" when changed; **Quiet hours**
   (From / Until, "Not set", a hint while only one is set, Clear); **Add to
   calendar (.ics)**.
-- **Appearance.** Theme swatches (Forest / Olive), Light or dark (System /
-  Light / Dark pills), Interface motion switch. Changes apply at once.
+- **Appearance.** Six theme swatches in even columns, each with its name,
+  and one line under them on what the chosen name stands for
+  (`themeLabel`, `themeMeaning`):
+  - **Forest** (default): deep forest and bronze, the Cartharise original
+  - **Olive**: the olive groves of the Punic countryside
+  - **Oasis**: palm green and date gold; mint pill on dark, mint paper on light
+  - **Tyrian Rose**: the rose dye of Tyre, Carthage's mother city; wine
+    heroes, rose pill, plum-charcoal on dark, blush on light
+  - **Alpine**: granite and snow of Hannibal's crossing; slate heroes,
+    silver pill, graphite on dark, snow grey on light
+  - **Obsidian**: volcanic black glass and gold; true black when dark (kind
+    to OLED screens), black heroes and buttons on a warm white
+
+  Then Light or dark (System / Light / Dark pills) and the Interface motion
+  switch. Changes apply at once. Every theme passes the contrast tests
+  (`test/color_system_test.dart`) and the avatar's disc-edge test.
 - **Your data (F-040–F-043, F-055).** Where the data lives
   (`StorageTransparencyText`: only on this phone, private app folder, not
   encrypted by Cartharise, not synced, not in phone or cloud backups);

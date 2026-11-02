@@ -6,6 +6,7 @@ import 'package:cartharise/domain/backup.dart';
 import 'package:cartharise/l10n/app_localizations_en.dart';
 import 'package:cartharise/state/app_state.dart';
 import 'package:cartharise/ui/onboarding/onboarding_flow.dart';
+import 'package:cartharise/ui/theme/cartha_theme.dart';
 import 'package:cartharise/ui/you/app_version.dart';
 import 'package:cartharise/ui/you/appearance_screen.dart';
 import 'package:cartharise/ui/you/backup_preview.dart';
@@ -393,6 +394,65 @@ void main() {
       await tester.pageBack();
       await pumpFrames(tester);
       expect(find.text('Olive · Light'), findsOneWidget);
+    });
+
+    testWidgets('every theme can be chosen and says what it stands for', (
+      tester,
+    ) async {
+      final h = await pumpCartha(
+        tester,
+        data: onboardedData(),
+        home: const AppearanceScreen(),
+      );
+      final l = AppLocalizationsEn();
+      for (final t in AppTheme.values) {
+        final swatch = find.byKey(ValueKey('theme-${t.name}'));
+        await tester.ensureVisible(swatch);
+        await _tap(tester, swatch);
+        expect(h.state.settings.theme, t);
+        expect(find.text(themeLabel(l, t)), findsOneWidget);
+        expect(
+          tester.widget<Text>(find.byKey(const ValueKey('theme-meaning'))).data,
+          themeMeaning(l, t),
+        );
+        // The whole app re-themes at once: the screen sits on its background.
+        final background = CarthaPalette.of(
+          tester.element(find.byType(AppearanceScreen)),
+        ).background;
+        expect(
+          background,
+          CarthaTheme.build(
+            t,
+            Theme.of(tester.element(find.byType(AppearanceScreen))).brightness,
+          ).extension<CarthaPalette>()!.background,
+          reason: t.name,
+        );
+      }
+    });
+
+    test('each theme has its own name, meaning and backgrounds', () {
+      final l = AppLocalizationsEn();
+      String bg(AppTheme t, Brightness b) => CarthaTheme.build(
+        t,
+        b,
+      ).extension<CarthaPalette>()!.background.toARGB32().toRadixString(16);
+      expect(
+        AppTheme.values.map((t) => themeLabel(l, t)).toSet(),
+        hasLength(6),
+      );
+      expect(
+        AppTheme.values.map((t) => themeMeaning(l, t)).toSet(),
+        hasLength(6),
+      );
+      for (final b in Brightness.values) {
+        expect(
+          AppTheme.values.map((t) => bg(t, b)).toSet(),
+          hasLength(AppTheme.values.length),
+          reason: 'every ${b.name} background is distinct',
+        );
+      }
+      // Obsidian is true black when dark (kind to OLED screens).
+      expect(bg(AppTheme.obsidian, Brightness.dark), 'ff000000');
     });
   });
 
