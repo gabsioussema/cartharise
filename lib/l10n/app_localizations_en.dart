@@ -2459,6 +2459,303 @@ class AppLocalizationsEn extends AppLocalizations {
       'Name and avatar are optional and stay on this phone.';
 
   @override
+  String get projectsPictureTitle => 'Picture';
+
+  @override
+  String get projectsPictureEmpty =>
+      'A painted scene or a photo. It shows on this project\'s tasks.';
+
+  @override
+  String get projectsPictureChoose => 'Choose a picture';
+
+  @override
+  String get projectsPictureChange => 'Change picture';
+
+  @override
+  String get projectsPictureRemove => 'Remove picture';
+
+  @override
+  String get projectsPictureRemoved => 'Picture removed';
+
+  @override
+  String get projectsPhotoRemoveTitle => 'Remove the photo?';
+
+  @override
+  String get projectsPhotoRemoveBody =>
+      'It\'s deleted from the app. Photos in your gallery aren\'t touched.';
+
+  @override
+  String get projectsPhotoRemoveConfirm => 'Remove photo';
+
+  @override
+  String get projectsClearBodyPhoto =>
+      'Clears this project\'s title, milestones, notes and photo. Your Compass stays.';
+
+  @override
+  String projectsPictureLabel(String name) {
+    return 'Project picture: $name';
+  }
+
+  @override
+  String get projectsPhotoName => 'your photo';
+
+  @override
+  String get projectsPhotoMissing => 'Photo not found on this phone';
+
+  @override
+  String get projectsArtSheetTitle => 'Project picture';
+
+  @override
+  String get projectsArtScenes => 'Painted scenes';
+
+  @override
+  String get projectsArtPhoto => 'Your photo';
+
+  @override
+  String get projectsArtPhotoNote => 'Photos stay on this phone.';
+
+  @override
+  String get projectsArtChoosePhoto => 'Choose a photo';
+
+  @override
+  String get projectsArtTakePhoto => 'Take a photo';
+
+  @override
+  String get projectsArtAdding => 'Adding the photo…';
+
+  @override
+  String get projectsArtSelected => 'Selected';
+
+  @override
+  String get projectsArtReplacesPhoto =>
+      'Choosing another picture deletes your photo from the app.';
+
+  @override
+  String get projectsArtSunrise => 'Sunrise';
+
+  @override
+  String get projectsArtPath => 'Winding road';
+
+  @override
+  String get projectsArtCompass => 'Compass hill';
+
+  @override
+  String get projectsArtSteps => 'Stone steps';
+
+  @override
+  String get projectsArtDawnRuins => 'Ruins at dawn';
+
+  @override
+  String get projectsArtRoots => 'Deep roots';
+
+  @override
+  String get projectsArtCitadel => 'Hill town';
+
+  @override
+  String get projectsArtSailing => 'Sailing';
+
+  @override
+  String get projectsArtRoute => 'Summit route';
+
+  @override
+  String get projectsPhotoDeniedCamera =>
+      'Camera access is off. Allow it in Settings, or choose a photo or a painted scene.';
+
+  @override
+  String get projectsPhotoDeniedLibrary =>
+      'Photo access is off. Allow it in Settings, or pick a painted scene.';
+
+  @override
+  String get projectsPhotoNoCamera =>
+      'No camera here. Choose a photo or a painted scene.';
+
+  @override
+  String get projectsPhotoNoLibrary =>
+      'Photos aren\'t available here. Pick a painted scene.';
+
+  @override
+  String get projectsPhotoFailed =>
+      'Couldn\'t get the photo. Try again, or pick a painted scene.';
+
+  @override
+  String get projectsPhotoTooLarge =>
+      'That photo is too large to keep. Try another one.';
+
+  @override
+  String get projectsPhotoNotKept =>
+      'Couldn\'t keep the photo on this phone. Check free space and try again.';
+
+  @override
+  String get projectsNotSaved => 'Not saved yet. Use Retry on this page.';
+
+  @override
+  String get projectsFinish => 'Finish this project';
+
+  @override
+  String get projectsFinishSheetBody =>
+      'It moves to your history with its milestones, tasks and attempts.';
+
+  @override
+  String get projectsFinishConfirm => 'Finish and keep';
+
+  @override
+  String get projectsFinishedSnack => 'Kept in your project history.';
+
+  @override
+  String get projectsFinishedTitle => 'Finished and kept';
+
+  @override
+  String projectsFinishedBody(String title) {
+    return '“$title” is in your project history.';
+  }
+
+  @override
+  String get projectsPlanNext => 'Plan the next one';
+
+  @override
+  String get projectsViewHistory => 'View history';
+
+  @override
+  String projectsHistoryLink(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Project history · $count',
+      one: 'Project history · 1',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get projectsCardNext => 'Plan your next project.';
+
+  @override
+  String get projectsHistoryTitle => 'Past projects';
+
+  @override
+  String get projectsHistorySubtitle => 'What you built, month by month.';
+
+  @override
+  String get projectsHistoryEmptyTitle => 'Nothing here yet';
+
+  @override
+  String get projectsHistoryEmptyBody =>
+      'Finish a month project to keep it here.';
+
+  @override
+  String projectsMonths(String start, String end) {
+    return '$start – $end';
+  }
+
+  @override
+  String projectsTasksCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count tasks',
+      one: '1 task',
+      zero: 'No tasks',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String projectsAttemptsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count attempts',
+      one: '1 attempt',
+      zero: 'No attempts',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get projectsNoMilestones => 'No milestones';
+
+  @override
+  String get projectsRetroEmpty => 'No notes written.';
+
+  @override
+  String get projectsPastTitle => 'Past project';
+
+  @override
+  String projectsFinishedOn(String date) {
+    return 'Finished $date';
+  }
+
+  @override
+  String get projectsMilestoneDone => 'Done';
+
+  @override
+  String get projectsMilestoneOpen => 'Open';
+
+  @override
+  String get projectsTasks => 'Tasks';
+
+  @override
+  String get projectsTasksEmpty => 'No tasks linked to it.';
+
+  @override
+  String get projectsAttempts => 'Attempts';
+
+  @override
+  String get projectsAttemptsEmpty => 'No attempts linked to it.';
+
+  @override
+  String get projectsTaskDone => 'Done';
+
+  @override
+  String get projectsDelete => 'Remove from history';
+
+  @override
+  String get projectsDeleteTitle => 'Remove this project?';
+
+  @override
+  String get projectsDeleteBody =>
+      'Its title, milestones, notes and picture go. Its tasks and attempts stay.';
+
+  @override
+  String get projectsDeleteConfirm => 'Remove';
+
+  @override
+  String get projectsDeleted => 'Project removed';
+
+  @override
+  String projectsTagLabel(String title) {
+    return 'Project: $title';
+  }
+
+  @override
+  String get projectsQuestLink => 'Part of the month project';
+
+  @override
+  String get projectsQuestLinkPast => 'Part of a finished project';
+
+  @override
+  String projectsKeepsakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Projects finished',
+      one: 'Project finished',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String projectsKeepsakesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count projects kept',
+      one: '1 project kept',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get resetTitle => 'The Reset';
 
   @override

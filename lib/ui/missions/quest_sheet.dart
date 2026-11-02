@@ -8,13 +8,17 @@ import '../../state/app_state.dart';
 import '../compass/formatting.dart';
 import '../widgets/widgets.dart';
 import 'missions_logic.dart';
+import 'project_link.dart';
+import 'project_ops.dart';
 import 'quest_tile.dart';
 
 /// How the quest sheet was closed.
 enum QuestSheetResult { saved, delete }
 
 /// Adds a quest (no [quest]) or edits one (F-027, F-029): title, "repeat
-/// every day", optional date. "Delete quest" deletes with Undo.
+/// every day", optional date and — while there is a project to link —
+/// "Part of the month project" (a new quest starts linked to the active
+/// project). "Delete quest" deletes with Undo.
 Future<void> showQuestSheet(BuildContext context, {Quest? quest}) async {
   final result = await showModalBottomSheet<QuestSheetResult>(
     context: context,
@@ -45,6 +49,15 @@ class _QuestSheetState extends State<QuestSheet> {
   late final _title = TextEditingController(text: widget.quest?.title ?? '');
   late bool _daily = widget.quest?.recurrence == QuestRecurrence.daily;
   late String? _due = widget.quest?.dueDate;
+
+  /// The project this quest can be linked to (its own, else the active
+  /// one), and whether it is.
+  late final MonthProject? _project = context
+      .read<AppState>()
+      .linkableProjectFor(widget.quest);
+  late bool _linked =
+      _project != null &&
+      (widget.quest == null || widget.quest!.projectId == _project.id);
   String? _error;
   bool _busy = false;
 
@@ -80,7 +93,12 @@ class _QuestSheetState extends State<QuestSheet> {
     final due = _daily ? null : _due;
     final quest = widget.quest;
     if (quest == null) {
-      await state.addQuest(text, recurrence: recurrence, dueDate: due);
+      await state.addQuest(
+        text,
+        recurrence: recurrence,
+        dueDate: due,
+        linkProject: _linked,
+      );
     } else {
       await state.editQuest(
         quest,
@@ -88,6 +106,10 @@ class _QuestSheetState extends State<QuestSheet> {
         recurrence: recurrence,
         dueDate: due,
       );
+      final project = _linked ? _project?.id : null;
+      if (_project != null && project != quest.projectId) {
+        await state.setQuestProject(quest.id, project);
+      }
     }
     if (mounted) Navigator.of(context).pop(QuestSheetResult.saved);
   }
@@ -169,6 +191,15 @@ class _QuestSheetState extends State<QuestSheet> {
                     onPressed: () => setState(() => _due = null),
                   ),
               ],
+            ),
+          ],
+          if (_project != null) ...[
+            const SizedBox(height: 8),
+            ProjectLinkSwitch(
+              project: _project,
+              past: context.read<AppState>().data.project?.id != _project.id,
+              value: _linked,
+              onChanged: (v) => setState(() => _linked = v),
             ),
           ],
           const SizedBox(height: 24),

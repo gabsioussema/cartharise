@@ -7,6 +7,7 @@ import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
 import '../compass/autosave.dart';
 import '../compass/formatting.dart';
+import '../missions/project_art.dart';
 import '../nav.dart';
 import '../theme/cartha_theme.dart';
 import '../widgets/widgets.dart';
@@ -328,8 +329,9 @@ class _BossStrength extends StatelessWidget {
   }
 }
 
-/// One battle-log attempt, its words exactly as typed; tapping it opens the
-/// edit sheet.
+/// One battle-log attempt, its words exactly as typed, and the project it
+/// was recorded for (its picture and name); tapping it opens the edit
+/// sheet.
 class _LogRow extends StatelessWidget {
   const _LogRow({super.key, required this.entry});
 
@@ -368,6 +370,13 @@ class _LogRow extends StatelessWidget {
                 ],
                 const SizedBox(height: 4),
                 Text(date, style: theme.textTheme.bodySmall),
+                if (entry.projectId != null) ...[
+                  const SizedBox(height: 6),
+                  LinkedProjectTag(
+                    entry.projectId,
+                    key: ValueKey('attempt-project-${entry.id}'),
+                  ),
+                ],
               ],
             ),
             trailing: Icon(

@@ -10,6 +10,7 @@ import '../compass/formatting.dart';
 import '../theme/cartha_theme.dart';
 import '../widgets/widgets.dart';
 import 'missions_logic.dart';
+import 'project_art.dart';
 import 'quest_sheet.dart';
 
 /// Deletes [quest] at once and offers "Undo" (puts it back where it was).
@@ -78,8 +79,8 @@ bool questXpOpenOn(AppState state, String day) =>
 
 /// One quest: an accessible checkbox ("Mark '…' done"), the title, calm
 /// labels (from an experiment · every day · planned for · done today ·
-/// "+20 XP" while the Campaign is on and today's quest XP isn't used up) and
-/// an options menu.
+/// "+20 XP" while the Campaign is on and today's quest XP isn't used up ·
+/// its project, with the project's picture) and an options menu.
 /// Tapping the row edits it. Done is shown by the tick, strike-through and a
 /// label — never by colour alone, and nothing is ever "missed" (F-031).
 class QuestTile extends StatelessWidget {
@@ -100,6 +101,8 @@ class QuestTile extends StatelessWidget {
     final xpOpen = context.select<AppState, bool>((s) => questXpOpenOn(s, day));
     final showXp = xpOpen && !done;
     final fromTry = quest.source == QuestSource.experiment;
+    // Its project (current or past): the picture and name, small.
+    final project = watchProject(context, quest.projectId);
     String? doneLabel;
     if (done) {
       final last = (quest.completedOn.toList()..sort()).last;
@@ -145,7 +148,8 @@ class QuestTile extends StatelessWidget {
                           quest.dueDate != null ||
                           done ||
                           showXp ||
-                          fromTry) ...[
+                          fromTry ||
+                          project != null) ...[
                         const SizedBox(height: 6),
                         Wrap(
                           spacing: 6,
@@ -186,6 +190,11 @@ class QuestTile extends StatelessWidget {
                                   icon: Icons.auto_awesome,
                                   tone: ChipTone.accent,
                                 ),
+                              ),
+                            if (project != null)
+                              ProjectTag(
+                                project,
+                                key: ValueKey('quest-project-${quest.id}'),
                               ),
                           ],
                         ),
