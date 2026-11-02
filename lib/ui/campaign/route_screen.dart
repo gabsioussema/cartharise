@@ -10,6 +10,7 @@ import '../journal/journal_kit.dart';
 import '../nav.dart';
 import '../persona/persona_ops.dart';
 import '../theme/cartha_theme.dart';
+import '../widgets/route_scenes.dart';
 import '../widgets/widgets.dart';
 import 'campaign_kit.dart';
 import 'campaign_ops.dart';
@@ -53,11 +54,19 @@ class CampaignRouteScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                CampaignRouteMap(
-                  id: 'route-map',
-                  progress: progress,
-                  avatar: state.persona?.avatar,
-                  avatarSize: 44,
+                RouteSceneWindow(
+                  key: const ValueKey('route-scene'),
+                  waypoint: progress.waypoint,
+                  semanticLabel: l.sceneryRouteScene(progress.waypoint.name),
+                  aspectRatio: 1.8,
+                  minHeight: 128,
+                  maxHeight: 240,
+                  overlay: CampaignRouteMap(
+                    id: 'route-map',
+                    progress: progress,
+                    avatar: state.persona?.avatar,
+                    avatarSize: 44,
+                  ),
                 ),
                 const SizedBox(height: 12),
                 Text(
@@ -163,12 +172,21 @@ class CampaignRouteScreen extends StatelessWidget {
 }
 
 /// One stop of the route: its place and whether it is where the user is,
-/// reached, or how much XP away — in words and by icon, never colour alone.
+/// reached, or how much XP away — in words and by icon, never colour alone —
+/// with a small painting of its landscape where there is room (decorative;
+/// the scene carries no words of its own).
 class _StopRow extends StatelessWidget {
   const _StopRow({required this.waypoint, required this.progress});
 
   final Waypoint waypoint;
   final CampaignProgress progress;
+
+  /// The landscape thumbnail beside the place.
+  static const sceneSize = Size(72, 48);
+
+  /// The row width (in unscaled text units) from which the thumbnail fits
+  /// beside the words.
+  static const sceneRoom = 230.0;
 
   @override
   Widget build(BuildContext context) {
@@ -187,42 +205,63 @@ class _StopRow extends StatelessWidget {
             l.campaignRouteStopAhead(i * kXpPerLevel - progress.xp),
           );
     final name = place(l, waypoint);
+    final scale = MediaQuery.textScalerOf(context).scale(1);
     return MergeSemantics(
       child: Padding(
         key: ValueKey('route-stop-${waypoint.name}'),
         padding: const EdgeInsetsDirectional.symmetric(vertical: 12),
-        child: Row(
-          children: [
-            Icon(
-              icon,
-              size: 22,
-              color: here || reached ? p.accent : p.textSecondary,
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    // Place names start a line: "The Ebro".
-                    name.isEmpty
-                        ? name
-                        : name[0].toUpperCase() + name.substring(1),
-                    style: theme.textTheme.titleSmall?.copyWith(
-                      fontWeight: here ? FontWeight.w700 : null,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    status,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: p.textSecondary,
-                    ),
-                  ),
-                ],
+        child: LayoutBuilder(
+          builder: (context, constraints) => Row(
+            children: [
+              Icon(
+                icon,
+                size: 22,
+                color: here || reached ? p.accent : p.textSecondary,
               ),
-            ),
-          ],
+              const SizedBox(width: 12),
+              // The stop's landscape (misty while ahead), when the words
+              // keep enough room beside it.
+              if (constraints.maxWidth / scale >= _StopRow.sceneRoom) ...[
+                SizedBox(
+                  key: ValueKey('route-stop-scene-${waypoint.name}'),
+                  width: _StopRow.sceneSize.width,
+                  height: _StopRow.sceneSize.height,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: RouteScene(
+                      waypoint,
+                      animate: false,
+                      veiled: !here && !reached,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+              ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      // Place names start a line: "The Ebro".
+                      name.isEmpty
+                          ? name
+                          : name[0].toUpperCase() + name.substring(1),
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        fontWeight: here ? FontWeight.w700 : null,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      status,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: p.textSecondary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

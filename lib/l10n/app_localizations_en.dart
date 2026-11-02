@@ -3635,6 +3635,60 @@ class AppLocalizationsEn extends AppLocalizations {
   String get resetCompleteLater => 'Later';
 
   @override
+  String sceneryRouteScene(String place) {
+    String _temp0 = intl.Intl.selectLogic(place, {
+      'carthage': 'Carthage: ships in the round harbour at dawn',
+      'newCarthage': 'New Carthage: white houses above a quiet bay',
+      'ebro': 'The Ebro: a wide river winding through the plain',
+      'pyrenees': 'The Pyrenees: a high pass between snowy peaks',
+      'rhone': 'The Rhône: an elephant crossing the river on a raft',
+      'alps': 'The Alps: a path climbing toward the snow by moonlight',
+      'italy': 'Italy: cypresses and fields in the morning sun',
+      'other': 'A landscape on the road',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get sceneryKeepsakesTitle => 'Keepsakes';
+
+  @override
+  String get sceneryKeepsakesLine =>
+      'Try any experiment from a chapter to keep its keepsake.';
+
+  @override
+  String sceneryKeepsakeName(String chapter) {
+    String _temp0 = intl.Intl.selectLogic(chapter, {
+      'terrain': 'Spyglass',
+      'pattern': 'Mosaic tile',
+      'banner': 'Banner',
+      'autopilot': 'Hourglass',
+      'plan': 'Scroll',
+      'other': 'Keepsake',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String sceneryKeepsakeKept(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Kept · $count tried',
+      one: 'Kept · 1 tried',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get sceneryKeepsakeNotYet => 'Not yet';
+
+  @override
+  String sceneryKeepsakeLabel(String name, String chapter, String status) {
+    return '$name, $chapter: $status';
+  }
+
+  @override
   String todayGreetingMorning(String name) {
     return 'Good morning, $name.';
   }

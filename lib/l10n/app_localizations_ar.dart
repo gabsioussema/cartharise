@@ -3635,6 +3635,63 @@ class AppLocalizationsAr extends AppLocalizations {
   String get resetCompleteLater => 'Later';
 
   @override
+  String sceneryRouteScene(String place) {
+    String _temp0 = intl.Intl.selectLogic(place, {
+      'carthage': 'قرطاج: سفن في الميناء الدائري عند الفجر',
+      'newCarthage': 'قرطاج الجديدة: بيوت بيضاء فوق خليج هادئ',
+      'ebro': 'نهر الإبرو: نهر عريض يتعرّج عبر السهل',
+      'pyrenees': 'جبال البرانس: ممرّ عالٍ بين قمم مكسوّة بالثلج',
+      'rhone': 'نهر الرون: فيل يعبر النهر على طوف',
+      'alps': 'جبال الألب: درب يصعد نحو الثلج تحت ضوء القمر',
+      'italy': 'إيطاليا: أشجار سرو وحقول في شمس الصباح',
+      'other': 'منظر على الطريق',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get sceneryKeepsakesTitle => 'تذكارات';
+
+  @override
+  String get sceneryKeepsakesLine => 'جرّب أيّ تجربة من فصل لتحتفظ بتذكاره.';
+
+  @override
+  String sceneryKeepsakeName(String chapter) {
+    String _temp0 = intl.Intl.selectLogic(chapter, {
+      'terrain': 'منظار',
+      'pattern': 'بلاطة فسيفساء',
+      'banner': 'راية',
+      'autopilot': 'ساعة رملية',
+      'plan': 'لفافة',
+      'other': 'تذكار',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String sceneryKeepsakeKept(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'محفوظ · $count تجربة',
+      many: 'محفوظ · $count تجربة',
+      few: 'محفوظ · $count تجارب',
+      two: 'محفوظ · تجربتان',
+      one: 'محفوظ · تجربة واحدة',
+      zero: 'محفوظ',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get sceneryKeepsakeNotYet => 'ليس بعد';
+
+  @override
+  String sceneryKeepsakeLabel(String name, String chapter, String status) {
+    return '$name، $chapter: $status';
+  }
+
+  @override
   String todayGreetingMorning(String name) {
     return 'Good morning, $name.';
   }

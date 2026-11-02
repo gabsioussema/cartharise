@@ -5734,6 +5734,48 @@ abstract class AppLocalizations {
   /// **'Later'**
   String get resetCompleteLater;
 
+  /// Screen-reader description of the painted landscape of a stop on Hannibal's route (place = the Waypoint name).
+  ///
+  /// In en, this message translates to:
+  /// **'{place, select, carthage{Carthage: ships in the round harbour at dawn} newCarthage{New Carthage: white houses above a quiet bay} ebro{The Ebro: a wide river winding through the plain} pyrenees{The Pyrenees: a high pass between snowy peaks} rhone{The Rhône: an elephant crossing the river on a raft} alps{The Alps: a path climbing toward the snow by moonlight} italy{Italy: cypresses and fields in the morning sun} other{A landscape on the road}}'**
+  String sceneryRouteScene(String place);
+
+  /// No description provided for @sceneryKeepsakesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Keepsakes'**
+  String get sceneryKeepsakesTitle;
+
+  /// No description provided for @sceneryKeepsakesLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Try any experiment from a chapter to keep its keepsake.'**
+  String get sceneryKeepsakesLine;
+
+  /// The object kept for a chapter (chapter = the CampaignChapter name).
+  ///
+  /// In en, this message translates to:
+  /// **'{chapter, select, terrain{Spyglass} pattern{Mosaic tile} banner{Banner} autopilot{Hourglass} plan{Scroll} other{Keepsake}}'**
+  String sceneryKeepsakeName(String chapter);
+
+  /// Under a kept keepsake: how many of the chapter's experiments were tried.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Kept · 1 tried} other{Kept · {count} tried}}'**
+  String sceneryKeepsakeKept(int count);
+
+  /// No description provided for @sceneryKeepsakeNotYet.
+  ///
+  /// In en, this message translates to:
+  /// **'Not yet'**
+  String get sceneryKeepsakeNotYet;
+
+  /// Screen-reader label of a keepsake: its name, its chapter, kept or not yet.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}, {chapter}: {status}'**
+  String sceneryKeepsakeLabel(String name, String chapter, String status);
+
   /// No description provided for @todayGreetingMorning.
   ///
   /// In en, this message translates to:

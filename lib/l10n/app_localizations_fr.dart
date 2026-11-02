@@ -3635,6 +3635,61 @@ class AppLocalizationsFr extends AppLocalizations {
   String get resetCompleteLater => 'Later';
 
   @override
+  String sceneryRouteScene(String place) {
+    String _temp0 = intl.Intl.selectLogic(place, {
+      'carthage': 'Carthage : des navires dans le port circulaire à l’aube',
+      'newCarthage':
+          'Carthagène : des maisons blanches au-dessus d’une baie calme',
+      'ebro': 'L’Èbre : un large fleuve qui serpente dans la plaine',
+      'pyrenees': 'Les Pyrénées : un col élevé entre des sommets enneigés',
+      'rhone': 'Le Rhône : un éléphant traverse le fleuve sur un radeau',
+      'alps': 'Les Alpes : un sentier monte vers la neige au clair de lune',
+      'italy': 'L’Italie : des cyprès et des champs au soleil du matin',
+      'other': 'Un paysage sur la route',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get sceneryKeepsakesTitle => 'Souvenirs';
+
+  @override
+  String get sceneryKeepsakesLine =>
+      'Essayez une expérience d’un chapitre pour garder son souvenir.';
+
+  @override
+  String sceneryKeepsakeName(String chapter) {
+    String _temp0 = intl.Intl.selectLogic(chapter, {
+      'terrain': 'Longue-vue',
+      'pattern': 'Carreau de mosaïque',
+      'banner': 'Bannière',
+      'autopilot': 'Sablier',
+      'plan': 'Rouleau',
+      'other': 'Souvenir',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String sceneryKeepsakeKept(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Gardé · $count expériences',
+      one: 'Gardé · 1 expérience',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get sceneryKeepsakeNotYet => 'Pas encore';
+
+  @override
+  String sceneryKeepsakeLabel(String name, String chapter, String status) {
+    return '$name, $chapter : $status';
+  }
+
+  @override
   String todayGreetingMorning(String name) {
     return 'Good morning, $name.';
   }

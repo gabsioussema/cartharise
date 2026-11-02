@@ -1,0 +1,14 @@
+{
+  "sceneryRouteScene": "{place, select, carthage{Carthage: ships in the round harbour at dawn} newCarthage{New Carthage: white houses above a quiet bay} ebro{The Ebro: a wide river winding through the plain} pyrenees{The Pyrenees: a high pass between snowy peaks} rhone{The Rhône: an elephant crossing the river on a raft} alps{The Alps: a path climbing toward the snow by moonlight} italy{Italy: cypresses and fields in the morning sun} other{A landscape on the road}}",
+  "@sceneryRouteScene": {"description": "Screen-reader description of the painted landscape of a stop on Hannibal's route (place = the Waypoint name).", "placeholders": {"place": {"type": "String"}}},
+
+  "sceneryKeepsakesTitle": "Keepsakes",
+  "sceneryKeepsakesLine": "Try any experiment from a chapter to keep its keepsake.",
+  "sceneryKeepsakeName": "{chapter, select, terrain{Spyglass} pattern{Mosaic tile} banner{Banner} autopilot{Hourglass} plan{Scroll} other{Keepsake}}",
+  "@sceneryKeepsakeName": {"description": "The object kept for a chapter (chapter = the CampaignChapter name).", "placeholders": {"chapter": {"type": "String"}}},
+  "sceneryKeepsakeKept": "{count, plural, =1{Kept · 1 tried} other{Kept · {count} tried}}",
+  "@sceneryKeepsakeKept": {"description": "Under a kept keepsake: how many of the chapter's experiments were tried.", "placeholders": {"count": {"type": "int"}}},
+  "sceneryKeepsakeNotYet": "Not yet",
+  "sceneryKeepsakeLabel": "{name}, {chapter}: {status}",
+  "@sceneryKeepsakeLabel": {"description": "Screen-reader label of a keepsake: its name, its chapter, kept or not yet.", "placeholders": {"name": {"type": "String"}, "chapter": {"type": "String"}, "status": {"type": "String"}}}
+}
