@@ -18,6 +18,7 @@ import '../nav.dart';
 import '../persona/avatar_view.dart';
 import '../persona/persona_ops.dart';
 import '../theme/cartha_theme.dart';
+import '../widgets/bidi.dart';
 import '../widgets/widgets.dart';
 import 'next_action.dart';
 import 'today_model.dart';
@@ -427,6 +428,7 @@ class _QuestRow extends StatelessWidget {
                     children: [
                       Text(
                         quest.title,
+                        textDirection: textDirectionOf(quest.title),
                         style: theme.textTheme.bodyLarge?.copyWith(
                           color: done ? p.textSecondary : p.textPrimary,
                           decoration: done ? TextDecoration.lineThrough : null,
@@ -667,7 +669,7 @@ class _DirectionCardState extends State<_DirectionCard> {
             label.toUpperCase(),
             style: theme.textTheme.labelMedium?.copyWith(
               color: p.accent,
-              letterSpacing: 1.2,
+              letterSpacing: CarthaFonts.of(context).spacing(1.2),
               fontWeight: FontWeight.w600,
             ),
           ),

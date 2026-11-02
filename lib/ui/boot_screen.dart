@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import '../domain/app_data.dart';
 import '../l10n/app_localizations.dart';
 import '../state/app_state.dart';
 import 'onboarding/onboarding_flow.dart';
@@ -125,7 +126,8 @@ class _BootView extends StatelessWidget {
                                   textAlign: TextAlign.center,
                                   style: theme.textTheme.labelMedium?.copyWith(
                                     color: p.heroAccent,
-                                    letterSpacing: 2.4,
+                                    letterSpacing: CarthaFonts.of(context)
+                                        .spacing(2.4),
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -207,8 +209,13 @@ class _LoadError extends StatelessWidget {
         ),
         const SizedBox(height: 24),
         Theme(
-          // Bronze pill on the forest hero in both brightnesses.
-          data: CarthaTheme.dark(),
+          // Bronze pill on the forest hero in both brightnesses, in the
+          // language's fonts.
+          data: CarthaTheme.build(
+            AppTheme.forest,
+            Brightness.dark,
+            fonts: CarthaFonts.of(context),
+          ),
           child: Builder(
             builder: (context) => Column(
               children: [

@@ -329,16 +329,19 @@ class OnHeroTheme extends StatelessWidget {
 
   final Widget child;
 
-  static final _themes = <AppTheme, ThemeData>{};
+  static final _themes = <(AppTheme, CarthaFonts), ThemeData>{};
 
   @override
   Widget build(BuildContext context) {
     final appTheme = context.select<AppState?, AppTheme>(
       (s) => s?.settings.theme ?? AppTheme.forest,
     );
-    final data = _themes[appTheme] ??= CarthaTheme.build(
+    // The language's fonts too (Arabic on a hero card is still Arabic).
+    final fonts = CarthaFonts.of(context);
+    final data = _themes[(appTheme, fonts)] ??= CarthaTheme.build(
       appTheme,
       Brightness.dark,
+      fonts: fonts,
     );
     return Theme(data: data, child: child);
   }

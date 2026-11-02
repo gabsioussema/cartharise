@@ -314,7 +314,7 @@ class _ExperimentCard extends StatelessWidget {
                   chapterName(l, experiment.chapter).toUpperCase(),
                   style: theme.textTheme.labelMedium?.copyWith(
                     color: p.accent,
-                    letterSpacing: 1.4,
+                    letterSpacing: CarthaFonts.of(context).spacing(1.4),
                     fontWeight: FontWeight.w600,
                   ),
                 ),

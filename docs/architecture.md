@@ -194,7 +194,15 @@ add a language: [translations.md](translations.md).
 * **Fonts per language** (`CarthaFonts`, a theme extension):
   Cinzel + Inter for Latin; one Arabic family for every style (never Cinzel)
   and no added letter spacing for Arabic. `CarthaFonts.arabicFamily` is the
-  bundled font's slot (null → Inter + the phone's Arabic font).
+  bundled Noto Sans Arabic UI (OFL, Latin-compatible line height), with Inter
+  as the fallback for Latin inside Arabic (`CarthaFonts.fallback`) and no
+  fake italic (`CarthaFonts.italic`). Themes built inside a screen
+  (`OnHeroTheme`) pass the ambient fonts on.
+* **Arabic and right to left** (`docs/translations.md` › Arabic): every
+  string and content item (draft, native review pending), Western digits
+  everywhere (`useWesternDigits`), mirrored arrows and route map, the user's
+  own words in their own direction (`textDirectionOf`,
+  `lib/ui/widgets/bidi.dart`). Tests: `test/ui/rtl_test.dart`.
 * **Voice interfaces** (`lib/services/dictation.dart`, `read_aloud.dart`, pure
   Dart, provided like the media services; fakes `FakeDictation`,
   `FakeReadAloud` in `test/support/fakes.dart`). `Dictation` is on-device only

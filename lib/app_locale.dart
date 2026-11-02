@@ -5,6 +5,8 @@ library;
 
 import 'dart:ui' show Locale;
 
+import 'package:intl/intl.dart' show DateFormat;
+
 import 'domain/language.dart';
 
 /// The locales Cartharise ships, in [kAppLanguages] order (English first).
@@ -29,3 +31,15 @@ List<String> languageCodesOf(Iterable<Locale> locales) => [
 /// preferred language Cartharise ships, else English.
 Locale resolveAppLocale(AppLanguage setting, Iterable<Locale> deviceLocales) =>
     localeFor(resolveLanguage(setting, languageCodesOf(deviceLocales)));
+
+/// Numbers are written with Western digits (0–9) in every language: the
+/// strings interpolate them so, the 'ar' NumberFormat does, and the user's
+/// own words keep whatever they typed. Dates follow, instead of the
+/// Arabic-Indic digits (٠–٩) of the 'ar' date symbols, so a date and a count
+/// on the same screen never use two digit systems. Idempotent; `CarthaApp`
+/// calls it once.
+void useWesternDigits() {
+  for (final language in kAppLanguages) {
+    DateFormat.useNativeDigitsByDefaultFor(language.code!, false);
+  }
+}

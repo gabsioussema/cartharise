@@ -312,7 +312,7 @@ class _StrategistMap extends StatelessWidget {
                     l.campaignMapEmpty,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: p.textSecondary,
-                      fontStyle: FontStyle.italic,
+                      fontStyle: CarthaFonts.of(context).italic,
                     ),
                   )
                 else

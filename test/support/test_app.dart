@@ -85,7 +85,8 @@ AppData onboardedData({String? name = 'Sam', AppSettings? settings}) => AppData(
 
 bool _fontsLoaded = false;
 
-/// Loads the bundled Inter + Cinzel and the Material icon font, so widget
+/// Loads the bundled Inter + Cinzel (+ Noto Sans Arabic UI) and the Material
+/// icon font, so widget
 /// tests measure real text (realistic overflow) and screenshots look real.
 Future<void> loadCarthaFonts() async {
   if (_fontsLoaded) return;
@@ -100,6 +101,13 @@ Future<void> loadCarthaFonts() async {
     cinzel.addFont(rootBundle.load('assets/fonts/Cinzel-$w.ttf'));
   }
   await cinzel.load();
+  // Arabic (step 3): real Arabic glyph widths, so RTL tests measure real
+  // overflow and RTL screenshots show real letters.
+  final arabic = FontLoader('NotoSansArabicUI');
+  for (final w in ['Regular', 'SemiBold', 'Bold']) {
+    arabic.addFont(rootBundle.load('assets/fonts/NotoSansArabicUI-$w.ttf'));
+  }
+  await arabic.load();
   final root =
       Platform.environment['FLUTTER_ROOT'] ?? '/opt/homebrew/share/flutter';
   final icons = File(

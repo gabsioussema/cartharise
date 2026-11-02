@@ -1,14 +1,16 @@
-/// The SIL Open Font License 1.1 texts of the two bundled font families,
+/// The SIL Open Font License 1.1 texts of the three bundled font families,
 /// added to Flutter's licence page (About › Open-source licences). The
-/// texts mirror `assets/fonts/Inter-OFL.txt` and `assets/fonts/Cinzel-OFL.txt`
-/// (kept in Dart so they need no asset entry).
+/// texts mirror `assets/fonts/Inter-OFL.txt`, `assets/fonts/Cinzel-OFL.txt`
+/// and `assets/fonts/NotoSansArabicUI-OFL.txt` (kept in Dart so they need no
+/// asset entry).
 library;
 
 import 'package:flutter/foundation.dart';
 
 bool _registered = false;
 
-/// Adds the Inter and Cinzel licences to [LicenseRegistry] once.
+/// Adds the Inter, Cinzel and Noto Sans Arabic UI licences to
+/// [LicenseRegistry] once.
 void registerFontLicenses() {
   if (_registered) return;
   _registered = true;
@@ -16,6 +18,9 @@ void registerFontLicenses() {
     () => Stream<LicenseEntry>.fromIterable(const [
       LicenseEntryWithLineBreaks(['Inter'], '$_interCopyright\n\n$_ofl'),
       LicenseEntryWithLineBreaks(['Cinzel'], '$_cinzelCopyright\n\n$_ofl'),
+      LicenseEntryWithLineBreaks([
+        'Noto Sans Arabic UI',
+      ], '$_notoArabicCopyright\n\n$_ofl'),
     ]),
   );
 }
@@ -25,6 +30,9 @@ const String _interCopyright =
 
 const String _cinzelCopyright =
     'Copyright 2020 The Cinzel Project Authors (https://github.com/NDISCOVER/Cinzel)';
+
+const String _notoArabicCopyright =
+    'Copyright 2022 The Noto Project Authors (https://github.com/notofonts/arabic)';
 
 const String _ofl = r'''
 This Font Software is licensed under the SIL Open Font License, Version 1.1.

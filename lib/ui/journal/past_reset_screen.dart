@@ -206,7 +206,7 @@ class _AnswerCard extends StatelessWidget {
         emptyText,
         style: theme.textTheme.bodyMedium?.copyWith(
           color: p.textSecondary,
-          fontStyle: FontStyle.italic,
+          fontStyle: CarthaFonts.of(context).italic,
         ),
       );
     }

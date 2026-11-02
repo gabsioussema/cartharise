@@ -15,6 +15,7 @@ import '../../domain/local_date.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
 import '../compass/compass_copy.dart';
+import '../theme/cartha_fonts.dart';
 
 /// The widest a column of reading or writing gets (tablets).
 const double kReadableWidth = 680;
@@ -75,7 +76,7 @@ class AreaSectionLabel extends StatelessWidget {
           text.toUpperCase(),
           style: theme.textTheme.labelMedium?.copyWith(
             color: theme.colorScheme.onSurfaceVariant,
-            letterSpacing: 1.4,
+            letterSpacing: CarthaFonts.of(context).spacing(1.4),
             fontWeight: FontWeight.w600,
           ),
         ),

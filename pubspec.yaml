@@ -94,6 +94,15 @@ flutter:
           weight: 600
         - asset: assets/fonts/Cinzel-700.ttf
           weight: 700
+    # Arabic (every style, never Cinzel): Noto Sans Arabic UI, whose vertical
+    # metrics match Latin UI fonts (notofonts/arabic, OFL).
+    - family: NotoSansArabicUI
+      fonts:
+        - asset: assets/fonts/NotoSansArabicUI-Regular.ttf
+        - asset: assets/fonts/NotoSansArabicUI-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/NotoSansArabicUI-Bold.ttf
+          weight: 700
 
 # `dart run flutter_launcher_icons` regenerates the Android/iOS launcher icons.
 flutter_launcher_icons:

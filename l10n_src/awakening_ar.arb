@@ -1,3 +1,28 @@
 {
-  "@@locale": "ar"
+  "@@locale": "ar",
+
+  "awakeningTitle": "اليقظة",
+  "awakeningSubtitle": "سبع أفكار وراء إعادة الضبط. اختيارية، وبأي ترتيب.",
+  "awakeningStripTitle": "الأفكار أولًا (اختياري)",
+  "awakeningSeeAll": "كل الدروس",
+  "awakeningReadCount": "المقروء: {read} من {total}",
+  "awakeningLessonNumber": "الدرس {n}",
+  "awakeningLessonOf": "الدرس {n} من {total}",
+  "awakeningRead": "مقروء",
+  "awakeningNotRead": "لم يُقرأ بعد",
+  "awakeningExample": "مثال",
+  "awakeningNuance": "عدسة للنظر، لا حُكم",
+  "awakeningCheckTitle": "وقفة للفهم",
+  "awakeningCheckHint": "يكفي اختيار الإجابة الأنسب. لا شيء يُقيَّم أو يُحفظ.",
+  "awakeningCheckRight": "تمامًا.",
+  "awakeningCheckNotQuite": "ليس تمامًا، ولا بأس.",
+  "awakeningTryIt": "تجربة الفكرة",
+  "awakeningTryItBody": "سؤال من إعادة الضبط يضع هذه الفكرة موضع التطبيق.",
+  "awakeningTryItPrompt": "للتجربة: {title}",
+  "awakeningPrevious": "الدرس السابق",
+  "awakeningNext": "الدرس التالي",
+  "awakeningDone": "العودة إلى الدروس",
+  "awakeningSourceNote": "بكلمات Cartharise، عن مقال «{title}» للكاتب {author}. تطبيق مستقل.",
+  "awakeningSourceLink": "عن المصدر",
+  "awakeningMissing": "هذا الدرس غير متاح."
 }

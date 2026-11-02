@@ -9,6 +9,7 @@ import '../media/media_kit.dart' show AttachmentCountLine, attachmentCountText;
 import '../media/pinned_memory_card.dart';
 import '../nav.dart';
 import '../theme/cartha_theme.dart';
+import '../widgets/bidi.dart';
 import '../widgets/widgets.dart';
 import 'journal_kit.dart';
 import 'look_back.dart';
@@ -192,16 +193,22 @@ class _NoteCard extends StatelessWidget {
               children: [
                 Text(
                   headline ?? untitled,
+                  textDirection: headline == null
+                      ? null
+                      : textDirectionOf(headline),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: theme.textTheme.titleSmall?.copyWith(
-                    fontStyle: headline == null ? FontStyle.italic : null,
+                    fontStyle: headline == null
+                        ? CarthaFonts.of(context).italic
+                        : null,
                   ),
                 ),
                 if (preview != null) ...[
                   const SizedBox(height: 2),
                   Text(
                     preview,
+                    textDirection: textDirectionOf(preview),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: theme.textTheme.bodyMedium?.copyWith(

@@ -1,3 +1,32 @@
 {
-  "@@locale": "ar"
+  "@@locale": "ar",
+
+  "personaBuilderSurprise": "فاجئني",
+  "personaBuilderSurprised": "مظهر جديد. لم يُحفظ بعد.",
+  "personaBuilderUndo": "تراجع",
+  "personaBuilderParts": "أجزاء الصورة الرمزية",
+  "personaBuilderPartLabel": "{category}: {value}",
+  "personaBuilderPreviewLabel": "معاينة الصورة الرمزية. {parts}",
+  "personaBuilderLockedNote": "الإضافات المقفلة تُفتح باختيارات المكافأة.",
+  "personaBuilderKept": "باقية لك",
+  "personaBuilderHiddenSilhouette": "اختيار لون البشرة يُظهر الوجه والألوان.",
+  "personaBuilderHiddenHeadwear": "الشعر مخفيّ تحت غطاء الرأس.",
+  "personaBuilderMottoLabel": "عبارتك (اختيارية)",
+  "personaBuilderMottoHint": "بضع كلمات من عندك",
+  "personaBuilderMottoCount": "{count}/{max}",
+  "personaBuilderMottoTooLong": "أطول قليلًا من اللازم. يلزم تقصيرها للحفظ.",
+  "personaBuilderMottoQuoted": "«{motto}»",
+  "personaBuilderSaved": "حُفظت الصورة الرمزية.",
+  "personaBuilderNotSaved": "لم تُحفظ على هذا الهاتف بعد. «إعادة المحاولة» في الأعلى، أو تصدير نسخة.",
+  "personaBuilderRemove": "إزالة الصورة الرمزية",
+  "personaBuilderRemoveTitle": "إزالة صورتك الرمزية؟",
+  "personaBuilderRemoveBody": "يعود ملفك إلى إظهار الشعار. ويمكن إنشاء صورة جديدة في أي وقت.",
+  "personaBuilderRemoveAction": "إزالة",
+  "personaBuilderRemoved": "أُزيلت الصورة الرمزية.",
+  "personaBuilderRemovedNotSaved": "أُزيلت هنا، لكن التغيير لم يُحفظ على هذا الهاتف بعد. «إعادة المحاولة» في الأعلى.",
+  "personaBuilderLeaveTitle": "المغادرة دون حفظ؟",
+  "personaBuilderLeaveBody": "لن تُحفظ تغييرات صورتك الرمزية.",
+  "personaBuilderLeaveAction": "مغادرة",
+  "personaBuilderKeepEditing": "متابعة التعديل",
+  "personaBuilderProfileHint": "الاسم والصورة الرمزية اختياريان ويبقيان على هذا الهاتف."
 }
