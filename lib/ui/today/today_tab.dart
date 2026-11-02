@@ -5,11 +5,10 @@ import 'package:provider/provider.dart';
 
 import '../../domain/app_data.dart';
 import '../../domain/campaign.dart';
-import '../../domain/content.dart';
 import '../../l10n/app_localizations.dart';
 import '../../state/app_state.dart';
+import '../campaign/campaign_invite.dart';
 import '../campaign/campaign_ops.dart';
-import '../compass/compass_import.dart';
 import '../missions/missions_logic.dart';
 import '../missions/quest_tile.dart' show questXpOpenOn;
 import '../nav.dart';
@@ -17,13 +16,15 @@ import '../persona/avatar_view.dart';
 import '../persona/persona_ops.dart';
 import '../theme/cartha_theme.dart';
 import '../widgets/widgets.dart';
-import 'next_step.dart';
+import 'next_action.dart';
 import 'today_model.dart';
 
-/// The default return view (F-036): greeting, the next best step (F-037),
-/// today's quests, gentle reset progress (F-054) and the user's direction.
-/// Everything is derived from stored state; no streaks, scores or guilt copy
-/// (F-031).
+/// The default return view (F-036; evolve plan Step 1 › A, "balanced"):
+/// greeting (+ avatar) → one next action with "Choose something else"
+/// (F-037) → the Campaign invitation while unanswered → Write → the three
+/// glance tiles (F-054) → today's quests → the user's direction, collapsed.
+/// Everything is derived from stored state; no streaks, scores, missed-day
+/// counts or guilt copy (F-031).
 class TodayTab extends StatelessWidget {
   const TodayTab({super.key});
 
@@ -48,6 +49,7 @@ class TodayTab extends StatelessWidget {
     };
     final today = state.today;
     final avatar = state.persona?.avatar;
+    final hints = FirstUseHints.of(state.data);
     return Scaffold(
       body: SafeArea(
         bottom: false,
@@ -80,7 +82,15 @@ class TodayTab extends StatelessWidget {
                   const SaveIndicator(),
                   const SizedBox(height: 16),
                 ],
-                _NextStepHero(step: nextStepFor(NextStepFacts.of(state))),
+                const NextActionCard(),
+                // The one-time Campaign invitation (new profiles start with
+                // the game off), right below the next action.
+                if (state.campaignInvitePending) ...[
+                  const SizedBox(height: 16),
+                  const CampaignInviteCard(key: ValueKey('today-invite')),
+                ],
+                const SizedBox(height: 16),
+                const _WriteCapture(),
                 const SizedBox(height: 16),
                 _GlanceRow(summary: JourneySummary.of(state)),
                 const SizedBox(height: 16),
@@ -89,9 +99,10 @@ class TodayTab extends StatelessWidget {
                   quests: state.todayFocus(today),
                   laterCount: state.missionSections(today).later.length,
                   today: today,
+                  firstUse: hints.quests,
                 ),
                 const SizedBox(height: 16),
-                const _DirectionCard(),
+                _DirectionCard(firstUse: hints.compass),
               ],
             );
           },
@@ -101,190 +112,75 @@ class TodayTab extends StatelessWidget {
   }
 }
 
-/// A labelled action of the next-step card.
-typedef _Action = (String label, VoidCallback? onPressed);
-
-/// "Your next step" on the forest hero with the dawn ruins scene.
-class _NextStepHero extends StatelessWidget {
-  const _NextStepHero({required this.step});
-
-  final NextStep step;
+/// "Write": a quick capture that opens a new journal note (nothing is saved
+/// until something is typed there).
+class _WriteCapture extends StatelessWidget {
+  const _WriteCapture();
 
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
-    final state = context.read<AppState>();
-    final content = state.content;
-    final prompt = step.prompt;
-    void open() => prompt == null
-        ? AppNav.switchTab(context, AppTab.reset)
-        : AppNav.openPrompt(context, prompt.id);
-
-    final String title;
-    final String body;
-    String? detail;
-    final _Action primary;
-    _Action? secondary;
-    switch (step.kind) {
-      case NextStepKind.start:
-        title = l.todayNextStartTitle;
-        body = l.todayNextStartBody(
-          content.byPhase(PromptPhase.morning).length,
-        );
-        primary = (l.todayNextStartAction, open);
-        if (step.suggestLessons) {
-          secondary = (
-            l.todayNextLessonsAction(content.lessons.length),
-            () => AppNav.openAwakening(context),
-          );
-        }
-      case NextStepKind.resume:
-        final phase = prompt?.phase.name ?? '';
-        title = l.todayNextResumeTitle(phase);
-        body = l.todayNextResumeBody(prompt?.title ?? '');
-        if (prompt != null) {
-          detail = l.todayNextResumePosition(
-            phase,
-            prompt.ordinal,
-            content.byPhase(prompt.phase).length,
-          );
-        }
-        primary = (l.todayNextResumeAction, open);
-        secondary = (
-          l.todayNextSeeReset,
-          () => AppNav.switchTab(context, AppTab.reset),
-        );
-      case NextStepKind.buildCompass:
-        title = l.todayNextCompassTitle;
-        if (step.canImport) {
-          body = l.todayNextCompassImportBody;
-          primary = (
-            l.todayNextCompassImportAction,
-            () => showCompassImport(context),
-          );
-          secondary = (l.todayOpenCompass, () => AppNav.openCompass(context));
-        } else {
-          body = l.todayNextCompassManualBody;
-          primary = (l.todayOpenCompass, () => AppNav.openCompass(context));
-        }
-      case NextStepKind.leversToQuests:
-        title = l.todayNextLeversTitle;
-        body = l.todayNextLeversBody;
-        primary = (l.todayNextLeversAction, () => AppNav.openMissions(context));
-      case NextStepKind.weeklyReview:
-        title = l.todayNextReviewTitle;
-        body = l.todayNextReviewBody;
-        primary = (l.todayNextReviewAction, () => AppNav.openReview(context));
-        secondary = (
-          l.todayNextJournalAction,
-          () => AppNav.openJournalEntry(context),
-        );
-      case NextStepKind.journal:
-        title = l.todayNextJournalTitle;
-        body = l.todayNextJournalBody;
-        primary = (
-          l.todayNextJournalAction,
-          () => AppNav.openJournalEntry(context),
-        );
-        secondary = (
-          l.todayOpenJournal,
-          () => AppNav.switchTab(context, AppTab.journal),
-        );
-    }
-
-    return HeroCard(
-      key: const ValueKey('today-next-step'),
-      padding: EdgeInsets.zero,
-      child: OnHeroTheme(
-        child: Builder(
-          builder: (context) {
-            final p = CarthaPalette.of(context);
-            final theme = Theme.of(context);
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Stack(
-                  children: [
-                    const DawnRuinsScene(aspectRatio: 2),
-                    Positioned.fill(
-                      child: IgnorePointer(
-                        child: DecoratedBox(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [p.hero.withValues(alpha: 0), p.hero],
-                              stops: const [0.7, 1],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+    final p = CarthaPalette.of(context);
+    final theme = Theme.of(context);
+    void write() => AppNav.openJournalEntry(context);
+    return Semantics(
+      container: true,
+      button: true,
+      label: l.todayWriteLabel,
+      onTap: write,
+      excludeSemantics: true,
+      child: SectionCard(
+        key: const ValueKey('today-write'),
+        onTap: write,
+        padding: const EdgeInsetsDirectional.fromSTEB(16, 14, 16, 14),
+        child: Row(
+          children: [
+            const GlyphIcon(CarthaGlyph.reflection, size: 22),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                l.todayWriteHint,
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: p.textSecondary,
                 ),
-                Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(20, 4, 20, 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        l.todayNextEyebrow.toUpperCase(),
-                        style: theme.textTheme.labelMedium?.copyWith(
-                          color: p.heroAccent,
-                          letterSpacing: 1.6,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Semantics(
-                        header: true,
-                        child: Text(
-                          title,
-                          style: theme.textTheme.titleLarge?.copyWith(
-                            color: p.onHero,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        body,
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: p.onHero,
-                        ),
-                      ),
-                      if (detail != null) ...[
-                        const SizedBox(height: 4),
-                        Text(
-                          detail,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: p.onHeroMuted,
-                          ),
-                        ),
-                      ],
-                      const SizedBox(height: 16),
-                      PrimaryButton(
-                        label: primary.$1,
-                        trailingIcon: Icons.arrow_forward,
-                        expand: true,
-                        onPressed: primary.$2,
-                      ),
-                      if (secondary != null) ...[
-                        const SizedBox(height: 4),
-                        Center(
-                          child: TextLinkButton(
-                            label: secondary.$1,
-                            onPressed: secondary.$2,
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
-              ],
-            );
-          },
+              ),
+            ),
+            const SizedBox(width: 8),
+            Icon(Icons.edit_outlined, size: 20, color: p.accent),
+          ],
         ),
       ),
+    );
+  }
+}
+
+/// A one-line first-use hint ([FirstUseHints]): a bulb and a short line.
+class _Hint extends StatelessWidget {
+  const _Hint(this.text, {super.key});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = CarthaPalette.of(context);
+    final theme = Theme.of(context);
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsetsDirectional.only(top: 1),
+          child: Icon(Icons.lightbulb_outline, size: 18, color: p.accent),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            text,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: p.textSecondary,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -295,6 +191,7 @@ class _FocusCard extends StatelessWidget {
     required this.quests,
     required this.laterCount,
     required this.today,
+    this.firstUse = false,
   });
 
   final List<Quest> quests;
@@ -303,6 +200,9 @@ class _FocusCard extends StatelessWidget {
   /// upcoming"): not listed here, only counted, with a way there.
   final int laterCount;
   final String today;
+
+  /// No quest exists yet: say what quests are ([FirstUseHints.quests]).
+  final bool firstUse;
 
   @override
   Widget build(BuildContext context) {
@@ -325,12 +225,15 @@ class _FocusCard extends StatelessWidget {
           if (quests.isEmpty) ...[
             Text(l.todayFocusEmptyTitle, style: theme.textTheme.titleSmall),
             const SizedBox(height: 4),
-            Text(
-              l.todayFocusEmptyBody,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: p.textSecondary,
+            if (firstUse)
+              _Hint(l.todayHintQuests, key: const ValueKey('today-hint-quests'))
+            else
+              Text(
+                l.todayFocusEmptyBody,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: p.textSecondary,
+                ),
               ),
-            ),
             const SizedBox(height: 8),
           ] else
             for (final q in shown) _QuestRow(quest: q, today: today),
@@ -547,6 +450,8 @@ class _GlanceTile extends StatelessWidget {
       button: true,
       label: l.todayTileLabel(title, value, label ?? detail),
       hint: action,
+      // The card's own tap is hidden by excludeSemantics: give it here.
+      onTap: onTap,
       excludeSemantics: true,
       child: SectionCard(
         onTap: onTap,
@@ -596,10 +501,22 @@ class _GlanceTile extends StatelessWidget {
   }
 }
 
-/// "Your direction": the vision and this month's project, from the Compass
-/// (or the month project the user set up in Missions).
-class _DirectionCard extends StatelessWidget {
-  const _DirectionCard();
+/// "Your direction", collapsed by default: a header (and one line saying
+/// what is inside) that expands to the vision and this month's project
+/// (the Missions project title if set, else the Compass's) → Compass.
+class _DirectionCard extends StatefulWidget {
+  const _DirectionCard({this.firstUse = false});
+
+  /// The Compass was never written: say what it can become
+  /// ([FirstUseHints.compass]).
+  final bool firstUse;
+
+  @override
+  State<_DirectionCard> createState() => _DirectionCardState();
+}
+
+class _DirectionCardState extends State<_DirectionCard> {
+  bool _open = false;
 
   @override
   Widget build(BuildContext context) {
@@ -611,11 +528,13 @@ class _DirectionCard extends StatelessWidget {
     final projectTitle = state.data.project?.title.trim() ?? '';
     final month = projectTitle.isNotEmpty ? projectTitle : compass.monthProject;
     final empty = compass.isEmpty && projectTitle.isEmpty;
-    final open = TextLinkButton(
-      label: l.todayOpenCompass,
-      trailingIcon: Icons.arrow_forward,
-      onPressed: () => AppNav.openCompass(context),
-    );
+    final hint = empty && widget.firstUse;
+    final summary = !empty
+        ? l.todayDirectionSummary
+        : hint
+        ? l.todayHintCompass
+        : l.todayDirectionEmpty;
+    void toggle() => setState(() => _open = !_open);
 
     Widget snippet(String label, String text, String placeholder) {
       final has = text.trim().isNotEmpty;
@@ -643,34 +562,105 @@ class _DirectionCard extends StatelessWidget {
       );
     }
 
+    final header = Semantics(
+      key: const ValueKey('today-direction-toggle'),
+      container: true,
+      button: true,
+      expanded: _open,
+      label: l.todayDirectionLabel(l.todayDirectionTitle, summary),
+      onTap: toggle,
+      excludeSemantics: true,
+      child: InkWell(
+        onTap: toggle,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: 56),
+          child: Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(20, 12, 16, 12),
+            child: Row(
+              children: [
+                const GlyphIcon(CarthaGlyph.direction, size: 22),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l.todayDirectionTitle,
+                        style: theme.textTheme.titleMedium,
+                      ),
+                      const SizedBox(height: 2),
+                      if (hint)
+                        _Hint(summary, key: const ValueKey('today-hint-compass'))
+                      else
+                        Text(
+                          summary,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: p.textSecondary,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                // Open or closed shows by the chevron's direction too.
+                Icon(
+                  _open ? Icons.expand_less : Icons.expand_more,
+                  color: p.textSecondary,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+
     return SectionCard(
       key: const ValueKey('today-direction'),
-      title: l.todayDirectionTitle,
-      icon: Icons.explore_outlined,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          if (empty) ...[
-            Text(l.todayDirectionEmptyTitle, style: theme.textTheme.titleSmall),
-            const SizedBox(height: 4),
-            Text(
-              l.todayDirectionEmptyBody,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: p.textSecondary,
+      padding: EdgeInsets.zero,
+      child: AnimatedSize(
+        duration: motionEnabled(context)
+            ? const Duration(milliseconds: 200)
+            : Duration.zero,
+        curve: Curves.easeOutCubic,
+        alignment: AlignmentDirectional.topStart,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            header,
+            if (_open)
+              Padding(
+                key: const ValueKey('today-direction-body'),
+                padding: const EdgeInsetsDirectional.fromSTEB(20, 0, 20, 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    if (!empty) ...[
+                      snippet(
+                        l.todayDirectionVision,
+                        compass.vision,
+                        l.todayDirectionNoVision,
+                      ),
+                      const SizedBox(height: 14),
+                      snippet(
+                        l.todayDirectionMonth,
+                        month,
+                        l.todayDirectionNoMonth,
+                      ),
+                      const SizedBox(height: 4),
+                    ],
+                    Align(
+                      alignment: AlignmentDirectional.centerStart,
+                      child: TextLinkButton(
+                        label: l.todayOpenCompass,
+                        trailingIcon: Icons.arrow_forward,
+                        onPressed: () => AppNav.openCompass(context),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ] else ...[
-            snippet(
-              l.todayDirectionVision,
-              compass.vision,
-              l.todayDirectionNoVision,
-            ),
-            const SizedBox(height: 14),
-            snippet(l.todayDirectionMonth, month, l.todayDirectionNoMonth),
           ],
-          const SizedBox(height: 4),
-          Align(alignment: AlignmentDirectional.centerStart, child: open),
-        ],
+        ),
       ),
     );
   }

@@ -1643,54 +1643,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingNext => 'Next';
 
   @override
-  String get onboardingGetStarted => 'Get started';
-
-  @override
-  String get onboardingSkip => 'Skip';
-
-  @override
-  String get onboardingSkipLabel => 'Skip the introduction';
-
-  @override
-  String get onboardingFinish => 'Finish';
-
-  @override
-  String onboardingPageDots(int current, int total) {
-    return 'Page $current of $total';
-  }
+  String get onboardingStart => 'Start';
 
   @override
   String onboardingStepCounter(int current, int total) {
-    return 'Setup $current of $total';
+    return 'Step $current of $total';
   }
-
-  @override
-  String get onboardingUnderstandTitle => 'Understand Yourself';
-
-  @override
-  String get onboardingUnderstandBody =>
-      'See what you want, and what holds you back.';
-
-  @override
-  String get onboardingResetTitle => 'Reset Your Life';
-
-  @override
-  String get onboardingResetBody =>
-      'One day of questions: morning, daytime, evening.';
-
-  @override
-  String get onboardingDirectionTitle => 'Choose a Direction';
-
-  @override
-  String get onboardingDirectionBody =>
-      'Turn your answers into a Life Compass.';
-
-  @override
-  String get onboardingStepsTitle => 'Improve Step by Step';
-
-  @override
-  String get onboardingStepsBody =>
-      'Small daily steps, adjusted each week. No pressure.';
 
   @override
   String get onboardingLimitsTitle => 'Before you start';
@@ -1712,13 +1670,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get onboardingLimitsNoGuaranteeBody =>
       'Change comes from small steps, week by week.';
-
-  @override
-  String get onboardingLimitsPracticeTitle => 'An ongoing practice';
-
-  @override
-  String get onboardingLimitsPracticeBody =>
-      'Redo the reset or change your goals anytime.';
 
   @override
   String get onboardingLimitsNotTherapyTitle => 'Not therapy';
@@ -1746,9 +1697,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboardingCreditTitle => 'Inspired by';
-
-  @override
-  String get onboardingCreditIntro => 'Built on the ideas of:';
 
   @override
   String onboardingCreditByline(String author, String date) {
@@ -2559,8 +2507,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String todayNextStartBody(int count) {
-    return '$count short questions, one at a time. Skip any of them, pause whenever you like.';
+    return '$count short questions. Skip any, pause anytime.';
   }
+
+  @override
+  String get todayNextStartHint =>
+      'Morning, daytime, evening: one day, at your own pace.';
 
   @override
   String get todayNextStartAction => 'Begin';
@@ -2601,7 +2553,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get todayNextResumeAction => 'Continue';
 
   @override
-  String get todayNextSeeReset => 'See the whole reset';
+  String get todayNextQuestBody => 'One of today\'s quests.';
+
+  @override
+  String get todayNextQuestAction => 'Mark done';
+
+  @override
+  String get todayNextQuestOption => 'Do one of today\'s quests';
 
   @override
   String get todayNextCompassTitle => 'Build your Compass';
@@ -2627,6 +2585,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get todayNextLeversAction => 'Choose quests';
 
   @override
+  String get todayNextProjectTitle => 'Work on your project';
+
+  @override
+  String todayNextProjectNext(String milestone) {
+    return 'Next: $milestone';
+  }
+
+  @override
+  String get todayNextProjectAction => 'Open the project';
+
+  @override
   String get todayNextReviewTitle => 'Look back on your week';
 
   @override
@@ -2646,10 +2615,46 @@ class AppLocalizationsEn extends AppLocalizations {
   String get todayNextJournalAction => 'New note';
 
   @override
-  String get todayOpenJournal => 'Open the journal';
+  String get todayOpenCompass => 'Open Compass';
 
   @override
-  String get todayOpenCompass => 'Open Compass';
+  String get todayChooseOther => 'Choose something else';
+
+  @override
+  String get todayChooseSteps => 'Other steps';
+
+  @override
+  String get todayPinTitle => 'Help me with';
+
+  @override
+  String get todayPinProject => 'My project';
+
+  @override
+  String get todayPinReflection => 'Reflection';
+
+  @override
+  String get todayPinNotes => 'Notes';
+
+  @override
+  String get todayPinAuto => 'Decide for me';
+
+  @override
+  String get todayPinNoProject => 'No project yet. Today decides for now.';
+
+  @override
+  String get todayDoneTitle => 'Done. That can be enough for today.';
+
+  @override
+  String get todayDoneMore => 'One more';
+
+  @override
+  String get todayDoneMoreLabel => 'Show one more step';
+
+  @override
+  String get todayWriteHint => 'Write a few lines…';
+
+  @override
+  String get todayWriteLabel => 'Write a new note';
 
   @override
   String get todayFocusTitle => 'Today\'s focus';
@@ -2659,6 +2664,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get todayFocusEmptyBody => 'Add a small quest when you\'re ready.';
+
+  @override
+  String get todayHintQuests =>
+      'Quests are small steps you choose. Adjust them each week.';
 
   @override
   String get todayFocusAdd => 'Add a quest';
@@ -2709,6 +2718,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get todayDirectionTitle => 'Your direction';
 
   @override
+  String get todayDirectionSummary => 'Your vision and this month\'s project.';
+
+  @override
+  String todayDirectionLabel(String title, String summary) {
+    return '$title. $summary';
+  }
+
+  @override
+  String get todayDirectionEmpty => 'Your Compass is empty.';
+
+  @override
+  String get todayHintCompass => 'Your answers can become a Life Compass.';
+
+  @override
   String get todayDirectionVision => 'Vision';
 
   @override
@@ -2719,13 +2742,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get todayDirectionNoMonth => 'No month project yet.';
-
-  @override
-  String get todayDirectionEmptyTitle => 'Your Compass is empty';
-
-  @override
-  String get todayDirectionEmptyBody =>
-      'Your vision, month project and daily levers.';
 
   @override
   String get todayTileReset => 'Reset';

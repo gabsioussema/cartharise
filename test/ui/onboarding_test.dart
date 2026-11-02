@@ -15,17 +15,11 @@ import '../support/test_app.dart';
 const _next = ValueKey('onboarding-next');
 const _finish = ValueKey('onboarding-finish');
 const _back = ValueKey('onboarding-back');
-const _skip = ValueKey('onboarding-skip');
 const _adult = ValueKey('onboarding-adult');
 
-/// Titles that identify each page.
+/// Titles that identify each page after the brand page.
 const _titles = {
-  OnboardingStep.understand: 'Understand Yourself',
-  OnboardingStep.reset: 'Reset Your Life',
-  OnboardingStep.direction: 'Choose a Direction',
-  OnboardingStep.steps: 'Improve Step by Step',
-  OnboardingStep.limits: "Before you start",
-  OnboardingStep.credit: 'Inspired by',
+  OnboardingStep.limits: 'Before you start',
   OnboardingStep.pace: 'Choose your pace',
   OnboardingStep.name: 'What should we call you?',
   OnboardingStep.privacy: 'Your words stay yours',
@@ -58,24 +52,34 @@ FilledButton _button(WidgetTester tester, ValueKey<String> key) =>
       find.descendant(of: find.byKey(key), matching: find.byType(FilledButton)),
     );
 
+/// Finishes the welcome from the privacy page and lets the write land.
+Future<void> _start(WidgetTester tester) async {
+  await _tap(tester, find.byKey(_finish));
+  await tester.runAsync(() => Future<void>.delayed(Duration.zero));
+  await pumpFrames(tester, count: 8);
+}
+
 void main() {
   group('OnboardingStep (pure)', () {
-    test('ten pages: brand, four carousel pages, five setup pages', () {
-      expect(OnboardingStep.values, hasLength(10));
-      expect(OnboardingStep.values.where((s) => s.isIntro), hasLength(5));
-      expect(
-        OnboardingStep.values.where((s) => s.isCarousel),
-        hasLength(OnboardingStep.carouselLength),
-      );
-      expect(
-        OnboardingStep.values.where((s) => s.setupPosition != null),
-        hasLength(OnboardingStep.setupLength),
-      );
-      expect(OnboardingStep.understand.carouselPosition, 1);
-      expect(OnboardingStep.steps.carouselPosition, 4);
-      expect(OnboardingStep.brand.carouselPosition, isNull);
-      expect(OnboardingStep.limits.setupPosition, 1);
-      expect(OnboardingStep.privacy.setupPosition, 5);
+    test('five pages: brand, the basics + 18+, pace, name, privacy', () {
+      expect(OnboardingStep.values, [
+        OnboardingStep.brand,
+        OnboardingStep.limits,
+        OnboardingStep.pace,
+        OnboardingStep.name,
+        OnboardingStep.privacy,
+      ]);
+      expect(OnboardingStep.length, OnboardingStep.values.length);
+      expect(OnboardingStep.values.where((s) => s.isIntro), [
+        OnboardingStep.brand,
+      ]);
+      expect([for (final s in OnboardingStep.values) s.position], [
+        1,
+        2,
+        3,
+        4,
+        5,
+      ]);
     });
 
     test('next / previous walk the pages in order; ends are null', () {
@@ -83,14 +87,6 @@ void main() {
       expect(OnboardingStep.privacy.next, isNull);
       for (final s in OnboardingStep.values.skip(1)) {
         expect(s.previous!.next, s);
-      }
-    });
-
-    test('Skip only from the intro, and never past the 18+ page', () {
-      expect(OnboardingStep.skipTarget, OnboardingStep.limits);
-      expect(OnboardingStep.skipTarget.index, 5, reason: 'page 6 of 10');
-      for (final s in OnboardingStep.values) {
-        expect(s.canSkip, s.index < OnboardingStep.limits.index);
       }
     });
 
@@ -103,49 +99,47 @@ void main() {
   });
 
   group('OnboardingFlow', () {
-    testWidgets('first launch opens on the brand page', (tester) async {
+    testWidgets('first launch opens on the brand page with the promise', (
+      tester,
+    ) async {
       await pumpCartha(tester);
       expect(find.byType(OnboardingFlow), findsOneWidget);
       expect(find.byType(CarthaWordmark), findsOneWidget);
       expect(find.text('Master Yourself. Rise With Purpose.'), findsOneWidget);
       expect(find.byKey(const ValueKey('onboarding-rule')), findsOneWidget);
+      expect(
+        find.text('One honest day of reflection. Then small steps.'),
+        findsOneWidget,
+      );
       expect(find.byType(DawnRuinsScene), findsOneWidget);
       expect(find.text('Begin'), findsOneWidget);
-      expect(find.byKey(_skip), findsOneWidget);
+      // No carousel any more: nothing to skip, no page dots.
+      expect(find.text('Skip'), findsNothing);
       expect(find.byKey(_back), findsNothing);
+      for (final scene in [SunriseScene, PathScene, CompassScene, StepsScene]) {
+        expect(find.byType(scene), findsNothing);
+      }
     });
 
-    testWidgets('the carousel shows the four scenes with page dots', (
+    testWidgets('Begin leads straight to the basics, page 2 of 5', (
       tester,
     ) async {
-      final semantics = tester.ensureSemantics();
       await pumpCartha(tester);
-      final scenes = [SunriseScene, PathScene, CompassScene, StepsScene];
-      for (final (i, step) in [
-        OnboardingStep.understand,
-        OnboardingStep.reset,
-        OnboardingStep.direction,
-        OnboardingStep.steps,
-      ].indexed) {
-        await _tapNext(tester);
-        expect(find.text(_titles[step]!), findsOneWidget);
-        expect(find.byType(scenes[i]), findsOneWidget);
-        expect(find.bySemanticsLabel('Page ${i + 1} of 4'), findsOneWidget);
-        expect(
-          find.byKey(ValueKey('onboarding-dot-${i + 1}-active')),
-          findsOneWidget,
-        );
-        expect(find.byKey(_back), findsOneWidget);
-        expect(find.byKey(_skip), findsOneWidget);
-      }
-      expect(find.text('Get started'), findsOneWidget);
       await _tapNext(tester);
       expect(find.text(_titles[OnboardingStep.limits]!), findsOneWidget);
-      expect(find.byKey(_skip), findsNothing);
-      semantics.dispose();
+      expect(find.text('Step 2 of 5'), findsOneWidget);
+      expect(find.byKey(_back), findsOneWidget);
+      await _tap(tester, find.byKey(_adult));
+      await _tapNext(tester);
+      expect(find.text('Step 3 of 5'), findsOneWidget);
+      await _tapNext(tester);
+      expect(find.text('Step 4 of 5'), findsOneWidget);
+      await _tapNext(tester);
+      expect(find.text('Step 5 of 5'), findsOneWidget);
+      expect(find.text('Start'), findsOneWidget);
     });
 
-    testWidgets('swipe moves forward and back through the intro', (
+    testWidgets('a left swipe on the brand page moves on, like Begin', (
       tester,
     ) async {
       await pumpCartha(tester);
@@ -155,30 +149,28 @@ void main() {
         1200,
       );
       await pumpFrames(tester);
-      expect(find.text('Understand Yourself'), findsOneWidget);
-      await tester.fling(
-        find.text('Understand Yourself'),
-        const Offset(300, 0),
-        1200,
-      );
-      await pumpFrames(tester);
-      expect(find.text('Master Yourself. Rise With Purpose.'), findsOneWidget);
+      expect(find.text(_titles[OnboardingStep.limits]!), findsOneWidget);
     });
 
-    testWidgets('Skip lands on the 18+ page, which must be confirmed', (
+    testWidgets('page 2: credit, limits (not therapy) and the 18+ gate', (
       tester,
     ) async {
-      final h = await pumpCartha(tester);
+      final h = await pumpCartha(tester, content: englishContent);
       await _tapNext(tester);
-      await _tap(tester, find.byKey(_skip));
-      expect(find.text(_titles[OnboardingStep.limits]!), findsOneWidget);
-      expect(
-        find.text('One day can bring clarity'),
-        findsOneWidget,
-        reason: 'promise',
-      );
+      final credit = englishContent.credit;
+      // The source credit.
+      expect(find.text('Inspired by'), findsOneWidget);
+      expect(find.text('“${credit.title}”'), findsOneWidget);
+      expect(find.text('by Dan Koe · 23 December 2025'), findsOneWidget);
+      expect(find.text(credit.independenceNotice), findsOneWidget);
+      // Kept short here; the full paraphrase notice lives in Inspiration.
+      expect(find.text(credit.paraphraseNotice), findsNothing);
+      expect(find.text('No need to read it first.'), findsOneWidget);
+      // What this is and isn't.
+      expect(find.text('One day can bring clarity'), findsOneWidget);
       expect(find.text("It won't fix your life overnight"), findsOneWidget);
       expect(find.text('Not therapy'), findsOneWidget);
+      expect(find.text('You stay in control'), findsOneWidget);
 
       // Not confirmed: Next is disabled and the reason is said in words.
       expect(_button(tester, _next).onPressed, isNull);
@@ -205,7 +197,7 @@ void main() {
       );
       expect(_button(tester, _next).onPressed, isNotNull);
       await _tapNext(tester);
-      expect(find.text(_titles[OnboardingStep.credit]!), findsOneWidget);
+      expect(find.text(_titles[OnboardingStep.pace]!), findsOneWidget);
       expect(h.state.needsOnboarding, isTrue);
     });
 
@@ -250,44 +242,32 @@ void main() {
       semantics.dispose();
     });
 
-    testWidgets(
-      'credit: title, author, both links, independence, no need to read',
-      (tester) async {
-        final opened = <String>[];
-        tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+    testWidgets('both credit links open the exact addresses', (tester) async {
+      final opened = <String>[];
+      tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+        const MethodChannel('plugins.flutter.io/url_launcher'),
+        (call) async {
+          final args = call.arguments as Map<Object?, Object?>;
+          opened.add(args['url']! as String);
+          return true;
+        },
+      );
+      addTearDown(
+        () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
           const MethodChannel('plugins.flutter.io/url_launcher'),
-          (call) async {
-            final args = call.arguments as Map<Object?, Object?>;
-            opened.add(args['url']! as String);
-            return true;
-          },
-        );
-        addTearDown(
-          () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
-            const MethodChannel('plugins.flutter.io/url_launcher'),
-            null,
-          ),
-        );
-        await pumpCartha(tester, content: englishContent);
-        await _goTo(tester, OnboardingStep.credit);
-        final credit = englishContent.credit;
-        expect(find.text('“${credit.title}”'), findsOneWidget);
-        expect(find.text('by Dan Koe · 23 December 2025'), findsOneWidget);
-        expect(find.text(credit.independenceNotice), findsOneWidget);
-        // Kept short here; the full paraphrase notice lives in Inspiration.
-        expect(find.text(credit.paraphraseNotice), findsNothing);
-        expect(find.text('No need to read it first.'), findsOneWidget);
-        await _tap(
-          tester,
-          find.byKey(const ValueKey('onboarding-credit-article')),
-        );
-        await _tap(
-          tester,
-          find.byKey(const ValueKey('onboarding-credit-newsletter')),
-        );
-        expect(opened, [credit.articleUrl, credit.newsletterUrl]);
-      },
-    );
+          null,
+        ),
+      );
+      await pumpCartha(tester, content: englishContent);
+      await _goTo(tester, OnboardingStep.limits);
+      final credit = englishContent.credit;
+      await _tap(tester, find.byKey(const ValueKey('onboarding-credit-article')));
+      await _tap(
+        tester,
+        find.byKey(const ValueKey('onboarding-credit-newsletter')),
+      );
+      expect(opened, [credit.articleUrl, credit.newsletterUrl]);
+    });
 
     testWidgets('a link that cannot open says so, with the address', (
       tester,
@@ -303,11 +283,8 @@ void main() {
         ),
       );
       await pumpCartha(tester);
-      await _goTo(tester, OnboardingStep.credit);
-      await _tap(
-        tester,
-        find.byKey(const ValueKey('onboarding-credit-article')),
-      );
+      await _goTo(tester, OnboardingStep.limits);
+      await _tap(tester, find.byKey(const ValueKey('onboarding-credit-article')));
       expect(
         find.text(
           "Couldn't open the link. You can visit it yourself: "
@@ -332,7 +309,7 @@ void main() {
       expect(storage.data, contains('not encrypted'));
       expect(storage.data, contains('not in phone or cloud backups'));
       expect(find.text('No account, ads or analytics.'), findsOneWidget);
-      expect(find.text('Finish'), findsOneWidget);
+      expect(find.text('Start'), findsOneWidget);
     });
 
     testWidgets('Back keeps every choice, with the button and system back', (
@@ -346,7 +323,7 @@ void main() {
       await pumpFrames(tester, count: 2);
 
       // Button back to the 18+ page: still confirmed.
-      for (var i = 0; i < 3; i++) {
+      for (var i = 0; i < 2; i++) {
         await _tap(tester, find.byKey(_back));
       }
       expect(find.text(_titles[OnboardingStep.limits]!), findsOneWidget);
@@ -356,10 +333,9 @@ void main() {
       final navigator = tester.state<NavigatorState>(find.byType(Navigator));
       await navigator.maybePop();
       await pumpFrames(tester);
-      expect(find.text(_titles[OnboardingStep.steps]!), findsOneWidget);
+      expect(find.text('Master Yourself. Rise With Purpose.'), findsOneWidget);
 
-      // Forward again (steps → limits → credit → pace): choices as left.
-      await _tapNext(tester);
+      // Forward again (brand → limits → pace): choices as left.
       await _tapNext(tester);
       await _tapNext(tester);
       expect(find.text(_titles[OnboardingStep.pace]!), findsOneWidget);
@@ -376,7 +352,7 @@ void main() {
       );
     });
 
-    testWidgets('Finish saves pace, trimmed name and 18+, then calls onDone', (
+    testWidgets('Start saves pace, trimmed name and 18+, then calls onDone', (
       tester,
     ) async {
       var done = 0;
@@ -390,9 +366,7 @@ void main() {
       await _tapNext(tester);
       await tester.enterText(find.byType(TextField), '  Ana  ');
       await _tapNext(tester);
-      await _tap(tester, find.byKey(_finish));
-      await tester.runAsync(() => Future<void>.delayed(Duration.zero));
-      await pumpFrames(tester, count: 2);
+      await _start(tester);
       expect(done, 1);
       final profile = h.store.saved!.profile!;
       expect(profile.displayName, 'Ana');
@@ -402,12 +376,25 @@ void main() {
       expect(h.state.needsOnboarding, isFalse);
     });
 
+    testWidgets('a new profile starts with the Campaign off and its '
+        'invitation pending', (tester) async {
+      final h = await pumpCartha(tester);
+      await _goTo(tester, OnboardingStep.privacy);
+      await _start(tester);
+      expect(h.state.settings.game, isFalse);
+      expect(h.state.settings.gameInvited, isFalse);
+      expect(h.store.saved!.settings.game, isFalse);
+      expect(h.store.saved!.settings.gameInvited, isFalse);
+      // Today offers the invitation, below the next action.
+      expect(find.byType(TodayTab), findsOneWidget);
+      expect(find.byKey(const ValueKey('today-invite')), findsOneWidget);
+      expect(find.byKey(const ValueKey('today-campaign')), findsNothing);
+    });
+
     testWidgets('no name: optional, the app greets "Traveler"', (tester) async {
       final h = await pumpCartha(tester);
       await _goTo(tester, OnboardingStep.privacy);
-      await _tap(tester, find.byKey(_finish));
-      await tester.runAsync(() => Future<void>.delayed(Duration.zero));
-      await pumpFrames(tester, count: 8);
+      await _start(tester);
       expect(h.state.data.profile!.displayName, isNull);
       expect(h.state.data.profile!.pace, Pace.flexible);
       expect(find.byType(RootShell), findsOneWidget);
@@ -415,10 +402,12 @@ void main() {
       expect(find.text('Good morning, Traveler.'), findsOneWidget);
     });
 
-    testWidgets('replaying the welcome starts from the earlier choices', (
-      tester,
-    ) async {
-      final data = onboardedData(name: 'Sam');
+    testWidgets('replaying the welcome starts from the earlier choices and '
+        'keeps the Campaign settings', (tester) async {
+      final data = onboardedData(
+        name: 'Sam',
+        settings: const AppSettings(game: true, gameInvited: true),
+      );
       final h = await pumpCartha(
         tester,
         data: data.copyWith(
@@ -429,9 +418,8 @@ void main() {
         ),
       );
       expect(find.byType(OnboardingFlow), findsOneWidget);
-      await _tap(tester, find.byKey(_skip));
+      await _tapNext(tester);
       expect(tester.widget<CheckboxListTile>(find.byKey(_adult)).value, isTrue);
-      await _tapNext(tester); // credit
       await _tapNext(tester); // pace
       await _tapNext(tester); // name
       expect(
@@ -439,29 +427,30 @@ void main() {
         'Sam',
       );
       await _tapNext(tester);
-      await _tap(tester, find.byKey(_finish));
-      await tester.runAsync(() => Future<void>.delayed(Duration.zero));
-      await pumpFrames(tester, count: 8);
+      await _start(tester);
       expect(h.state.data.profile!.pace, Pace.oneDay);
+      expect(h.state.settings.game, isTrue, reason: 'existing user: kept');
+      expect(h.state.settings.gameInvited, isTrue);
       expect(find.text('Good morning, Sam.'), findsOneWidget);
     });
 
-    testWidgets('scenes are static with reduced motion', (tester) async {
+    testWidgets('the scene is static with reduced motion', (tester) async {
       tester.platformDispatcher.accessibilityFeaturesTestValue =
           const FakeAccessibilityFeatures(disableAnimations: true);
       addTearDown(
         tester.platformDispatcher.clearAccessibilityFeaturesTestValue,
       );
       await pumpCartha(tester, frames: 1);
-      await _tapNext(tester);
       final scene = tester.state(find.byType(BrandScene));
       expect(isBrandSceneAnimating(scene), isFalse);
       expect(brandSceneProgress(scene), 1);
     });
 
-    testWidgets('scenes rise once with motion on', (tester) async {
+    testWidgets('the scene rises once with motion on', (tester) async {
       await pumpCartha(tester);
-      await tester.tap(find.byKey(_next));
+      // Back to the brand page: a fresh scene.
+      await _tapNext(tester);
+      await tester.tap(find.byKey(_back));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 100));
       final scene = tester.state(find.byType(BrandScene));

@@ -5,6 +5,7 @@
 library;
 
 import 'package:cartharise/content/en.dart';
+import 'package:cartharise/domain/app_data.dart';
 import 'package:cartharise/domain/persona.dart';
 import 'package:cartharise/ui/widgets/scenes.dart';
 import 'package:flutter/material.dart';
@@ -29,10 +30,6 @@ void main() {
 
       await _settleScenes(tester);
       await captureScreenshot(tester, '10_onboarding_brand_${b.name}');
-      for (final name in ['understand', 'reset', 'direction', 'steps']) {
-        await next();
-        await captureScreenshot(tester, '11_onboarding_${name}_${b.name}');
-      }
       await next();
       await captureScreenshot(tester, '12_onboarding_limits_${b.name}');
       await tester.ensureVisible(
@@ -42,8 +39,6 @@ void main() {
       await captureScreenshot(tester, '12_onboarding_limits_end_${b.name}');
       await tester.tap(find.byKey(const ValueKey('onboarding-adult')));
       await pumpFrames(tester, count: 2);
-      await next();
-      await captureScreenshot(tester, '13_onboarding_credit_${b.name}');
       await next();
       await captureScreenshot(tester, '14_onboarding_pace_${b.name}');
       await next();
@@ -69,12 +64,46 @@ void main() {
       await pumpCartha(
         tester,
         brightness: b,
-        data: inProgressData(),
+        data: inProgressData().copyWith(quests: []),
         content: englishContent,
         size: const Size(390, 1500),
       );
       await _settleScenes(tester);
       await captureScreenshot(tester, '21_today_in_progress_${b.name}');
+    });
+
+    testWidgets('today done for today ${b.name}', (tester) async {
+      // A quest was completed today: the easy stop.
+      await pumpCartha(
+        tester,
+        brightness: b,
+        data: inProgressData(),
+        content: englishContent,
+        size: const Size(390, 1500),
+      );
+      await _settleScenes(tester);
+      await captureScreenshot(tester, '21c_today_done_${b.name}');
+      await tester.tap(find.byKey(const ValueKey('today-one-more')));
+      await _settleScenes(tester);
+      await captureScreenshot(tester, '21d_today_quest_${b.name}');
+      await tester.tap(find.byKey(const ValueKey('today-choose-other')));
+      await _settleScenes(tester);
+      await captureScreenshot(tester, '21e_today_choose_${b.name}');
+    });
+
+    testWidgets('today new user ${b.name}', (tester) async {
+      // Straight after the welcome: Campaign off, its invitation pending.
+      await pumpCartha(
+        tester,
+        brightness: b,
+        data: onboardedData(
+          settings: const AppSettings(game: false, gameInvited: false),
+        ),
+        content: englishContent,
+        size: const Size(390, 1300),
+      );
+      await _settleScenes(tester);
+      await captureScreenshot(tester, '20b_today_new_user_${b.name}');
     });
 
     testWidgets('today with an avatar ${b.name}', (tester) async {
